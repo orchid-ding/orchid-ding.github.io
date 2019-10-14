@@ -89,7 +89,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#大数据概论"><span class="toc-text">大数据概论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#三、传统的大数据项目流程"><span class="toc-text">三、传统的大数据项目流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式文件系统"><span class="toc-text">分布式文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二、HDFS"><span class="toc-text">二、HDFS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-HDFS特点"><span class="toc-text">2.1 HDFS特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-HDFS常用命令"><span class="toc-text">2.2 HDFS常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-命令行小结"><span class="toc-text">2.2.1 命令行小结</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-HDFS编程"><span class="toc-text">2.3 HDFS编程</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#大数据概论"><span class="toc-text">大数据概论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、大数据特性"><span class="toc-text">一、大数据特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、大数据的挑战"><span class="toc-text">二、大数据的挑战</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、传统的大数据项目流程"><span class="toc-text">三、传统的大数据项目流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式文件系统"><span class="toc-text">分布式文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、Hadoop简介"><span class="toc-text">一、Hadoop简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、HDFS"><span class="toc-text">二、HDFS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-HDFS特点"><span class="toc-text">2.1 HDFS特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-HDFS常用命令"><span class="toc-text">2.2 HDFS常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-命令行小结"><span class="toc-text">2.2.1 命令行小结</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-hdfs与getconf结合使用"><span class="toc-text">2.2.2 hdfs与getconf结合使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-3-hdfs与dfsadmin结合使用"><span class="toc-text">2.2.3 hdfs与dfsadmin结合使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-4-hdfs与fsck结合使用"><span class="toc-text">2.2.4 hdfs与fsck结合使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-5-其他命令"><span class="toc-text">2.2.5 其他命令</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-HDFS编程"><span class="toc-text">2.3 HDFS编程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-HDFS架构"><span class="toc-text">2.4  HDFS架构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1、NameNode"><span class="toc-text">1、NameNode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2、DataNode"><span class="toc-text">2、DataNode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-SeconddaryNameNode"><span class="toc-text">3 SeconddaryNameNode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-心跳机制"><span class="toc-text">4 心跳机制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-负载均衡"><span class="toc-text">5 负载均衡</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-小结"><span class="toc-text">6 小结</span></a></li></ol></li></ol></li></ol></li></ol>
 </div>
     
 </div>
@@ -189,22 +189,19 @@
 </tr>
 </tbody>
 </table>
-<p>###一、大数据特性</p>
-<ol>
+<h3 id="一、大数据特性"><a href="#一、大数据特性" class="headerlink" title="一、大数据特性"></a>一、大数据特性</h3><ol>
 <li>数据量大（Volume） </li>
 <li>类型繁多（Variety） </li>
 <li>价值密度低（Value） </li>
 <li>速度快时效高（Velocity）</li>
 </ol>
-<p>###二、大数据的挑战</p>
-<ol>
+<h3 id="二、大数据的挑战"><a href="#二、大数据的挑战" class="headerlink" title="二、大数据的挑战"></a>二、大数据的挑战</h3><ol>
 <li>存储： 每天几TB、GB的数据增量，并且还在持续的增长中。</li>
 <li>分析： 如何从巨大的数据中挖掘出隐藏的商业价值。</li>
 <li>管理： 如何快速构建并且保证系统的安全、简单可用。</li>
 </ol>
 <h3 id="三、传统的大数据项目流程"><a href="#三、传统的大数据项目流程" class="headerlink" title="三、传统的大数据项目流程"></a>三、传统的大数据项目流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: 开始</span><br><span class="line">dataCollect=&gt;operation: 数据收集 ： Flume、Kafaka、Scribe</span><br><span class="line">dataStore=&gt;operation: 数据存储 ： HDFS、HBase、Cassadra</span><br><span class="line">dataCaculate=&gt;operation: 数据计算 : Mapreduce、Strom、Impala、Spark、Spark Streaming...</span><br><span class="line">数据计算三大类：</span><br><span class="line">1、离线处理平台： Spark、Spark Core</span><br><span class="line">2、交互式处理平台： Spark SQL、Hive 、Impala</span><br><span class="line">3、流处理平台 ： Strom、Spring Stoeaming 、 Flink</span><br><span class="line">dataAnalyse=&gt;operation: 分析与挖掘 ： Mahour、R语言、Hive、Pig</span><br><span class="line">dataEtl=&gt;operation: ETL ： sqoop、DataX</span><br><span class="line">dataView=&gt;operation: 可视化 ： Echarts.js 、 E3.js、 数据报表系统</span><br><span class="line">dataActual=&gt;operation: 项目实战</span><br><span class="line">e=&gt;end: 结束</span><br><span class="line"></span><br><span class="line">st-&gt;dataCollect-&gt;dataStore-&gt;dataCaculate-&gt;dataAnalyse-&gt;dataEtl-&gt;dataView-&gt;dataActual-&gt;e</span><br></pre></td></tr></table></figure>
-<h2 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h2><p>###一、Hadoop简介</p>
-<ol>
+<h2 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h2><h3 id="一、Hadoop简介"><a href="#一、Hadoop简介" class="headerlink" title="一、Hadoop简介"></a>一、Hadoop简介</h3><ol>
 <li><p>Hadoop架构</p>
 <p><img src="img/Image201906191834.png" alt="Image201906191834"></p>
 </li>
@@ -305,8 +302,7 @@
 </li>
 <li>有用的help，如查看ls命令的使用说明：hadoop fs -help ls</li>
 </ul>
-<p>#####2.2.2 hdfs与getconf结合使用</p>
-<ol>
+<h5 id="2-2-2-hdfs与getconf结合使用"><a href="#2-2-2-hdfs与getconf结合使用" class="headerlink" title="2.2.2 hdfs与getconf结合使用"></a>2.2.2 hdfs与getconf结合使用</h5><ol>
 <li><p>获取NameNode的节点名称（可能有多个）</p>
    <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs getconf -namenodes</span><br></pre></td></tr></table></figure>
 </li>
@@ -317,8 +313,7 @@
  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs getconf -nnRpcAddresses</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>#####2.2.3 hdfs与dfsadmin结合使用</p>
-<ol>
+<h5 id="2-2-3-hdfs与dfsadmin结合使用"><a href="#2-2-3-hdfs与dfsadmin结合使用" class="headerlink" title="2.2.3 hdfs与dfsadmin结合使用"></a>2.2.3 hdfs与dfsadmin结合使用</h5><ol>
 <li><p>同样要学会借助帮助信息</p>
    <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -help safemode</span><br></pre></td></tr></table></figure>
 </li>
@@ -332,14 +327,12 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -safemode enter</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>#####2.2.4 hdfs与fsck结合使用</p>
-<ol>
+<h5 id="2-2-4-hdfs与fsck结合使用"><a href="#2-2-4-hdfs与fsck结合使用" class="headerlink" title="2.2.4 hdfs与fsck结合使用"></a>2.2.4 hdfs与fsck结合使用</h5><ol>
 <li><p>fsck指令<strong>显示HDFS块信息</strong></p>
  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs fsck /02-041-0029.mp4 -files -blocks -locations # 查看文件02-041-0029.mp4的块信息</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>#####2.2.5 其他命令</p>
-<ol>
+<h5 id="2-2-5-其他命令"><a href="#2-2-5-其他命令" class="headerlink" title="2.2.5 其他命令"></a>2.2.5 其他命令</h5><ol>
 <li><p>检查压缩库本地安装情况</p>
    <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop checknative</span><br></pre></td></tr></table></figure>
 </li>
@@ -367,14 +360,12 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归列出当前目录下所有目录和文件名称</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> source</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">listAllChildren</span><span class="params">(String source)</span></span>&#123;</span><br><span class="line">    StringBuffer stringBuffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// HDFS 读写文件配置</span></span><br><span class="line">        Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line">        <span class="comment">// HDFS文件系统</span></span><br><span class="line">        FileSystem fileSystem = FileSystem.get(URI.create(source),configuration);</span><br><span class="line">        list(stringBuffer,fileSystem,<span class="keyword">new</span> Path(source));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> stringBuffer.toString();</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归目录和文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> stringBuffer  文件目录名称集合</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> fileSystem  hdfs 文件系统</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> source path 路径</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">list</span><span class="params">(StringBuffer stringBuffer,FileSystem fileSystem, Path source)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    FileStatus[] iterator = fileSystem.listStatus(source);</span><br><span class="line">    <span class="keyword">for</span> (FileStatus status:iterator) &#123;</span><br><span class="line">        stringBuffer.append(status.getPath() + <span class="string">"\n"</span>);</span><br><span class="line">        <span class="keyword">if</span>(status.isDirectory())&#123;</span><br><span class="line">            list(stringBuffer,fileSystem,status.getPath());</span><br><span class="line">        &#125;</span><br><span class="line">  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>####2.4  HDFS架构</p>
-<p><img src="img/1558073557041.png" alt=""></p>
+<h4 id="2-4-HDFS架构"><a href="#2-4-HDFS架构" class="headerlink" title="2.4  HDFS架构"></a>2.4  HDFS架构</h4><p><img src="img/1558073557041.png" alt=""></p>
 <ul>
 <li>大多数分布式框架都是主从架构</li>
 <li>HDFS也是主从架构Master|Slave或称为管理节点|工作节点</li>
 </ul>
-<p>#####1、NameNode</p>
-<p><strong>1.1 文件系统</strong></p>
+<h5 id="1、NameNode"><a href="#1、NameNode" class="headerlink" title="1、NameNode"></a>1、NameNode</h5><p><strong>1.1 文件系统</strong></p>
 <ul>
 <li>file system文件系统：操作系统中负责管理和存储文件信息的软件；具体地说，它负责为用户创建文件，存入、读取、修改、转储、删除文件等</li>
 <li>读文件 =&gt;&gt;找到文件 =&gt;&gt; 在哪 + 叫啥？</li>
@@ -421,15 +412,13 @@
 <p>①为hdfs-site.xml中属性dfs.namenode.edits.dir的值决定；用于namenode保存edits.log文件</p>
 <p>②为hdfs-site.xml中属性dfs.namenode.name.dir的值决定；用于namenode保存fsimage文件</p>
 </blockquote>
-<p>#####2、DataNode</p>
-<ul>
+<h5 id="2、DataNode"><a href="#2、DataNode" class="headerlink" title="2、DataNode"></a>2、DataNode</h5><ul>
 <li>DataNode数据节点的作用<ul>
 <li>存储block以及block元数据到datanode本地磁盘；此处的元数据包括数据块的长度、块数据的校验和、时间戳</li>
 </ul>
 </li>
 </ul>
-<p>#####3 SeconddaryNameNode   </p>
-<ul>
+<h5 id="3-SeconddaryNameNode"><a href="#3-SeconddaryNameNode" class="headerlink" title="3 SeconddaryNameNode"></a>3 SeconddaryNameNode</h5><ul>
 <li><p>为什么引入SecondaryNameNode</p>
 <ul>
 <li><p>为什么元数据存储在NameNode在内存中？</p>
@@ -486,8 +475,7 @@
 <p>| 属性                                 | 值              | 解释                                                         |<br>| ———————————— | ————— | ———————————————————— |<br>| dfs.namenode.checkpoint.period       | 3600秒(即1小时) | The number of seconds between two periodic checkpoints.      |<br>| dfs.namenode.checkpoint.txns         | 1000000         | The Secondary NameNode or CheckpointNode will create a checkpoint of the namespace every ‘dfs.namenode.checkpoint.txns’ transactions, regardless of whether ‘dfs.namenode.checkpoint.period’ has expired. |<br>| dfs.namenode.checkpoint.check.period | 60(1分钟)       | The SecondaryNameNode and CheckpointNode will poll the NameNode every ‘dfs.namenode.checkpoint.check.period’ seconds to query the number of uncheckpointed transactions. |</p>
 </li>
 </ul>
-<p>#####4 心跳机制</p>
-<p><img src="img/Image201906211518.png" alt=""></p>
+<h5 id="4-心跳机制"><a href="#4-心跳机制" class="headerlink" title="4 心跳机制"></a>4 心跳机制</h5><p><img src="img/Image201906211518.png" alt=""></p>
 <p><strong>工作原理：</strong></p>
 <ol>
 <li>NameNode启动的时候，会开一个ipc server在那里</li>
@@ -551,8 +539,7 @@
 <li>查看hdfs-default.xml默认配置文件</li>
 </ul>
 <p><img src="/Users/dingchuangshi/Documents/Java大数据课件/三期课件/第八章HDFS课件/20191009-HDFS-第一次/assets/Image201907311730.png" alt=""></p>
-<p>#####5 负载均衡</p>
-<ul>
+<h5 id="5-负载均衡"><a href="#5-负载均衡" class="headerlink" title="5 负载均衡"></a>5 负载均衡</h5><ul>
 <li><p>什么原因会有可能造成不均衡？</p>
 <ul>
 <li>机器与机器之间磁盘利用率不平衡是HDFS集群非常容易出现的情况</li>
@@ -569,8 +556,7 @@
 </li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>HADOOP_HOME/sbin/start-balancer.sh -t 5%	# 磁盘利用率最高的节点若比最少的节点，大于5%，触发均衡</span><br></pre></td></tr></table></figure>
-<p>#####6 小结</p>
-<ul>
+<h5 id="6-小结"><a href="#6-小结" class="headerlink" title="6 小结"></a>6 小结</h5><ul>
 <li>NameNode负责存储元数据，存在内存中</li>
 <li>DataNode负责存储block块及块的元数据</li>
 <li>SecondaryNameNode主要负责对HDFS元数据做checkpoint操作</li>
