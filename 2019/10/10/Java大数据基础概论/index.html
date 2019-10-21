@@ -11,7 +11,7 @@
 
     <title>
         
-        大数据概论-HDFS理论基础- - Kaffir Lily的博客 | Kaffir Lily&#39;s Blog
+        大数据概论-HDFS理论基础 - Kaffir Lily的博客 | Kaffir Lily&#39;s Blog
         
     </title>
 
@@ -120,7 +120,7 @@
 
 <div class="post-container">
     <div class="post-title">
-        大数据概论-HDFS理论基础-
+        大数据概论-HDFS理论基础
     </div>
 
     <div class="post-meta">
@@ -259,7 +259,7 @@
  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -cat /edits.txt</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>从本地路径上传文件至HDFS</strong></p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>用法：hdfs dfs -put /本地路径 /hdfs路径</span><br><span class="line">hdfs dfs -put hadoop-2.7.3.tar.gz /</span><br><span class="line">hdfs dfs -copyFromLocal hadoop-2.7.3.tar.gz /  #根put作用一样</span><br><span class="line">hdfs dfs -moveFromLocal hadoop-2.7.3.tar.gz /  #根put作用一样，只不过，源文件被拷贝成功后，会被删除</span><br></pre></td></tr></table></figure>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">用法：hdfs dfs -put /本地路径 /hdfs路径</span></span><br><span class="line">hdfs dfs -put hadoop-2.7.3.tar.gz /</span><br><span class="line">hdfs dfs -copyFromLocal hadoop-2.7.3.tar.gz /  #根put作用一样</span><br><span class="line">hdfs dfs -moveFromLocal hadoop-2.7.3.tar.gz /  #根put作用一样，只不过，源文件被拷贝成功后，会被删除</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>在hdfs文件系统中下载文件</strong></p>
   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -get /hdfs路径 /本地路径</span><br><span class="line">hdfs dfs -copyToLocal /hdfs路径 /本地路径  #根get作用一样</span><br></pre></td></tr></table></figure>
@@ -283,7 +283,7 @@
   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -ls file:///home/bruce/</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>查找文件</p>
-  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> linux find命令</span><br><span class="line">find . -name 'edit*'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> HDFS find命令</span><br><span class="line">hadoop fs -find / -name part-r-00000 # 在HDFS根目录中，查找part-r-00000文件</span><br></pre></td></tr></table></figure>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> linux find命令</span></span><br><span class="line">find . -name 'edit*'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> HDFS find命令</span></span><br><span class="line">hadoop fs -find / -name part-r-00000 # 在HDFS根目录中，查找part-r-00000文件</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <blockquote>
@@ -549,7 +549,7 @@
 <li><p>如何手动负载均衡？</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>HADOOP_HOME/sbin/start-balancer.sh -t 5%	# 磁盘利用率最高的节点若比最少的节点，大于5%，触发均衡</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/start-balancer.sh -t 5%	<span class="comment"># 磁盘利用率最高的节点若比最少的节点，大于5%，触发均衡</span></span></span><br></pre></td></tr></table></figure>
 <h5 id="6-小结"><a href="#6-小结" class="headerlink" title="6 小结"></a>6 小结</h5><ul>
 <li>NameNode负责存储元数据，存在内存中</li>
 <li>DataNode负责存储block块及块的元数据</li>
