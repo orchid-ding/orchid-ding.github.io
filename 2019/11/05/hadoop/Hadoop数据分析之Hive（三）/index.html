@@ -497,7 +497,7 @@
 <h4 id="9、压缩"><a href="#9、压缩" class="headerlink" title="9、压缩"></a>9、压缩</h4><p>​    参见数据的压缩</p>
 <ul>
 <li><p>Hive表中间数据压缩</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">设置为<span class="literal">true</span>为激活中间数据压缩功能，默认是<span class="literal">false</span>，没有开启</span></span><br><span class="line">set hive.exec.compress.intermediate=true;</span><br><span class="line"><span class="meta">#</span><span class="bash">设置中间数据的压缩算法</span></span><br><span class="line">set mapred.map.output.compression.codec= org.apache.hadoop.io.compress.SnappyCodec;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>设置为true为激活中间数据压缩功能，默认是false，没有开启</span><br><span class="line">set hive.exec.compress.intermediate=true;</span><br><span class="line"><span class="meta">#</span>设置中间数据的压缩算法</span><br><span class="line">set mapred.map.output.compression.codec= org.apache.hadoop.io.compress.SnappyCodec;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Hive表最终输出结果压缩</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set hive.exec.compress.output=true;</span><br><span class="line">set mapred.output.compression.codec= </span><br><span class="line">org.apache.hadoop.io.compress.SnappyCodec;</span><br></pre></td></tr></table></figure>
@@ -509,10 +509,10 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">主要的决定因素有：input的文件总个数，input的文件大小，集群设置的文件块大小。</span><br><span class="line"></span><br><span class="line">举例：</span><br><span class="line">a)  假设input目录下有1个文件a，大小为780M，那么hadoop会将该文件a分隔成7个块（6个128m的块和1个12m的块），从而产生7个map数。</span><br><span class="line">b) 假设input目录下有3个文件a，b，c大小分别为10m，20m，150m，那么hadoop会分隔成4个块（10m，20m，128m，22m），从而产生4个map数。即，如果文件大于块大小(128m)，那么会拆分，如果小于块大小，则把该文件当成一个块。</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>2） 是不是map数越多越好？</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答案是否定的。如果一个任务有很多小文件（远远小于块大小128m），则每个小文件也会被当做一个块，用一个map任务来完成，而一个map任务启动和初始化的时间远远大于逻辑处理的时间，就会造成很大的资源浪费。而且，同时可执行的map数是受限的。</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答案是否定的。如果一个任务有很多小文件（远远小于块大小128m），则每个小文件也会被当做一个块，用一个map任务来完成，而一个map任务启动和初始化的时间远远大于逻辑处理的时间，就会造成很大的资源浪费。而且，同时可执行的map数是受限的。</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>3） 是不是保证每个map处理接近128m的文件块，就高枕无忧了？</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答案也是不一定。比如有一个127m的文件，正常会用一个map去完成，但这个文件只有一个或者两个小字段，却有几千万的记录，如果map处理的逻辑比较复杂，用一个map任务去做，肯定也比较耗时。</span><br><span class="line"></span><br><span class="line">针对上面的问题2和3，我们需要采取两种方式来解决：即减少map数和增加map数；</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答案也是不一定。比如有一个127m的文件，正常会用一个map去完成，但这个文件只有一个或者两个小字段，却有几千万的记录，如果map处理的逻辑比较复杂，用一个map任务去做，肯定也比较耗时。</span><br><span class="line"></span><br><span class="line">针对上面的问题2和3，我们需要采取两种方式来解决：即减少map数和增加map数；</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h5 id="2-小文件合并"><a href="#2-小文件合并" class="headerlink" title="2 小文件合并"></a>2 小文件合并</h5><ul>
@@ -531,7 +531,7 @@
 <li>根据 ==computeSliteSize(Math.max(minSize,Math.min(maxSize,blocksize)))==公式</li>
 <li>==调整maxSize最大值==。让maxSize最大值低于blocksize就可以增加map的个数。</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mapreduce.input.fileinputformat.split.minsize=1 默认值为1</span><br><span class="line"></span><br><span class="line">mapreduce.input.fileinputformat.split.maxsize=Long.MAXValue 默认值Long.MAXValue因此，默认情况下，切片大小=blocksize </span><br><span class="line"></span><br><span class="line">maxsize（切片最大值): 参数如果调到比blocksize小，则会让切片变小，而且就等于配置的这个参数的值。</span><br><span class="line"></span><br><span class="line">minsize(切片最小值): 参数调的比blockSize大，则可以让切片变得比blocksize还大。</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mapreduce.input.fileinputformat.split.minsize=1 默认值为1</span><br><span class="line"></span><br><span class="line">mapreduce.input.fileinputformat.split.maxsize=Long.MAXValue 默认值Long.MAXValue因此，默认情况下，切片大小=blocksize </span><br><span class="line"></span><br><span class="line">maxsize（切片最大值): 参数如果调到比blocksize小，则会让切片变小，而且就等于配置的这个参数的值。</span><br><span class="line"></span><br><span class="line">minsize(切片最小值): 参数调的比blockSize大，则可以让切片变得比blocksize还大。</span><br></pre></td></tr></table></figure>
 <ul>
 <li>例如</li>
 </ul>
@@ -548,7 +548,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> hive.exec.reducers.max=<span class="number">1009</span>;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>3) 计算reducer数的公式</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">N=min(参数2，总输入数据量/参数1)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">N=min(参数2，总输入数据量/参数1)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
