@@ -361,7 +361,7 @@
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'mytable'</span>, <span class="string">'base_info'</span>,<span class="string">' extra_info'</span>, &#123;NUMREGIONS =&gt; <span class="number">15</span>, SPLITALGO =&gt; <span class="string">'HexStringSplit'</span>&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p><img src="/Users/dingchuangshi/Downloads/20191111-HBase第二次课/assets/hbasePreSplit.png" alt="hbasePreSplit"></p>
+<p><img src="assets/hbasePreSplit.png" alt="hbasePreSplit"></p>
 <h2 id="7-region-合并"><a href="#7-region-合并" class="headerlink" title="7. region 合并"></a>7. region 合并</h2><h3 id="7-1-region合并说明"><a href="#7-1-region合并说明" class="headerlink" title="7.1 region合并说明"></a>7.1 region合并说明</h3><ul>
 <li>Region的合并不是为了性能,  而是出于维护的目的 .</li>
 <li>比如删除了大量的数据 ,这个时候每个Region都变得很小 ,存储多个Region就浪费了 ,这个时候可以把Region合并起来，进而可以减少一些Region服务器节点 </li>
