@@ -121,8 +121,6 @@
     
     <a href="#hdfs" title="hdfs" rel="1">hdfs</a>
     
-    <a href="#问题集合" title="问题集合" rel="1">问题集合</a>
-    
     <a href="#调优" title="调优" rel="1">调优</a>
     
     <a href="#数据仓库" title="数据仓库" rel="1">数据仓库</a>
@@ -133,21 +131,27 @@
     
     <a href="#MapReduce" title="MapReduce" rel="3">MapReduce</a>
     
-    <a href="#hbase" title="hbase" rel="2">hbase</a>
+    <a href="#function" title="function" rel="1">function</a>
+    
+    <a href="#hbase" title="hbase" rel="3">hbase</a>
+    
+    <a href="#协处理器" title="协处理器" rel="1">协处理器</a>
+    
+    <a href="#rowkey设计" title="rowkey设计" rel="1">rowkey设计</a>
     
     <a href="#hbase与hive整合" title="hbase与hive整合" rel="1">hbase与hive整合</a>
     
-    <a href="#function" title="function" rel="1">function</a>
+    <a href="#问题集合" title="问题集合" rel="1">问题集合</a>
     
     <a href="#phoenix" title="phoenix" rel="2">phoenix</a>
     
     <a href="#二级索引" title="二级索引" rel="1">二级索引</a>
     
+    <a href="#环境搭建" title="环境搭建" rel="2">环境搭建</a>
+    
     <a href="#zookeeper" title="zookeeper" rel="2">zookeeper</a>
     
     <a href="#zookeeper ha" title="zookeeper ha" rel="2">zookeeper ha</a>
-    
-    <a href="#环境搭建" title="环境搭建" rel="2">环境搭建</a>
     
 </div>
 
@@ -234,9 +238,9 @@
     <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
     </li> -->
     <div class="post-preview">
-        <a href="/2019/10/10/hadoop/Java大数据基础概论/">
+        <a href="/2019/10/15/hadoop/MapRedecer编程（一）/">
             <h2 class="post-title">
-                大数据概论-HDFS理论基础
+                MapRedecer编程（一）
             </h2>
             
         </a>
@@ -248,9 +252,9 @@
     <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
     </li> -->
     <div class="post-preview">
-        <a href="/2019/10/15/hadoop/MapRedecer编程（一）/">
+        <a href="/2019/10/10/hadoop/Java大数据基础概论/">
             <h2 class="post-title">
-                MapRedecer编程（一）
+                大数据概论-HDFS理论基础
             </h2>
             
         </a>
@@ -290,9 +294,9 @@
     <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
     </li> -->
     <div class="post-preview">
-        <a href="/2019/11/13/hbase/大数据开发之HBase（二）/">
+        <a href="/2019/11/03/hadoop/hadoop之数据分析Hive（二）/">
             <h2 class="post-title">
-                大数据开发之HBase（二）
+                hadoop之数据分析Hive（二）
             </h2>
             
         </a>
@@ -318,9 +322,9 @@
     <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
     </li> -->
     <div class="post-preview">
-        <a href="/2019/11/03/hadoop/hadoop之数据分析Hive（二）/">
+        <a href="/2019/11/13/hbase/大数据开发之HBase（二）/">
             <h2 class="post-title">
-                hadoop之数据分析Hive（二）
+                大数据开发之HBase（二）
             </h2>
             
         </a>
@@ -463,27 +467,6 @@
 </div>
 
 <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="问题集合">
-                    <span class="tag-text">问题集合</span>
-                </span>
-    
-    <!-- <li class="listing-item">
-    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-    </li> -->
-    <div class="post-preview">
-        <a href="/2019/11/15/exceptions/大数据问题集合/">
-            <h2 class="post-title">
-                大数据问题集合
-            </h2>
-            
-        </a>
-        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-    </div>
-    
-</div>
-
-<div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="调优">
                     <span class="tag-text">调优</span>
                 </span>
@@ -617,9 +600,58 @@
 </div>
 
 <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="function">
+                    <span class="tag-text">function</span>
+                </span>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/11/03/hadoop/hadoop之数据分析Hive（二）/">
+            <h2 class="post-title">
+                hadoop之数据分析Hive（二）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+</div>
+
+<div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="hbase">
                     <span class="tag-text">hbase</span>
                 </span>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/11/17/hbase/大数据开发之HBase（四）/">
+            <h2 class="post-title">
+                大数据开发之HBase（四）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/11/11/hbase/大数据开发之Hbase（一）/">
+            <h2 class="post-title">
+                大数据开发之Hbase（一）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
     
     <!-- <li class="listing-item">
     <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
@@ -635,14 +667,42 @@
         <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
     </div>
     
+</div>
+
+<div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="协处理器">
+                    <span class="tag-text">协处理器</span>
+                </span>
+    
     <!-- <li class="listing-item">
     <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
     <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
     </li> -->
     <div class="post-preview">
-        <a href="/2019/11/11/hbase/大数据开发之Hbase（一）/">
+        <a href="/2019/11/17/hbase/大数据开发之HBase（四）/">
             <h2 class="post-title">
-                大数据开发之Hbase（一）
+                大数据开发之HBase（四）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+</div>
+
+<div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="rowkey设计">
+                    <span class="tag-text">rowkey设计</span>
+                </span>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/11/17/hbase/大数据开发之HBase（四）/">
+            <h2 class="post-title">
+                大数据开发之HBase（四）
             </h2>
             
         </a>
@@ -673,8 +733,8 @@
 </div>
 
 <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="function">
-                    <span class="tag-text">function</span>
+                <span class="fa fa-tag listing-seperator" id="问题集合">
+                    <span class="tag-text">问题集合</span>
                 </span>
     
     <!-- <li class="listing-item">
@@ -682,9 +742,9 @@
     <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
     </li> -->
     <div class="post-preview">
-        <a href="/2019/11/03/hadoop/hadoop之数据分析Hive（二）/">
+        <a href="/2019/11/15/exceptions/大数据问题集合/">
             <h2 class="post-title">
-                hadoop之数据分析Hive（二）
+                大数据问题集合
             </h2>
             
         </a>
@@ -750,76 +810,6 @@
 </div>
 
 <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="zookeeper">
-                    <span class="tag-text">zookeeper</span>
-                </span>
-    
-    <!-- <li class="listing-item">
-    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-    </li> -->
-    <div class="post-preview">
-        <a href="/2019/10/27/zookeeper/zookeeper分布式协调框架（一）/">
-            <h2 class="post-title">
-                zookeeper分布式协调框架（一）
-            </h2>
-            
-        </a>
-        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-    </div>
-    
-    <!-- <li class="listing-item">
-    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-    </li> -->
-    <div class="post-preview">
-        <a href="/2019/10/28/zookeeper/zookeeper分布式协调框架（二）/">
-            <h2 class="post-title">
-                zookeeper分布式协调框架（二）
-            </h2>
-            
-        </a>
-        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-    </div>
-    
-</div>
-
-<div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="zookeeper ha">
-                    <span class="tag-text">zookeeper ha</span>
-                </span>
-    
-    <!-- <li class="listing-item">
-    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-    </li> -->
-    <div class="post-preview">
-        <a href="/2019/10/27/zookeeper/zookeeper分布式协调框架（一）/">
-            <h2 class="post-title">
-                zookeeper分布式协调框架（一）
-            </h2>
-            
-        </a>
-        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-    </div>
-    
-    <!-- <li class="listing-item">
-    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-    </li> -->
-    <div class="post-preview">
-        <a href="/2019/10/28/zookeeper/zookeeper分布式协调框架（二）/">
-            <h2 class="post-title">
-                zookeeper分布式协调框架（二）
-            </h2>
-            
-        </a>
-        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-    </div>
-    
-</div>
-
-<div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="环境搭建">
                     <span class="tag-text">环境搭建</span>
                 </span>
@@ -846,6 +836,76 @@
         <a href="/2019/10/28/zookeeper/zookeeper分布式协调框架（二）/">
             <h2 class="post-title">
                 zookeeper分布式协调框架（二）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+</div>
+
+<div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="zookeeper">
+                    <span class="tag-text">zookeeper</span>
+                </span>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/10/28/zookeeper/zookeeper分布式协调框架（二）/">
+            <h2 class="post-title">
+                zookeeper分布式协调框架（二）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/10/27/zookeeper/zookeeper分布式协调框架（一）/">
+            <h2 class="post-title">
+                zookeeper分布式协调框架（一）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+</div>
+
+<div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="zookeeper ha">
+                    <span class="tag-text">zookeeper ha</span>
+                </span>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/10/28/zookeeper/zookeeper分布式协调框架（二）/">
+            <h2 class="post-title">
+                zookeeper分布式协调框架（二）
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2019/10/27/zookeeper/zookeeper分布式协调框架（一）/">
+            <h2 class="post-title">
+                zookeeper分布式协调框架（一）
             </h2>
             
         </a>
