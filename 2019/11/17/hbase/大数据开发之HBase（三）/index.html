@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        大数据开发之HBase（三） - Kaffir Lily的博客 | Kaffir Lily&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="icon-font icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#大数据数据库之HBase"><span class="toc-text">大数据数据库之HBase</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HBase协处理器"><span class="toc-text">1. HBase协处理器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-两种协处理器"><span class="toc-text">1.1 两种协处理器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-observer"><span class="toc-text">1.1.1 observer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-2-endpoint"><span class="toc-text">1.1.2 endpoint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-3-总结"><span class="toc-text">1.1.3 总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-协处理器加载方式"><span class="toc-text">1.2 协处理器加载方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-静态加载"><span class="toc-text">1.2.1 静态加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-动态加载"><span class="toc-text">1.2.2 动态加载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-协处理器Observer实战"><span class="toc-text">1.3 协处理器Observer实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-创建第一张表proc1"><span class="toc-text">1.3.1 创建第一张表proc1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-创建第二张表proc2"><span class="toc-text">1.3.2 创建第二张表proc2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-开发HBase协处理器"><span class="toc-text">1.3.3 开发HBase协处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-将项目打成jar包，并上传到HDFS上面"><span class="toc-text">1.3.4 将项目打成jar包，并上传到HDFS上面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-5-将jar包挂载到proc1表"><span class="toc-text">1.3.5 将jar包挂载到proc1表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-6-向proc1表添加数据"><span class="toc-text">1.3.6 向proc1表添加数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-HBase表的rowkey设计"><span class="toc-text">2. HBase表的rowkey设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-rowkey长度原则"><span class="toc-text">2.1 rowkey长度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-rowkey散列原则"><span class="toc-text">2.2 rowkey散列原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-rowkey唯一原则"><span class="toc-text">2.3 rowkey唯一原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-HBase表的热点"><span class="toc-text">3. HBase表的热点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-什么是热点"><span class="toc-text">3.2 什么是热点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-热点的解决方案"><span class="toc-text">3.2 热点的解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-预分区"><span class="toc-text">3.2.1 预分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-加盐"><span class="toc-text">3.2.3 加盐</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-哈希"><span class="toc-text">3.2.4 哈希</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-反转"><span class="toc-text">3.2.4 反转</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-HBase的数据备份"><span class="toc-text">4. HBase的数据备份</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-基于HBase提供的类对表进行备份"><span class="toc-text">4.1 基于HBase提供的类对表进行备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-基于snapshot快照对表进行备份"><span class="toc-text">4.2 基于snapshot快照对表进行备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-快照实战"><span class="toc-text">4.3 快照实战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-HBase二级索引"><span class="toc-text">5. HBase二级索引</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        大数据开发之HBase（三）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-11-17 19:48:03</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#协处理器" title="协处理器">协处理器</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#rowkey设计" title="rowkey设计">rowkey设计</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="大数据数据库之HBase"><a href="#大数据数据库之HBase" class="headerlink" title="大数据数据库之HBase"></a>大数据数据库之HBase</h1><h2 id="1-HBase协处理器"><a href="#1-HBase协处理器" class="headerlink" title="1. HBase协处理器"></a>1. HBase协处理器</h2><ul>
+<li><a href="http://hbase.apache.org/book.html#cp" target="_blank" rel="noopener">http://hbase.apache.org/book.html#cp</a></li>
+<li>起源：<ul>
+<li>Hbase 作为列族数据库最经常被人诟病的特性包括：无法轻易建立“二级索引”，难以执行求和、计数、排序等操作。比如，在旧版本的(&lt;0.92)Hbase 中，统计数据表的总行数，需 要使用 Counter 方法，执行一次 MapReduce Job 才能得到。</li>
+<li>虽然 HBase 在数据存储层中集成了 MapReduce，能够有效用于数据表的分布式计算。然而在很多情况下，做一些简单的相加或者聚合计算的时候， 如果直接将计算过程放置在 server端，能够减少通讯开销，从而获得很好的性能提升。</li>
+<li>于是， HBase 在 0.92 之后引入了协处理器(coprocessors)，实现一些激动人心的新特性：能够轻易建立二次索引、复杂过滤器(谓词下推)以及访问控制等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-两种协处理器"><a href="#1-1-两种协处理器" class="headerlink" title="1.1 两种协处理器"></a>1.1 两种协处理器</h3><ul>
+<li>协处理器有两种：observer和endpoint</li>
+</ul>
+<h4 id="1-1-1-observer"><a href="#1-1-1-observer" class="headerlink" title="1.1.1 observer"></a>1.1.1 observer</h4><ul>
+<li>Observer 类似于传统数据库中的触发器，当发生某些事件的时候这类协处理器会被 Server 端调用。</li>
+<li><p>Observer Coprocessor就是一些散布在 HBase Server 端代码中的 hook 钩子， 在固定的事件发生时被调用。</p>
+<ul>
+<li>比如： put 操作之前有钩子函数 prePut，该函数在put操作执行前会被Region Server调用；在 put 操作之后则有 postPut 钩子函数</li>
+</ul>
+</li>
+<li><p>以 HBase0.92 版本为例，它提供了三种观察者接口：</p>
+<ul>
+<li>RegionObserver：提供客户端的数据操纵事件钩子： Get、 Put、 Delete、 Scan 等。</li>
+<li>WALObserver：提供 WAL 相关操作钩子。</li>
+<li>MasterObserver：提供 DDL类型的操作钩子。如创建、删除、修改数据表等。</li>
+<li>到 0.96 版本又新增一个 RegionServerObserver</li>
+</ul>
+</li>
+</ul>
+<p><img src="assets/Image201911151202.png" alt=""></p>
+<ul>
+<li>下图是以 RegionObserver 为例子讲解 Observer 这种协处理器的原理：</li>
+</ul>
+<p><img src="assets/1122015-20170511100919222-711579099.png" alt="1122015-20170511100919222-711579099"></p>
+<h4 id="1-1-2-endpoint"><a href="#1-1-2-endpoint" class="headerlink" title="1.1.2 endpoint"></a>1.1.2 endpoint</h4><ul>
+<li>Endpoint协处理器类似传统数据库中的存储过程，客户端可以调用这些 Endpoint 协处理器执行一段 Server 端代码，并将 Server 端代码的结果返回给客户端进一步处理</li>
+<li>最常见的用法就是进行聚集操作。<ul>
+<li>如果没有协处理器，当用户需要找出一张表中的最大数据，即max 聚合操作，就必须进行全表扫描，在客户端代码内遍历扫描结果，并执行求最大值的操作。</li>
+<li>这样的方法无法利用底层集群的并发能力，而将所有计算都集中到 Client 端统一执 行，势必效率低下。</li>
+<li>利用 Coprocessor，用户可以将求最大值的代码部署到 HBase Server 端，HBase将利用底层cluster 的多个节点并发执行求最大值的操作。即在每个 Region范围内执行求最大值的代码，将每个 Region 的最大值在 Region Server 端计算出，仅仅将该 max 值返回给客户端。</li>
+<li>在客户端进一步将多个 Region 的最大值进一步处理而找到其中的最大值。这样整体的执行效率就会提高很多</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-1-3-总结"><a href="#1-1-3-总结" class="headerlink" title="1.1.3 总结"></a>1.1.3 总结</h4><ul>
+<li>Observer允许集群在正常的客户端操作过程中可以有不同的行为表现</li>
+<li>Endpoint 允许扩展集群的能力，对客户端应用开放新的运算命令</li>
+<li>observer 类似于 RDBMS 中的触发器，主要在服务端工作</li>
+<li>endpoint 类似于 RDBMS 中的存储过程，主要在 client 端工作</li>
+<li>observer 可以实现权限管理、优先级设置、监控、 ddl 控制、 二级索引等功能</li>
+<li>endpoint 可以实现 min、 max、 avg、 sum、 distinct、 group by 等功能</li>
+</ul>
+<h3 id="1-2-协处理器加载方式"><a href="#1-2-协处理器加载方式" class="headerlink" title="1.2 协处理器加载方式"></a>1.2 协处理器加载方式</h3><ul>
+<li>协处理器的加载方式有两种<ul>
+<li>静态加载方式（ Static Load）；静态加载的协处理器称之为 System Coprocessor</li>
+<li>动态加载方式 （ Dynamic Load）；动态加载的协处理器称 之为 Table Coprocessor</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-1-静态加载"><a href="#1-2-1-静态加载" class="headerlink" title="1.2.1 静态加载"></a>1.2.1 静态加载</h4><ul>
+<li>通过修改 hbase-site.xml 这个文件来实现， 如启动全局 aggregation，能过操纵所有的表数据。只需要在hbase-site.xml里面添加以下配置即可</li>
+<li>==注意==：修改完配置之后需要<strong>重启HBase集群</strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.coprocessor.user.region.classes<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hbase.coprocessor.AggregateImplementation<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>为所有table加载了一个 cp class，可以用” ,”分割加载多个 class，修改</li>
+</ul>
+<h4 id="1-2-2-动态加载"><a href="#1-2-2-动态加载" class="headerlink" title="1.2.2 动态加载"></a>1.2.2 动态加载</h4><ul>
+<li>启用表aggregation，只对特定的表生效。</li>
+<li>通过 HBase Shell 来实现。</li>
+<li>disable 指定表。</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; disable <span class="string">'mytable'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加 aggregation</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; alter <span class="string">'mytable'</span>, METHOD =&gt; <span class="string">'table_att'</span>,<span class="string">'coprocessor'</span>=&gt;<span class="string">'|org.apache.Hadoop.hbase.coprocessor.AggregateImplementation||'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>重启指定表 </li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; enable <span class="string">'mytable'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>协处理器卸载</p>
+<p> <img src="assets/xxx.png" alt="xxx"></p>
+</li>
+</ul>
+<h3 id="1-3-协处理器Observer实战"><a href="#1-3-协处理器Observer实战" class="headerlink" title="1.3 协处理器Observer实战"></a>1.3 协处理器Observer实战</h3><p><img src="assets/xdfsdfsdf.png" alt="xdfsdfsdf" style="zoom:80%;"></p>
+<ul>
+<li>通过协处理器Observer实现向hbase当中一张表插入数据时，通过协处理器，将数据复制一份保存到另外一张表当中去；但是只取第一张表当中的部分列数据，保存到第二张表当中去</li>
+</ul>
+<h4 id="1-3-1-创建第一张表proc1"><a href="#1-3-1-创建第一张表proc1" class="headerlink" title="1.3.1 创建第一张表proc1"></a>1.3.1 创建第一张表proc1</h4><ul>
+<li>打开hbase shell</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd //install/hbase-1.2.0-cdh5.14.2/</span><br><span class="line">bin/hbase shell</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在HBase当中创建一张表，表名user2，并只有一个列族info</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):053:0&gt;</span> create <span class="string">'proc1'</span>,<span class="string">'info'</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-3-2-创建第二张表proc2"><a href="#1-3-2-创建第二张表proc2" class="headerlink" title="1.3.2 创建第二张表proc2"></a>1.3.2 创建第二张表proc2</h4><ul>
+<li>创建第二张表proc2，作为目标表</li>
+<li>将第一张表当中插入数据的部分列，使用协处理器，复制到proc2表当中来</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):054:0&gt;</span> create <span class="string">'proc2'</span>,<span class="string">'info'</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-3-3-开发HBase协处理器"><a href="#1-3-3-开发HBase协处理器" class="headerlink" title="1.3.3 开发HBase协处理器"></a>1.3.3 开发HBase协处理器</h4><ul>
+<li>创建maven工程所用的repositories、dependencies、plugins跟之前的一样</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>cloudera<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-mr1-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.testng<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testng<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.14.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--    &lt;verbal&gt;true&lt;/verbal&gt;--&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-shade-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>shade<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">filters</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">artifact</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">artifact</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.SF<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.DSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*/RSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">filters</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>开发HBase的协处理器</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba.hbase.cp;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.Cell;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.coprocessor.BaseRegionObserver;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.coprocessor.ObserverContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.regionserver.wal.WALEdit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyProcessor</span> <span class="keyword">extends</span> <span class="title">BaseRegionObserver</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> e</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> put   插入到proc1表里面的数据，都是封装在put对象里面了</span></span><br><span class="line"><span class="comment">     *              插入到proc1表里面的数据都在put对象里面，就可以解析put对象，获取数据，获取到了数据之后，插入到proc2表里面去</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> edit</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> durability</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prePut</span><span class="params">(ObserverContext&lt;RegionCoprocessorEnvironment&gt; e, Put put, WALEdit edit, Durability durability)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">//获取连接</span></span><br><span class="line">        Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">        configuration.set(<span class="string">"hbase.zookeeper.quorum"</span>, <span class="string">"node01:2181,node02:2181,node03:2181"</span>);</span><br><span class="line">        Connection connection = ConnectionFactory.createConnection(configuration);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//涉及到多个版本问题</span></span><br><span class="line">        List&lt;Cell&gt; cells = put.get(<span class="string">"info"</span>.getBytes(), <span class="string">"name"</span>.getBytes());</span><br><span class="line">        Cell nameCell = cells.get(<span class="number">0</span>);<span class="comment">//获取最新的那个版本数据</span></span><br><span class="line">        <span class="comment">//Cell nameCell = put.get("info".getBytes(), "name".getBytes()).get(0);</span></span><br><span class="line">        Put put1 = <span class="keyword">new</span> Put(put.getRow());</span><br><span class="line">        put1.add(nameCell);</span><br><span class="line">        Table reverseuser = connection.getTable(TableName.valueOf(<span class="string">"proc2"</span>));</span><br><span class="line">        reverseuser.put(put1);</span><br><span class="line">        reverseuser.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-4-将项目打成jar包，并上传到HDFS上面"><a href="#1-3-4-将项目打成jar包，并上传到HDFS上面" class="headerlink" title="1.3.4 将项目打成jar包，并上传到HDFS上面"></a>1.3.4 将项目打成jar包，并上传到HDFS上面</h4><ul>
+<li>将我们的协处理器打成一个jar包，此处不需要用任何的打包插件即可</li>
+<li>然后将打好的jar包上传到linux的/kfly/install路径下</li>
+<li>再将jar包上传到HDFS</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install</span><br><span class="line">mv original-hbaseStudy-1.0-SNAPSHOT.jar  processor.jar</span><br><span class="line">hdfs dfs -mkdir -p /processor</span><br><span class="line">hdfs dfs -put processor.jar /processor</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-5-将jar包挂载到proc1表"><a href="#1-3-5-将jar包挂载到proc1表" class="headerlink" title="1.3.5 将jar包挂载到proc1表"></a>1.3.5 将jar包挂载到proc1表</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):056:0&gt;</span> describe <span class="string">'proc1'</span></span><br><span class="line"><span class="meta">hbase(main):055:0&gt;</span> alter <span class="string">'proc1'</span>,METHOD =&gt; <span class="string">'table_att'</span>,<span class="string">'Coprocessor'</span>=&gt;<span class="string">'hdfs://node01:8020/processor/processor.jar|top.kfly.hbasemr.MyProcessor|1001|'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>再次查看’proc1’表；可以查看到我们的卸载器已经加载了</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):043:0&gt;</span> describe <span class="string">'proc1'</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-3-6-向proc1表添加数据"><a href="#1-3-6-向proc1表添加数据" class="headerlink" title="1.3.6 向proc1表添加数据"></a>1.3.6 向proc1表添加数据</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba.hbase.cp.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Connection;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Put;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Table;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.testng.annotations.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestObserver</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPut</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//获取连接</span></span><br><span class="line">        Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">        configuration.set(<span class="string">"hbase.zookeeper.quorum"</span>, <span class="string">"node01,node02"</span>);</span><br><span class="line"></span><br><span class="line">        Connection connection = ConnectionFactory.createConnection(configuration);</span><br><span class="line"></span><br><span class="line">        Table user5 = connection.getTable(TableName.valueOf(<span class="string">"proc1"</span>));</span><br><span class="line"></span><br><span class="line">        Put put1 = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">"hello_world"</span>));</span><br><span class="line"></span><br><span class="line">        put1.addColumn(Bytes.toBytes(<span class="string">"info"</span>),<span class="string">"name"</span>.getBytes(),<span class="string">"helloworld"</span>.getBytes());</span><br><span class="line">        put1.addColumn(Bytes.toBytes(<span class="string">"info"</span>),<span class="string">"gender"</span>.getBytes(),<span class="string">"abc"</span>.getBytes());</span><br><span class="line">        put1.addColumn(Bytes.toBytes(<span class="string">"info"</span>),<span class="string">"nationality"</span>.getBytes(),<span class="string">"test"</span>.getBytes());</span><br><span class="line">        user5.put(put1);</span><br><span class="line">        <span class="keyword">byte</span>[] row = put1.getRow();</span><br><span class="line">        System.out.println(Bytes.toString(row));</span><br><span class="line">        user5.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注意：如果需要卸载我们的协处理器，那么进入hbase的shell命令行，执行以下命令即可</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">disable <span class="string">'proc1'</span></span><br><span class="line">alter <span class="string">'proc1'</span>,METHOD=&gt;<span class="string">'table_att_unset'</span>,NAME=&gt;<span class="string">'coprocessor$1'</span></span><br><span class="line">enable <span class="string">'proc1'</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-HBase表的rowkey设计"><a href="#2-HBase表的rowkey设计" class="headerlink" title="2. HBase表的rowkey设计"></a>2. HBase表的rowkey设计</h2><ul>
+<li>rowkey设计三原则</li>
+</ul>
+<h3 id="2-1-rowkey长度原则"><a href="#2-1-rowkey长度原则" class="headerlink" title="2.1 rowkey长度原则"></a>2.1 rowkey长度原则</h3><ul>
+<li>rowkey是一个二进制码流，可以是任意字符串，最大长度64kb，实际应用中一般为10-100bytes，以byte[]形式保存，一般设计成定长。</li>
+</ul>
+<ul>
+<li>建议尽可能短；但是也不能太短，否则rowkey前缀重复的概率增大</li>
+<li>设计过长会降低memstore内存的利用率和HFile存储数据的效率。</li>
+</ul>
+<h3 id="2-2-rowkey散列原则"><a href="#2-2-rowkey散列原则" class="headerlink" title="2.2 rowkey散列原则"></a>2.2 rowkey散列原则</h3><ul>
+<li>建议将rowkey的高位作为散列字段，这样将提高数据均衡分布在每个RegionServer，以实现负载均衡的几率。</li>
+<li>如果没有散列字段，首字段直接是时间信息。所有的数据都会集中在一个RegionServer上，这样在数据检索的时候负载会集中在个别的RegionServer上，造成热点问题，会降低查询效率。    </li>
+</ul>
+<h3 id="2-3-rowkey唯一原则"><a href="#2-3-rowkey唯一原则" class="headerlink" title="2.3 rowkey唯一原则"></a>2.3 rowkey唯一原则</h3><ul>
+<li>必须在设计上保证其唯一性，rowkey是按照字典顺序排序存储的</li>
+<li>因此，设计rowkey的时候，要充分利用这个排序的特点，可以将经常读取的数据存储到一块，将最近可能会被访问的数据放到一块</li>
+<li>下图为电信上网详单数据，保存在HBase的一个应用场景</li>
+</ul>
+<p><img src="assets/2019-10-16_112336.png" alt="2019-10-16_112336"></p>
+<p><img src="assets/2019-10-16_112157.png" alt="2019-10-16_112157"></p>
+<p><img src="assets/2019-10-16_112529.png" alt="2019-10-16_112529"></p>
+<h2 id="3-HBase表的热点"><a href="#3-HBase表的热点" class="headerlink" title="3. HBase表的热点"></a>3. HBase表的热点</h2><h3 id="3-2-什么是热点"><a href="#3-2-什么是热点" class="headerlink" title="3.2 什么是热点"></a>3.2 什么是热点</h3><ul>
+<li>检索habse的记录首先要通过row key来定位数据行。</li>
+<li>当大量的client访问hbase集群的一个或少数几个节点，造成少数region server的读/写请求过多、负载过大，而其他region server负载却很小，就造成了“热点”现象。</li>
+</ul>
+<h3 id="3-2-热点的解决方案"><a href="#3-2-热点的解决方案" class="headerlink" title="3.2 热点的解决方案"></a>3.2 热点的解决方案</h3><h4 id="3-2-1-预分区"><a href="#3-2-1-预分区" class="headerlink" title="3.2.1 预分区"></a>3.2.1 预分区</h4><ul>
+<li>预分区的目的让表的数据可以均衡的分散在集群中，而不是默认只有一个region分布在集群的一个节点上。</li>
+</ul>
+<h4 id="3-2-3-加盐"><a href="#3-2-3-加盐" class="headerlink" title="3.2.3 加盐"></a>3.2.3 加盐</h4><ul>
+<li>这里所说的加盐不是密码学中的加盐，而是在rowkey的前面增加随机数，具体就是给rowkey分配一个随机前缀以使得它和之前的rowkey的开头不同</li>
+</ul>
+<h4 id="3-2-4-哈希"><a href="#3-2-4-哈希" class="headerlink" title="3.2.4 哈希"></a>3.2.4 哈希</h4><ul>
+<li>哈希会使同一行永远用一个前缀加盐。哈希也可以使负载分散到整个集群，但是读却是可以预测的。使用确定的哈希可以让客户端重构完整的rowkey，可以使用get操作准确获取某一个行数据。</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">rowkey</span>=MD5(username).subString(<span class="number">0</span>,<span class="number">10</span>)+时间戳</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-4-反转"><a href="#3-2-4-反转" class="headerlink" title="3.2.4 反转"></a>3.2.4 反转</h4><ul>
+<li>反转固定长度或者数字格式的rowkey。这样可以使得rowkey中经常改变的部分（最没有意义的部分）放在前面。</li>
+<li>这样可以有效的随机rowkey，但是牺牲了rowkey的有序性。</li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">电信公司：</span><br><span class="line">移动-----------&gt; <span class="number">136</span>xxxx9301  -----&gt;<span class="number">1039</span>xxxx631</span><br><span class="line">				<span class="number">136</span>xxxx1234  </span><br><span class="line">				<span class="number">136</span>xxxx2341 </span><br><span class="line">电信</span><br><span class="line">联通</span><br><span class="line"></span><br><span class="line">user表</span><br><span class="line">rowkey    name    age   sex    <span class="keyword">address</span></span><br><span class="line"><span class="keyword">	</span>	  lisi1    <span class="number">21</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi2    <span class="number">22</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi3    <span class="number">25</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi4    <span class="number">30</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi5    <span class="number">40</span>     f       <span class="keyword">shanghai</span></span><br><span class="line"><span class="keyword">	</span>	  lisi6    <span class="number">50</span>     f       tianjin</span><br><span class="line">	          </span><br><span class="line">需求：后期想经常按照居住地和年龄进行查询？	</span><br><span class="line">rowkey= <span class="keyword">address+age+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing21+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing22+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing25+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing30+随机数</span></span><br><span class="line"><span class="keyword"> </span>  </span><br><span class="line">rowkey= <span class="keyword">address+age+随机数</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-HBase的数据备份"><a href="#4-HBase的数据备份" class="headerlink" title="4. HBase的数据备份"></a>4. HBase的数据备份</h2><h3 id="4-1-基于HBase提供的类对表进行备份"><a href="#4-1-基于HBase提供的类对表进行备份" class="headerlink" title="4.1 基于HBase提供的类对表进行备份"></a>4.1 基于HBase提供的类对表进行备份</h3><ul>
+<li><p>使用HBase提供的类把HBase中某张表的数据导出到HDFS，之后再导出到测试hbase表中。</p>
+</li>
+<li><p>(1)  ==从hbase表导出到HDFS==</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 shells]$ hbase org.apache.hadoop.hbase.mapreduce.Export myuser /hbase_data/myuser_bak</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>(2) ==文件导入hbase表==</p>
+<p>hbase shell中创建备份目标表</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'myuser_bak'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>将HDFS上的数据导入到备份目标表中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.mapreduce.Driver import myuser_bak /hbase_data/myuser_bak/*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>补充说明</p>
+<p>以上都是对数据进行了全量备份，后期也可以实现表的<strong>增量数据备份</strong>，增量备份跟全量备份操作差不多，只不过要在后面加上时间戳。</p>
+<p>例如：<br>HBase数据导出到HDFS</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase org<span class="selector-class">.apache</span><span class="selector-class">.hadoop</span><span class="selector-class">.hbase</span><span class="selector-class">.mapreduce</span><span class="selector-class">.Export</span> test /hbase_data/test_bak_increment 开始时间戳  结束时间戳</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-2-基于snapshot快照对表进行备份"><a href="#4-2-基于snapshot快照对表进行备份" class="headerlink" title="4.2 基于snapshot快照对表进行备份"></a>4.2 基于snapshot快照对表进行备份</h3><ul>
+<li><p>通过snapshot快照的方式实现HBase数据的迁移和拷贝。这种方式比较常用，效率高，也是最为推荐的数据迁移方式。</p>
+</li>
+<li><p>HBase的snapshot其实就是一组==metadata==信息的集合（文件列表），通过这些metadata信息的集合，就能将表的数据回滚到snapshot那个时刻的数据。</p>
+<ul>
+<li>首先我们要了解一下所谓的HBase的LSM类型的系统结构，我们知道在HBase中，数据是先写入到Memstore中，当Memstore中的数据达到一定条件，就会flush到HDFS中，形成HFile，后面就不允许原地修改或者删除了。</li>
+<li>如果要更新或者删除的话，只能追加写入新文件。既然数据写入以后就不会在发生原地修改或者删除，这就是snapshot做文章的地方。做snapshot的时候，只需要给快照表对应的所有文件创建好指针（元数据集合），恢复的时候只需要根据这些指针找到对应的文件进行恢复就Ok。这是原理的最简单的描述，下图是描述快照时候的简单流程：    </li>
+</ul>
+<p><img src="assets/snapshot.png" alt="snapshot"></p>
+</li>
+</ul>
+<h3 id="4-3-快照实战"><a href="#4-3-快照实战" class="headerlink" title="4.3 快照实战"></a>4.3 <strong>快照实战</strong></h3><ul>
+<li>1、创建表的snapshot</li>
+</ul>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">snapshot</span> <span class="string">'tableName'</span>, <span class="string">'snapshotName'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>2、查看snapshot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list_snapshots</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>​        查找以test开头的snapshot</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">list_snapshots</span> <span class="string">'test.*'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>3、恢复snapshot</li>
+</ul>
+<p>​        ps:这里需要对表进行disable操作，先把表置为不可用状态，然后在进行进行restore_snapshot的操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">disable</span> <span class="string">'tableName'</span></span><br><span class="line">restore_snapshot <span class="string">'snapshotName'</span></span><br><span class="line"><span class="built_in">enable</span> <span class="string">'tableName'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>4、删除snapshot</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">delete_snapshot</span> <span class="string">'snapshotName'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>5、迁移 snapshot</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot \</span><br><span class="line">-<span class="ruby">snapshot snapshotName  \</span></span><br><span class="line"><span class="ruby">-copy-from <span class="symbol">hdfs:</span>/<span class="regexp">/src-hbase-root-dir/hbase</span> \</span></span><br><span class="line"><span class="ruby">-copy-to <span class="symbol">hdfs:</span>/<span class="regexp">/dst-hbase-root-dir/hbase</span> \</span></span><br><span class="line"><span class="ruby">-mappers <span class="number">1</span> \</span></span><br><span class="line"><span class="ruby">-bandwidth <span class="number">1024</span></span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">例如：</span></span><br><span class="line"><span class="ruby">hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot \</span></span><br><span class="line"><span class="ruby">-snapshot test  \</span></span><br><span class="line"><span class="ruby">-copy-from <span class="symbol">hdfs:</span>/<span class="regexp">/node01:8020/hbase</span> \</span></span><br><span class="line"><span class="ruby">-copy-to <span class="symbol">hdfs:</span>/<span class="regexp">/node01:8020/hbase</span>1 \</span></span><br><span class="line"><span class="ruby">-mappers <span class="number">1</span> \</span></span><br><span class="line"><span class="ruby">-bandwidth <span class="number">1024</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>​        注意：这种方式用于将快照表迁移到另外一个集群的时候使用，使用MR进行数据的拷贝，速度很快，使用的时候记得设置好bandwidth参数，以免由于网络打满导致的线上业务故障。</p>
+<ul>
+<li><p>6、将snapshot使用bulkload的方式导入</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hbase org<span class="selector-class">.apache</span><span class="selector-class">.hadoop</span><span class="selector-class">.hbase</span><span class="selector-class">.mapreduce</span><span class="selector-class">.LoadIncrementalHFiles</span> \</span><br><span class="line">hdfs:<span class="comment">//dst-hbase-root-dir/hbase/archive/datapath/tablename/filename \</span></span><br><span class="line">tablename</span><br><span class="line"></span><br><span class="line">例如：</span><br><span class="line">创建一个新表</span><br><span class="line">create <span class="string">'newTest'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span></span><br><span class="line">hbase org<span class="selector-class">.apache</span><span class="selector-class">.hadoop</span><span class="selector-class">.hbase</span><span class="selector-class">.mapreduce</span><span class="selector-class">.LoadIncrementalHFiles</span> hdfs:<span class="comment">//node1:9000/hbase1/archive/data/default/test/6325fabb429bf45c5dcbbe672225f1fb newTest</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="5-HBase二级索引"><a href="#5-HBase二级索引" class="headerlink" title="5. HBase二级索引"></a>5. HBase二级索引</h2><p><img src="assets/hbase寻址.png" alt="hbase寻址"></p>
+<ul>
+<li>HBase表后期按照rowkey查询性能是最高的。rowkey就相当于hbase表的一级索引</li>
+<li><p>但是在实际的工作中，我们做的查询基本上都是按照一定的条件进行查找，无法事先知道满足这些条件的rowkey是什么，正常是可以通过hbase过滤器去实现。但是效率非常低，这是由于查询的过程中需要在底层进行大量的文件扫描。</p>
+</li>
+<li><p>HBase的二级索引</p>
+</li>
+<li>为了HBase的数据查询更高效、适应更多的场景，诸如使用非rowkey字段检索也能做到秒级响应，或者支持各个字段进行模糊查询和多字段组合查询等， 因此需要在HBase上面构建二级索引， 以满足现实中更复杂多样的业务需求。<ul>
+<li>hbase的二级索引其本质就是建立HBase表中列与行键之间的映射关系。</li>
+</ul>
+</li>
+</ul>
+<p><img src="assets/二级索引思想.png" alt=""></p>
+<ul>
+<li>构建hbase二级索引方案<ul>
+<li>MapReduce方案 </li>
+<li>Hbase Coprocessor(协处理器)方案 </li>
+<li>Solr+hbase方案</li>
+<li>ES+hbase方案</li>
+<li>Phoenix+hbase方案<ul>
+<li><a href="https://kfly.top/2019/11/17/phoenix/Phoenix%E6%9E%84%E5%BB%BA%E4%BA%8C%E7%BA%A7%E7%B4%A2%E5%BC%95/" target="_blank" rel="noopener">点击查看</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
