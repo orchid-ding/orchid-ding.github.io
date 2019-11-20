@@ -147,9 +147,37 @@
 </span>
     </div>
     <div class="post-content ">
-        <h1 id="1-hbase微博实战案例"><a href="#1-hbase微博实战案例" class="headerlink" title="1. hbase微博实战案例"></a>1. hbase微博实战案例</h1><h2 id="1-1-需求分析"><a href="#1-1-需求分析" class="headerlink" title="1.1 需求分析"></a>1.1 需求分析</h2><p>1) 微博内容的浏览，数据库表设计</p>
+        <h1 id="1-hbase微博实战案例"><a href="#1-hbase微博实战案例" class="headerlink" title="1. hbase微博实战案例"></a>1. hbase微博实战案例</h1><h2 id="1-1-需求分析"><a href="#1-1-需求分析" class="headerlink" title="1.1 需求分析"></a>1.1 需求分析</h2><blockquote>
+<ol>
+<li><p>hbase属于OLAP数据库，表设计与OLTP数据库不同，支持百万列。列的动态变化。</p>
+</li>
+<li><p>设计规范</p>
+<p>| <strong>项目</strong>     | <strong>说明</strong>                                                     | <strong>示例</strong>                                                     |<br>| ———— | ———————————————————— | ———————————————————— |<br>| <strong>命名空间</strong> | 采用英文单词、阿拉伯数字的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字。不建议用连接符（下划线）拼接多个单词，简单语义的可采用单个单词，复杂语义的可采用多个单词的首字母拼接。长度尽量限制在4~8字符之间。命名空间一般可与项目名称、组织机构名称等保持一致。 | 根据项目名称构建命名空间：DLQX（电力气象首字母拼接形式），简短明了。不建议过长的命名空间名称，譬如不推荐采用以下形式：USER_INFO_MANAGE等。 |<br>| <strong>表名称</strong>   | 采用英文单词、阿拉伯数字、连接符（_）的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字，可用连接符拼接多个单词。长度尽量限制在8~16字符之间。尽量采用具有明确意义的英文单词，而不建议采用汉字的拼音字母或者拼音首字母组合。 | 符合规范的表名称：USER_INFO_MANAGE、WEATHER_DATA、T_ELECTRIC_GATHER等。 |<br>| <strong>列族名称</strong> | 采用英文单词、阿拉伯数字的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字。长度尽量限制在1~6字符之间，过长的列族名称将占用更多的存储空间。 | 符合规范的列族名称：D1、D2、DATA等。不推荐的列族名称：USER_INFO、D_1等。 |<br>| <strong>列名称</strong>   | 采用英文单词、阿拉伯数字、连接符（_）的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字，可用连接符拼接多个单词。长度尽量限制在1~16字符之间。尽量采用具有明确意义的英文单词，而不建议采用汉字的拼音字母或者拼音首字母组合。 | 符合规范的列名称：USER_ID、DATA_1、REMARK等。不推荐的列名称：UserID、1_DA |</p>
+</li>
+</ol>
+</blockquote>
+<p>1) 微博内容的浏览，数据库表设计</p>
+<ul>
+<li>rowKey: uid + timestamp</li>
+</ul>
+<p><img src="assets/image-20191119172809987.png" alt="image-20191119172809987"></p>
 <p>2) 用户社交体现：关注用户，取关用户</p>
+<ul>
+<li><p>rowKey： uid</p>
+</li>
+<li><p>ColumnFamily： 关注（attends）、粉丝（fans）两个列族</p>
+</li>
+<li><p>列族下列名称和cell值直接使用uid，当新增关注或者粉丝时直接动态增加列即可</p>
+</li>
+</ul>
+<p><img src="assets/image-20191119172951520.png" alt="image-20191119172951520"></p>
 <p>3) 拉取关注的人的微博内容</p>
+<ul>
+<li>发送微博直接推送给粉丝，需要表微博收件箱</li>
+<li>rowKey 和列都用uid，动态增加列接收发送的微博</li>
+<li>cell值使用微博id，设置微博版本ß</li>
+</ul>
+<p><img src="assets/image-20191119174811329.png" alt="image-20191119174811329"></p>
 <h2 id="1-2-代码实现"><a href="#1-2-代码实现" class="headerlink" title="1.2 代码实现"></a>1.2 代码实现</h2><h3 id="1-2-1-准备工作"><a href="#1-2-1-准备工作" class="headerlink" title="1.2.1 准备工作"></a>1.2.1 准备工作</h3><ul>
 <li><p>第一步：创建maven工程并导入jar包</p>
 <p>直接使用在版本确界当中创建的工程以及导入的jar包即可</p>
@@ -294,6 +322,7 @@
 <p>b、根据获取的RowKey，得到微博内容</p>
 <p><strong>代码实现：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 某个用户获取收件箱表内容</span></span><br><span class="line"><span class="comment"> * 例如A用户刷新微博，拉取他所有关注人的微博内容</span></span><br><span class="line"><span class="comment"> * A 从 weibo:receive_content_email  表当中获取所有关注人的rowkey</span></span><br><span class="line"><span class="comment"> * 通过rowkey从weibo:content表当中获取微博内容</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getContent</span><span class="params">(String uid)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">//从weibo:receive_content_email 表当中获取用户id为uid的人的所有的微博列表</span></span><br><span class="line">    Connection connection = getConnection();</span><br><span class="line">    <span class="comment">//从 weibo:receive_content_email</span></span><br><span class="line">    Table table_receive_content_email = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));</span><br><span class="line">    <span class="comment">//定义list集合里面存储我们的所有的Get对象，用于下一步的查询</span></span><br><span class="line">    List&lt;Get&gt;  rowkeysList = <span class="keyword">new</span> ArrayList&lt;Get&gt;();</span><br><span class="line">    Get get = <span class="keyword">new</span> Get(uid.getBytes());</span><br><span class="line">    <span class="comment">//设置最大版本为5个</span></span><br><span class="line">    get.setMaxVersions(<span class="number">5</span>);</span><br><span class="line">    Result result = table_receive_content_email.get(get);</span><br><span class="line">    Cell[] cells = result.rawCells();</span><br><span class="line">    <span class="keyword">for</span> (Cell cell : cells) &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] rowkeys = CellUtil.cloneValue(cell);</span><br><span class="line">        Get get1 = <span class="keyword">new</span> Get(rowkeys);</span><br><span class="line">        rowkeysList.add(get1);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//从weibo:content表当中通过用户id进行查询微博内容</span></span><br><span class="line">    <span class="comment">//table_content内容表</span></span><br><span class="line">    Table table_content = connection.getTable(TableName.valueOf(TABLE_CONTENT));</span><br><span class="line">    <span class="comment">//所有查询出来的内容进行打印出来</span></span><br><span class="line">    Result[] results = table_content.get(rowkeysList);</span><br><span class="line">    <span class="keyword">for</span> (Result result1 : results) &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] value = result1.getValue(<span class="string">"info"</span>.getBytes(), <span class="string">"content"</span>.getBytes());</span><br><span class="line">        <span class="keyword">byte</span>[] row = result1.getRow();</span><br><span class="line">        String rowkey = Bytes.toString(row);</span><br><span class="line">        String[] split = rowkey.split(<span class="string">"_"</span>);</span><br><span class="line">        Content content = <span class="keyword">new</span> Content();</span><br><span class="line">        content.setUid(split[<span class="number">0</span>]);</span><br><span class="line">        content.setTimeStamp(Long.parseLong(split[<span class="number">1</span>]));</span><br><span class="line">        content.setContent(Bytes.toString(value));</span><br><span class="line">        System.out.println(content.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/orchid-ding/hadoop-example/tree/master/src/main/java/hbase/weibo" target="_blank" rel="noopener">点击获取代码示例</a></p>
 
         
         <br />
