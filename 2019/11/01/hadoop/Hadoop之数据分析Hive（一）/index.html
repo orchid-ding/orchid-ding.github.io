@@ -140,6 +140,9 @@
         <a class="tag" href="/tags/#hive" title="hive">hive</a>
         <span>/</span>
         
+        <a class="tag" href="/tags/#环境搭建" title="环境搭建">环境搭建</a>
+        <span>/</span>
+        
         
         </span>
         <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
@@ -240,61 +243,8 @@
 </li>
 </ul>
 <p><img src="assets/hive1.png" alt="hive1"></p>
-<h3 id="3-Hive的安装部署"><a href="#3-Hive的安装部署" class="headerlink" title="3. Hive的安装部署"></a>3. Hive的安装部署</h3><p>​    注意hive就是==一个构建数据仓库的工具==，只需要在==一台服务器上==安装就可以了，不需要在多台服务器上安装。 </p>
-<ul>
-<li><p>1、提前先安装好mysql服务和hadoop集群</p>
-<ul>
-<li>详细见<a href="https://www.cnblogs.com/brianzhu/p/8575243.html" target="_blank" rel="noopener">https://www.cnblogs.com/brianzhu/p/8575243.html</a></li>
-</ul>
-</li>
-<li><p>2、下载hive的安装包</p>
-<ul>
-<li><a href="http://archive.cloudera.com/cdh5/cdh/5/hive-1.1.0-cdh5.14.2.tar.gz" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hive-1.1.0-cdh5.14.2.tar.gz</a></li>
-</ul>
-</li>
-<li><p>3、规划安装目录</p>
-<ul>
-<li>/kkb/install</li>
-</ul>
-</li>
-<li><p>4、上传安装包到node03服务器中的/kkb/soft路径下</p>
-</li>
-<li><p>5、解压安装包到指定的规划目录</p>
-<ul>
-<li><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/soft/</span><br><span class="line">tar -zxf hive<span class="number">-1.1</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>.tar.gz -C /kkb/install/</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>6、修改配置文件</p>
-<ul>
-<li><p>进入到Hive的安装目录下的conf文件夹中</p>
-<ul>
-<li><p>cd /kkb/install/hive-1.1.0-cdh5.14.2/conf/</p>
-</li>
-<li><p>mv  hive-env.sh.template hive-env.sh</p>
-</li>
-<li><p>vim hive-env.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">配置HADOOP_HOME路径</span></span><br><span class="line">export HADOOP_HOME=/kkb/install/hadoop-2.6.0-cdh5.14.2/</span><br><span class="line"><span class="meta">#</span><span class="bash">配置HIVE_CONF_DIR路径</span></span><br><span class="line">export HIVE_CONF_DIR=/kkb/install/hive-1.1.0-cdh5.14.2/conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>vim hive-site.xml</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml-stylesheet type=<span class="string">"text/xsl"</span> href=<span class="string">"configuration.xsl"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionURL<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>jdbc:mysql://node03:3306/hive?createDatabaseIfNotExist=true&amp;amp;characterEncoding=latin1&amp;amp;useSSL=false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionDriverName<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionUserName<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>root<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionPassword<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.cli.print.current.db<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.cli.print.header<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.server2.thrift.bind.host<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>node03.kaikeba.com<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改hive的日志配置文件路径，便于我们排查hive出现的错误问题</p>
-<p>​    node03执行以下命令，定义hive的日志文件存放路径</p>
-<p>​    </p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /kkb/install/hive<span class="number">-1.1</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>/logs/</span><br><span class="line">cd /kkb/install/hive<span class="number">-1.1</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>/conf/</span><br><span class="line">mv hive-log4j.properties.template hive-log4j.properties</span><br><span class="line">vim hive-log4j.properties</span><br><span class="line"></span><br><span class="line">#更改以下内容，设置我们的日志文件存放的路径</span><br><span class="line">hive.log.dir=/kkb/install/hive<span class="number">-1.1</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>/logs/</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<pre><code>* ps: ==需要将mysql的驱动包上传到hive的lib目录下==
-
-  * 例如 mysql-connector-java-5.1.38.jar
-</code></pre><h3 id="4-hive的交互方式"><a href="#4-hive的交互方式" class="headerlink" title="4. hive的交互方式"></a>4. hive的交互方式</h3><ul>
+<h3 id="3-Hive的安装部署"><a href="#3-Hive的安装部署" class="headerlink" title="3. Hive的安装部署"></a>3. Hive的安装部署</h3><p>​    </p>
+<h3 id="4-hive的交互方式"><a href="#4-hive的交互方式" class="headerlink" title="4. hive的交互方式"></a>4. hive的交互方式</h3><ul>
 <li>==先启动hadoop集群和mysql服务==</li>
 </ul>
 <h4 id="1-Hive交互shell"><a href="#1-Hive交互shell" class="headerlink" title="1 Hive交互shell"></a>1 Hive交互shell</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hive-1.1.0-cdh5.14.2</span><br><span class="line">bin/hive</span><br></pre></td></tr></table></figure>
