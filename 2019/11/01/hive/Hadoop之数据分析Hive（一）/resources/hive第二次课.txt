@@ -1,0 +1,627 @@
+现在能看得到屏幕，听得到声音吗？？？
+
+上一次课的问题尽管提：
+
+
+彭于权 19:43:42
+没搞清楚MySQL和hive的关系
+hive：大数据领域里面一个sql  on  hadoop的框架
+主要的作用是通过解析hql语句，实现hdfs上面的数据的查询操作
+真实的数据保存在hdfs上面的，数据的计算，使用的mr的程序
+hive不提供数据的存储，也不提供数据的计算
+
+hive可以将hdfs上面结构化的数据，映射成为一张表。
+文件有多少列，每列数据类型是什么，列之间的分隔符是什么，数据存储在hdfs的位置在哪里。这些信息都时我们一些元数据信息
+元数据信息需要存储：存储在mysql里面了
+mysql就是存储元数据信息
+
+hive当中创建一张表，mysql里面不会同步出来一张表
+mysql当中记录了hive的表的元数据信息
+
+hive当中建库建表的元数据信息保存在mysql里面了
+
+
+
+杨鹏 19:43:59
+老师有个基础问题，从本地上传文件到HDFS，这个本地指的是Linux的本地，是不能直接从windos上传吗？ 
+本地指代的是linux本地，正确
+不能从windows上面上传。需要将windows作为一个hdfs的客户端，如果在windows上面也能启动datanode进程，那也可以上传
+
+丁创世 19:48:27
+装一个本地hadoop就可以上传了，我试了  正确的
+
+杨鹏 19:49:45
+我们现在的hadoop是装在linux系统上的，只要在windows上再装个hadoop,那么两个系统都可以上传文件到hdfs  正确的
+
+
+
+高世鹏 19:50:53
+感觉创建数据库和表就是在创建hdfs上面的目录   对对对，就是在mysql里面记录了这个目录的元数据信息
+
+李武强 19:51:10
+建模有推荐的工具或软件吗 
+数据仓库的建模    tableau
+
+胡明明 19:52:11
+每执行一次查询，就会有对应的mr任务执行吗？
+不一定的
+有些查询，不需要mr的参与
+
+
+胡明明 19:53:30
+咱们第一期那个作业里面，是不是有数据格式错误啊
+回头把作业给我看一下
+
+罗帅 19:53:31
+企业用mr多一点还是直接用hive 肯定hive多的
+
+朱晔 19:53:42
+老师 sqoop 我们不用吗 ?  肯定会用，sqoop以及datax都会有的
+
+
+李武强 19:53:43
+hive分隔符是欧元符号的问题   默认的分隔符是\001  是一个ask的码值，非打印字符
+
+
+
+都兴忱 19:54:32
+能按列分吗？ 查询某一列？？可以的
+
+
+都兴忱 19:55:19
+如何一条记录超过一行，怎么分 换行了，需要做数据的清洗，将数据弄到一行里面去
+abc  18
+abc  28
+需要做数据的清洗，保证一行一条数据
+
+
+
+高世鹏 19:56:24
+如何目录下有多个文件，多个文件的内容格式都不一样，
+那我创建一个表映射到这个目录下，select * 的时候有些文件不匹配怎么办？ 
+不匹配的文件，不会进入到表里面来
+
+a.txt‘
+
+name  age  address
+abc	18	北京
+
+
+b.txt  
+abc 25 河北  ==》\t切割  切不开，将这一行数据当做一个字段 
+创建表的时候需要指定分隔符  \t
+
+也需要做数据清洗，保证数据的分隔符都是一样的
+
+胡明明 19:56:55
+hive就能完成数据清洗功能吗  可以，自定义函数即可 自定函数也是在写java代码
+
+
+hive的第二次课：
+第一次课：数据仓库的基本概念   数据仓库的分层  三层架构
+ods
+dw 
+app
+
+hive的基本概念：hive是大数据领域里面一个数据仓库工具   可以将结构化的数据映射成为一张表
+将元数据信息保存在mysql里面了
+
+hive的安装部署==》只需要部署一台即可
+
+
+hive的交互方式：三种
+第一种：
+bin/hive
+
+第二种：
+启动hive服务端 hiveserver2
+使用客户端beeline去进行连接
+
+第三种：
+bin/hive -e   直接执行hql语句  
+bin/hive -f   hive脚本
+
+
+hive当中的建库语法  创建数据库
+hive当中的建表语法 创建数据库表
+
+内部表：删除表的时候，同步删除hdfs的数据
+外部表：删除表的时候，不会删除hdfs的额数据
+分区表：分文件夹存储数据
+
+数据加载通过load  
+可以从linux本地加载数据  local
+也可以从hdfs加载数据
+
+load  data local inpath  ''  overwrite into table  xxxx
+
+外部分区表综合练习
+
+location  ==》指定建表的时候数据存储的hdfs的位置目录
+
+msck  repair  table  xxxx  修复表的元数据信息
+
+
+
+今日课程大纲
+1、分桶表   知道 
+2、修改表结构  了解一下
+3、数据导入几种方式 掌握
+4、数据导出  了解
+5、hive的静态分区以及动态分区   知道
+6、基本的查询语法  掌握
+7、jdbc操作  了解
+8、dbbeaver使用 了解
+
+分区表是分文件夹 
+
+分桶表：直接对数据进行分桶，分成多个文件，每个文件里面保存部分数据，到时候如果需要获取数据的时候，可以直接从对应的文件里面获取即可
+可以过滤掉大量不相关的文件，提高查询效率
+分桶表就是分文件，将一个大的文件分成多个小的文件，提高查询效率
+
+0: jdbc:hive2://node03:10000> set hive.enforce.bucketing=true;  #开启分桶功能
+No rows affected (0.006 seconds)
+0: jdbc:hive2://node03:10000> set mapreduce.job.reduces=4;  # 设置我们的reduce的个数为4个
+
+mr的输出，一个reduceTask会输出一个文件
+
+create table myhive.user_buckets_demo(id int, name string)
+clustered by(id) 
+into 4 buckets 
+row format delimited fields terminated by '\t';
+
+表示按照id进行hashCode取值 %  4  确定每一条数据需要去到哪一个文件里面去
+就是前面的mr当中的分区的操作
+
+可以创建分区分桶表对数据进一步的划分，避免一个数据文件太大了
+
+
+
+
+朱晔 20:12:34
+分桶后不是加大了hadoop的存储量？ hadoop不是对少数的大文件最有效吗？ 
+实际工作当中你需要控制桶的数量，尽量保证每个桶里面的数据量比较接近128M
+1280M的文件==》划分10个桶比较合理  set mapreduce.job.reduces=10;
+
+
+罗帅 20:13:03
+分完的表还是大文件  已经是划分成为多个小文件了
+
+
+姜日鹏 20:15:13
+我设置reduce个数为3个分4桶会怎么样   ==》会报错  reducetask的个数  >=  桶的个数
+
+胡定靖 20:15:50
+能自定义hash吗  默认使用hashPartioner可以自定义
+
+
+
+姜日鹏 20:17:33
+这里分桶表不可以直接load么  不行，直接load是一整个文件，需要将文件打散，需要使用mr的程序
+直接load没有执行mr的程序没法打散
+
+
+姜日鹏 20:20:26
+数据文件太大会导致什么样的情况呢，除了查询慢还有什么么   查询比较慢
+
+
+刘鑫 20:21:19
+那要是分完了觉得大了，还能改分桶数模吗  可以改
+
+高世鹏 20:21:57
+可以设置分桶表到已经存在的文件吗?   没法设置
+
+姜日鹏 20:21:58
+如果reduce个数大于桶数会出现空文件么  会出现
+
+
+
+刘继雄 20:23:33
+有的文件分3桶就好，有的分4桶，怎么处理 
+创建桶的时候就要定好  
+
+
+武晓磊 20:24:16
+修改桶数后还需要什么操作呢?会自动重新分桶吗 
+需要重新insert  overwrite select  操作
+
+
+罗帅 20:24:33
+分桶表的数据只能insert吗
+  对对对
+  
+ 
+  高世鹏 20:24:53
+load 操作底层不是 MR操作? 
+   不是的  只是将文件移动到hdfs对应的文件夹下面去了
+   
+ 徐将锋 20:25:16
+怎么自定义分桶   需要自定义Partitioner
+
+
+hive修改表结构  了解即可
+
+   
+   
+   
+   姜日鹏 20:27:41
+我看每次插入表都是新增一个文件，为什么不直接在一个文件下追加呢 
+hadoop没有提供mr追加的操作
+追加会产生什么问题？？？ 涉及到block块的操作，更改block块的内容涉及到元数据更改==》非常麻烦
+
+   
+   
+   高世鹏 20:31:47
+是不是创建表并没有与文件形成映射，加载数据之后映射才会形成？ 
+不是的  创建表的时候已经指定了hdfs文件存储的位置，你只需要通过load将文件移动到hdfs指定的位置即可
+
+
+create external table score7 (s_id string,c_id string,s_score int) 
+row format delimited fields terminated by '\t' location '/myscore7';  
+   
+   
+ 唐大龙 20:32:58
+什么时候在HDFS创建分桶的文件夹及文件？ 
+分桶表比较特殊，不能使用load，只能通过insert   select方式加载数据
+ 创建表的时候已经创建了文件夹，通过insert  select的时候才创建文件
+ 
+   
+   姜日鹏 20:33:21
+score6和score的表结构一样么   正确的
+
+姜日鹏 20:35:41
+内部表可以指定location么   任何类型的表都可以指定location
+
+   
+  武晓磊 20:36:31
+把文件传过去以后不用MSCK REPAIR TABLE吗  不用，只有分区表需要修复
+
+
+
+李亚远 20:36:43
+如果是个分区表，放到文件夹之后还得刷一下元数据吧？   正确
+
+ 
+   姜日鹏 20:37:29
+假设有两个集群a，b每个集群对应一个hdfs和hive，
+我在a集群连接b集群的hive，使用hdfs语句它操作的是哪个集群的hdfs呢 
+a集群的
+
+徐将锋 20:38:09
+那为什么分区表需要刷新，普通的不需要刷新   这个就是分区表的特殊性  分区表元数据信息需要刷新到mysql里面去
+
+
+内部表 分区表 分桶表
+外部表 分区表  分桶表
+
+最基本的表模型  内部表  外部表
+
+
+分区表比较特殊：有子文件夹
+内部表  外部表  分桶表都没有子文件夹
+   
+  刘继雄 20:40:17
+不是可以在分区的基础上进行分桶？  对的，可以继续分桶的
+内部分区分桶表  外部分区分桶表
+
+
+
+都兴忱 20:41:13
+是对一个文件夹下分桶吗  
+分区分桶表：先对数据进行分文件夹，分了文件夹之后再进行划分桶
+
+
+内部表外部表分区表分桶表还有没有问题？？？
+
+
+老高 20:43:03
+暂时没有   有问题再找我
+
+导出
+insert overwrite local directory '/kkb/install/hivedatas' select * from stu;
+指定了一个已经存在的路径  ==》hive会将这个存在的路径先给删除掉
+
+insert overwrite local directory '/' select * from stu;
+先删除已经存在的/  删服务器了  rm  -rf  /*  
+
+
+梁禺 20:46:50
+怎么指定导出的分隔符  
+insert overwrite  directory '/kkb/hivedatas/stu'  row format delimited fields terminated by  ','  
+  select * from stu;
+
+  梁禺 20:48:09
+怎么指定导出的分隔符 
+
+  
+  
+
+申建豪 20:47:23
+从hdfs上导出时，如果是在不同的分区表中，是不是需要加上hdfs的路径呢 
+不需要，只需要指定分区条件即可 select * from   user  where month = '201809'  or  month = '201810'
+
+
+姜日鹏 20:47:58
+是导出来的是一个文件夹还是一个文件   文件夹下面有文件
+
+姜日鹏 20:50:16
+只有分桶表不可以load，其他的都可以么 正确的
+
+内部分区表
+外部分区表  分区表需要load到对应的分区文件夹下面  然后 msck  repair
+内部表
+外部表  都是可以load
+
+
+胡明明 20:50:38
+能给某个字段在分割吗  不行的
+
+
+朱晔 20:51:22
+分区表的分区条件在建表的时候是不是不能出现在见表语句的，字段定义中 ？对对对的
+create  table  myuser (id int ,name age,month string ) partitioned by (month string)  报错
+
+梁禺 20:52:26
+导入和’导出时，可以对字段进行操作吗  可以的
+
+insert overwrite  directory '/kkb/hivedatas/stu'  row format delimited fields terminated by  ','  
+  select id from stu;
+
+动态分区以及静态分区
+静态分区，在加载分区表的时候
+往某个分区表，通过查询的方式加载数据 ，必须要指定分区字段值
+insert  overwrite  table  xx  partition(month = '201809')   select  from  myuser  ;
+
+如何在一个分区表里面创建好几个分区==》  通过insert overwrite select的方式实现
+可以使用动态分区来解决
+通过获取数据所在的分区，然后填补到目标表当中的分区里面去
+
+
+create table order_partition(
+order_number string,
+order_price  double,
+order_time string
+)
+partitioned BY(month string)
+row format delimited fields terminated by '\t';
+
+
+create table t_order(
+    order_number string,
+    order_price  double, 
+    order_time   string
+)row format delimited fields terminated by '\t';
+
+create table order_dynamic_partition(
+    order_number string,
+    order_price  double    
+)partitioned BY(order_time string)
+row format delimited fields terminated by '\t';
+
+要想进行动态分区，需要设置参数
+//开启动态分区功能
+hive> set hive.exec.dynamic.partition=true; 
+//设置hive为非严格模式
+hive> set hive.exec.dynamic.partition.mode=nonstrict; 
+hive> 
+insert into table order_dynamic_partition partition(order_time)   #  这里就不用指定分区号了，使用字段的值作为分区号
+select order_number,order_price,order_time from t_order;
+
+
+朱晔 21:07:38
+动态分区的个数是否有限制？ 有限制的   限制创建文件夹的个数
+
+
+丁创世 21:07:49
+如果指定未分区的字段会怎么样？   语法要求，必须指定分区字段，不让会报错
+
+
+
+谢晓莹 21:08:45
+动态分区一定要利用已存在的表创建吗？   对的，一定要从已经存在的表里面来创建
+
+
+朱晔 21:10:56
+有限制的话，上限时多少？在哪里可以修改？ 
+不急，调优课程慢慢讲
+
+
+徐将锋 21:11:50
+非严格和严格模式什么区别 
+不急，调优课慢慢讲
+
+丁创世 21:12:11
+分通分区表还是不明白，是先分区，还是先分区   无所谓的，先分区再分桶
+先创建文件夹，创建了文件夹之后再进行划分桶
+
+
+朱晔 21:13:27
+老师我昨天新建的数据库 在今天的beeline客户端里看不到了，但是在hdfs和 mysql的 DBS元数据表里面都看到了，要怎么解决 ? 
+hive新建的数据库嘛？？？ 有可能是元数据信息没有出来  
+如果所有hive创建的数据库都看不到，那就有问题
+
+李武强 21:14:56
+hive表修改表结构，删除了某一个字段，然后由增加了一个字段，查询数据的时候有什么影响
+
+没影响
+
+李亚远 21:15:15
+老师typora用的什么主题，能用====显示高亮  默认主题  ==  高亮  ==
+
+
+hive当中的group  by的操作与nysql语法不一样，与oracle语法一样的
+select s_id  from score group by s_id;
+
+select的字段，必须在group  by字段后面挑选，除了聚合函数max，min，avg
+
+
+唐大龙 21:21:39
+MR为什么执行这么慢？数据量也不大啊  分布式计算，分配资源比较慢，启动container比较慢
+
+
+select s_id,avg(s_score) as avgScore from score group by s_id having avgScore > 60;
+
+join操作
+inner join操作
+left join操作
+right  join操作
+full join操作
+
+
+join不写其他的条件，默认就是inner  join
+select * from teacher t join course c on t.t_id = c.t_id;
+
+姜日鹏 21:26:03
+还有自然连接，不等值连接，交叉连接呢 
+hive当中不支持不等值连接   
+交叉连接 ==》好像也不支持
+
+
+hive当中的排序：
+order  by  ：全局排序，如果需要全局的排序  只能有一个reduceTask
+如果数据量比较大的话，就会造成执行效率非常慢
+
+高世鹏 21:30:31
+通过自定义分区不可以吗？   不行的
+
+
+sort by： 每个reduceTask内部排序，局部有序，全局无序 允许有多个reducetask
+
+distribute by ：指定按照哪个字段进行分区  可以自己控制分区的字段
+
+
+指定按照s_id进行分区，将相同的s_id的数据发送到同一个reduce里面去，然后通过sort  by进行局部排序
+
+insert overwrite local directory '/kkb/install/hivedatas/distribute' 
+select * from score distribute by s_id sort by s_score;
+
+
+如果distribute by  的字段和sort by  的字段是一样的，可以使用cluster  by  代替
+
+insert overwrite local directory '/kkb/install/hivedatas/distribute' 
+select * from score distribute by s_score sort by s_score;
+====
+insert overwrite local directory '/kkb/install/hivedatas/distribute' 
+select * from score cluster  by s_score;
+
+cluster  by：
+
+
+insert overwrite local directory '/kkb/install/hivedatas/distribute_sort' select * from score distribute  by s_score sort  by s_score;
+
+
+insert overwrite local directory '/kkb/install/hivedatas/cluster' select * from score  cluster by s_score;
+
+
+
+
+
+姜日鹏 21:32:21
+那我如果有大量数据并且有全局排序的需求要怎么办呢   只能求其次取topN
+求top10或者top20  topN的效率也会比较高
+
+姜日鹏 21:38:11
+求topN就是使用limit么 
+ 对对对
+
+
+
+刘继雄 21:34:58
+假如设置了多个reduceTask，还用了order by，那么是只执行一个reduceTask吗？ 对对对，其他的reduceTask没有数据，不会运行的
+
+
+
+朱晔 21:36:04
+select * from (selct c1  from tab 1 sort by c1 ) order by c1  能这么嵌套吗？ 
+执行了两层sql，第一层selct c1  from tab 1 sort by c1 可以有多个reuduceTask
+外面一层还是只有一个reduceTask
+
+王 21:38:45
+只显示优先级最高的，1没有就显示2，2没有就显示3,3没有就显示为空的？怎么写？
+求每组当中的topN
+分析函数
+
+
+李亚远 21:39:29
+sort by 是不是结合分桶表用的多些？或者结合自定义Partitionby？否则都不知道reduce分了那些区，拿排序也就没有意义了？ 
+sort by 一般是结合distribute  by来使用   distribute  by 就是指定分区规则
+
+朱晔 21:43:26
+查询大量数据的时候如果用 distinct 关键字，出现内存溢出，有什么好的替代方案？   
+select  count(distinct id) from myuser; 也是只有一个reduceTask，特别慢
+select count(1) from (
+select  id from  myuser group by id ) temp1;
+
+
+朱晔 21:44:40
+我今天碰到了变态需求了  一般大数据开发人员，写代码的时候都是配一把刀就没有需求了
+
+
+王 21:48:16
+只能用maven框架吗？ 不一定，还有其他的手动导入jar包等
+基本上98%的公司都用maven来管理jar包
+
+
+唐大龙 21:49:52
+windows 查询 hive，windows需要配置什么吗 
+不用配置的，需要启动hive的hiveserver2的服务即可
+
+梁禺 21:54:01
+有稳定的工具不 
+有  hue工具
+企业用什么  ==》 hue比较多
+
+
+hive第二天主要讲了哪些东西
+
+分桶表  理解
+修改表结构
+数据导入导出
+静态分区，动态分区
+hive基本查询语法  知道  group  by
+排序 ：理解
+
+jdbc操作了解
+
+
+姜日鹏 21:55:21
+分区表进行sort by的结果会是分区内有序的么，这个sort by的分区和分区表的分区不太一样吧 
+
+不一样的，sort  by的分区就是mr的partition 的过程
+
+
+高世鹏 21:56:16
+select 底层是MR ， 那每次执行select后mr输出的文件在哪？  输出文件直接显示在屏幕上面了
+
+
+姜日鹏 21:56:40
+group和distinct的底层执行原理有什么不同呢、   group  by是分组，可以有多个reducetask
+distinct去重只能有一个reducetask
+
+reduce不是都要产生一个结果文件吗？  产生的结果文件直接输出到屏幕了，没有保存起来
+如果需要保存使用insert  overwrite  select
+
+朱晔 21:58:08
+如果分组聚合后产生了多个小文件能合并吗？ 
+可以合并的
+
+
+
+
+姜日鹏 21:58:27
+想把hive表导出成一个文件可以么  可以的，参见导出那一章
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

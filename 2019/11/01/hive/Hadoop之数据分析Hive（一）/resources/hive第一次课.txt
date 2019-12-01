@@ -1,0 +1,663 @@
+现在能听得到声音，看得到画面嘛？？
+
+唐大龙 19:46:03
+mysql改密码没成功 
+小问题，明天直接远程操作
+
+之前的课程还有没有什么问题？？？
+可以尽管提出来
+
+
+Alfred 19:49:02
+老师好，ZooKeeper中的quorum 是系统自己生成的，还手工设的 
+9865 QuorumPeerMain  进程的名字，zk的框架自己生成的
+Alfred 19:49:42
+仲裁quorum   ==》系统自己生成的
+
+
+heretic0r 19:49:18
+声音有点小？ 将电脑声音调大一点
+能不能听得到？？？  
+
+
+陈敏_大数据 19:51:09
+zookeeper集群脑裂的时候，是不是两个leader都能访问读取数据 
+注意：脑裂分为两种情况，
+事务性的请求（写入操作，删除操作，更新操作）：不能够执行成功，会阻塞
+非事务性的请求（读取数据操作），可以正常的执行
+数据一致性：每个节点看到的数据都是一样的
+
+
+刘亲王 19:52:40
+发起proposal算是事务性请求吗  
+proposal？是滴
+
+
+侯晓东 19:54:27
+上节课讲的脑裂超过半数的一组，SET操作能成功啊 
+操作的时候，只需要保证半数写入成功，就算写入成功
+5台zk，只要保证3台写入成功就算成功
+
+脑裂：有两个leader 
+
+刘亲王 19:54:32
+那集群第一次逐台启动，zxid会递增啦  对对对
+
+每次操作的时候，会有一个zxid，事务的id，也可以理解为顺序操作的编号
+
+zk还有一个监控软件taokeeper  主要是用于监控zk集群是否正常
+
+
+侯晓东 19:57:02
+5台服务器，一个leader有三台服务器，
+另一个leader有2台服务器，
+客户端提交事务到3台服务器的脑裂一方可以执行成功吗？ 
+对对对
+相当于出现了两个zk的集群侯晓东 19:57:02
+5台服务器，一个leader有三台服务器，另一个leader有2台服务器，客户端提交事务到3台服务器的脑裂一方可以执行成功吗？ 
+
+殷书豪 19:57:44
+我们数仓讲不讲企业级的规范之类的？ 
+
+殷书豪 19:57:44
+我们数仓讲不讲企业级的规范之类的？
+会讲
+
+刘亲王 19:58:37
+hadoop中编程除了MR，会涉及yarn编程啊
+主要涉及到yarn的任务队列的划分，包括调度器，以及资源一些参数控制
+
+授课不喜欢太磨叽了
+每来一次尽量多给你们讲知识点
+
+hive第一次课：
+1、数据仓库基本概念：
+dw:data warehouse
+主要用于做数据分析，对企业的支持决策做一些辅助
+数据仓库本身不生产数据，也不会消耗数据，数据从外部来，供给外部使用
+粮仓：用于储存粮食，从外部放入进去，供给外部使用
+
+2、数据仓库的主要特征：
+面向主题：一般都是有一定的目的进行构建数据仓库
+集成性：将所有用到的数据都会集成到一起去
+非易失性：数据仓库里面的数据一般都不会改变（数据仓库是用于正确的记录已经发生的事实）
+时变性：随着时间的发展，数据仓库分析的手段也会改变
+
+数据仓库当中存储的数据，是过去的数据，还是未来的数据？？
+
+刘勇奇-java-深圳 20:04:21
+数仓和数据库什么区别？ 不急，等会儿讲
+
+3、数据库与数据仓库的区别：
+数据库：mysql，oracle，业务系统当中一般都会用到数据库，最大的特征主要是用于事务的保证 主要是用于OLTP  联机事务处理
+数据仓库：主要是用于面向数据分析，对数据进行分析作用的，主要是用于OLAP  联机分析处理
+
+数据仓库的出现不是要取代数据库，也不是一个大型的数据库的集合
+一个是用于分析数据一个是用于保证事务性
+
+
+数据仓库的分层架构：
+数据仓库的分层每个公司都不一样：
+最基础的三层：ODS，DW,APP层
+ods：贴源层 主要是用于保管我们的原始数据的
+dw：数据仓库层，主要是用于面向数据分析的，大部分的工作，都是在这一层，写sql
+app：数据展示层，主要用于数据的报表展示
+
+分层主要是为了解决什么问题》？？主要是为了保证每一层处理自己的事情，简化处理的逻辑，解耦的功能
+
+姜日鹏 20:14:23
+联机分析处理，的这个联机怎么理解   可以简单的理解为在服务器上面进行数据的分析操作
+
+杨鹏 20:15:24
+数据库的事务怎么理解？ 
+每个业务系统当中都有事务性
+就是用于处理原子性，一致性，隔离性
+
+
+
+侯晓东 20:14:37
+把这个TXT发一下吧 
+肯定会发  
+
+
+hive：
+1、hive是什么
+hive是基于hadoop的一个数据仓库的工具，hive可以将结构化的数据映射成为一张表
+hive是不是数据仓库？？？不是不是，hive仅仅是处理数据仓库的一个工具
+hive可以将结构化的数据映射成为一张表
+
+结构化的数据：类似于mysql当中的一张表，数据字段一定了，数据类型也一定了
+
+hive是基于hadoop的一个数据仓库的工具，hive可以将结构化的数据映射成为一张表
+
+hive存不存储数据，计不计算数据？？？
+
+
+
+建表：将表的字段，数据位置，包字段之间的分隔符都记录下来？
+这些是什么信息？？？？
+也叫元数据信息
+需要存储下来？？？也需要的吧
+
+hive的主要的工作就是将我们写的sql语句翻译成为mr的任务，运行在yarn上面
+hive可以简单的理解为mr的客户端，hive是安装一台还是多台？？？
+
+Hive 不支持记录级别的增删改操作
+早期的版本，hive不支持，增删改，只支持查询操作，现在的版本，都支持
+但是实际工作当中不会用到增删改，只会用到查询操作select
+
+数据仓库的主要的职责就是正确的记录既定的已经发生的事实：已经发生的事实，不能更改了
+
+章祎胤 20:27:50
+那万一记错了呢  那就是数据源的问题了
+
+刘继雄 20:28:07
+为什么还增加增删改操作呢？ 
+鸡肋
+
+Alfred 20:28:17
+加一些新收集的信息呢？ 
+直接往数据库当中追加即可
+
+
+
+大数据开发张武 20:29:27
+追加记录不是新增么
+追加记录是将我们新的一天的数据追加进去，不建议使用insert  into  user(id,name ,age) values(xxx,xx,xx,) 
+这种方式追加
+刘鹏2333 20:31:03
+属于入仓吧 
+就是属于入仓  ，ods的操作
+
+
+
+胡明明 20:28:31
+支持增删改 是不是很危险 
+一般不会有人用
+就像删库一样
+
+
+hive的架构：
+用户接口：提供用户通过各种方式来访问hive，可以通过jdbc，可以通过hiveserver2，还可以通过hive shell
+hiveserver：服务端  
+
+解析器：主要就是用于解析sql语法
+编译器：将解析之后的sql语法进行编译成为MR的任务
+优化器：有一定的优化功能，自动的会对我们写的sql语句进行调优，调优的功能有限的
+执行器：提交mr的任务到yarn上面去执行的
+
+底层的hadoop：数据存储hdfs，数据的计算mr，运行在yarn上面的
+
+
+架构有没有什么问题？？？
+
+姚琪 20:34:23
+数据仓库是不是对应DBA？ 
+不是的，DBA主要是维护数据库的
+
+高世鹏 20:36:50
+这个讲课速度有点快啊。。。 
+
+李亚远 20:38:06
+MR执行任务时候访问的是哪里的数据呢？mysql还是hdfs？ 
+mr执行的时候，数据都是在hdfs的
+
+hive.server2.thrift.bind.host  我们只能是node03  我们没配你那个域名 
+
+李亚远 20:40:04
+感觉像是就为了写简单点的代码（sql）
+就增加了很多空间负担（映射到mysql的表），不划算啊 
+
+mr代码非常复杂的
+通过hive大大的简化了mr的开发
+
+
+双喜 20:40:57
+配置文件能不能详细过一下 
+hive-site.xml
+主要配置hive去连接元数据库  mysql
+  <property>
+                <name>javax.jdo.option.ConnectionURL</name>
+                <value>jdbc:mysql://node03:3306/hive?createDatabaseIfNotExist=true&amp;characterEncoding=latin1&amp;useSSL=false</value>
+        </property>
+
+        <property>
+                <name>javax.jdo.option.ConnectionDriverName</name>
+                <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionUserName</name>
+                <value>root</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionPassword</name>
+                <value>123456</value>
+        </property>
+        <property>
+                <name>hive.cli.print.current.db</name>
+                <value>true</value>
+        </property>
+        <property>
+                <name>hive.cli.print.header</name>
+            <value>true</value>
+        </property>
+		<!--  配置hiveserver2的服务启动再哪一台机器上面的 -->
+		<property>
+                <name>hive.server2.thrift.bind.host</name>
+                <value>node03</value>
+        </property>
+
+panhm 20:42:02
+怎么把hive翻译成的mr的 
+
+主要就是通过解析器的，就是将sql语法解析成为mr的任务
+解析器：主要就是用于解析sql语法
+编译器：将解析之后的sql语法进行编译成为MR的任务
+优化器：有一定的优化功能，自动的会对我们写的sql语句进行调优，调优的功能有限的
+执行器：提交mr的任务到yarn上面去执行的
+
+武晓磊 20:42:30
+有了hive还用mr编程吗  可能需要，用于做数据的清洗的工作
+
+胡明明 20:42:35
+不需要配置 hadoop的地址吗   不用不用
+我都已经知道了数据在hdfs的哪一个位置，知道了数据的字段的个数
+
+
+武晓磊 20:43:14
+企业开发是不是不用mr编程,都用hive就可以了 
+基本上hive可以解决90%的需求
+
+panhm 20:43:48
+配置文件里的name属性，都是固定的吗   对对对
+
+细嗅蔷薇 20:44:16
+hive有集群吗
+hive就是mr的一个客户端，没有集群
+
+
+Scott Chen 20:44:39
+结构化数据用SQL方便，如果是非结构化的，可能需要写MR 
+有经验
+
+
+
+章祎胤 20:46:19
+可以再快点
+挺不住
+
+
+大数据开发张武 20:46:37
+hive还会专门录一个小视频么
+什么视频？？？ 不会录了
+
+
+刘亲王 20:47:38
+hadoop需要stop吗
+hadoop一定要启动，hdfs以及yarn都要启动
+
+hive的交互方式：
+有三种：
+hive的shell命令行交互：  基本上很少用了
+bin/hive
+
+
+hive的jdbc服务 hiveserver2的服务  实际工作当中开发的时候用的比较多
+启动服务端：
+bin/hive --service hiveserver2
+后台启动
+nohup  bin/hive --service hiveserver2  2>&1 &  
+
+客户端连接： 
+bin/beeline 
+!connect jdbc:hive2://node03:10000
+
+jdbc:mysql://node03:3306/user
+
+
+beeline> !connect jdbc:hive2://node03:10000
+scan complete in 1ms
+Connecting to jdbc:hive2://node03:10000
+Enter username for jdbc:hive2://node03:10000:   这个用户名，是连接hive的用户名，没有配置
+尽量保持与hadoop的用户名一直，不会存在权限的问题
+hadoop使用hadoop用户来安装的
+
+
+
+hive的命令交互  适用于开发任务完成了，之后准备上线，将所以需要执行的hql语句都会写到脚本里面去了
+使用hive -e  或者hive  -f 来进行执行hql语句
+ bin/hive -e "show databases;" 不进入hive的客户端，直接执行hql语句
+ bin/hive -f hive.sql  不进入hive的客户端，直接执行sql脚本文件
+ 
+ BYK 20:55:43
+第一种方法，只能在原机使用   对对对对
+ 
+ 
+BYK 20:58:34
+额。我们公司是一个web页面。。。 
+
+不急，使用hue整合即可
+
+
+
+罗帅 20:58:46
+第二种方式输入账号密码随便输都行吗？ 理论上来说都是可以的，用户名和密码，随意
+但是你一定要保证输入的用户名有权限去操作hdfs上面的文件
+hadoop 软件的权限都是hadoop用户的 ，使用abc用户没权限去操作
+
+BYK 20:59:42
+老师web界面，原理是使用的第二种方法吗？ 对对对，就是使用hiveserver2远程连接
+
+刘继雄 20:59:47
+可以在哪里设置用户名密码？ hive-site.xml里面进行配置，但是一般都没有配置的
+
+
+
+刘亚东 21:00:15
+hive的连接数跟什么有关呀？我们集群有时候会超过连接数上限
+可以配置hive的客户端的连接上限数的
+hive-site.xml里面进行配置，如果不配置，就是默认值
+
+BYK 21:01:12
+老师，第三种主要是用于构建数据仓库时和岗创建数据仓库时吗 
+第三种主要用于我们开发已经完成，将写好的hql定时每天去执行
+
+
+武晓磊 20:48:23
+三种交互方式企业里一般用哪种  不急慢慢讲
+
+
+王 21:02:20
+hql是hibernate中的吗 不是  不是
+
+李武强 21:07:25
+干掉了，能找回来吗 可以去垃圾桶里面找
+
+hive的建表的语法：
+
+CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name 
+[(col_name data_type [COMMENT col_comment], ...)] 
+[COMMENT table_comment] 
+[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)] 分区
+[CLUSTERED BY (col_name, col_name, ...) 分桶
+[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS] 
+[ROW FORMAT row_format]  row format delimited fields terminated by “分隔符”
+[STORED AS file_format] 
+[LOCATION hdfs_path]
+
+external：创建外部表需要使用得到  ， 内部表不需要使用这个关键字
+col_name data_type  字段名，字段类型
+PARTITIONED BY ：分区表需要用的到
+CLUSTERED BY  +   SORTED BY ： 分桶表需要用的到
+row format delimited fields terminated by：指定字段之间的分隔符
+STORED AS file_format ： 指定存储格式
+LOCATION  ：文件存放hdfs的位置
+
+内部表：创建内部表的时候，没有external关键字
+删除内部表的时候，会同步的删除hdfs的数据
+
+insert  into stu(id,name) values(1,"zhangsan");
+select * from  stu; 
+插入一条数据，到表里面去，就是执行了一个mr的程序，生成了一个文件，文件里面就一条数据
+插入一条数据，就会产生一个文件，一个文件里面就一条数据
+大量的小文件会造成namenode的内存的压力  ==》  一个文件元数据信息大概多大？？？
+150字节 
+
+create table if not exists myhive.stu1 as select id, name from stu;
+
+hive当中如果不指定字段之间的分隔符，默认的分隔符就是\001 是一个asc码值，非打印字符
+
+create  table if not exists myhive.stu3(id int ,name string)
+row format delimited fields terminated by '\t' stored as textfile location       '/user/stu2';
+
+
+
+
+
+外部表：创建外部表的时候有external关键字
+删除外部表的时候，不会删除hdfs的数据
+
+
+加载数据到外部表：
+#将数据都上传到/kkb/install/hivedatas路径下，然后在hive客户端下执行以下操作
+load data local inpath '/kkb/install/hivedatas/teacher.csv' into table myhive.teacher;
+local表示从linux本地文件系统加载数据到hive表里面去
+如果是从hdfs加载数据，不需要local即可
+
+BYK 21:21:22
+内部表和外部表的使用场景都是什么呢，是不是一般都用外部表。。。。 
+内部表，删除表的时候会删除hdfs的数据
+外部表删除表的时候不会删除hdfs的数据
+外部表一般使用在数据仓库的ods层，表示这一份数据，不是我们独享的，可能很多其他的人都要使用这份数据
+
+内部表：就是数据仓库的dw层，自己创建的数据仓库层，自己使用，与其他的人无关，想删除就删除
+
+
+汪昊 21:24:14
+怎么区分是外部表还是内部表 
+
+desc extended  teacher;  进行查看
+
+王 21:24:40
+那这样的话表里数据和hdfs的数据不是同一个？
+肯定是同一个数据
+
+双喜 21:24:58
+重新创建就相当于还原了是吧？  对对对
+
+双喜 21:25:19
+我看到 重新创建数据还在  肯定在的啊，数据就是保存在hdfs上面了
+
+BYK 21:26:59
+外部表不如叫做基础表或者共用表。。。。 理解的很到位
+
+王 21:30:22
+外部表删的只是表结构，？ 对对对对
+
+罗帅 21:30:23
+数据到底在hdfs还是mysql  ==》数据在hdfs，元数据在mysql
+
+ryo yang伟鹏 21:31:10
+那怎样删除外部表的数据?  数据是在hdfs上面的，如何删除hdfs的数据
+hdfs  dfs -rmr /xxx
+
+
+徐将锋 21:31:12
+元数据存储再mysql哪个位置  就是在mysql里面有一个hive的数据库
+
+
+刘勇奇-java-深圳 21:33:24
+后面会不会多讲一些场景？  数仓的项目里面慢慢体会
+
+load data   local inpath '/kkb/install/hivedatas/teacher.csv' into table myhive.teacher;
+load  data        inpath  '/kkb/hdfsload/hivedatas'  overwrite into table myhive.teacher;
+
+overwrite 表示覆盖，重复的数据会覆盖，如果不是重复的数据，继续追加
+
+
+刘继雄 21:36:06
+一个语句加载一个文件，一个语句加载多个文件吗 
+可以的，只要指定文件的路径，就可以加载多个文件
+
+
+梁禺 21:36:59
+移到哪里去了  移动到/user/hive/warehouse/dbname/tablename
+
+刘勇奇-java-深圳 21:37:40
+文件夹？  对对对
+
+
+包和平 21:37:56
+多个文件是逗号分隔吗  没有多个文件这一说，如果是多个文件，使用文件夹的方式
+
+胡定靖 21:38:08
+文件内容追加到teacher.csv里面吗，    不对，是多个文件
+
+
+姜日鹏 21:39:00
+hdfs不是不适合存小数据么，为什么不合并呢 
+有合并的，hive当中可以合并  CombineHiveInputFormat罗帅 21:39:36
+元数据一定要存在mysql吗？
+
+胡定靖 21:39:51
+放多份的话，文件不是重名了吗 
+
+
+胡定靖 21:39:51
+放多份的话，文件不是重名了吗   自动会重命名
+
+
+罗帅 21:39:36
+元数据一定要存在mysql吗？
+存哪都一样，oracle也行，安全即可
+
+
+刘勇奇-java-深圳 21:41:15
+hive几个课时？  
+五个课时
+
+
+
+分区表：
+实际工作当中，数据一般都是按照每天进行采集的，每天的数据都会放到某一个日期文件夹洗唛那
+
+
+ create table score2 (s_id string,c_id string, s_score int) 
+ partitioned by (year string,month string,day string) 
+ row format delimited fields terminated by '\t';
+
+ load data local inpath '/kkb/install/hivedatas/score.csv' 
+ into table score2 partition(year='2018',month='06',day='01');
+ 
+ /user/hive/warehouse/myhive.db/score2/year=2018/month=06/day=01 一个分区还是三个分区？？？
+  /user/hive/warehouse/myhive.db/score2/year=2018/month=07/day=01
+   /user/hive/warehouse/myhive.db/score2/year=2018/month=08/day=01
+ 3个分区
+ 
+ 殷书豪 21:53:23
+能不能直接放在year下？  可以的，你创建表的时候，只有一个year分区字段即可
+ 
+load  data local inpath 'xx'  into table score partition(month='201910')
+ 
+ 
+load data  local inpath '/kkb/install/hivedatas/score.csv' into table score partition  (month='201806');
+ month='201910'  == 表示给文件夹起名字
+ 
+分区表：总结一下，就是分文件夹
+ 
+ 
+梁禺 21:54:30
+文件里没有分区字段的值吗 ：没有，文件里面不存分区字段的值，分区字段的值，是取文件夹的名字
+
+ 刘继雄 21:54:34
+加载数据可以在源文件里面多那个分区字段吗？ 
+
+Scott Chen 21:55:25
+文件夹名字就是分区字段的值吧  对对对
+
+CYM 21:55:26
+如果源文件就在hdfs上，这个load又存了一遍hdfs，  对对对，从本地或者从hdfs加载
+如果是从本地加载数据，类似于复制的操作
+如果是从hdfs加载，类似于一个剪切的操作
+
+马桂全 21:56:24
+通过hdfs的方式修改了文件夹名，会怎么样  数据就找不到了
+
+
+刘继雄 21:56:35
+这里可以在源文件里面多加上分区字段值？ 不行的
+
+
+
+需求描述：现在有一个文件score.csv文件，
+里面有三个字段，分别是s_id string, c_id string,s_score int，
+字段都是使用 \t进行分割，
+存放在hdfs集群的这个目录下/scoredatas/day=20180607，这个文件每天都会生成，
+存放到对应的日期文件夹下面去，文件别人也需要公用，不能移动。
+需求，
+创建hive对应的表，并将数据加载到表中，进行数据统计分析，
+且删除表之后，数据不能删除
+
+/scoredatas/day=20180607/score.csv
+/scoredatas/day=20180608/score.csv
+/scoredatas/day=20180609/score.csv
+/scoredatas/day=20180610/score.csv
+/scoredatas/day=20180611/score.csv
+
+1、外部表
+2、文件别人也需要公用，不能移动 如何解决？？   创建表的时候，数据默认都是移动到/user/hive/warehouse
+通过建表的时候指定location的位置
+create  table  scorestudy  location  '/scoredatas/'    指定文件存放的hdfs的位置
+3、 
+create  external table  score_stu  (s_id string, c_id string,s_score int) 
+partitioned by (day string) row format delimited fields terminated by '\t' 
+location '/scoredatas'
+
+create external table score4(s_id string, c_id string,s_score int) partitioned by (day string) 
+row format delimited fields terminated by '\t' location '/scoredatas';
+
+BYK 22:04:10
+没导入呢 
+元数据没有记录这个分区信息
+让mysql将分区信息给记录上即可
+ msck  repair   table  score4;  刷新mysql的元数据信息即可
+
+ 罗帅 22:05:33
+建完表，再添加文件会有数据吗？  会有数据的
+通过load的方式肯定会有数据
+直接将文件放在hdfs的对应的位置，没有load，没有load，mysql里面没有记录元数据分区信息
+ 
+ 丁创世 22:05:36
+每次hdfs上传文件都要刷新？  对对对
+如果是load，就不用刷新了
+
+
+BYK 22:06:03
+不是很懂。。。每次都要刷新元数据到mysql吗 
+
+
+梁禺 22:06:41
+不是分区表  要刷吗 
+普通表不用刷新的
+
+
+课程总结：
+数据仓库基本概念：知道数仓的分层
+hive安装搞定
+外部表，
+内部表
+分区表需要区分
+最后的外部分区表的练习理解即可
+
+ 刘继雄 22:08:17
+mysql安装后需要创建hive库吗，还是会自动创建？  自动创建
+
+
+
+hive当中有没有索引：有跟没有是一样的，鸡肋，没人用
+
+胡明明 22:09:04
+mysql 存的元数据 咋看  去mysql里面看
+
+姜日鹏 22:09:45
+联机分析处理中的联机解释：联机没有太在意
+
+胡明明 22:10:10
+我知道 用工具，就是不知道每个表干啥的 
+不用太在意
+ 
+
+分桶表：
+
+
+
+
+
+
+
+
+
+
+
+
+

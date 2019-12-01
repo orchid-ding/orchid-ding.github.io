@@ -1,0 +1,581 @@
+现在能看得到屏幕听得到声音嘛？？？
+
+
+老高 19:48:24
+王老，location 的为啥只能外部表使用，内部表不允许使用呢，这个规则定义的意义在哪里，是跟外部表删表不删文件有关系吗 
+内部表为什么不能用location指定数据存储的位置
+
+应该是可以指定没有问题的
+
+
+load数据的时候，，加了overwrite关键字就会把目的地下面的数据全部都给清掉
+加了overwrite就是覆盖，将重名的文件进行替换
+/user/hive/warehouse/myhive.db/myuser/a.txt
+
+没有overwrite 就会重命名
+/user/hive/warehouse/myhive.db/myuser/a.txt
+/user/hive/warehouse/myhive.db/myuser/a(1).txt
+
+梁禺 19:50:16
+location能指定linux本地的路径吗  ==>不行的
+
+
+老高 19:50:29
+那如果内部表可以使用 location ，那岂不是也需要msck  repair   table？ 
+不需要的，内部表，仅仅有一个目录存储文件数据
+
+内部分区表
+/user/hive/warehouse/myhive.db/myuser/month=201806
+/user/hive/warehouse/myhive.db/myuser/month=201807
+
+
+唐大龙 19:52:09
+现实工作中如果往hive表中加载很大文件的数据，一般用什么方式？
+一个文件大小为多少合适？
+特别大的文件load一般采用什么方案比较快？   客户尝试使用其他的一些存储格式，以及压缩方式配合使用
+
+
+尽量控制一个文件不要太大了
+一个文件大小为多少比较合适  ==》看自己的业务处理复杂度
+业务逻辑越复杂，数据文件就尽量打小
+如果业务逻辑比较简单，尽量文件放大一点的
+
+
+高世鹏 19:52:22
+权威指南2上面说加了overwrite，就会把目录下的文件全删了，再加载新的数据，可能现在的版本做了改变了 
+
+
+武晓磊 19:53:38
+分桶企业一般用的多吗  如果数据量实在太大了，还是用的比较多的
+分桶有一个功效就是将大文件给打小，成为多个小文件
+
+
+梁禺 19:55:47
+今天内容看起来很多 
+大部分都是函数  ==》 有一定的基础  ==》快速的过一遍函数
+
+
+Alfred 19:56:25
+hiveserver2 如何正常退出？ 
+前台和后台启动
+前台启动：ctrl + c 即可
+后台启动：直接kill -9  
+
+王 19:58:26
+学习哪种数据库对以后较好？  mysql，oracle
+
+
+王 19:59:07
+nosql    ==>  redis  mongoDB  HBase
+
+
+
+hive前两次课
+1、hive的安装以及基本语法
+建库语法
+建表语法 
+	外部表  分区表   分桶表
+	内部表  分区表   分桶表
+ddl 
+dml  hive语法：大部分与mysql类似，也有一部分不一样，group by 这个语法比较特殊 与oracle的语法一样，与mysql不一样
+
+排序：
+order  by  全局排序操作只能有一个reduceTask
+sort  by   局部排序，每个reduceTask内部进行排序
+distributed by  指定字段进行分区操作
+cluster  by   id =  distributed by(id)   +  sort  by(id)
+
+第三次课：
+1、hive当中的参数传递
+2、hive当中的函数的介绍
+3、hive当中的数据压缩  
+
+
+hive当中的参数传递：研究的就是hive有哪些参数，该如何传递参数
+配置文件hive-site.xml
+命令行
+参数声明
+
+
+
+传递参数：
+hiveconf  ==> 默认传递的是hive-default.xml里面配置的属性参数
+hivevar   ==》默认是用于传递自定义的参数  name=zhangsan
+
+define与hivevar用途完全一样，还有一种简写“-d
+bin/hive --hiveconf "mapred.job.queue.name=root.default" -d my="201809" --database mydb
+执行SQL
+select * from mydb where concat(year, month) = ${my} limit 10;
+
+
+select * from student left join score 
+on student.s_id = score.s_id where 
+score.month = '201807' and score.s_score > 80 and score.c_id = 03;
+
+
+bin/hive --hiveconf month=201807 --hivevar s_score=80 --hivevar c_id=03  -f /kkb/install/hivedatas/hivevariable.hql
+
+武晓磊 20:14:22
+命令行可以传参吗？一定要在脚本里吗
+在进入命令行之前就定义一些参数
+bin/hive  --hiveconf  name=zhagnsan  --hivevar age=18
+select * from user where name = ${hiveconf.name} and age = ${age}
+
+
+唐大龙 20:14:49
+命令行配置有效范围是不是session级   对对对，退出hive客户端，参数失效
+
+李亚远 20:16:59
+conf和var定义的参数名可以重名吗？  不行
+
+
+
+条件判断函数：CASE 
+
+case  when 有两种语法
+case  a when  b then c when d then e else f end 
+
+case when a then b when c then d  else f end 
+
+
+
+将员工按照性别打上标识  男 1  女 0  
+select * ,case  sex when 'male' then '0'  when 'female' then '1'  else '2' end from  employee;
+
+
+将员工按照薪资待遇划分等级  
+薪水小于五千的，打上低等收入的标签，
+收入在5000到10000打上中等收入标签，收入大于10000打上高等收入标签
+
+select * ,case when salary < 5000 then 'ddsr' when  salary >5000 and salary < 10000 then 'zdsr'  from   employee
+
+
+select *,
+case 
+when salary < 5000 then "低等收入" 
+when salary>= 5000 and salary < 10000 then "中等收入"
+when salary > 10000 then "高等收入"  
+end  as level,
+case sex
+when "female" then 1 
+when "male" then 0
+end as flag 
+from employee;
+
+
+
+select  get_json_object('{"store":{"fruit":\[{"weight":8,"type":"apple"},{"weight":9,"type":"pear"}], 
+"bicycle":{"price":19.95,"color":"red"} },"email":"amy@only_for_json_udf_test.net","owner":"amy"}','$.owner')
+
+
+create table score_map(name string, score map<string,int>)
+row format delimited fields terminated by '\t' 
+collection items terminated by ',' map keys terminated by ':';
+
+集合的分隔符，只能指定同一个
+name    address(LIST)   ageandsex(MAP)
+ZHANGSAN  bj,sh,tj      18:0,20:1
+
+
+ create table movie_score( name string,  info struct<number:int,score:float> )row format delimited fields terminated by "\t"  
+ collection items terminated by ":"; 
+
+
+
+create table  person(name string,work_locations array<string>)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+COLLECTION ITEMS TERMINATED BY ',';
+
+
+UDTF==>Hive当中的聚合函数  max  min  sum  avg
+
+
+需求：现在有数据格式如下
+zhangsan	child1,child2,child3,child4	k1:v1,k2:v2
+lisi	child5,child6,child7,child8	 k3:v3,k4:v4
+
+字段之间使用\t分割，需求将所有的child进行拆开成为一列
+ 
++----------+--+
+| mychild  |
++----------+--+
+| child1   |
+| child2   |
+| child3   |
+| child4   |
+| child5   |
+| child6   |
+| child7   |
+| child8   |
++----------+--+
+
+
+
+将map的key和value也进行拆开，成为如下结果
+
++-----------+-------------+--+
+| mymapkey  | mymapvalue  |
++-----------+-------------+--+
+| k1        | v1          |
+| k2        | v2          |
+| k3        | v3          |
+| k4        | v4          |
++-----------+-------------+--+
+
+
+create  table hive_explode.t3(name string,children array<string>,address Map<string,string>) 
+row format delimited fields terminated by '\t'  collection items   
+ terminated by ','  map keys terminated by ':' stored as textFile;
+
+
+ hive (hive_explode)> select explode(children) as child_explode from t3;
+ 
+zhangsan	child1,child2,child3,child4	k1:v1,k2:v2
+lisi	child5,child6,child7,child8	 k3:v3,k4:v4
+ 
+ 
+zhangsan        ["child1","child2","child3","child4"]   {"k1":"v1","k2":"v2"}
+lisi    ["child5","child6","child7","child8"]   {"k3":"v3","k4":"v4"}
+ 
+zhangsan	child1
+zhangsan	child2
+zhangsan	child3
+zhangsan	child4
+lisi		child5
+lisi		child6
+lisi		child7
+lisi		child8
+
+
+select   name, mychild from  t3  lateral view explode(children) tempTable as mychild;
+zhangsan        child1
+zhangsan        child2
+zhangsan        child3
+zhangsan        child4
+lisi    child5
+lisi    child6
+lisi    child7
+lisi    child8
+
+李亚远 21:08:38
+那个虚拟表的结构是什么样的，能select出来吗  不行
+tempTable  表名
+mychild
+
+child1
+child2
+child3
+child4 
+child5
+child6
+child7
+child8 
+
+姜日鹏 21:09:22
+lateral view简单理解就是行转列的函数  bingo
+
+
+唐大龙 21:10:08
+explode 不是炸开吗  explode就是炸开的操作
+
+
+
+ lateral  view  配合explode一起使用，产生笛卡尔积
+ 
+ lateral view  侧写  侧面描写  
+ 可以通过lateral  view 实现创建一张虚拟的表出来
+ 
+ 
+ 
+ 
+ 
+ 
+ a:shandong,b:beijing,c:hebei|1,2,3,4,5,6,7,8,9|
+ 
+ 
+ 
+"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"
+"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"
+"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"
+
+ 
+ 4900
+2090
+6987
+
+
+
+select explode(split(regexp_replace(regexp_replace(sale_info,'\\[\\{',''),'}]',''),'},\\{')) 
+as sale_info from hive_explode.explode_lateral_view;
+
+"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"
+"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"
+"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"
+
+
+select  get_json_object("$.monthSales")
+
+select get_json_object(explode(split(regexp_replace(regexp_replace(sale_info,'\\[\\{',''),'}]',''),'},\\{')),'$.monthSales') as  sale_info from hive_explode.explode_lateral_view;
+
+
+select goods_id2,sale_info from explode_lateral_view 
+LATERAL VIEW explode(split(goods_id,','))goods as goods_id2;
+
+goods 虚拟的表名
+goods_id2 炸开之后的虚拟的列名
+
+1       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+2       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+3       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+4       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+5       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+6       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+7       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+8       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+9       [{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+
+
+a:shandong,b:beijing,c:hebei|1,2,3,4,5,6,7,8,9|[{"source":"7fresh","monthSales":4900,"userCount":1900,"score":"9.9"},{"source":"jd","monthSales":2090,"userCount":78981,"score":"9.8"},{"source":"jdmart","monthSales":6987,"userCount":1600,"score":"9.0"}]
+
+
+
+select goods_id2,sale_info,area2 from explode_lateral_view  
+LATERAL VIEW explode(split(goods_id,','))goods as goods_id2 
+LATERAL VIEW explode(split(area,','))area as area2;
+
+
+
+COLLECT_SET ==》 收集数据，将多行数据，收集成为一条数据
+
+
+射手座,A            老王|按住啦baby
+白羊座,A            孙悟空|猪八戒
+白羊座,B            宋宋
+
+将多行数据转换成为一列
+
+collect_set 收集多条数据成为一个集合
+concat_ws 将集合当中的数据按照指定的分隔符进行分割
+
+select t1.base, concat_ws('|', collect_set(t1.name)) name from    
+(select name, concat(constellation, "," , blood_type) base from person_info) t1 group by  t1.base;
+
+
+
+姜日鹏 21:21:08
+突然想到一个mapjoin会产生几个job呢，它是不是还有个加载表的job 
+
+
+侯晓东 21:21:18
+对，设置了100个reduce 设置太多的reduceTask，reduceTask启动的时候，需要分配资源，很慢
+
+
+
+求每一类电影有多少部
+select  category_name,count(1) from (
+ select movie, category_name  from  movie_info lateral view explode(category) 
+ table_tmp as category_name ) temp2 group by temp2.category_name;
+
+
+
+ 
+ hive当中的reflect函数  ==》 反射的思想  指定类名，指定方法名，指定参数个数，就可以调用某一个java方法
+ 
+ 
+ select reflect("java.lang.Math","max",col1,col2) from test_udf;
+ java.lang.Math 使我们jdk当中自带的一个类，当中的一个max方法
+ 
+ 
+ 可以自定义reflect函数来实现解决
+ select  reflect("com.kkb.reflect.MyReflect","MyReflect",str1,str2)
+ 
+ 唐大龙 21:31:02
+这个reflect性能怎么样   ==》 通过反射，去创建class类放到jvm里面去了，供我们一直调用
+
+ 
+ 胡鹏飞 21:31:09
+能不能rpc 
+ 调用远程的服务   不能
+ 
+  select reflect(class_name,method_name,col1,col2) from test_udf2;
+ 
+ 
+ 王 21:34:14
+参数是固定个数的吗  不固定，你想传入多少个参数都行
+
+Alfred 21:35:49
+reflect  就不调用MR了么？  肯定也是调用了mr
+
+
+姜日鹏 21:34:04
+自定义函数底层想用MR执行怎么办 你自定义了一个函数，类似于map或者reduce 阶段调用了你的方法
+
+MyMapper extends Mapper{
+	public map(){
+	//调用你定义的函数的方法
+	数据传入过来，调用 java.lang.Math.max(数据1，数据2)
+	}
+}
+
+丁创世 21:36:43
+参数有什么限制吗？ 比如date、map、等等的java数据类型 
+支持的是hive当中的各种类型，最简单的就是将类型，全部都给转换成为字符串
+然后再自定义reflect里面再去处理
+
+李亚远 21:37:32
+之后会讲hql详细的编译过程吗   不会的
+将hql语句解析，生成了一个语法树
+
+
+姜日鹏 21:38:18
+那底层执行mr的时候怎么知道我的自定义函数是在map函数中运行的还是在reduce函数中运行的 
+根据你自己的函数来看，如果有聚合的操作，肯定是在reduce里面执行
+如果没有聚合操作，就是map里面执行
+
+高世鹏 21:38:29
+什么语句会变成mr，什么语句不会呢？   后面会将
+
+
+分组求topN
+
+
+助教-1 21:38:45
+https://tech.meituan.com/2014/02/12/hive-sql-to-mapreduce.html
+
+分组求topN  ==》 求每组当中最大或者最小的前几个值
+row_number over
+rank  over
+dense_rank over  
+
+cookieid  create_time  pv
+
+
+cookie1,2015-04-12,7 	1   1    1
+cookie1,2015-04-11,5 	2   2    2
+cookie1,2015-04-15,4 	3   3    3
+cookie1,2015-04-16,4 	4   3    3
+cookie1,2015-04-13,3 	5   4    5
+cookie1,2015-04-14,2 	6   5    6
+cookie1,2015-04-10,1 	7   6    7
+
+
+
+
+cookie2,2015-04-15,9
+cookie2,2015-04-16,7
+cookie2,2015-04-13,6
+cookie2,2015-04-12,5
+cookie2,2015-04-14,3
+cookie2,2015-04-11,3
+cookie2,2015-04-10,2
+
+
+
+
+
+求每个cookie访问的pv的前三名
+
+求出来几条数据？？？6条数据
+
+
+
+侯晓东 21:44:05
+sort by 
+
+侯晓东 21:44:20
+按cookie分区，两个reduce   不行，如果有10000个cookie，能不能启动一千个reduceTask
+
+徐将锋 21:44:30
+分区排序+limit    ==> 也不行  现在有3个cookie 但是只有两个reduceTask
+select  from  cookie_table 
+
+
+SELECT 
+cookieid,
+createtime,
+pv,
+RANK() OVER(PARTITION BY cookieid ORDER BY pv desc) AS rn1,
+DENSE_RANK() OVER(PARTITION BY cookieid ORDER BY pv desc) AS rn2,
+ROW_NUMBER() OVER(PARTITION BY cookieid ORDER BY pv DESC) AS rn3 
+FROM cookie_pv 
+WHERE rn1 <=  3 ;
+
+cookieid        createtime      pv      rn1     rn2     rn3
+cookie1 2015-04-12      7       		1       1       1
+cookie1 2015-04-11      5       		2       2       2
+cookie1 2015-04-16      4       		3       3       3
+cookie1 2015-04-15      4       		3       3       4
+cookie1 2015-04-13      3       		5       4       5
+cookie1 2015-04-14      2       		6       5       6
+cookie1 2015-04-10      1       		7       6       7
+cookie2 2015-04-15      9       		1       1       1
+cookie2 2015-04-16      7       		2       2       2
+cookie2 2015-04-13      6       		3       3       3
+cookie2 2015-04-12      5       		4       4       4
+cookie2 2015-04-11      3       		5       5       5
+cookie2 2015-04-14      3       		5       5       6
+cookie2 2015-04-10      2       		7       6       7
+
+
+
+
+
+王 21:49:30
+这个不还是先排序再打标记？  就是先排序，再打标记，但是你要注意排序是每组内部的排序，不是全局排序
+
+
+
+
+ 
+ partition  by ==> 类似于group  by的效果
+ 
+ ORDER BY pv desc 对分组内的数据进行排序
+ 
+ 
+ 武晓磊 21:47:05
+Row_num  partition by sort by =n
+肯定是高手
+
+
+
+王 21:53:21
+组内排完序直接取前三不可以是吗？  组内排完没法直接取前三，不提供组内直接取
+
+
+hive当中的自定义函数
+udf：一行数据输入，一行数据输出
+udtf  一进多出  一行数据输入，多行输出
+udaf     聚集函数，多进一出
+
+
+
+
+选择哪种方式压缩：
+第一个方面：压缩和解压缩的性能究竟怎么样
+第二个方面：压缩的时候数据是否是可分割的数据
+	可分割：例如1个1280M的数据，会启动10个Maptask来进行并行的计算
+	不可分割：例如1个1280M的数据，会启动1个Maptask来进行并行的计算  ==》 需要自己控制文件的大小
+
+
+
+姜日鹏 22:07:29
+这个分组topN的函数，当有1000万组的时候，会有1000万个reducetask么  ==》 你觉得会不会？？？肯定是不会的，用了mr当中的GroupingComparator
+
+
+高世鹏 22:07:30
+reduce的数量是根据不同的语句系统默认分配的吗？不同语句reduce数量不一样？   对对  
+
+
+丁创世 22:07:35
+snappy、的文件怎么查看  看不了的，你需要解压之后才能看
+
+hive当中你不用管解压的问题，自动会解压的
+
+
+
+
+
+
+
+ 
