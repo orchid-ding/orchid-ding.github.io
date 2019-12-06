@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        数仓商城项目之--系统业务数仓 - Kaffir Lily的博客 | Kaffir Lily&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="icon-font icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="icon-font icon-shouye1"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#电商数仓（系统业务数据仓库）"><span class="toc-text">电商数仓（系统业务数据仓库）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-电商业务与数据结构简介"><span class="toc-text">1. 电商业务与数据结构简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-电商业务流程"><span class="toc-text">1.1 电商业务流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-电商常识（SKU、SPU）"><span class="toc-text">1.2  电商常识（SKU、SPU）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-电商表结构"><span class="toc-text">1.3 电商表结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-订单表（order-info）"><span class="toc-text">1.3.1 订单表（order_info）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-订单详情表（order-detail）"><span class="toc-text">1.3.2 订单详情表（order_detail）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-商品表"><span class="toc-text">1.3.3 商品表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-用户表"><span class="toc-text">1.3.4 用户表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-5-商品一级分类表"><span class="toc-text">1.3.5 商品一级分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-6-商品二级分类表"><span class="toc-text">1.3.6 商品二级分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-7-商品三级分类表"><span class="toc-text">1.3.7 商品三级分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-8-支付流水表"><span class="toc-text">1.3.8 支付流水表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-数仓理论"><span class="toc-text">2. 数仓理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-表的分类"><span class="toc-text">2.1 表的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-实体表"><span class="toc-text">2.1.1 实体表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-维度表"><span class="toc-text">2.1.2 维度表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-事务型事实表"><span class="toc-text">2.1.3 事务型事实表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-同步策略"><span class="toc-text">2.2 同步策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-实体表同步策略"><span class="toc-text">2.2.1 实体表同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-维度表同步策略"><span class="toc-text">2.2.2 维度表同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-事务型事实表同步策略"><span class="toc-text">2.2.3 事务型事实表同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-周期型事实表同步策略"><span class="toc-text">2.2.4 周期型事实表同步策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-范式理论"><span class="toc-text">2.3 范式理论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-范式概念"><span class="toc-text">2.3.1 范式概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-函数依赖"><span class="toc-text">2.3.2 函数依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-范式区分"><span class="toc-text">2.3.3 范式区分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-关系建模和纬度建模"><span class="toc-text">2.4 关系建模和纬度建模</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-雪花模型、星型模型和星座模型"><span class="toc-text">2.5 雪花模型、星型模型和星座模型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-数仓搭建"><span class="toc-text">3. 数仓搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-数据生成"><span class="toc-text">3.1 数据生成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-生成业务数据"><span class="toc-text">3.1.1 生成业务数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-业务数据导入数仓"><span class="toc-text">3.2 业务数据导入数仓</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-分析表的同步策略"><span class="toc-text">3.2.1 分析表的同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-Sqoop定时导入脚本"><span class="toc-text">3.2.2 Sqoop定时导入脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-建表"><span class="toc-text">3.3 建表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-创建订单表"><span class="toc-text">3.3.1 创建订单表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-创建订单详情表"><span class="toc-text">3.3.2 创建订单详情表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-3-创建商品表"><span class="toc-text">3.3.3 创建商品表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-4-创建用户表"><span class="toc-text">3.3.4 创建用户表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-5-创建分类表"><span class="toc-text">3.3.5 创建分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-6-支付流水表"><span class="toc-text">3.3.6 支付流水表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-数据导入脚本"><span class="toc-text">3.4 数据导入脚本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-DWD层"><span class="toc-text">4. DWD层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-创建表"><span class="toc-text">4.1 创建表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1-创建订单表"><span class="toc-text">4.1.1 创建订单表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-2-订单详情表"><span class="toc-text">4.1.2 订单详情表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-3-用户表"><span class="toc-text">4.1.3 用户表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-4-支付流水表"><span class="toc-text">4.1.4 支付流水表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-5-商品表"><span class="toc-text">4.1.5 商品表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-DWD层数据导入脚本"><span class="toc-text">4.2   DWD层数据导入脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-总结"><span class="toc-text">4.2.1 总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-DWS-用户行为宽表"><span class="toc-text">5 DWS 用户行为宽表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-GWV-成交总额"><span class="toc-text">6. GWV 成交总额</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-转化率之用户新鲜度及漏斗分析"><span class="toc-text">7. 转化率之用户新鲜度及漏斗分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-ADS层之新增用户占日活跃用户比率（用户新鲜度）"><span class="toc-text">7.1  ADS层之新增用户占日活跃用户比率（用户新鲜度）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-ADS层之用户行为漏斗分析"><span class="toc-text">7.2  ADS层之用户行为漏斗分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-品牌复购率"><span class="toc-text">8. 品牌复购率</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-复购率分析"><span class="toc-text">8.1 复购率分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-DWS层"><span class="toc-text">8.2 DWS层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-1-用户购买商品明细表（宽表）"><span class="toc-text">8.2.1 用户购买商品明细表（宽表）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-ADS层品牌复购率"><span class="toc-text">8.3 ADS层品牌复购率</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-数据可视化表"><span class="toc-text">9. 数据可视化表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-sqoop导出脚本"><span class="toc-text">10.sqoop导出脚本</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        数仓商城项目之--系统业务数仓
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-04 12:35:30</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#数仓项目" title="数仓项目">数仓项目</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="电商数仓（系统业务数据仓库）"><a href="#电商数仓（系统业务数据仓库）" class="headerlink" title="电商数仓（系统业务数据仓库）"></a>电商数仓（系统业务数据仓库）</h1><h2 id="1-电商业务与数据结构简介"><a href="#1-电商业务与数据结构简介" class="headerlink" title="1. 电商业务与数据结构简介"></a>1. 电商业务与数据结构简介</h2><h3 id="1-1-电商业务流程"><a href="#1-1-电商业务流程" class="headerlink" title="1.1 电商业务流程"></a>1.1 电商业务流程</h3><p><img src="assets/image-20191204124410155.png" alt="image-20191204124410155"></p>
+<h3 id="1-2-电商常识（SKU、SPU）"><a href="#1-2-电商常识（SKU、SPU）" class="headerlink" title="1.2  电商常识（SKU、SPU）"></a>1.2  电商常识（SKU、SPU）</h3><ol>
+<li><p>SKU=Stock Keeping Unit（库存量基本单位）。现在已经被引申为产品统一编号的简称，每种产品均对应有唯一的SKU号。</p>
+</li>
+<li><p>SPU(Standard Product Unit)：是商品信息聚合的最小单位，是一组可复用、易检索的标准化信息集合。</p>
+</li>
+</ol>
+<h3 id="1-3-电商表结构"><a href="#1-3-电商表结构" class="headerlink" title="1.3 电商表结构"></a>1.3 电商表结构</h3><p><img src="assets/image-20191204130052893.png" alt="image-20191204130052893"></p>
+<h4 id="1-3-1-订单表（order-info）"><a href="#1-3-1-订单表（order-info）" class="headerlink" title="1.3.1 订单表（order_info）"></a>1.3.1 订单表（order_info）</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>订单编号</td>
+</tr>
+<tr>
+<td>total_amount</td>
+<td>订单金额</td>
+</tr>
+<tr>
+<td>order_status</td>
+<td>订单状态</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>用户id</td>
+</tr>
+<tr>
+<td>payment_way</td>
+<td>支付方式</td>
+</tr>
+<tr>
+<td>out_trade_no</td>
+<td>支付流水号</td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>operate_time</td>
+<td>操作时间</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-2-订单详情表（order-detail）"><a href="#1-3-2-订单详情表（order-detail）" class="headerlink" title="1.3.2 订单详情表（order_detail）"></a>1.3.2 订单详情表（order_detail）</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>订单编号</td>
+<td></td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>订单号</td>
+<td></td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>用户id</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_id</td>
+<td>商品id</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_name</td>
+<td>商品名称</td>
+<td></td>
+</tr>
+<tr>
+<td>order_price</td>
+<td>商品价格</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_num</td>
+<td>商品数量</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-3-商品表"><a href="#1-3-3-商品表" class="headerlink" title="1.3.3 商品表"></a>1.3.3 商品表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>skuId</td>
+<td></td>
+</tr>
+<tr>
+<td>spu_id</td>
+<td>spuid</td>
+<td></td>
+</tr>
+<tr>
+<td>price</td>
+<td>价格</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_name</td>
+<td>商品名称</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_desc</td>
+<td>商品描述</td>
+<td></td>
+</tr>
+<tr>
+<td>weight</td>
+<td>重量</td>
+<td></td>
+</tr>
+<tr>
+<td>tm_id</td>
+<td>品牌id</td>
+<td></td>
+</tr>
+<tr>
+<td>category3_id</td>
+<td>品类id</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-4-用户表"><a href="#1-3-4-用户表" class="headerlink" title="1.3.4 用户表"></a>1.3.4 用户表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>用户id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>姓名</td>
+<td></td>
+</tr>
+<tr>
+<td>birthday</td>
+<td>生日</td>
+<td></td>
+</tr>
+<tr>
+<td>gender</td>
+<td>性别</td>
+<td></td>
+</tr>
+<tr>
+<td>email</td>
+<td>邮箱</td>
+<td></td>
+</tr>
+<tr>
+<td>user_level</td>
+<td>用户等级</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-5-商品一级分类表"><a href="#1-3-5-商品一级分类表" class="headerlink" title="1.3.5 商品一级分类表"></a>1.3.5 商品一级分类表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-6-商品二级分类表"><a href="#1-3-6-商品二级分类表" class="headerlink" title="1.3.6 商品二级分类表"></a>1.3.6 商品二级分类表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td></td>
+</tr>
+<tr>
+<td>category1_id</td>
+<td>一级品类id</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-7-商品三级分类表"><a href="#1-3-7-商品三级分类表" class="headerlink" title="1.3.7 商品三级分类表"></a>1.3.7 商品三级分类表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td></td>
+</tr>
+<tr>
+<td>Category2_id</td>
+<td>二级品类id</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-8-支付流水表"><a href="#1-3-8-支付流水表" class="headerlink" title="1.3.8 支付流水表"></a>1.3.8 支付流水表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>编号</td>
+</tr>
+<tr>
+<td>out_trade_no</td>
+<td>对外业务编号</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>订单编号</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>用户编号</td>
+</tr>
+<tr>
+<td>alipay_trade_no</td>
+<td>支付宝交易流水编号</td>
+</tr>
+<tr>
+<td>total_amount</td>
+<td>支付金额</td>
+</tr>
+<tr>
+<td>subject</td>
+<td>交易内容</td>
+</tr>
+<tr>
+<td>payment_type</td>
+<td>支付类型</td>
+</tr>
+<tr>
+<td>payment_time</td>
+<td>支付时间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-数仓理论"><a href="#2-数仓理论" class="headerlink" title="2. 数仓理论"></a>2. 数仓理论</h2><h3 id="2-1-表的分类"><a href="#2-1-表的分类" class="headerlink" title="2.1 表的分类"></a>2.1 表的分类</h3><h4 id="2-1-1-实体表"><a href="#2-1-1-实体表" class="headerlink" title="2.1.1 实体表"></a>2.1.1 实体表</h4><ul>
+<li><strong>实体表</strong>，一般是指一个现实存在的业务对象，比如用户，商品，商家，销售员等等。</li>
+</ul>
+<p>用户表：</p>
+<table>
+<thead>
+<tr>
+<th>用户id</th>
+<th>姓名</th>
+<th>生日</th>
+<th>性别</th>
+<th>邮箱</th>
+<th>用户等级</th>
+<th>创建时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>张三</td>
+<td>2011-11-11</td>
+<td>男</td>
+<td><a href="mailto:zs@163.com" target="_blank" rel="noopener">zs@163.com</a></td>
+<td>2</td>
+<td>2018-11-11</td>
+</tr>
+<tr>
+<td>2</td>
+<td>李四</td>
+<td>2011-11-11</td>
+<td>女</td>
+<td><a href="mailto:ls@163.com" target="_blank" rel="noopener">ls@163.com</a></td>
+<td>3</td>
+<td>2018-11-11</td>
+</tr>
+<tr>
+<td>3</td>
+<td>王五</td>
+<td>2011-11-11</td>
+<td>中性</td>
+<td><a href="mailto:ww@163.com" target="_blank" rel="noopener">ww@163.com</a></td>
+<td>1</td>
+<td>2018-11-11</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-1-2-维度表"><a href="#2-1-2-维度表" class="headerlink" title="2.1.2 维度表"></a>2.1.2 维度表</h4><ul>
+<li><strong>维度表</strong>，一般是指对应一些业务状态，编号的解释表。也可以称之为码表。</li>
+</ul>
+<p>比如地区表，订单状态，支付方式，审批状态，商品分类等等。</p>
+<p>订单状态表：</p>
+<table>
+<thead>
+<tr>
+<th>订单状态编号</th>
+<th>订单状态名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>未支付</td>
+</tr>
+<tr>
+<td>2</td>
+<td>支付</td>
+</tr>
+<tr>
+<td>3</td>
+<td>发货中</td>
+</tr>
+<tr>
+<td>4</td>
+<td>已发货</td>
+</tr>
+<tr>
+<td>5</td>
+<td>已完成</td>
+</tr>
+</tbody>
+</table>
+<p>   商品分类表：</p>
+<table>
+<thead>
+<tr>
+<th>商品分类编号</th>
+<th>分类名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>服装</td>
+</tr>
+<tr>
+<td>2</td>
+<td>保健</td>
+</tr>
+<tr>
+<td>3</td>
+<td>电器</td>
+</tr>
+<tr>
+<td>4</td>
+<td>图书</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-1-3-事务型事实表"><a href="#2-1-3-事务型事实表" class="headerlink" title="2.1.3 事务型事实表"></a>2.1.3 事务型事实表</h4><ul>
+<li><strong>事务型事实表</strong>，一般指随着业务发生不断产生的数据。特点是一旦发生不会再变化。</li>
+</ul>
+<p>一般比如，交易流水，操作日志，出库入库记录等等。</p>
+<p>交易流水表：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>对外业务编号</th>
+<th>订单编号</th>
+<th>用户编号</th>
+<th>支付宝交易流水编号</th>
+<th>支付金额</th>
+<th>交易内容</th>
+<th>支付类型</th>
+<th>支付时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>7577697945</td>
+<td>1</td>
+<td>111</td>
+<td>QEyF-63000323</td>
+<td>223.00</td>
+<td>海狗人参丸1</td>
+<td>alipay</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0170099522</td>
+<td>2</td>
+<td>222</td>
+<td>qdwV-25111279</td>
+<td>589.00</td>
+<td>海狗人参丸2</td>
+<td>wechatpay</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1840931679</td>
+<td>3</td>
+<td>666</td>
+<td>hSUS-65716585</td>
+<td>485.00</td>
+<td>海狗人参丸3</td>
+<td>unionpay</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>周期型事实表</strong>，一般指随着业务发生不断产生的数据。</li>
+</ul>
+<p>与事务型不同的是，数据会随着业务周期性的推进而变化。</p>
+<p> 比如订单，其中订单状态会周期性变化。再比如，请假、贷款申请，随着批复状态在周期性变化。</p>
+<p>订单表：</p>
+<table>
+<thead>
+<tr>
+<th>订单编号</th>
+<th>订单金额</th>
+<th>订单状态</th>
+<th>用户id</th>
+<th>支付方式</th>
+<th>支付流水号</th>
+<th>创建时间</th>
+<th>操作时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>223.00</td>
+<td>2</td>
+<td>111</td>
+<td>alipay</td>
+<td>QEyF-63000323</td>
+<td>2019-02-10 00:01:29</td>
+<td>2019-02-10 00:01:29</td>
+</tr>
+<tr>
+<td>2</td>
+<td>589.00</td>
+<td>2</td>
+<td>222</td>
+<td>wechatpay</td>
+<td>qdwV-25111279</td>
+<td>2019-02-10 00:05:02</td>
+<td>2019-02-10 00:05:02</td>
+</tr>
+<tr>
+<td>3</td>
+<td>485.00</td>
+<td>1</td>
+<td>666</td>
+<td>unionpay</td>
+<td>hSUS-65716585</td>
+<td>2019-02-10 00:50:02</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-同步策略"><a href="#2-2-同步策略" class="headerlink" title="2.2 同步策略"></a>2.2 同步策略</h3><p>数据同步策略的类型包括：全量表、增量表、新增及变化表、拉链表</p>
+<ul>
+<li>全量表：存储完整的数据。</li>
+</ul>
+<ul>
+<li>增量表：存储新增加的数据。</li>
+</ul>
+<ul>
+<li>新增及变化表：存储新增加的数据和变化的数据。</li>
+</ul>
+<ul>
+<li>拉链表：对新增及变化表做定期合并。</li>
+</ul>
+<h4 id="2-2-1-实体表同步策略"><a href="#2-2-1-实体表同步策略" class="headerlink" title="2.2.1 实体表同步策略"></a>2.2.1 实体表同步策略</h4><ul>
+<li><p>实体表：比如用户，商品，商家，销售员等</p>
+</li>
+<li><p>实体表数据量比较小：通常可以做每日全量，就是每天存一份完整数据。即每日全量。</p>
+</li>
+</ul>
+<h4 id="2-2-2-维度表同步策略"><a href="#2-2-2-维度表同步策略" class="headerlink" title="2.2.2 维度表同步策略"></a>2.2.2 维度表同步策略</h4><ul>
+<li><p>维度表：比如订单状态，审批状态，商品分类</p>
+</li>
+<li><p>维度表数据量比较小：通常可以做每日全量，就是每天存一份完整数据。即每日全量。</p>
+</li>
+<li><p>说明：</p>
+<ul>
+<li>针对可能会有变化的状态数据可以存储每日全量。</li>
+<li>没变化的客观世界的维度（比如性别，地区，民族，政治成分，鞋子尺码）可以只存一份固定值。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-3-事务型事实表同步策略"><a href="#2-2-3-事务型事实表同步策略" class="headerlink" title="2.2.3 事务型事实表同步策略"></a>2.2.3 事务型事实表同步策略</h4><ul>
+<li><p>事务型事实表：比如，交易流水，操作日志，出库入库记录等。</p>
+</li>
+<li><p>因为数据不会变化，而且数据量巨大，所以每天只同步新增数据即可，所以可以做成每日增量表，即每日创建一个分区存储。</p>
+</li>
+</ul>
+<h4 id="2-2-4-周期型事实表同步策略"><a href="#2-2-4-周期型事实表同步策略" class="headerlink" title="2.2.4 周期型事实表同步策略"></a>2.2.4 周期型事实表同步策略</h4><ul>
+<li><p>周期型事实表：比如，订单、请假、贷款申请等</p>
+</li>
+<li><p>这类表从数据量的角度，存每日全量的话，数据量太大，冗余也太大。如果用每日增量的话无法反应数据变化。</p>
+</li>
+<li><p>每日新增及变化量，包括了当日的新增和修改。一般来说这个表，足够计算大部分当日数据的。但是这种依然无法解决能够得到某一个历史时间点（时间切片）的切片数据。 </p>
+</li>
+<li><p>所以要用利用每日新增和变化表，制作一张拉链表，以方便的取到某个时间切片的快照数据。所以我们需要得到每日新增及变化量。</p>
+</li>
+</ul>
+<ul>
+<li>拉链表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>name姓名</th>
+<th>start新名字创建时间</th>
+<th>end名字更改时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>1990/1/1</td>
+<td>2018/12/31</td>
+</tr>
+<tr>
+<td>张小三</td>
+<td>2019/1/1</td>
+<td>2019/4/30</td>
+</tr>
+<tr>
+<td>张大三</td>
+<td>2019/5/1</td>
+<td>9999-99-99</td>
+</tr>
+<tr>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-3-范式理论"><a href="#2-3-范式理论" class="headerlink" title="2.3 范式理论"></a>2.3 范式理论</h3><h4 id="2-3-1-范式概念"><a href="#2-3-1-范式概念" class="headerlink" title="2.3.1 范式概念"></a>2.3.1 范式概念</h4><ul>
+<li>​    关系型数据库设计时，遵照一定的规范要求，目的在于降低数据的冗余性，目前业界范式有：第一范式(1NF)、第二范式(2NF)、第三范式(3NF)、巴斯-科德范式(BCNF)、第四范式(4NF)、第五范式(5NF)。</li>
+</ul>
+<p>范式可以理解为设计一张数据表的表结构，符合的标准级别。</p>
+<ul>
+<li><p>使用范式的根本目的是：</p>
+<ul>
+<li>减少数据冗余，尽量让每个数据只出现一次。</li>
+<li>保证数据一致性</li>
+</ul>
+</li>
+<li><p>缺点是获取数据时，需要通过拼接出最后的数据。</p>
+</li>
+</ul>
+<h4 id="2-3-2-函数依赖"><a href="#2-3-2-函数依赖" class="headerlink" title="2.3.2 函数依赖"></a>2.3.2 函数依赖</h4><p><img src="assets/image-20191204143818657.png" alt="image-20191204143818657"></p>
+<h4 id="2-3-3-范式区分"><a href="#2-3-3-范式区分" class="headerlink" title="2.3.3 范式区分"></a>2.3.3 范式区分</h4><ul>
+<li>1NF：属性不可分割</li>
+<li>2NF：只含有部分依赖</li>
+<li>3NF：不包含传递依赖</li>
+</ul>
+<h3 id="2-4-关系建模和纬度建模"><a href="#2-4-关系建模和纬度建模" class="headerlink" title="2.4 关系建模和纬度建模"></a>2.4 关系建模和纬度建模</h3><ul>
+<li>关系模型：主要用于OLTP系统，为了保证数据的一致性以及避免冗余，所以大部分业务系统的表都是遵循第三范式的。  </li>
+<li>维度模型主要应用于OLAP系统中，因为关系模型虽然冗余少，但是在大规模数据，跨表分析统计查询过程中，会造成多表关联，这会大大降低执行效率。</li>
+</ul>
+<h4 id="2-5-雪花模型、星型模型和星座模型"><a href="#2-5-雪花模型、星型模型和星座模型" class="headerlink" title="2.5 雪花模型、星型模型和星座模型"></a>2.5 雪花模型、星型模型和星座模型</h4><p><img src="assets/image-20191204145843067.png" alt="image-20191204145843067"></p>
+<p><img src="assets/image-20191204145910488.png" alt="image-20191204145910488"></p>
+<h2 id="3-数仓搭建"><a href="#3-数仓搭建" class="headerlink" title="3. 数仓搭建"></a>3. 数仓搭建</h2><h3 id="3-1-数据生成"><a href="#3-1-数据生成" class="headerlink" title="3.1 数据生成"></a>3.1 数据生成</h3><h4 id="3-1-1-生成业务数据"><a href="#3-1-1-生成业务数据" class="headerlink" title="3.1.1 生成业务数据"></a>3.1.1 生成业务数据</h4><p>1）生成业务数据函数说明</p>
+<pre><code><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> init_data ( do_date_string VARCHAR(20) , order_incr_num INT, user_incr_num INT , sku_num INT , if_truncate BOOLEAN )：</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 参数一：do_date_string生成数据日期</span></span><br><span class="line"><span class="comment">--     参数二：order_incr_num订单id个数</span></span><br><span class="line"><span class="comment">--     参数三：user_incr_num用户id个数</span></span><br><span class="line"><span class="comment">--     参数四：sku_num商品sku个数</span></span><br><span class="line"><span class="comment">--     参数五：if_truncate是否删除数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 需求：生成日期2019年2月10日数据、订单1000个、用户200个、商品sku300个、删除原始数据。</span></span><br><span class="line"><span class="keyword">CALL</span> init_data(<span class="string">'2019-02-10'</span>,<span class="number">1000</span>,<span class="number">200</span>,<span class="number">300</span>,<span class="literal">TRUE</span>);</span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="3-2-业务数据导入数仓"><a href="#3-2-业务数据导入数仓" class="headerlink" title="3.2 业务数据导入数仓"></a>3.2 业务数据导入数仓</h3><h4 id="3-2-1-分析表的同步策略"><a href="#3-2-1-分析表的同步策略" class="headerlink" title="3.2.1 分析表的同步策略"></a>3.2.1 分析表的同步策略</h4><p><img src="assets/image-20191204160350046.png" alt="image-20191204160350046"></p>
+<h4 id="3-2-2-Sqoop定时导入脚本"><a href="#3-2-2-Sqoop定时导入脚本" class="headerlink" title="3.2.2 Sqoop定时导入脚本"></a>3.2.2 Sqoop定时导入脚本</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">db_date=<span class="variable">$2</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$db_date</span></span><br><span class="line">db_name=gmall</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_data</span></span>() &#123;</span><br><span class="line">/kfly/install/sqoop-1.4.6-cdh5.14.2/bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node02:3306/<span class="variable">$db_name</span>?useSSL=<span class="literal">false</span> \</span><br><span class="line">--username root \</span><br><span class="line">--password 123456 \</span><br><span class="line">--target-dir /origin_data/<span class="variable">$db_name</span>/db/<span class="variable">$1</span>/<span class="variable">$db_date</span> \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--num-mappers 1 \</span><br><span class="line">--fields-terminated-by <span class="string">"\t"</span> \</span><br><span class="line">--query <span class="string">"<span class="variable">$2</span>"</span><span class="string">' and $CONDITIONS;'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_sku_info</span></span>()&#123;</span><br><span class="line">  import_data <span class="string">"sku_info"</span> <span class="string">"select </span></span><br><span class="line"><span class="string">id, spu_id, price, sku_name, sku_desc, weight, tm_id,</span></span><br><span class="line"><span class="string">category3_id, create_time</span></span><br><span class="line"><span class="string">  from sku_info where 1=1"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_user_info</span></span>()&#123;</span><br><span class="line">  import_data <span class="string">"user_info"</span> <span class="string">"select </span></span><br><span class="line"><span class="string">id, name, birthday, gender, email, user_level, </span></span><br><span class="line"><span class="string">create_time </span></span><br><span class="line"><span class="string">from user_info where 1=1"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_base_category1</span></span>()&#123;</span><br><span class="line">  import_data <span class="string">"base_category1"</span> <span class="string">"select </span></span><br><span class="line"><span class="string">id, name from base_category1 where 1=1"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_base_category2</span></span>()&#123;</span><br><span class="line">  import_data <span class="string">"base_category2"</span> <span class="string">"select </span></span><br><span class="line"><span class="string">id, name, category1_id from base_category2 where 1=1"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_base_category3</span></span>()&#123;</span><br><span class="line">  import_data <span class="string">"base_category3"</span> <span class="string">"select id, name, category2_id from base_category3 where 1=1"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_order_detail</span></span>()&#123;</span><br><span class="line">  import_data   <span class="string">"order_detail"</span>   <span class="string">"select </span></span><br><span class="line"><span class="string">    od.id, </span></span><br><span class="line"><span class="string">    order_id, </span></span><br><span class="line"><span class="string">    user_id, </span></span><br><span class="line"><span class="string">    sku_id, </span></span><br><span class="line"><span class="string">    sku_name, </span></span><br><span class="line"><span class="string">    order_price, </span></span><br><span class="line"><span class="string">    sku_num, </span></span><br><span class="line"><span class="string">    o.create_time  </span></span><br><span class="line"><span class="string">  from order_info o, order_detail od</span></span><br><span class="line"><span class="string">  where o.id=od.order_id</span></span><br><span class="line"><span class="string">  and DATE_FORMAT(create_time,'%Y-%m-%d')='<span class="variable">$db_date</span>'"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_payment_info</span></span>()&#123;</span><br><span class="line">  import_data <span class="string">"payment_info"</span>   <span class="string">"select </span></span><br><span class="line"><span class="string">    id,  </span></span><br><span class="line"><span class="string">    out_trade_no, </span></span><br><span class="line"><span class="string">    order_id, </span></span><br><span class="line"><span class="string">    user_id, </span></span><br><span class="line"><span class="string">    alipay_trade_no, </span></span><br><span class="line"><span class="string">    total_amount,  </span></span><br><span class="line"><span class="string">    subject, </span></span><br><span class="line"><span class="string">    payment_type, </span></span><br><span class="line"><span class="string">    payment_time </span></span><br><span class="line"><span class="string">  from payment_info </span></span><br><span class="line"><span class="string">  where DATE_FORMAT(payment_time,'%Y-%m-%d')='<span class="variable">$db_date</span>'"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">import_order_info</span></span>()&#123;</span><br><span class="line">  import_data   <span class="string">"order_info"</span>   <span class="string">"select </span></span><br><span class="line"><span class="string">    id, </span></span><br><span class="line"><span class="string">    total_amount, </span></span><br><span class="line"><span class="string">    order_status, </span></span><br><span class="line"><span class="string">    user_id, </span></span><br><span class="line"><span class="string">    payment_way, </span></span><br><span class="line"><span class="string">    out_trade_no, </span></span><br><span class="line"><span class="string">    create_time, </span></span><br><span class="line"><span class="string">    operate_time  </span></span><br><span class="line"><span class="string">  from order_info </span></span><br><span class="line"><span class="string">  where (DATE_FORMAT(create_time,'%Y-%m-%d')='<span class="variable">$db_date</span>' or DATE_FORMAT(operate_time,'%Y-%m-%d')='<span class="variable">$db_date</span>')"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">  <span class="string">"base_category1"</span>)</span><br><span class="line">     import_base_category1</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"base_category2"</span>)</span><br><span class="line">     import_base_category2</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"base_category3"</span>)</span><br><span class="line">     import_base_category3</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"order_info"</span>)</span><br><span class="line">     import_order_info</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"order_detail"</span>)</span><br><span class="line">     import_order_detail</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"sku_info"</span>)</span><br><span class="line">     import_sku_info</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"user_info"</span>)</span><br><span class="line">     import_user_info</span><br><span class="line">;;</span><br><span class="line">  <span class="string">"payment_info"</span>)</span><br><span class="line">     import_payment_info</span><br><span class="line">;;</span><br><span class="line">   <span class="string">"all"</span>)</span><br><span class="line">   import_base_category1</span><br><span class="line">   import_base_category2</span><br><span class="line">   import_base_category3</span><br><span class="line">   import_order_info</span><br><span class="line">   import_order_detail</span><br><span class="line">   import_sku_info</span><br><span class="line">   import_user_info</span><br><span class="line">   import_payment_info</span><br><span class="line">;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-3-建表"><a href="#3-3-建表" class="headerlink" title="3.3 建表"></a>3.3 建表</h3><h4 id="3-3-1-创建订单表"><a href="#3-3-1-创建订单表" class="headerlink" title="3.3.1 创建订单表"></a>3.3.1 创建订单表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_order_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_order_info (</span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'订单编号'</span>,</span><br><span class="line"> <span class="string">`total_amount`</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'订单金额'</span>,</span><br><span class="line"> <span class="string">`order_status`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'订单状态'</span>,</span><br><span class="line"> <span class="string">`user_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户id'</span>,</span><br><span class="line"> <span class="string">`payment_way`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'支付方式'</span>,</span><br><span class="line"> <span class="string">`out_trade_no`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'支付流水号'</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,</span><br><span class="line"> <span class="string">`operate_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'操作时间'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'订单表'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_order_info/'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-2-创建订单详情表"><a href="#3-3-2-创建订单详情表" class="headerlink" title="3.3.2 创建订单详情表"></a>3.3.2 创建订单详情表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_order_detail;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_order_detail( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'订单编号'</span>,</span><br><span class="line"> <span class="string">`order_id`</span> <span class="keyword">string</span>  <span class="keyword">COMMENT</span> <span class="string">'订单号'</span>, </span><br><span class="line"> <span class="string">`user_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户id'</span>,</span><br><span class="line"> <span class="string">`sku_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'商品id'</span>,</span><br><span class="line"> <span class="string">`sku_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'商品名称'</span>,</span><br><span class="line"> <span class="string">`order_price`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'商品价格'</span>,</span><br><span class="line"> <span class="string">`sku_num`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'商品数量'</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'订单明细表'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span> </span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_order_detail/'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-3-创建商品表"><a href="#3-3-3-创建商品表" class="headerlink" title="3.3.3 创建商品表"></a>3.3.3 创建商品表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_sku_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_sku_info( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'skuId'</span>,</span><br><span class="line"> <span class="string">`spu_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'spuid'</span>, </span><br><span class="line"> <span class="string">`price`</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'价格'</span>,</span><br><span class="line"> <span class="string">`sku_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'商品名称'</span>,</span><br><span class="line"> <span class="string">`sku_desc`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'商品描述'</span>,</span><br><span class="line"> <span class="string">`weight`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'重量'</span>,</span><br><span class="line"> <span class="string">`tm_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'品牌id'</span>,</span><br><span class="line"> <span class="string">`category3_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'品类id'</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'商品表'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_sku_info/'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-4-创建用户表"><a href="#3-3-4-创建用户表" class="headerlink" title="3.3.4 创建用户表"></a>3.3.4 创建用户表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_user_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_user_info( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户id'</span>,</span><br><span class="line"> <span class="string">`name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'姓名'</span>,</span><br><span class="line"> <span class="string">`birthday`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'生日'</span>,</span><br><span class="line"> <span class="string">`gender`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'性别'</span>,</span><br><span class="line"> <span class="string">`email`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'邮箱'</span>,</span><br><span class="line"> <span class="string">`user_level`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户等级'</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'用户信息'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_user_info/'</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-3-5-创建分类表"><a href="#3-3-5-创建分类表" class="headerlink" title="3.3.5 创建分类表"></a>3.3.5 创建分类表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_user_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_user_info( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户id'</span>,</span><br><span class="line"> <span class="string">`name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'姓名'</span>,</span><br><span class="line"> <span class="string">`birthday`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'生日'</span>,</span><br><span class="line"> <span class="string">`gender`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'性别'</span>,</span><br><span class="line"> <span class="string">`email`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'邮箱'</span>,</span><br><span class="line"> <span class="string">`user_level`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户等级'</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'用户信息'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_user_info/'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_base_category2;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_base_category2( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">' id'</span>,</span><br><span class="line"> <span class="string">`name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'名称'</span>,</span><br><span class="line"> category1_id <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'一级品类id'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'商品二级分类'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_base_category2/'</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_base_category3;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_base_category3(</span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">' id'</span>,</span><br><span class="line"> <span class="string">`name`</span>  <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'名称'</span>,</span><br><span class="line"> category2_id <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'二级品类id'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'商品三级分类'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_base_category3/'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-6-支付流水表"><a href="#3-3-6-支付流水表" class="headerlink" title="3.3.6 支付流水表"></a>3.3.6 支付流水表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ods_payment_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ods_payment_info(</span><br><span class="line"> <span class="string">`id`</span> <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'编号'</span>,</span><br><span class="line"> <span class="string">`out_trade_no`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'对外业务编号'</span>,</span><br><span class="line"> <span class="string">`order_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'订单编号'</span>,</span><br><span class="line"> <span class="string">`user_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户编号'</span>,</span><br><span class="line"> <span class="string">`alipay_trade_no`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'支付宝交易流水编号'</span>,</span><br><span class="line"> <span class="string">`total_amount`</span> <span class="built_in">decimal</span>(<span class="number">16</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'支付金额'</span>,</span><br><span class="line"> <span class="string">`subject`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'交易内容'</span>,</span><br><span class="line"> <span class="string">`payment_type`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'支付类型'</span>,</span><br><span class="line"> <span class="string">`payment_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'支付时间'</span></span><br><span class="line">)<span class="keyword">COMMENT</span> <span class="string">'支付流水表'</span> </span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ods/ods_payment_info/'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-数据导入脚本"><a href="#3-4-数据导入脚本" class="headerlink" title="3.4 数据导入脚本"></a>3.4 数据导入脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">   APP=gmall</span><br><span class="line">   hive=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天</span></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$1</span>"</span> ] ;<span class="keyword">then</span></span><br><span class="line">	do_date=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">	do_date=`date -d <span class="string">"-1 day"</span> +%F`</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">sql=<span class="string">" </span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/order_info/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_order_info partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/order_detail/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_order_detail partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/sku_info/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_sku_info partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/user_info/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_user_info partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/payment_info/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_payment_info partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/base_category1/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_base_category1 partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/base_category2/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_base_category2 partition(dt='<span class="variable">$do_date</span>');</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">load data inpath '/origin_data/<span class="variable">$APP</span>/db/base_category3/<span class="variable">$do_date</span>' OVERWRITE into table "</span><span class="variable">$APP</span><span class="string">".ods_base_category3 partition(dt='<span class="variable">$do_date</span>'); </span></span><br><span class="line"><span class="string">"</span></span><br><span class="line"><span class="variable">$hive</span> -e <span class="string">"<span class="variable">$sql</span>"</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-DWD层"><a href="#4-DWD层" class="headerlink" title="4. DWD层"></a>4. DWD层</h2><ul>
+<li>对ODS层数据进行判空过滤。对商品分类表进行维度退化（降维）。</li>
+</ul>
+<h3 id="4-1-创建表"><a href="#4-1-创建表" class="headerlink" title="4.1 创建表"></a>4.1 创建表</h3><h4 id="4-1-1-创建订单表"><a href="#4-1-1-创建订单表" class="headerlink" title="4.1.1 创建订单表"></a>4.1.1 创建订单表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dwd_order_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dwd_order_info (</span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`total_amount`</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`order_status`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">' 1 2 3 4 5'</span>,</span><br><span class="line"> <span class="string">`user_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">`payment_way`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`out_trade_no`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`operate_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span></span><br><span class="line">) </span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet </span><br><span class="line">location <span class="string">'/warehouse/gmall/dwd/dwd_order_info/'</span> </span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>) </span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="4-1-2-订单详情表"><a href="#4-1-2-订单详情表" class="headerlink" title="4.1.2 订单详情表"></a>4.1.2 订单详情表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dwd_order_detail;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dwd_order_detail( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`order_id`</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">''</span>, </span><br><span class="line"> <span class="string">`user_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">`sku_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">`sku_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`order_price`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`sku_num`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span></span><br><span class="line">)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>) </span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">'/warehouse/gmall/dwd/dwd_order_detail/'</span></span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="4-1-3-用户表"><a href="#4-1-3-用户表" class="headerlink" title="4.1.3 用户表"></a>4.1.3 用户表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dwd_user_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dwd_user_info( </span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">`name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>, </span><br><span class="line"> <span class="string">`birthday`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`gender`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`email`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`user_level`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span></span><br><span class="line">) </span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">'/warehouse/gmall/dwd/dwd_user_info/'</span></span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="4-1-4-支付流水表"><a href="#4-1-4-支付流水表" class="headerlink" title="4.1.4 支付流水表"></a>4.1.4 支付流水表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dwd_payment_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dwd_payment_info(</span><br><span class="line"> <span class="string">`id`</span> <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`out_trade_no`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`order_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`user_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`alipay_trade_no`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`total_amount`</span> <span class="built_in">decimal</span>(<span class="number">16</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`subject`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`payment_type`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`payment_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span></span><br><span class="line">)  </span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">'/warehouse/gmall/dwd/dwd_payment_info/'</span></span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h4 id="4-1-5-商品表"><a href="#4-1-5-商品表" class="headerlink" title="4.1.5 商品表"></a>4.1.5 商品表</h4><p><img src="assets/image-20191204164800632.png" alt="image-20191204164800632"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dwd_sku_info;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dwd_sku_info(</span><br><span class="line"> <span class="string">`id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'skuId'</span>,</span><br><span class="line"> <span class="string">`spu_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'spuid'</span>,</span><br><span class="line"> <span class="string">`price`</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`sku_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`sku_desc`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`weight`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span>,</span><br><span class="line"> <span class="string">`tm_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">`category3_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'1id'</span>,</span><br><span class="line"> <span class="string">`category2_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'2id'</span>,</span><br><span class="line"> <span class="string">`category1_id`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'3id'</span>,</span><br><span class="line"> <span class="string">`category3_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'3'</span>,</span><br><span class="line"> <span class="string">`category2_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'2'</span>,</span><br><span class="line"> <span class="string">`category1_name`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'1'</span>,</span><br><span class="line"> <span class="string">`create_time`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">''</span></span><br><span class="line">) </span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">'/warehouse/gmall/dwd/dwd_sku_info/'</span></span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-DWD层数据导入脚本"><a href="#4-2-DWD层数据导入脚本" class="headerlink" title="4.2   DWD层数据导入脚本"></a>4.2   DWD层数据导入脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义变量方便修改</span></span><br><span class="line">APP=gmall</span><br><span class="line">hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天</span></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$1</span>"</span> ] ;<span class="keyword">then</span></span><br><span class="line">	do_date=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">	do_date=`date -d <span class="string">"-1 day"</span> +%F`  </span><br><span class="line"><span class="keyword">fi</span> </span><br><span class="line"></span><br><span class="line">sql=<span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set hive.exec.dynamic.partition.mode=nonstrict;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">insert overwrite table "</span><span class="variable">$APP</span><span class="string">".dwd_order_info partition(dt)</span></span><br><span class="line"><span class="string">select * from "</span><span class="variable">$APP</span><span class="string">".ods_order_info </span></span><br><span class="line"><span class="string">where dt='<span class="variable">$do_date</span>' and id is not null;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">insert overwrite table "</span><span class="variable">$APP</span><span class="string">".dwd_order_detail partition(dt)</span></span><br><span class="line"><span class="string">select * from "</span><span class="variable">$APP</span><span class="string">".ods_order_detail </span></span><br><span class="line"><span class="string">where dt='<span class="variable">$do_date</span>'   and id is not null;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">insert overwrite table "</span><span class="variable">$APP</span><span class="string">".dwd_user_info partition(dt)</span></span><br><span class="line"><span class="string">select * from "</span><span class="variable">$APP</span><span class="string">".ods_user_info</span></span><br><span class="line"><span class="string">where dt='<span class="variable">$do_date</span>' and id is not null;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">insert overwrite table "</span><span class="variable">$APP</span><span class="string">".dwd_payment_info partition(dt)</span></span><br><span class="line"><span class="string">select * from "</span><span class="variable">$APP</span><span class="string">".ods_payment_info</span></span><br><span class="line"><span class="string">where dt='<span class="variable">$do_date</span>' and id is not null;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">insert overwrite table "</span><span class="variable">$APP</span><span class="string">".dwd_sku_info partition(dt)</span></span><br><span class="line"><span class="string">select  </span></span><br><span class="line"><span class="string">    sku.id,</span></span><br><span class="line"><span class="string">    sku.spu_id,</span></span><br><span class="line"><span class="string">    sku.price,</span></span><br><span class="line"><span class="string">    sku.sku_name,</span></span><br><span class="line"><span class="string">    sku.sku_desc,</span></span><br><span class="line"><span class="string">    sku.weight,</span></span><br><span class="line"><span class="string">    sku.tm_id,</span></span><br><span class="line"><span class="string">    sku.category3_id,</span></span><br><span class="line"><span class="string">    c2.id category2_id,</span></span><br><span class="line"><span class="string">    c1.id category1_id,</span></span><br><span class="line"><span class="string">    c3.name category3_name,</span></span><br><span class="line"><span class="string">    c2.name category2_name,</span></span><br><span class="line"><span class="string">    c1.name category1_name,</span></span><br><span class="line"><span class="string">    sku.create_time,</span></span><br><span class="line"><span class="string">    sku.dt</span></span><br><span class="line"><span class="string">from</span></span><br><span class="line"><span class="string">    "</span><span class="variable">$APP</span><span class="string">".ods_sku_info sku</span></span><br><span class="line"><span class="string">join "</span><span class="variable">$APP</span><span class="string">".ods_base_category3 c3 on sku.category3_id=c3.id </span></span><br><span class="line"><span class="string">    join "</span><span class="variable">$APP</span><span class="string">".ods_base_category2 c2 on c3.category2_id=c2.id </span></span><br><span class="line"><span class="string">    join "</span><span class="variable">$APP</span><span class="string">".ods_base_category1 c1 on c2.category1_id=c1.id </span></span><br><span class="line"><span class="string">where sku.dt='<span class="variable">$do_date</span>'  and c2.dt='<span class="variable">$do_date</span>'</span></span><br><span class="line"><span class="string">and c3.dt='<span class="variable">$do_date</span>' and c1.dt='<span class="variable">$do_date</span>'</span></span><br><span class="line"><span class="string">and sku.id is not null;</span></span><br><span class="line"><span class="string">"</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$hive</span> -e <span class="string">"<span class="variable">$sql</span>"</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-1-总结"><a href="#4-2-1-总结" class="headerlink" title="4.2.1 总结"></a>4.2.1 总结</h4><ul>
+<li><p>维度退化要付出什么代价？ </p>
+<ul>
+<li>如果被退化的维度，还有其他业务表使用，退化后处理起来就麻烦些。</li>
+</ul>
+</li>
+<li><p>想想在实际业务中还有那些维度表可以退化</p>
+<ul>
+<li>城市的三级分类（省、市、县）等</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-DWS-用户行为宽表"><a href="#5-DWS-用户行为宽表" class="headerlink" title="5 DWS 用户行为宽表"></a>5 DWS 用户行为宽表</h2><ul>
+<li>为什么要建宽表<ul>
+<li>需求目标，把每个用户单日的行为聚合起来组成一张多列宽表，以便之后关联用户维度信息后进行，不同角度的统计分析。</li>
+</ul>
+</li>
+</ul>
+<p><img src="assets/image-20191204165240937.png" alt="image-20191204165240937"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dws_user_action;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dws_user_action </span><br><span class="line">(   </span><br><span class="line">    user_id          <span class="keyword">string</span>      <span class="keyword">comment</span> <span class="string">'用户 id'</span>,</span><br><span class="line">    order_count     <span class="built_in">bigint</span>      <span class="keyword">comment</span> <span class="string">'下单次数 '</span>,</span><br><span class="line">    order_amount    <span class="built_in">decimal</span>(<span class="number">16</span>,<span class="number">2</span>)  <span class="keyword">comment</span> <span class="string">'下单金额 '</span>,</span><br><span class="line">    payment_count   <span class="built_in">bigint</span>      <span class="keyword">comment</span> <span class="string">'支付次数'</span>,</span><br><span class="line">    payment_amount  <span class="built_in">decimal</span>(<span class="number">16</span>,<span class="number">2</span>) <span class="keyword">comment</span> <span class="string">'支付金额 '</span>,</span><br><span class="line">    comment_count   <span class="built_in">bigint</span>      <span class="keyword">comment</span> <span class="string">'评论次数'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'每日用户行为宽表'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">'/warehouse/gmall/dws/dws_user_action/'</span></span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">with  </span><br><span class="line">tmp_order as</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span> </span><br><span class="line">        user_id, </span><br><span class="line"><span class="keyword">count</span>(*)  order_count,</span><br><span class="line">        <span class="keyword">sum</span>(oi.total_amount) order_amount</span><br><span class="line">    <span class="keyword">from</span> gmall.dwd_order_info oi</span><br><span class="line">    <span class="keyword">where</span> <span class="keyword">date_format</span>(oi.create_time,<span class="string">'yyyy-MM-dd'</span>)=<span class="string">'2019-02-10'</span></span><br><span class="line">    <span class="keyword">group</span> <span class="keyword">by</span> user_id</span><br><span class="line">) ,</span><br><span class="line">tmp_payment <span class="keyword">as</span></span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        user_id, </span><br><span class="line">        <span class="keyword">sum</span>(pi.total_amount) payment_amount, </span><br><span class="line">        <span class="keyword">count</span>(*) payment_count </span><br><span class="line">    <span class="keyword">from</span> gmall.dwd_payment_info <span class="keyword">pi</span> </span><br><span class="line">    <span class="keyword">where</span> <span class="keyword">date_format</span>(pi.payment_time,<span class="string">'yyyy-MM-dd'</span>)=<span class="string">'2019-02-10'</span></span><br><span class="line">    <span class="keyword">group</span> <span class="keyword">by</span> user_id</span><br><span class="line">),</span><br><span class="line">tmp_comment <span class="keyword">as</span></span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        user_id,</span><br><span class="line">        <span class="keyword">count</span>(*) comment_count</span><br><span class="line">    <span class="keyword">from</span> gmall.dwd_comment_log c</span><br><span class="line">    <span class="keyword">where</span> <span class="keyword">date_format</span>(c.dt,<span class="string">'yyyy-MM-dd'</span>)=<span class="string">'2019-02-10'</span></span><br><span class="line">    <span class="keyword">group</span> <span class="keyword">by</span> user_id </span><br><span class="line">) </span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> gmall.dws_user_action <span class="keyword">partition</span>(dt=<span class="string">'2019-02-10'</span>) </span><br><span class="line"><span class="keyword">select</span></span><br><span class="line">    user_actions.user_id,</span><br><span class="line">    <span class="keyword">sum</span>(user_actions.order_count),</span><br><span class="line">    <span class="keyword">sum</span>(user_actions.order_amount),</span><br><span class="line">    <span class="keyword">sum</span>(user_actions.payment_count),</span><br><span class="line">    <span class="keyword">sum</span>(user_actions.payment_amount),</span><br><span class="line">    <span class="keyword">sum</span>(user_actions.comment_count)</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        user_id,</span><br><span class="line">        order_count,</span><br><span class="line">        order_amount,</span><br><span class="line">        <span class="number">0</span> payment_count,</span><br><span class="line">        <span class="number">0</span> payment_amount,</span><br><span class="line">        <span class="number">0</span> comment_count</span><br><span class="line">    <span class="keyword">from</span> tmp_order</span><br><span class="line"></span><br><span class="line">    <span class="keyword">union</span> all</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        user_id,</span><br><span class="line">        <span class="number">0</span> order_count,</span><br><span class="line">        <span class="number">0</span> order_amount,</span><br><span class="line">        payment_count,</span><br><span class="line">        payment_amount,</span><br><span class="line">        <span class="number">0</span> comment_count</span><br><span class="line">    <span class="keyword">from</span> tmp_payment  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">union</span> all</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        user_id,</span><br><span class="line">        <span class="number">0</span> order_count,</span><br><span class="line">        <span class="number">0</span> order_amount,</span><br><span class="line">        <span class="number">0</span> payment_count,</span><br><span class="line">        <span class="number">0</span> payment_amount,</span><br><span class="line">        comment_count</span><br><span class="line">    <span class="keyword">from</span> tmp_comment</span><br><span class="line"> ) user_actions</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> user_id;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义变量方便修改</span></span><br><span class="line">APP=gmall</span><br><span class="line">hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天</span></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$1</span>"</span> ] ;<span class="keyword">then</span></span><br><span class="line">	do_date=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">	do_date=`date -d <span class="string">"-1 day"</span> +%F`  </span><br><span class="line"><span class="keyword">fi</span> </span><br><span class="line"></span><br><span class="line">sql=<span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">with  </span></span><br><span class="line"><span class="string">tmp_order as</span></span><br><span class="line"><span class="string">(</span></span><br><span class="line"><span class="string">    select </span></span><br><span class="line"><span class="string">        user_id, </span></span><br><span class="line"><span class="string">        sum(oi.total_amount) order_amount, </span></span><br><span class="line"><span class="string">        count(*)  order_count</span></span><br><span class="line"><span class="string">    from "</span><span class="variable">$APP</span><span class="string">".dwd_order_info  oi</span></span><br><span class="line"><span class="string">    where date_format(oi.create_time,'yyyy-MM-dd')='<span class="variable">$do_date</span>'</span></span><br><span class="line"><span class="string">    group by user_id</span></span><br><span class="line"><span class="string">)  ,</span></span><br><span class="line"><span class="string">tmp_payment as</span></span><br><span class="line"><span class="string">(</span></span><br><span class="line"><span class="string">    select </span></span><br><span class="line"><span class="string">        user_id, </span></span><br><span class="line"><span class="string">        sum(pi.total_amount) payment_amount, </span></span><br><span class="line"><span class="string">        count(*) payment_count </span></span><br><span class="line"><span class="string">    from "</span><span class="variable">$APP</span><span class="string">".dwd_payment_info pi </span></span><br><span class="line"><span class="string">    where date_format(pi.payment_time,'yyyy-MM-dd')='<span class="variable">$do_date</span>'</span></span><br><span class="line"><span class="string">    group by user_id</span></span><br><span class="line"><span class="string">),</span></span><br><span class="line"><span class="string">tmp_comment as</span></span><br><span class="line"><span class="string">(  </span></span><br><span class="line"><span class="string">    select  </span></span><br><span class="line"><span class="string">        user_id, </span></span><br><span class="line"><span class="string">        count(*) comment_count</span></span><br><span class="line"><span class="string">    from "</span><span class="variable">$APP</span><span class="string">".dwd_comment_log c</span></span><br><span class="line"><span class="string">    where date_format(c.dt,'yyyy-MM-dd')='<span class="variable">$do_date</span>'</span></span><br><span class="line"><span class="string">    group by user_id </span></span><br><span class="line"><span class="string">)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Insert overwrite table "</span><span class="variable">$APP</span><span class="string">".dws_user_action partition(dt='<span class="variable">$do_date</span>')</span></span><br><span class="line"><span class="string">select </span></span><br><span class="line"><span class="string">    user_actions.user_id, </span></span><br><span class="line"><span class="string">    sum(user_actions.order_count), </span></span><br><span class="line"><span class="string">    sum(user_actions.order_amount),</span></span><br><span class="line"><span class="string">    sum(user_actions.payment_count), </span></span><br><span class="line"><span class="string">    sum(user_actions.payment_amount),</span></span><br><span class="line"><span class="string">    sum(user_actions.comment_count) </span></span><br><span class="line"><span class="string">from</span></span><br><span class="line"><span class="string">(</span></span><br><span class="line"><span class="string">    select</span></span><br><span class="line"><span class="string">        user_id,</span></span><br><span class="line"><span class="string">        order_count,</span></span><br><span class="line"><span class="string">        order_amount,</span></span><br><span class="line"><span class="string">        0 payment_count,</span></span><br><span class="line"><span class="string">        0 payment_amount,</span></span><br><span class="line"><span class="string">        0 comment_count</span></span><br><span class="line"><span class="string">    from tmp_order</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    union all</span></span><br><span class="line"><span class="string">    select</span></span><br><span class="line"><span class="string">        user_id,</span></span><br><span class="line"><span class="string">        0 order_count,</span></span><br><span class="line"><span class="string">        0 order_amount,</span></span><br><span class="line"><span class="string">        payment_count,</span></span><br><span class="line"><span class="string">        payment_amount,</span></span><br><span class="line"><span class="string">        0 comment_count</span></span><br><span class="line"><span class="string">    from tmp_payment</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    union all</span></span><br><span class="line"><span class="string">    select</span></span><br><span class="line"><span class="string">        user_id,</span></span><br><span class="line"><span class="string">        0 order_count,</span></span><br><span class="line"><span class="string">        0 order_amount,</span></span><br><span class="line"><span class="string">        0 payment_count,</span></span><br><span class="line"><span class="string">        0 payment_amount,</span></span><br><span class="line"><span class="string">        comment_count </span></span><br><span class="line"><span class="string">    from tmp_comment</span></span><br><span class="line"><span class="string"> ) user_actions</span></span><br><span class="line"><span class="string">group by user_id;</span></span><br><span class="line"><span class="string">"</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$hive</span> -e <span class="string">"<span class="variable">$sql</span>"</span></span><br></pre></td></tr></table></figure>
+<h2 id="6-GWV-成交总额"><a href="#6-GWV-成交总额" class="headerlink" title="6. GWV 成交总额"></a>6. GWV 成交总额</h2><p><img src="assets/image-20191204170348604.png" alt="image-20191204170348604"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ads_gmv_sum_day;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ads_gmv_sum_day(</span><br><span class="line"> <span class="string">`dt`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line"> <span class="string">`gmv_count`</span> <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'当日gmv订单个数'</span>,</span><br><span class="line"> <span class="string">`gmv_amount`</span> <span class="built_in">decimal</span>(<span class="number">16</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'当日gmv订单总金额'</span>,</span><br><span class="line"> <span class="string">`gmv_payment`</span> <span class="built_in">decimal</span>(<span class="number">16</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'当日支付金额'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'GMV'</span></span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ads/ads_gmv_sum_day/'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> gmall.ads_gmv_sum_day</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line"><span class="string">'2019-02-10'</span> dt,</span><br><span class="line">    <span class="keyword">sum</span>(order_count) gmv_count,</span><br><span class="line">    <span class="keyword">sum</span>(order_amount) gmv_amount,</span><br><span class="line">    <span class="keyword">sum</span>(payment_amount) payment_amount </span><br><span class="line"><span class="keyword">from</span> gmall.dws_user_action</span><br><span class="line"><span class="keyword">where</span> dt =<span class="string">'2019-02-10'</span></span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> dt</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义变量方便修改</span></span><br><span class="line">APP=gmall</span><br><span class="line">hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天</span></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$1</span>"</span> ] ;<span class="keyword">then</span></span><br><span class="line">	do_date=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">	do_date=`date -d <span class="string">"-1 day"</span> +%F`</span><br><span class="line"><span class="keyword">fi</span> </span><br><span class="line"></span><br><span class="line">sql=<span class="string">"</span></span><br><span class="line"><span class="string">insert into table "</span><span class="variable">$APP</span><span class="string">".ads_gmv_sum_day </span></span><br><span class="line"><span class="string">select </span></span><br><span class="line"><span class="string">    '<span class="variable">$do_date</span>' dt,</span></span><br><span class="line"><span class="string">    sum(order_count)  gmv_count,</span></span><br><span class="line"><span class="string">    sum(order_amount) gmv_amount,</span></span><br><span class="line"><span class="string">    sum(payment_amount) payment_amount </span></span><br><span class="line"><span class="string">from "</span><span class="variable">$APP</span><span class="string">".dws_user_action </span></span><br><span class="line"><span class="string">where dt ='<span class="variable">$do_date</span>'</span></span><br><span class="line"><span class="string">group by dt;</span></span><br><span class="line"><span class="string">"</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$hive</span> -e <span class="string">"<span class="variable">$sql</span>"</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-转化率之用户新鲜度及漏斗分析"><a href="#7-转化率之用户新鲜度及漏斗分析" class="headerlink" title="7. 转化率之用户新鲜度及漏斗分析"></a>7. 转化率之用户新鲜度及漏斗分析</h2><p><img src="assets/image-20191204170729077.png" alt="image-20191204170729077"></p>
+<h3 id="7-1-ADS层之新增用户占日活跃用户比率（用户新鲜度）"><a href="#7-1-ADS层之新增用户占日活跃用户比率（用户新鲜度）" class="headerlink" title="7.1  ADS层之新增用户占日活跃用户比率（用户新鲜度）"></a>7.1  ADS层之新增用户占日活跃用户比率（用户新鲜度）</h3><p><img src="assets/image-20191204171248249.png" alt="image-20191204171248249"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ads_user_convert_day;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ads_user_convert_day( </span><br><span class="line">    <span class="string">`dt`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line">    <span class="string">`uv_m_count`</span>  <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'当日活跃设备'</span>,</span><br><span class="line">    <span class="string">`new_m_count`</span>  <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'当日新增设备'</span>,</span><br><span class="line">    <span class="string">`new_m_ratio`</span>   <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'当日新增占日活的比率'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'转化率'</span></span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ads/ads_user_convert_day/'</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> gmall.ads_user_convert_day</span><br><span class="line"><span class="keyword">select</span></span><br><span class="line">    <span class="string">'2019-02-10'</span>,</span><br><span class="line">    <span class="keyword">sum</span>(uc.dc) sum_dc,</span><br><span class="line">    <span class="keyword">sum</span>(uc.nmc) sum_nmc,</span><br><span class="line">    <span class="keyword">cast</span>(<span class="keyword">sum</span>( uc.nmc)/<span class="keyword">sum</span>( uc.dc)*<span class="number">100</span> <span class="keyword">as</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>))  new_m_ratio</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        day_count dc,</span><br><span class="line">        <span class="number">0</span> nmc</span><br><span class="line">    <span class="keyword">from</span> gmall.ads_uv_count</span><br><span class="line"><span class="keyword">where</span> dt=<span class="string">'2019-02-10'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">union</span> all</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        <span class="number">0</span> dc,</span><br><span class="line">        new_mid_count nmc</span><br><span class="line">    <span class="keyword">from</span> gmall.ads_new_mid_count</span><br><span class="line">    <span class="keyword">where</span> create_date=<span class="string">'2019-02-10'</span></span><br><span class="line">)uc;</span><br></pre></td></tr></table></figure>
+<h3 id="7-2-ADS层之用户行为漏斗分析"><a href="#7-2-ADS层之用户行为漏斗分析" class="headerlink" title="7.2  ADS层之用户行为漏斗分析"></a>7.2  ADS层之用户行为漏斗分析</h3><p><img src="assets/image-20191204171353833.png" alt="image-20191204171353833"></p>
+<p><img src="assets/image-20191204171418617.png" alt="image-20191204171418617"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ads_user_action_convert_day;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span>  <span class="keyword">table</span> gmall.ads_user_action_convert_day(</span><br><span class="line">    <span class="string">`dt`</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line">    <span class="string">`total_visitor_m_count`</span>  <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'总访问人数'</span>,</span><br><span class="line">    <span class="string">`order_u_count`</span> <span class="built_in">bigint</span>     <span class="keyword">COMMENT</span> <span class="string">'下单人数'</span>,</span><br><span class="line">    <span class="string">`visitor2order_convert_ratio`</span>  <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'访问到下单转化率'</span>,</span><br><span class="line">    <span class="string">`payment_u_count`</span> <span class="built_in">bigint</span>     <span class="keyword">COMMENT</span> <span class="string">'支付人数'</span>,</span><br><span class="line">    <span class="string">`order2payment_convert_ratio`</span> <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">COMMENT</span> <span class="string">'下单到支付的转化率'</span></span><br><span class="line"> ) <span class="keyword">COMMENT</span> <span class="string">'用户行为漏斗分析'</span></span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span>  <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ads/ads_user_action_convert_day/'</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> gmall.ads_user_action_convert_day</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    <span class="string">'2019-02-10'</span>,</span><br><span class="line">    uv.day_count,</span><br><span class="line">    ua.order_count,</span><br><span class="line">    <span class="keyword">cast</span>(ua.order_count/uv.day_count <span class="keyword">as</span>  <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>)) visitor2order_convert_ratio,</span><br><span class="line">    ua.payment_count,</span><br><span class="line">    <span class="keyword">cast</span>(ua.payment_count/ua.order_count <span class="keyword">as</span>  <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>)) order2payment_convert_ratio</span><br><span class="line"><span class="keyword">from</span>  </span><br><span class="line">(</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    dt,</span><br><span class="line">        <span class="keyword">sum</span>(<span class="keyword">if</span>(order_count&gt;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>)) order_count,</span><br><span class="line">        <span class="keyword">sum</span>(<span class="keyword">if</span>(payment_count&gt;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>)) payment_count</span><br><span class="line">    <span class="keyword">from</span> gmall.dws_user_action</span><br><span class="line"><span class="keyword">where</span> dt=<span class="string">'2019-02-10'</span></span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> dt</span><br><span class="line">)ua <span class="keyword">join</span> gmall.ads_uv_count  uv <span class="keyword">on</span> uv.dt=ua.dt</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h2 id="8-品牌复购率"><a href="#8-品牌复购率" class="headerlink" title="8. 品牌复购率"></a>8. 品牌复购率</h2><h3 id="8-1-复购率分析"><a href="#8-1-复购率分析" class="headerlink" title="8.1 复购率分析"></a>8.1 复购率分析</h3><p><img src="assets/image-20191204171732545.png" alt="image-20191204171732545"></p>
+<h3 id="8-2-DWS层"><a href="#8-2-DWS层" class="headerlink" title="8.2 DWS层"></a>8.2 DWS层</h3><h4 id="8-2-1-用户购买商品明细表（宽表）"><a href="#8-2-1-用户购买商品明细表（宽表）" class="headerlink" title="8.2.1 用户购买商品明细表（宽表）"></a>8.2.1 用户购买商品明细表（宽表）</h4><p><img src="assets/image-20191204171651319.png" alt="image-20191204171651319"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.dws_sale_detail_daycount;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.dws_sale_detail_daycount</span><br><span class="line">(   </span><br><span class="line">    user_id   <span class="keyword">string</span>  <span class="keyword">comment</span> <span class="string">'用户 id'</span>,</span><br><span class="line">    sku_id    <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品 Id'</span>,</span><br><span class="line">    user_gender  <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'用户性别'</span>,</span><br><span class="line">    user_age <span class="keyword">string</span>  <span class="keyword">comment</span> <span class="string">'用户年龄'</span>,</span><br><span class="line">    user_level <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'用户等级'</span>,</span><br><span class="line">    order_price <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">comment</span> <span class="string">'商品价格'</span>,</span><br><span class="line">    sku_name <span class="keyword">string</span>   <span class="keyword">comment</span> <span class="string">'商品名称'</span>,</span><br><span class="line">    sku_tm_id <span class="keyword">string</span>   <span class="keyword">comment</span> <span class="string">'品牌id'</span>,</span><br><span class="line">    sku_category3_id <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品三级品类id'</span>,</span><br><span class="line">    sku_category2_id <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品二级品类id'</span>,</span><br><span class="line">    sku_category1_id <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品一级品类id'</span>,</span><br><span class="line">    sku_category3_name <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品三级品类名称'</span>,</span><br><span class="line">    sku_category2_name <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品二级品类名称'</span>,</span><br><span class="line">    sku_category1_name <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品一级品类名称'</span>,</span><br><span class="line">    spu_id  <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'商品 spu'</span>,</span><br><span class="line">    sku_num  <span class="built_in">int</span> <span class="keyword">comment</span> <span class="string">'购买个数'</span>,</span><br><span class="line">    order_count <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'当日下单单数'</span>,</span><br><span class="line">    order_amount <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'当日下单金额'</span></span><br><span class="line">) <span class="keyword">COMMENT</span> <span class="string">'用户购买商品明细表'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (<span class="string">`dt`</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">'/warehouse/gmall/dws/dws_user_sale_detail_daycount/'</span></span><br><span class="line">tblproperties (<span class="string">"parquet.compression"</span>=<span class="string">"snappy"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">with</span><br><span class="line">tmp_detail as</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span></span><br><span class="line">        user_id,</span><br><span class="line">        sku_id, </span><br><span class="line">        <span class="keyword">sum</span>(sku_num) sku_num,   </span><br><span class="line">        <span class="keyword">count</span>(*) order_count, </span><br><span class="line">        <span class="keyword">sum</span>(od.order_price*sku_num) order_amount</span><br><span class="line">    <span class="keyword">from</span> gmall.dwd_order_detail od</span><br><span class="line">    <span class="keyword">where</span> od.dt=<span class="string">'2019-02-10'</span></span><br><span class="line">    <span class="keyword">group</span> <span class="keyword">by</span> user_id, sku_id</span><br><span class="line">)  </span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> gmall.dws_sale_detail_daycount <span class="keyword">partition</span>(dt=<span class="string">'2019-02-10'</span>)</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">    tmp_detail.user_id,</span><br><span class="line">    tmp_detail.sku_id,</span><br><span class="line">    u.gender,</span><br><span class="line">    months_between(<span class="string">'2019-02-10'</span>, u.birthday)/<span class="number">12</span>  age, </span><br><span class="line">    u.user_level,</span><br><span class="line">    price,</span><br><span class="line">    sku_name,</span><br><span class="line">    tm_id,</span><br><span class="line">    category3_id,</span><br><span class="line">    category2_id,</span><br><span class="line">    category1_id,</span><br><span class="line">    category3_name,</span><br><span class="line">    category2_name,</span><br><span class="line">    category1_name,</span><br><span class="line">    spu_id,</span><br><span class="line">    tmp_detail.sku_num,</span><br><span class="line">    tmp_detail.order_count,</span><br><span class="line">    tmp_detail.order_amount </span><br><span class="line"><span class="keyword">from</span> tmp_detail </span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> gmall.dwd_user_info u <span class="keyword">on</span> tmp_detail.user_id =u.id <span class="keyword">and</span> u.dt=<span class="string">'2019-02-10'</span></span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> gmall.dwd_sku_info s <span class="keyword">on</span> tmp_detail.sku_id =s.id <span class="keyword">and</span> s.dt=<span class="string">'2019-02-10'</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h3 id="8-3-ADS层品牌复购率"><a href="#8-3-ADS层品牌复购率" class="headerlink" title="8.3 ADS层品牌复购率"></a>8.3 ADS层品牌复购率</h3><p><img src="assets/image-20191204172657826.png" alt="image-20191204172657826"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> gmall.ads_sale_tm_category1_stat_mn;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> gmall.ads_sale_tm_category1_stat_mn</span><br><span class="line">(   </span><br><span class="line">    tm_id <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'品牌id'</span>,</span><br><span class="line">    category1_id <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'1级品类id '</span>,</span><br><span class="line">    category1_name <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'1级品类名称 '</span>,</span><br><span class="line">    buycount   <span class="built_in">bigint</span> <span class="keyword">comment</span>  <span class="string">'购买人数'</span>,</span><br><span class="line">    buy_twice_last <span class="built_in">bigint</span>  <span class="keyword">comment</span> <span class="string">'两次以上购买人数'</span>,</span><br><span class="line">    buy_twice_last_ratio <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>)  <span class="keyword">comment</span>  <span class="string">'单次复购率'</span>,</span><br><span class="line">    buy_3times_last   <span class="built_in">bigint</span> <span class="keyword">comment</span>   <span class="string">'三次以上购买人数'</span>,</span><br><span class="line">    buy_3times_last_ratio <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>)  <span class="keyword">comment</span>  <span class="string">'多次复购率'</span>,</span><br><span class="line">    stat_mn <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'统计月份'</span>,</span><br><span class="line">    stat_date <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'统计日期'</span> </span><br><span class="line">)   <span class="keyword">COMMENT</span> <span class="string">'复购率统计'</span></span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/warehouse/gmall/ads/ads_sale_tm_category1_stat_mn/'</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> gmall.ads_sale_tm_category1_stat_mn</span><br><span class="line"><span class="keyword">select</span>   </span><br><span class="line">    mn.sku_tm_id,</span><br><span class="line">    mn.sku_category1_id,</span><br><span class="line">    mn.sku_category1_name,</span><br><span class="line">    <span class="keyword">sum</span>(<span class="keyword">if</span>(mn.order_count&gt;=<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>)) buycount,</span><br><span class="line">    <span class="keyword">sum</span>(<span class="keyword">if</span>(mn.order_count&gt;=<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>)) buyTwiceLast,</span><br><span class="line">    <span class="keyword">sum</span>(<span class="keyword">if</span>(mn.order_count&gt;=<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>))/<span class="keyword">sum</span>( <span class="keyword">if</span>(mn.order_count&gt;=<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>)) buyTwiceLastRatio,</span><br><span class="line">    <span class="keyword">sum</span>(<span class="keyword">if</span>(mn.order_count&gt;=<span class="number">3</span>,<span class="number">1</span>,<span class="number">0</span>))  buy3timeLast  ,</span><br><span class="line">    <span class="keyword">sum</span>(<span class="keyword">if</span>(mn.order_count&gt;=<span class="number">3</span>,<span class="number">1</span>,<span class="number">0</span>))/<span class="keyword">sum</span>( <span class="keyword">if</span>(mn.order_count&gt;=<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>)) buy3timeLastRatio ,</span><br><span class="line">    <span class="keyword">date_format</span>(<span class="string">'2019-02-10'</span> ,<span class="string">'yyyy-MM'</span>) stat_mn,</span><br><span class="line">    <span class="string">'2019-02-10'</span> stat_date</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">(</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">        user_id, </span><br><span class="line">sd.sku_tm_id,</span><br><span class="line">        sd.sku_category1_id,</span><br><span class="line">        sd.sku_category1_name,</span><br><span class="line">        <span class="keyword">sum</span>(order_count) order_count</span><br><span class="line">    <span class="keyword">from</span> gmall.dws_sale_detail_daycount sd </span><br><span class="line">    <span class="keyword">where</span> <span class="keyword">date_format</span>(dt,<span class="string">'yyyy-MM'</span>)=<span class="keyword">date_format</span>(<span class="string">'2019-02-10'</span> ,<span class="string">'yyyy-MM'</span>)</span><br><span class="line">    <span class="keyword">group</span> <span class="keyword">by</span> user_id, sd.sku_tm_id, sd.sku_category1_id, sd.sku_category1_name</span><br><span class="line">) mn</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> mn.sku_tm_id, mn.sku_category1_id, mn.sku_category1_name</span><br></pre></td></tr></table></figure>
+<h2 id="9-数据可视化表"><a href="#9-数据可视化表" class="headerlink" title="9. 数据可视化表"></a>9. 数据可视化表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 2. 每日活跃统计</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`ads_uv_count`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`ads_uv_count`</span>  (</span><br><span class="line">  <span class="string">`dt`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line">  <span class="string">`day_count`</span> <span class="built_in">bigint</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当日用户数量'</span>,</span><br><span class="line">  <span class="string">`wk_count`</span> <span class="built_in">bigint</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当周用户数量'</span>,</span><br><span class="line">  <span class="string">`mn_count`</span> <span class="built_in">bigint</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当月用户数量'</span>,</span><br><span class="line">  <span class="string">`is_weekend`</span> <span class="built_in">varchar</span>(<span class="number">200</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'Y,N是否是周末,用于得到本周最终结果'</span>,</span><br><span class="line">  <span class="string">`is_monthend`</span> <span class="built_in">varchar</span>(<span class="number">200</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'Y,N是否是月末,用于得到本月最终结果'</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8 <span class="keyword">COLLATE</span> = utf8_general_ci <span class="keyword">COMMENT</span> = <span class="string">'每日活跃用户数量'</span> ROW_FORMAT = Dynamic;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. 留存率统计</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`ads_user_retention_day_rate`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`ads_user_retention_day_rate`</span>  (</span><br><span class="line">  <span class="string">`stat_date`</span> <span class="built_in">varchar</span>(<span class="number">255</span>)  <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line">  <span class="string">`create_date`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'设备新增日期'</span>,</span><br><span class="line">  <span class="string">`retention_day`</span> <span class="built_in">bigint</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'截止当前日期留存天数'</span>,</span><br><span class="line">  <span class="string">`retention_count`</span> <span class="built_in">bigint</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'留存数量'</span>,</span><br><span class="line">  <span class="string">`new_mid_count`</span> <span class="built_in">bigint</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当日设备新增数量'</span>,</span><br><span class="line">  <span class="string">`retention_ratio`</span> <span class="built_in">decimal</span>(<span class="number">10</span>, <span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'留存率'</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8 <span class="keyword">COLLATE</span> = utf8_general_ci <span class="keyword">COMMENT</span> = <span class="string">'每日用户留存情况'</span> ROW_FORMAT = Dynamic;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3. 漏斗分析</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`ads_user_action_convert_day`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`ads_user_action_convert_day`</span>  (</span><br><span class="line">  <span class="string">`dt`</span> <span class="built_in">varchar</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line">  <span class="string">`total_visitor_m_count`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'总访问人数'</span>,</span><br><span class="line">  <span class="string">`order_u_count`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'下单人数'</span>,</span><br><span class="line">  <span class="string">`visitor2order_convert_ratio`</span> <span class="built_in">decimal</span>(<span class="number">10</span>, <span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'购物车到下单转化率'</span>,</span><br><span class="line">  <span class="string">`payment_u_count`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'支付人数'</span>,</span><br><span class="line">  <span class="string">`order2payment_convert_ratio`</span> <span class="built_in">decimal</span>(<span class="number">10</span>, <span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'下单到支付的转化率'</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8 <span class="keyword">COLLATE</span> = utf8_general_ci <span class="keyword">COMMENT</span> = <span class="string">'每日用户行为转化率统计'</span> ROW_FORMAT = Dynamic;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 4. gmv统计</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> ads_gmv_sum_day;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> ads_gmv_sum_day(</span><br><span class="line">  <span class="string">`dt`</span> <span class="built_in">varchar</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期'</span>,</span><br><span class="line">  <span class="string">`gmv_count`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当日gmv订单个数'</span>,</span><br><span class="line">  <span class="string">`gmv_amount`</span> <span class="built_in">decimal</span>(<span class="number">16</span>, <span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当日gmv订单总金额'</span>,</span><br><span class="line">  <span class="string">`gmv_payment`</span> <span class="built_in">decimal</span>(<span class="number">16</span>, <span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'当日支付金额'</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8 <span class="keyword">COLLATE</span> = utf8_general_ci <span class="keyword">COMMENT</span> = <span class="string">'每日活跃用户数量'</span> ROW_FORMAT = Dynamic;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 5. 全国商品销售</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`ads_gmv_sum_province`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`ads_gmv_sum_province`</span>  (</span><br><span class="line">  <span class="string">`province`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`gmv`</span> <span class="built_in">bigint</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`remark`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="keyword">DEFAULT</span> <span class="literal">NULL</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8 <span class="keyword">COLLATE</span> = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
+<h2 id="10-sqoop导出脚本"><a href="#10-sqoop导出脚本" class="headerlink" title="10.sqoop导出脚本"></a>10.sqoop导出脚本</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">db_name=gmall</span><br><span class="line"><span class="function"><span class="title">export_data</span></span>()&#123;</span><br><span class="line">/kkb/install/sqoop-1.4.6-cdh5.14.2/bin/sqoop <span class="built_in">export</span> \</span><br><span class="line">--connect <span class="string">"jdbc:mysql://node03:3306/<span class="variable">$&#123;db_name&#125;</span>?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"</span> \</span><br><span class="line">--username root \</span><br><span class="line">--password 123456 \</span><br><span class="line">--table <span class="variable">$1</span> \</span><br><span class="line">--m 1 \</span><br><span class="line">--<span class="built_in">export</span>-dir /warehouse/<span class="variable">$db_name</span>/ads/<span class="variable">$1</span> \</span><br><span class="line">--input-fields-terminated-by <span class="string">"\t"</span> \</span><br><span class="line">--update-mode allowinsert \</span><br><span class="line">--update-key  <span class="string">"gmv_count,gmv_amount,gmv_payment"</span> \</span><br><span class="line">--input-null-string  <span class="string">'\\N'</span> \</span><br><span class="line">--input-null-non-string  <span class="string">'\\N'</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span> </span><br><span class="line">  <span class="string">"ads_uv_count"</span>)</span><br><span class="line">   export_data <span class="string">"ads_uv_count"</span></span><br><span class="line">;;</span><br><span class="line"> <span class="string">"ads_user_action_convert_day"</span>)</span><br><span class="line">   export_data <span class="string">"ads_user_action_convert_day"</span></span><br><span class="line">;;</span><br><span class="line"> <span class="string">"ads_gmv_sum_day"</span>)</span><br><span class="line">   export_data <span class="string">"ads_gmv_sum_day"</span></span><br><span class="line">;;</span><br><span class="line"> <span class="string">"all"</span>)</span><br><span class="line">   export_data <span class="string">"ads_uv_count"</span> </span><br><span class="line">   export_data <span class="string">"ads_user_action_convert_day"</span></span><br><span class="line">   export_data <span class="string">"ads_gmv_sum_day"</span></span><br><span class="line">;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>–update-mode：</p>
+<ul>
+<li>updateonly  只更新，无法插入新数据</li>
+<li>allowinsert  允许新增 </li>
+</ul>
+</li>
+<li><p>–update-key：允许更新的情况下，指定哪些字段匹配视为同一条数据，进行更新而不增加。多个字段用逗号分隔。</p>
+</li>
+<li><p>–input-null-string和–input-null-non-string：</p>
+</li>
+</ul>
+<p>分别表示，将字符串列和非字符串列的空串和“null”转换成’\N’。</p>
+<p>Hive中的在底层是以“”来存储，而中的在底层就是，–input-null-string–input-null-non-string–null-string–null-non-string</p>
+<p><img src="assets/image-20191204174225224.png" alt="image-20191204174225224"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
