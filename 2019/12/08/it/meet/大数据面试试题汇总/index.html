@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        大数据面试试题汇总 - Kaffir Lily的博客 | Kaffir Lily&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="icon-font icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="icon-font icon-shouye1"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Java基础篇"><span class="toc-text">1. Java基础篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-语言基础"><span class="toc-text">1.1 语言基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-锁"><span class="toc-text">1.2 锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-多线程"><span class="toc-text">1.3 多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-并发容器（J-U-C）"><span class="toc-text">1.4 并发容器（J.U.C）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Java进阶篇"><span class="toc-text">2. Java进阶篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-JVM"><span class="toc-text">2.1 JVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-NIO"><span class="toc-text">2.2 NIO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-RPC"><span class="toc-text">2.3 RPC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Linux-基础"><span class="toc-text">3. Linux 基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-分布式理论篇"><span class="toc-text">4.分布式理论篇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Netty"><span class="toc-text">5. Netty</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Hadoop"><span class="toc-text">6. Hadoop</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-MapReduce"><span class="toc-text">6.1 MapReduce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-HDFS"><span class="toc-text">6.2 HDFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Yarn："><span class="toc-text">6.3 Yarn：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Hive"><span class="toc-text">7. Hive</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Hbase"><span class="toc-text">8. Hbase</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Scala"><span class="toc-text">9. Scala</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Spark"><span class="toc-text">10. Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-Spark-Core"><span class="toc-text">10.1 Spark Core</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-Spark-Streaming："><span class="toc-text">10.2 Spark Streaming：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-Spark-SQL："><span class="toc-text">10.3 Spark SQL：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-Structured-Streaming"><span class="toc-text">10.4 Structured Streaming</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-5-Spark-Mlib："><span class="toc-text">10.5 Spark Mlib：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-Kafka"><span class="toc-text">11. Kafka</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-Flink"><span class="toc-text">12. Flink</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-大数据算法"><span class="toc-text">13. 大数据算法</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        大数据面试试题汇总
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-08 16:35:48</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#bigdata" title="bigdata">bigdata</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#meet" title="meet">meet</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="1-Java基础篇"><a href="#1-Java基础篇" class="headerlink" title="1. Java基础篇"></a>1. Java基础篇</h1><ul>
+<li>语言基础</li>
+<li>锁</li>
+<li>多线程</li>
+<li>并发包中常用的并发容器（JUC）</li>
+</ul>
+<h2 id="1-1-语言基础"><a href="#1-1-语言基础" class="headerlink" title="1.1 语言基础"></a>1.1 语言基础</h2><ul>
+<li><p>Java面向对象</p>
+</li>
+<li><p>Java语言的三大特性： 封装、继承、多态</p>
+</li>
+<li><p>Java语言的数据类型</p>
+<ul>
+<li><p>内置数据类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 在被创建时，在栈上给其划分一块内存，将数值直接存储在栈上。</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">byte</span> <span class="keyword">short</span> <span class="keyword">float</span> <span class="keyword">double</span> <span class="keyword">char</span> <span class="keyword">boolean</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引用数据类型</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2. 在被创建时，首先要在栈上给其引用（句柄）分配一块内存，而对象的具体信息都存储在堆内存上，然后由栈上面的引用指向堆中对象的地址。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">interface</span> <span class="title">array</span> <span class="title">enum</span> @<span class="title">interface</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Java的自动类型转换，强制类型转换</p>
+</li>
+<li><p>String的不可变性、虚拟机的常量池、String.intern() 的底层原理</p>
+<ul>
+<li><p>String.intern(): </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// String.intern();</span></span><br><span class="line"><span class="comment">// return 一个字符串，内容与此字符串相同，但一定取自具有唯一字符串的池。</span></span><br><span class="line">String a = <span class="string">"a"</span>;</span><br><span class="line">String b = <span class="string">"b"</span>;</span><br><span class="line">String ab = <span class="string">"ab"</span>;</span><br><span class="line">String ab0 = <span class="string">"a"</span> + <span class="string">"b"</span>;</span><br><span class="line">String ab1 = a + b;</span><br><span class="line">String ab2 = <span class="keyword">new</span> String(<span class="string">"ab"</span>);</span><br><span class="line">String ab3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line"><span class="comment">// 以下结果为。true</span></span><br><span class="line">System.out.println(ab == ab0);</span><br><span class="line">System.out.println(ab == ab1.intern());</span><br><span class="line">System.out.println(ab == ab2.intern());</span><br><span class="line">System.out.println(ab == ab3.intern());</span><br><span class="line">System.out.println(ab2.intern() == ab3.intern());</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Java 语言中的关键字：<strong>final</strong>、<strong>static</strong>、<strong>transient</strong>、<strong>instanceof</strong>、<strong>volatile</strong>、<strong>synchronized</strong>的底层原理</p>
+<ul>
+<li><a href="https://blog.csdn.net/Tang_zhihong/article/details/88744343" target="_blank" rel="noopener">查看</a></li>
+</ul>
+</li>
+<li><p>Java 中常用的集合类的实现原理： ArrayList/LinkedList/Vector、SynchronizedList/Vector、HashMap/HashTable/ConcurrentHashMap 互相的区别以及底层实现原理</p>
+<ul>
+<li><a href="https://crossoverjie.top/JCSprout/#/collections/ArrayList" target="_blank" rel="noopener">查看</a></li>
+</ul>
+</li>
+<li><p>动态代理的实现方式 </p>
+<ul>
+<li>jdk动态代理：interface 、 InvocationHandler</li>
+<li>CGLIB： MethodInterceptor</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-锁"><a href="#1-2-锁" class="headerlink" title="1.2 锁"></a>1.2 锁</h2><ul>
+<li>CAS、乐观锁与悲观锁、数据库相关锁机制、分布式锁、偏向锁、轻量级锁、重量级锁、monitor</li>
+<li>锁优化、锁消除、锁粗化、自旋锁、可重入锁、阻塞锁、死锁</li>
+<li>死锁的原因</li>
+<li>死锁的解决办法</li>
+<li>CountDownLatch、CyclicBarrier 和 Semaphore 三个类的使用和原理</li>
+</ul>
+<h2 id="1-3-多线程"><a href="#1-3-多线程" class="headerlink" title="1.3 多线程"></a>1.3 多线程</h2><ul>
+<li>并发和并行的区别 <a href="https://blog.csdn.net/weixin_30363263/article/details/80732156" target="_blank" rel="noopener">点</a></li>
+<li>线程与进程的区别   <a href="https://blog.csdn.net/feiBlog/article/details/85397287" target="_blank" rel="noopener">点</a></li>
+<li>线程的实现、线程的状态、优先级、线程调度、创建线程的多种方式、守护线程 </li>
+<li>自己设计线程池、submit() 和 execute()、线程池原理</li>
+<li>为什么不允许使用 Executors 创建线程池 <a href="https://blog.csdn.net/fly910905/article/details/81584675" target="_blank" rel="noopener">点</a></li>
+<li>死锁、死锁如何排查、线程安全和内存模型的关系</li>
+<li>ThreadLocal 变量</li>
+<li>Executor 创建线程池的几种方式：<ul>
+<li>newFixedThreadPool(int nThreads)</li>
+<li>newCachedThreadPool()</li>
+<li>newSingleThreadExecutor()</li>
+<li>newScheduledThreadPool(int corePoolSize)</li>
+<li>newSingleThreadExecutor()</li>
+</ul>
+</li>
+<li>ThreadPoolExecutor 创建线程池、拒绝策略</li>
+<li>线程池关闭的方式</li>
+</ul>
+<h2 id="1-4-并发容器（J-U-C）"><a href="#1-4-并发容器（J-U-C）" class="headerlink" title="1.4 并发容器（J.U.C）"></a>1.4 并发容器（J.U.C）</h2><ul>
+<li>JUC 包中 List 接口的实现类：CopyOnWriteArrayList</li>
+<li>JUC 包中 Set 接口的实现类：CopyOnWriteArraySet、ConcurrentSkipListSet</li>
+<li>JUC 包中 Map 接口的实现类：ConcurrentHashMap、ConcurrentSkipListMap</li>
+<li>JUC包中Queue接口的实现类：ConcurrentLinkedQueue、ConcurrentLinkedDeque、ArrayBlockingQueue、LinkedBlockingQueue、LinkedBlockingDeque</li>
+</ul>
+<h1 id="2-Java进阶篇"><a href="#2-Java进阶篇" class="headerlink" title="2. Java进阶篇"></a>2. Java进阶篇</h1><h2 id="2-1-JVM"><a href="#2-1-JVM" class="headerlink" title="2.1 JVM"></a>2.1 JVM</h2><ul>
+<li><p>JVM内存结构</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> 文件格式、运行时数据区：堆、栈、方法区、直接内存、运行时常量池</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>堆和栈区别</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Java </span>中的对象一定在堆上分配吗？</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Java 内存模型</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">计算机内存模型、缓存一致性、MESI 协议、可见性、原子性、顺序性、happens-before、内存屏障、<span class="keyword">synchronized</span>、<span class="keyword">volatile</span>、<span class="keyword">final</span>、锁</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>垃圾回收</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GC 算法：标记清除、引用计数、复制、标记压缩、分代回收、增量式回收、GC 参数、对象存活的判定、垃圾收集器（CMS、G1、ZGC、<span class="built_in">Epsilon</span>）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JVM 参数及调优</p>
+  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-Xmx</span>、<span class="selector-tag">-Xmn</span>、<span class="selector-tag">-Xms</span>、<span class="selector-tag">Xss</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:SurvivorRatio</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:PermSize</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:MaxPermSize</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:MaxTenuringThreshold</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Java 对象模型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oop-klass、对象头</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HotSpot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">即时编译器、编译优化</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虚拟机性能监控与故障处理工具</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">jps、jstack、jmap、jstat、jconsole、 </span><span class="keyword">jinfo、 </span><span class="keyword">jhat、javap、btrace、TProfiler、Arthas</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>类加载机制</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classLoader、类加载过程、双亲委派（破坏双亲委派）、模块化（<span class="keyword">jboss </span>modules、osgi、<span class="keyword">jigsaw）</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-2-NIO"><a href="#2-2-NIO" class="headerlink" title="2.2 NIO"></a>2.2 NIO</h2><ul>
+<li>用户空间以及内核空间</li>
+<li>Linux 网络 I/O 模型：阻塞 I/O (Blocking I/O)、非阻塞 I/O (Non-Blocking I/O)、I/O 复用（I/O Multiplexing)、信号驱动的 I/O (Signal Driven I/O)、异步 I/O</li>
+<li>灵拷贝（ZeroCopy）</li>
+<li>BIO 与 NIO 对比</li>
+<li>缓冲区 Buffer</li>
+<li>通道 Channel</li>
+<li>反应堆</li>
+<li>选择器</li>
+<li>AIO</li>
+</ul>
+<h2 id="2-3-RPC"><a href="#2-3-RPC" class="headerlink" title="2.3 RPC"></a>2.3 RPC</h2><ul>
+<li>RPC 的原理编程模型</li>
+<li>常用的 RPC 框架：Thrift、Dubbo、SpringCloud</li>
+<li>RPC 的应用场景和与消息队列的差别</li>
+<li>RPC 核心技术点：服务暴露、远程代理对象、通信、序列化</li>
+</ul>
+<h1 id="3-Linux-基础"><a href="#3-Linux-基础" class="headerlink" title="3. Linux 基础"></a>3. Linux 基础</h1><ul>
+<li>了解 Linux 的常用命令</li>
+<li>远程登录</li>
+<li>上传下载</li>
+<li>系统目录</li>
+<li>文件和目录操作</li>
+<li>Linux 下的权限体系</li>
+<li>压缩和打包</li>
+<li>用户和组</li>
+<li>Shell 脚本的编写</li>
+<li>管道操作</li>
+</ul>
+<h1 id="4-分布式理论篇"><a href="#4-分布式理论篇" class="headerlink" title="4.分布式理论篇"></a>4.分布式理论篇</h1><ul>
+<li>分布式中的一些基本概念：集群（Cluster）、负载均衡（Load Balancer）等</li>
+<li>分布式系统理论基础： 一致性、2PC 和 3PC</li>
+<li>分布式系统理论基础：CAP</li>
+<li>分布式系统理论基础：时间、时钟和事件顺序</li>
+<li>分布式系统理论进阶：Paxos</li>
+<li>分布式系统理论进阶：Raft、Zab</li>
+<li>分布式系统理论进阶：选举、多数派和租约</li>
+<li>分布式锁的解决方案</li>
+<li>分布式事务的解决方案</li>
+<li>分布式 ID 生成器解决方案</li>
+</ul>
+<h1 id="5-Netty"><a href="#5-Netty" class="headerlink" title="5. Netty"></a>5. Netty</h1><ul>
+<li>Netty 三层网络架构：Reactor 通信调度层、职责链 PipeLine、业务逻辑处理层</li>
+<li>Netty 的线程调度模型</li>
+<li>序列化方式</li>
+<li>链路有效性检测</li>
+<li>流量整形</li>
+<li>优雅停机策略</li>
+<li>Netty 对 SSL/TLS 的支持</li>
+<li>Netty 的源码质量极高，推荐对部分的核心代码进行阅读：</li>
+<li>Netty 的 Buffer</li>
+<li>Netty 的 Reactor</li>
+<li>Netty 的 Pipeline</li>
+<li>Netty 的 Handler 综述</li>
+<li>Netty 的 ChannelHandler</li>
+<li>Netty 的 LoggingHandler</li>
+<li>Netty 的 TimeoutHandler</li>
+<li>Netty 的 CodecHandler</li>
+<li>Netty 的 MessageToByteEncoder</li>
+</ul>
+<h1 id="6-Hadoop"><a href="#6-Hadoop" class="headerlink" title="6. Hadoop"></a>6. Hadoop</h1><h2 id="6-1-MapReduce"><a href="#6-1-MapReduce" class="headerlink" title="6.1 MapReduce"></a>6.1 MapReduce</h2><ul>
+<li>掌握 MapReduce 的工作原理</li>
+<li>能用 MapReduce 手写代码实现简单的 WordCount 或者 TopN 算法</li>
+<li>掌握 MapReduce Combiner 和 Partitioner的作用</li>
+<li>熟悉 Hadoop 集群的搭建过程，并且能解决常见的错误</li>
+<li>熟悉 Hadoop 集群的扩容过程和常见的坑</li>
+<li>如何解决 MapReduce 的数据倾斜</li>
+<li>Shuffle 原理和减少 Shuffle 的方法</li>
+</ul>
+<h2 id="6-2-HDFS"><a href="#6-2-HDFS" class="headerlink" title="6.2 HDFS"></a>6.2 HDFS</h2><ul>
+<li>十分熟悉 HDFS 的架构图和读写流程</li>
+<li>十分熟悉 HDFS 的配置</li>
+<li>熟悉 DataNode 和 NameNode 的作用</li>
+<li>NameNode 的 HA 搭建和配置，Fsimage 和 EditJournal 的作用的场景</li>
+<li>HDFS 操作文件的常用命令</li>
+<li>HDFS 的安全模式</li>
+</ul>
+<h2 id="6-3-Yarn："><a href="#6-3-Yarn：" class="headerlink" title="6.3 Yarn："></a>6.3 Yarn：</h2><ul>
+<li>Yarn 的产生背景和架构</li>
+<li>Yarn 中的角色划分和各自的作用</li>
+<li>Yarn 的配置和常用的资源调度策略</li>
+<li>Yarn 进行一次任务资源调度的过程</li>
+</ul>
+<h1 id="7-Hive"><a href="#7-Hive" class="headerlink" title="7. Hive"></a>7. Hive</h1><blockquote>
+<p>Hive 是一个数据仓库基础工具，在 Hadoop 中用来处理结构化数据。它架构在 Hadoop 之上，总归为大数据，并使得查询和分析方便。Hive 是应用最广泛的 OLAP 框架。Hive SQL 也是我们进行 SQL 开发用的最多的框架。</p>
+</blockquote>
+<ul>
+<li>HiveSQL 的原理：我们都知道 HiveSQL 会被翻译成 MapReduce 任务执行，那么一条 SQL 是如何翻译成 MapReduce 的？</li>
+<li>Hive 和普通关系型数据库有什么区别？</li>
+<li>Hive 支持哪些数据格式</li>
+<li>Hive 在底层是如何存储 NULL 的</li>
+<li>HiveSQL 支持的几种排序各代表什么意思（Sort By/Order By/Cluster By/Distrbute By）</li>
+<li>Hive 的动态分区</li>
+<li>HQL 和 SQL 有哪些常见的区别</li>
+<li>Hive 中的内部表和外部表的区别</li>
+<li>Hive 表进行关联查询如何解决长尾和数据倾斜问题</li>
+<li>HiveSQL 的优化（系统参数调整、SQL 语句优化）</li>
+</ul>
+<h1 id="8-Hbase"><a href="#8-Hbase" class="headerlink" title="8. Hbase"></a>8. Hbase</h1><blockquote>
+<p>HBase 本质上是一个数据模型，类似于谷歌的大表设计，可以提供快速随机访问海量结构化数据。它利用了 Hadoop 的文件系统（HDFS）提供的容错能力。</p>
+<p>它是 Hadoop 的生态系统，提供对数据的随机实时读/写访问，是 Hadoop 文件系统的一部分。</p>
+<p>我们可以直接或通过 HBase 的存储 HDFS 数据。使用 HBase 在 HDFS 读取消费/随机访问数据。 HBase 在 Hadoop 的文件系统之上，并提供了读写访问。</p>
+<p>HBase 是一个面向列的数据库，在表中它由行排序。表模式定义只能列族，也就是键值对。一个表有多个列族以及每一个列族可以有任意数量的列。后续列的值连续地存储在磁盘上。表中的每个单元格值都具有时间戳。总之，在一个 HBase：表是行的集合、行是列族的集合、列族是列的集合、列是键值对的集合。</p>
+</blockquote>
+<ul>
+<li>Hbase 的架构和原理  </li>
+<li>Hbase 的读写流程</li>
+<li>Hbase 有没有并发问题？Hbase 如何实现自己的 MVVC 的？</li>
+<li>Hbase 中几个重要的概念：HMaster、RegionServer、WAL 机制、MemStore</li>
+<li>Hbase 在进行表设计过程中如何进行列族和 RowKey 的设计</li>
+<li>Hbase 的数据热点问题发现和解决办法</li>
+<li>提高 Hbase 的读写性能的通用做法</li>
+<li>HBase 中 RowFilter 和 BloomFilter 的原理</li>
+<li>Hbase API 中常见的比较器</li>
+<li>Hbase 的预分区</li>
+<li>Hbase 的 Compaction</li>
+<li>Hbase 集群中 HRegionServer 宕机如何解决</li>
+</ul>
+<h1 id="9-Scala"><a href="#9-Scala" class="headerlink" title="9. Scala"></a>9. Scala</h1><h1 id="10-Spark"><a href="#10-Spark" class="headerlink" title="10. Spark"></a>10. Spark</h1><blockquote>
+<p>Spark 是专门为大数据处理设计的通用计算引擎，是一个实现快速通用的集群计算平台。它是由加州大学伯克利分校 AMP 实验室开发的通用内存并行计算框架，用来构建大型的、低延迟的数据分析应用程序。它扩展了广泛使用的 MapReduce 计算模型。高效的支撑更多计算模式，包括交互式查询和流处理。Spark 的一个主要特点是能够在内存中进行计算，即使依赖磁盘进行复杂的运算，Spark 依然比 MapReduce 更加高效。</p>
+<p>Spark 生态包含了：Spark Core、Spark Streaming、Spark SQL、Structured Streming 和机器学习相关的库等。</p>
+</blockquote>
+<h2 id="10-1-Spark-Core"><a href="#10-1-Spark-Core" class="headerlink" title="10.1 Spark Core"></a>10.1 Spark Core</h2><ul>
+<li>Spark的集群搭建和集群架构（Spark 集群中的角色）</li>
+<li>Spark Cluster 和 Client 模式的区别</li>
+<li>Spark 的弹性分布式数据集 RDD</li>
+<li>Spark DAG（有向无环图）</li>
+<li>掌握 Spark RDD 编程的算子 API（Transformation 和 Action 算子）</li>
+<li>RDD 的依赖关系，什么是宽依赖和窄依赖</li>
+<li>RDD 的血缘机制</li>
+<li>Spark 核心的运算机制</li>
+<li>Spark 的任务调度和资源调度</li>
+<li>Spark 的 CheckPoint 和容错</li>
+<li>Spark 的通信机制</li>
+<li>Spark Shuffle 原理和过程</li>
+</ul>
+<h2 id="10-2-Spark-Streaming："><a href="#10-2-Spark-Streaming：" class="headerlink" title="10.2 Spark Streaming："></a>10.2 Spark Streaming：</h2><ul>
+<li>原理剖析（源码级别）和运行机制</li>
+<li>Spark Dstream 及其 API 操作</li>
+<li>Spark Streaming 消费 Kafka 的两种方式</li>
+<li>Spark 消费 Kafka 消息的 Offset 处理</li>
+<li>数据倾斜的处理方案</li>
+<li>Spark Streaming 的算子调优</li>
+<li>并行度和广播变量</li>
+<li>Shuffle 调优</li>
+</ul>
+<h2 id="10-3-Spark-SQL："><a href="#10-3-Spark-SQL：" class="headerlink" title="10.3 Spark SQL："></a>10.3 Spark SQL：</h2><ul>
+<li>Spark SQL 的原理和运行机制</li>
+<li>Catalyst 的整体架构</li>
+<li><p>Spark SQL 的 DataFrame</p>
+</li>
+<li><p>Spark SQL 的优化策略：内存列式存储和内存缓存表、列存储压缩、逻辑查询优化、Join 的优化</p>
+</li>
+</ul>
+<h2 id="10-4-Structured-Streaming"><a href="#10-4-Structured-Streaming" class="headerlink" title="10.4 Structured Streaming"></a>10.4 Structured Streaming</h2><blockquote>
+<p>Spark 从 2.3.0 版本开始支持 Structured Streaming，它是一个建立在 Spark SQL 引擎之上可扩展且容错的流处理引擎，统一了批处理和流处理。正是 Structured Streaming 的加入使得 Spark 在统一流、批处理方面能和 Flink 分庭抗礼。</p>
+</blockquote>
+<ul>
+<li>Structured Streaming 的模型</li>
+<li>Structured Streaming 的结果输出模式</li>
+<li>事件时间（Event-time）和延迟数据（Late Data）</li>
+<li>窗口操作</li>
+<li>水印</li>
+<li>容错和数据恢复</li>
+</ul>
+<h2 id="10-5-Spark-Mlib："><a href="#10-5-Spark-Mlib：" class="headerlink" title="10.5 Spark Mlib："></a>10.5 Spark Mlib：</h2><blockquote>
+<p>本部分是 Spark 对机器学习支持的部分，我们学有余力的同学可以了解一下 Spark 对常用的分类、回归、聚类、协同过滤、降维以及底层的优化原语等算法和工具。可以尝试自己使用 Spark Mlib 做一些简单的算法应用</p>
+</blockquote>
+<h1 id="11-Kafka"><a href="#11-Kafka" class="headerlink" title="11. Kafka"></a>11. Kafka</h1><blockquote>
+<p>Kafka 是最初由 Linkedin 公司开发，是一个分布式、支持分区的（partition）、多副本的（replica）的分布式消息系统，它的最大的特性就是可以实时的处理大量数据以满足各种需求场景：比如基于 Hadoop 的批处理系统、低延迟的实时系统、Spark 流式处理引擎，Nginx 日志、访问日志，消息服务等等，用 Scala 语言编写，Linkedin 于 2010 年贡献给了 Apache 基金会并成为顶级开源项目。</p>
+<p>Kafka 或者类似 Kafka 各个公司自己造的消息’轮子’已经是大数据领域消息中间件的事实标准。目前 Kafka 已经更新到了 2.x 版本，支持了类似 KafkaSQL 等功能，Kafka 不满足单纯的消息中间件，也正朝着平台化的方向演进。</p>
+</blockquote>
+<ul>
+<li>Kafka 的特性和使用场景</li>
+<li>Kafka 中的一些概念：Leader、Broker、Producer、Consumer、Topic、Group、Offset、Partition、ISR</li>
+<li>Kafka 的整体架构</li>
+<li>Kafka 选举策略</li>
+<li>Kafka 读取和写入消息过程中都发生了什么</li>
+<li>Kakfa 如何进行数据同步（ISR）</li>
+<li>Kafka 实现分区消息顺序性的原理</li>
+<li>消费者和消费组的关系</li>
+<li>消费 Kafka 消息的 Best Practice（最佳实践）是怎样的</li>
+<li>Kafka 如何保证消息投递的可靠性和幂等性</li>
+<li>Kafka 消息的事务性是如何实现的</li>
+<li>如何管理 Kafka 消息的 Offset</li>
+<li>Kafka 的文件存储机制</li>
+<li>Kafka 是如何支持 Exactly-once 语义的</li>
+<li>通常 Kafka 还会要求和 RocketMQ 等消息中间件进行比较</li>
+</ul>
+<h1 id="12-Flink"><a href="#12-Flink" class="headerlink" title="12. Flink"></a>12. Flink</h1><blockquote>
+<p>Apache Flink（以下简称 Flink）项目是大数据处理领域最近冉冉升起的一颗新星，其不同于其他大数据项目的诸多特性吸引了越来越多人的关注。尤其是 2019 年初 Blink 开源将 Flink 的关注度提升到了前所未有的程度。</p>
+</blockquote>
+<ul>
+<li>Flink 集群的搭建</li>
+<li>Flink 的架构原理</li>
+<li>Flink 的编程模型</li>
+<li>Flink 集群的 HA 配置</li>
+<li>Flink DataSet 和 DataSteam API</li>
+<li>序列化</li>
+<li>Flink 累加器</li>
+<li>状态 State 的管理和恢复</li>
+<li>窗口和时间</li>
+<li>并行度</li>
+<li>Flink 和消息中间件 Kafka 的结合</li>
+<li>Flink Table 和 SQL 的原理和用法</li>
+</ul>
+<h1 id="13-大数据算法"><a href="#13-大数据算法" class="headerlink" title="13. 大数据算法"></a>13. 大数据算法</h1><ul>
+<li>两个超大文件找共同出现的单词</li>
+<li>海量数据求 TopN</li>
+<li>海量数据找出不重复的数据</li>
+<li>布隆过滤器</li>
+<li>bit-map</li>
+<li>堆</li>
+<li>字典树</li>
+<li>倒排索引</li>
+</ul>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
