@@ -301,23 +301,43 @@
 <li>分布式 ID 生成器解决方案</li>
 </ul>
 <h1 id="5-Netty"><a href="#5-Netty" class="headerlink" title="5. Netty"></a>5. Netty</h1><ul>
-<li>Netty 三层网络架构：Reactor 通信调度层、职责链 PipeLine、业务逻辑处理层</li>
-<li>Netty 的线程调度模型</li>
-<li>序列化方式</li>
-<li>链路有效性检测</li>
-<li>流量整形</li>
-<li>优雅停机策略</li>
-<li>Netty 对 SSL/TLS 的支持</li>
-<li>Netty 的源码质量极高，推荐对部分的核心代码进行阅读：</li>
-<li>Netty 的 Buffer</li>
-<li>Netty 的 Reactor</li>
-<li>Netty 的 Pipeline</li>
-<li>Netty 的 Handler 综述</li>
-<li>Netty 的 ChannelHandler</li>
-<li>Netty 的 LoggingHandler</li>
-<li>Netty 的 TimeoutHandler</li>
-<li>Netty 的 CodecHandler</li>
-<li>Netty 的 MessageToByteEncoder</li>
+<li><p>Netty 三层网络架构：Reactor 通信调度层、职责链 PipeLine、业务逻辑处理层</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. Reactor通信调度层: 该层的主要职责就是监听网络的连接和读写操作，负责将网络层的数据读取到内存缓冲区中，然后触发各种网络事件，例如连接创建、连接激活、读事件、写事件等，将这些事件触发到Pipeline中，再由Pipeline充当的职责链来进行后续的处理</span><br><span class="line"><span class="number">2</span>. 职责链Pipeline层。负责事件在职责链中有序的向前（后）传播，同时负责动态的编排职责链。Pipeline可以选择监听和处理自己关心的事件</span><br><span class="line"><span class="number">3</span>. 业务逻辑处理层，一般可分为两类：</span><br><span class="line">		<span class="selector-tag">a</span>. 纯粹的业务逻辑处理，例如日志、订单处理。</span><br><span class="line">		<span class="selector-tag">b</span>. 应用层协议管理，例如HTTP(S)协议、FTP协议等。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>Netty 的线程调度模型</p>
+</li>
+<li><p>序列化方式</p>
+</li>
+<li><p>链路有效性检测</p>
+</li>
+<li><p>流量整形</p>
+</li>
+<li><p>优雅停机策略</p>
+</li>
+<li><p>Netty 对 SSL/TLS 的支持</p>
+</li>
+<li><p>Netty 的源码质量极高，推荐对部分的核心代码进行阅读：</p>
+</li>
+<li><p>Netty 的 Buffer</p>
+</li>
+<li><p>Netty 的 Reactor</p>
+</li>
+<li><p>Netty 的 Pipeline</p>
+</li>
+<li><p>Netty 的 Handler 综述</p>
+</li>
+<li><p>Netty 的 ChannelHandler</p>
+</li>
+<li><p>Netty 的 LoggingHandler</p>
+</li>
+<li><p>Netty 的 TimeoutHandler</p>
+</li>
+<li><p>Netty 的 CodecHandler</p>
+</li>
+<li><p>Netty 的 MessageToByteEncoder</p>
+</li>
 </ul>
 <h1 id="6-Hadoop"><a href="#6-Hadoop" class="headerlink" title="6. Hadoop"></a>6. Hadoop</h1><h2 id="6-1-MapReduce"><a href="#6-1-MapReduce" class="headerlink" title="6.1 MapReduce"></a>6.1 MapReduce</h2><ul>
 <li>掌握 MapReduce 的工作原理</li>
@@ -382,9 +402,13 @@
 <p>Spark 生态包含了：Spark Core、Spark Streaming、Spark SQL、Structured Streming 和机器学习相关的库等。</p>
 </blockquote>
 <h2 id="10-1-Spark-Core"><a href="#10-1-Spark-Core" class="headerlink" title="10.1 Spark Core"></a>10.1 Spark Core</h2><ul>
-<li>Spark的集群搭建和集群架构（Spark 集群中的角色）</li>
+<li>Spark的集群搭建和集群架构（Spark 集群中的角色）👌</li>
 <li>Spark Cluster 和 Client 模式的区别</li>
-<li>Spark 的弹性分布式数据集 RDD</li>
+<li>Spark 的弹性分布式数据集 RDD 👌 <ul>
+<li>spark 的rdd是什么，rdd的特性是什么，以及它的五大属性 👌</li>
+<li>常见的算子操作map/mapPartitions 和 foreach 和 foreachPartitions是什么 👌</li>
+</ul>
+</li>
 <li>Spark DAG（有向无环图）</li>
 <li>掌握 Spark RDD 编程的算子 API（Transformation 和 Action 算子）</li>
 <li>RDD 的依赖关系，什么是宽依赖和窄依赖</li>
