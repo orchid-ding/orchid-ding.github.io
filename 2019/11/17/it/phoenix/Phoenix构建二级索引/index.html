@@ -215,11 +215,11 @@
 </li>
 </ul>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:phoenix:node01:2181&gt; create index USER_COOKIE_ID_INDEX on<span class="built_in"> USER </span>(<span class="string">"f"</span>.<span class="string">"cookie_id"</span>);</span><br></pre></td></tr></table></figure>
-<p><img src="assets/user_cookie_id_index.PNG" alt=""></p>
+<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/user_cookie_id_index.PNG" alt=""></p>
 <ul>
 <li><p>再次执行查询”cookie_id”=’99738fd1-2084-44e9’的数据记录</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">"cookie_id"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span> = <span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="assets/3.PNG" alt=""></p>
+<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/3.PNG" alt=""></p>
 <p>此时：查询速度由10秒左右减少到了毫秒级别。</p>
 <p>注意：select所带的字段必须包含在覆盖索引内</p>
 <p>EXPLAIN(语句的执行逻辑及计划):</p>
@@ -227,7 +227,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> <span class="string">"cookie_id"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>  <img src="assets/4.PNG" alt="">    </p>
+<p>  <img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/4.PNG" alt="">    </p>
 <h5 id="5-3-3-以下查询不会用到索引表"><a href="#5-3-3-以下查询不会用到索引表" class="headerlink" title="5.3.3 以下查询不会用到索引表"></a>5.3.3 以下查询不会用到索引表</h5>  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">"cookie_id"</span>,<span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(虽然cookie_id是索引字段，但age不是索引字段，所以不会使用到索引)<br>  也可以通过EXPLAIN查询语句的执行逻辑及计划</li>
@@ -269,11 +269,11 @@
 <h4 id="5-5-如何确保query查询使用Index"><a href="#5-5-如何确保query查询使用Index" class="headerlink" title="5.5 如何确保query查询使用Index"></a>5.5 如何确保query查询使用Index</h4><p>​    要想让一个查询使用index，有三种方式实现。</p>
 <h5 id="5-5-1-创建-convered-index"><a href="#5-5-1-创建-convered-index" class="headerlink" title="5.5.1  创建 convered index"></a>5.5.1  创建 convered index</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果在某次查询中，查询项或者查询条件中包含除被索引列之外的列（主键MY_PK除外）。默认情况下，该查询会触发full table scan（全表扫描），但是使用covered index则可以避免全表扫描。 </span><br><span class="line">创建包含某个字段的覆盖索引,创建方式如下：</span><br><span class="line"> create index USER_COOKIE_ID_AGE_INDEX on<span class="built_in"> USER </span>(<span class="string">"f"</span>.<span class="string">"cookie_id"</span>) include(<span class="string">"f"</span>.<span class="string">"age"</span>);</span><br><span class="line"> </span><br><span class="line"> 查看当前所有表会发现多一张USER_COOKIE_ID_AGE_INDEX索引表，查询该表数据。</span><br></pre></td></tr></table></figure>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">查询数据</span><br><span class="line"><span class="keyword">select</span> <span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span>  <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="string">"age"</span>,<span class="string">"sex"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span>  <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="assets/16.PNG" alt=""></p>
-<p><img src="assets/17.PNG" alt=""></p>
+<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/16.PNG" alt=""></p>
+<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/17.PNG" alt=""></p>
 <h5 id="5-5-2-在查询中提示其使用index"><a href="#5-5-2-在查询中提示其使用index" class="headerlink" title="5.5.2 在查询中提示其使用index"></a>5.5.2 在查询中提示其使用index</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在<span class="keyword">select</span>和column_name之间加上<span class="comment">/*+ Index(&lt;表名&gt; &lt;index名&gt;)*/</span>，通过这种方式强制使用索引。</span><br><span class="line">例如：</span><br><span class="line"><span class="keyword">select</span> <span class="comment">/*+ index(user,USER_COOKIE_ID_AGE_INDEX) */</span> <span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br><span class="line"></span><br><span class="line">如果sex是索引字段，那么就会直接从索引表中查询</span><br><span class="line">如果sex不是索引字段，那么将会进行全表扫描，所以当用户明确知道表中数据较少且符合检索条件时才适用，此时的性能才是最佳的。</span><br></pre></td></tr></table></figure>
-<p><img src="assets/18.PNG" alt=""></p>
-<p><img src="assets/19.PNG" alt=""></p>
+<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/18.PNG" alt=""></p>
+<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/19.PNG" alt=""></p>
 <h5 id="5-5-3-使用本地索引-创建Local-Indexing-索引"><a href="#5-5-3-使用本地索引-创建Local-Indexing-索引" class="headerlink" title="5.5.3 使用本地索引 (创建Local Indexing 索引)"></a>5.5.3 使用本地索引 (创建Local Indexing 索引)</h5><ul>
 <li>详细见上面</li>
 </ul>
