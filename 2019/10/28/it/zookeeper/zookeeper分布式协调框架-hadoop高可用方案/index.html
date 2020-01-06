@@ -241,7 +241,7 @@
 <li><p>解压hadoop压缩包到/kkb/install</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>解压hadoop压缩包到/kkb/install</span><br><span class="line">[hadoop@node01 ~]$ cd</span><br><span class="line">[hadoop@node01 ~]$ cd /kkb/soft/</span><br><span class="line">[hadoop@node01 soft]$ tar -xzvf hadoop-2.6.0-cdh5.14.2_after_compile.tar.gz -C /kkb/install/</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">解压hadoop压缩包到/kkb/install</span></span><br><span class="line">[hadoop@node01 ~]$ cd</span><br><span class="line">[hadoop@node01 ~]$ cd /kkb/soft/</span><br><span class="line">[hadoop@node01 soft]$ tar -xzvf hadoop-2.6.0-cdh5.14.2_after_compile.tar.gz -C /kkb/install/</span><br></pre></td></tr></table></figure>
 <h3 id="3-2-修改hadoop-env-sh"><a href="#3-2-修改hadoop-env-sh" class="headerlink" title="3.2 修改hadoop-env.sh"></a>3.2 修改hadoop-env.sh</h3><ul>
 <li>进入hadoop配置文件路径$HADOOP_HOME/etc/hadoop</li>
 </ul>
@@ -310,7 +310,7 @@
 <h3 id="3-10-配置环境变量"><a href="#3-10-配置环境变量" class="headerlink" title="3.10 配置环境变量"></a>3.10 配置环境变量</h3><ul>
 <li><strong>node01到node05<font color="red">五个节点都配置环境变量</font></strong></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>将hadoop添加到环境变量中</span><br><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">将hadoop添加到环境变量中</span></span><br><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
 <ul>
 <li>添加内容如下（注意：若HADOOP_HOME已经存在，则修改）：</li>
 </ul>
@@ -368,7 +368,7 @@
 <h4 id="4-2-4-初始化元数据、启动主NN"><a href="#4-2-4-初始化元数据、启动主NN" class="headerlink" title="4.2.4 初始化元数据、启动主NN"></a>4.2.4 初始化元数据、启动主NN</h4><ul>
 <li>node01上执行（主namenode）</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -initializeSharedEdits -force</span><br><span class="line"><span class="meta">#</span>启动HDFS</span><br><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -initializeSharedEdits -force</span><br><span class="line"><span class="meta">#</span><span class="bash">启动HDFS</span></span><br><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
 <h4 id="4-2-5-同步元数据信息、启动从NN"><a href="#4-2-5-同步元数据信息、启动从NN" class="headerlink" title="4.2.5 同步元数据信息、启动从NN"></a>4.2.5 同步元数据信息、启动从NN</h4><ul>
 <li><strong>node02</strong>上执行（从namenode）</li>
 <li>同步元数据信息，并且设置node02上namenode为standBy状态</li>
