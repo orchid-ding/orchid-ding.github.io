@@ -1,0 +1,3374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        数仓商城项目-用户行为数仓 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#电商数仓项目"><span class="toc-text">电商数仓项目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-数据仓库的概念"><span class="toc-text">1. 数据仓库的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-项目需求和架构设计"><span class="toc-text">2. 项目需求和架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-项目需求分析"><span class="toc-text">2.1 项目需求分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-项目框架"><span class="toc-text">2.2 项目框架</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-项目技术选型"><span class="toc-text">2.2.1 项目技术选型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-系统数据流程设计"><span class="toc-text">2.2.2 系统数据流程设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-框架版本选型"><span class="toc-text">2.2.3 框架版本选型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-服务器选型"><span class="toc-text">2.2.4 服务器选型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-5-集群资源规划"><span class="toc-text">2.2.5 集群资源规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-6-测试集群服务器规划"><span class="toc-text">2.2.6 测试集群服务器规划</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-数据生成模块"><span class="toc-text">3. 数据生成模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-埋点数据的基本格式"><span class="toc-text">3.1 埋点数据的基本格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-事件日志数据"><span class="toc-text">3.2 事件日志数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-商品列表页（loading）"><span class="toc-text">3.2.1 商品列表页（loading）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-商品点击（display）"><span class="toc-text">3.2.2 商品点击（display）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-商品详情页（NewsDetail）"><span class="toc-text">3.2.3 商品详情页（NewsDetail）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-广告（Ad）"><span class="toc-text">3.2.4 广告（Ad）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-5-消息通知（notification）"><span class="toc-text">3.2.5 消息通知（notification）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-6-用户前台活跃-active-foreground"><span class="toc-text">3.2.6 用户前台活跃(active_foreground)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-7-用户后台活跃-active-background"><span class="toc-text">3.2.7 用户后台活跃(active_background)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-8-评论（comment）"><span class="toc-text">3.2.8 评论（comment）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-9-收藏（favorites）"><span class="toc-text">3.2.9 收藏（favorites）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-10-点赞（praise）"><span class="toc-text">3.2.10 点赞（praise）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-11错误日志-error"><span class="toc-text">3.2.11错误日志(error)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-12-启动日志数据-startlog"><span class="toc-text">3.2.12 启动日志数据(startlog)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-数据生成脚本"><span class="toc-text">3.3 数据生成脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-java代码"><span class="toc-text">3.3.1 java代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-数据采集模块"><span class="toc-text">3.4 数据采集模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-生成日志脚本"><span class="toc-text">3.4.1 生成日志脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-日志采集Flume"><span class="toc-text">3.4.2 日志采集Flume</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-3-集群规划"><span class="toc-text">3.4.3 集群规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-4-经验之谈"><span class="toc-text">3.4.4 经验之谈</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Flume分类ETL和拦截器"><span class="toc-text">4. Flume分类ETL和拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-java代码"><span class="toc-text">4.1 java代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-日志采集"><span class="toc-text">4.2 日志采集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1Flume配置分析"><span class="toc-text">4.2.1Flume配置分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-具体配置如下"><span class="toc-text">4.2.2 具体配置如下</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-修改hadoop配置文件"><span class="toc-text">4.2.3 修改hadoop配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-4-Flume启动脚本"><span class="toc-text">4.2.4 Flume启动脚本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-数据仓库分层"><span class="toc-text">5 数据仓库分层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-为什么要分层"><span class="toc-text">5.1 为什么要分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-数仓分层"><span class="toc-text">5.2 数仓分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-数据集市与数据仓库概念"><span class="toc-text">5.3 数据集市与数据仓库概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-数仓搭建之ODS层"><span class="toc-text">6. 数仓搭建之ODS层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-Shell中单引号和双引号区别"><span class="toc-text">6.1  Shell中单引号和双引号区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-创建数据库ODS层"><span class="toc-text">6.1 创建数据库ODS层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-创建启动日志ods-start-log"><span class="toc-text">6.1.1 创建启动日志ods_start_log</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-2-创建事件日志表ods-event-log"><span class="toc-text">6.1.2 创建事件日志表ods_event_log</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-3-ods加载数据脚本"><span class="toc-text">6.1.3 ods加载数据脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-创建数据库DWD层"><span class="toc-text">6.2 创建数据库DWD层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-1-DWD层启动表"><span class="toc-text">6.2.1 DWD层启动表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-2-DWD层事件表数据解析"><span class="toc-text">6.2.2 DWD层事件表数据解析</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-2-1-创建事件基础明细表"><span class="toc-text">6.2.2.1 创建事件基础明细表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-2-2-自定义UDF函数，解析（公公字段）"><span class="toc-text">6.2.2.2 自定义UDF函数，解析（公公字段）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-2-3-自定义UDTF函数字段，（解析具体事件）"><span class="toc-text">6.2.2.3 自定义UDTF函数字段，（解析具体事件）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-2-4-使用udf-amp-udtf函数"><span class="toc-text">6.2.2.4 使用udf &amp; udtf函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-2-5-解析事件日志到明细表"><span class="toc-text">6.2.2.5 解析事件日志到明细表</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-3-DWD层事件表"><span class="toc-text">6.2.3 DWD层事件表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-1-商品点击表"><span class="toc-text">6.2.3.1 商品点击表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-2-商品详情页表"><span class="toc-text">6.2.3.2 商品详情页表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-3-广告表"><span class="toc-text">6.2.3.3 广告表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-4-消息通知表"><span class="toc-text">6.2.3.4 消息通知表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-5-商品列表页面"><span class="toc-text">6.2.3.5 商品列表页面</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-6-用户后台活跃度"><span class="toc-text">6.2.3.6 用户后台活跃度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-7-用户前台活跃表"><span class="toc-text">6.2.3.7 用户前台活跃表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-8-评论表"><span class="toc-text">6.2.3.8 评论表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-9-收藏表"><span class="toc-text">6.2.3.9 收藏表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-10-点赞表"><span class="toc-text">6.2.3.10 点赞表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-3-11-错误日志表"><span class="toc-text">6.2.3.11 错误日志表</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-业务说明"><span class="toc-text">7 业务说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-用户"><span class="toc-text">7.1. 用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-新增用户"><span class="toc-text">7.2. 新增用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-活跃用户"><span class="toc-text">7.3. 活跃用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-周（月）活跃用户"><span class="toc-text">7.4. 周（月）活跃用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-5-月活跃率"><span class="toc-text">7.5. 月活跃率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-6-沉默用户"><span class="toc-text">7.6. 沉默用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-7-版本分布"><span class="toc-text">7.7. 版本分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-8-本周回流用户"><span class="toc-text">7.8. 本周回流用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-9-连续n周活跃用户"><span class="toc-text">7.9.  连续n周活跃用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-10-忠诚用户"><span class="toc-text">7.10. 忠诚用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-11-连续活跃用户"><span class="toc-text">7.11. 连续活跃用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-12-近期流失用户"><span class="toc-text">7.12. 近期流失用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-13-留存用户"><span class="toc-text">7.13.  留存用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-14-用户新鲜度"><span class="toc-text">7.14. 用户新鲜度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-15-单次使用时长"><span class="toc-text">7.15.  单次使用时长</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-16-日使用时长"><span class="toc-text">7.16. 日使用时长</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-17-启动次数计算标准"><span class="toc-text">7.17. 启动次数计算标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-用户需求"><span class="toc-text">8. 用户需求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-用户活跃主题"><span class="toc-text">8.1 用户活跃主题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-1-DWS层"><span class="toc-text">8.1.1 DWS层</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-1-1-每日活跃设备明细"><span class="toc-text">8.1.1.1 每日活跃设备明细</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-1-2-周活跃设备"><span class="toc-text">8.1.1.2 周活跃设备</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-1-3-月活跃设备"><span class="toc-text">8.1.1.3 月活跃设备</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-1-4-加载数据脚本"><span class="toc-text">8.1.1.4 加载数据脚本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-2-1-当日、当周、当月活跃设备数"><span class="toc-text">8.1.2.1 当日、当周、当月活跃设备数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-2-2-当周、日、月活跃脚本"><span class="toc-text">8.1.2.2 当周、日、月活跃脚本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-用户新增主题"><span class="toc-text">8.2 用户新增主题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-1-DWS层-每日新增设备明细"><span class="toc-text">8.2.1 DWS层 每日新增设备明细</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-2-ADS层-每日新增设备表"><span class="toc-text">8.2.2  ADS层 每日新增设备表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-3-用户新增主题脚本"><span class="toc-text">8.2.3 用户新增主题脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-用户留存主题"><span class="toc-text">8.3 用户留存主题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-1-用户留存概念"><span class="toc-text">8.3.1 用户留存概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-2-需求描述"><span class="toc-text">8.3.2 需求描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-3-DWS层"><span class="toc-text">8.3.3 DWS层</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#8-3-3-1-每日留存用户明细表"><span class="toc-text">8.3.3.1 每日留存用户明细表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-3-3-2-共1-2-3-n天留存用户明细表"><span class="toc-text">8.3.3.2 共1,2,3,n天留存用户明细表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-3-3-3-留存用户脚本"><span class="toc-text">8.3.3.3 留存用户脚本</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-4-ADS层"><span class="toc-text">8.3.4 ADS层</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#8-3-4-1-用户留存数"><span class="toc-text">8.3.4.1 用户留存数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-3-4-2-用户留存率"><span class="toc-text">8.3.4.2 用户留存率</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-3-4-3-用户留存主题脚本"><span class="toc-text">8.3.4.3 用户留存主题脚本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-沉默用户数"><span class="toc-text">8.4 沉默用户数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-5-本周回流用户数"><span class="toc-text">8.5 本周回流用户数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-6-本周流失用户"><span class="toc-text">8.6 本周流失用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-7-连续三周活跃"><span class="toc-text">8.7 连续三周活跃</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-7-最近七天内连续三周活跃"><span class="toc-text">8.7 最近七天内连续三周活跃</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Hive总结"><span class="toc-text">9. Hive总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-Hive的架构"><span class="toc-text">9.1 Hive的架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-Hive和数据库比较"><span class="toc-text">9.2 Hive和数据库比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-3-内部表和外部表"><span class="toc-text">9.3 内部表和外部表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-窗口函数"><span class="toc-text">9.4 窗口函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-5-在项目中是否自定义过UDF、UDTF函数，以及用他们处理了什么问题？"><span class="toc-text">9.5  在项目中是否自定义过UDF、UDTF函数，以及用他们处理了什么问题？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-6-个By区别"><span class="toc-text">9.6 个By区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-7-Hive优化"><span class="toc-text">9.7 Hive优化</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        数仓商城项目-用户行为数仓
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-11-29 16:12:11</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#电商项目" title="电商项目">电商项目</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="电商数仓项目"><a href="#电商数仓项目" class="headerlink" title="电商数仓项目"></a>电商数仓项目</h1><h2 id="1-数据仓库的概念"><a href="#1-数据仓库的概念" class="headerlink" title="1. 数据仓库的概念"></a>1. 数据仓库的概念</h2><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162305823.png" alt="image-20191129162305823"></p>
+<h2 id="2-项目需求和架构设计"><a href="#2-项目需求和架构设计" class="headerlink" title="2. 项目需求和架构设计"></a>2. 项目需求和架构设计</h2><h3 id="2-1-项目需求分析"><a href="#2-1-项目需求分析" class="headerlink" title="2.1 项目需求分析"></a>2.1 项目需求分析</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162437944.png" alt="image-20191129162437944"></p>
+<h3 id="2-2-项目框架"><a href="#2-2-项目框架" class="headerlink" title="2.2 项目框架"></a>2.2 项目框架</h3><h4 id="2-2-1-项目技术选型"><a href="#2-2-1-项目技术选型" class="headerlink" title="2.2.1 项目技术选型"></a>2.2.1 项目技术选型</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162531041.png" alt="image-20191129162531041" style="zoom:150%;"></p>
+<h4 id="2-2-2-系统数据流程设计"><a href="#2-2-2-系统数据流程设计" class="headerlink" title="2.2.2 系统数据流程设计"></a>2.2.2 系统数据流程设计</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162635970.png" alt="image-20191129162635970"></p>
+<h4 id="2-2-3-框架版本选型"><a href="#2-2-3-框架版本选型" class="headerlink" title="2.2.3 框架版本选型"></a>2.2.3 框架版本选型</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162705449.png" alt="image-20191129162705449" style="zoom: 150%;"></p>
+<p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162732861.png" alt="image-20191129162732861" style="zoom:150%;"></p>
+<h4 id="2-2-4-服务器选型"><a href="#2-2-4-服务器选型" class="headerlink" title="2.2.4 服务器选型"></a>2.2.4 服务器选型</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129162835568.png" alt="image-20191129162835568" style="zoom:150%;"></p>
+<h4 id="2-2-5-集群资源规划"><a href="#2-2-5-集群资源规划" class="headerlink" title="2.2.5 集群资源规划"></a>2.2.5 集群资源规划</h4><ol>
+<li><p>如何确认集群规模 ？（假设每台服务器8T磁盘空间，128G内存）<br>（1）每天日活跃用户100w，每人一天平均100条：100w <em> 100条 =10000w条<br>（2）每条日志1KB左右，每天1亿条：100000000 / 1024 /1024= 约100G<br>（3）半年内不扩容服务器来算： 100G</em> 180天= 约18T<br>（4）保存3份副本：18T <em> 3 =54T<br>（5）预留20%-30%Buf = 54T/0.7= 77T<br>（6）算到这： 约  8T </em> 10 台服务器</p>
+</li>
+<li><p>如果考虑数仓分层？</p>
+<p>  每一层会生成大量的中间结果表，服务器将近再扩容1-2 倍</p>
+</li>
+</ol>
+<h4 id="2-2-6-测试集群服务器规划"><a href="#2-2-6-测试集群服务器规划" class="headerlink" title="2.2.6 测试集群服务器规划"></a>2.2.6 测试集群服务器规划</h4><table>
+<thead>
+<tr>
+<th>服务名称</th>
+<th>子服务</th>
+<th>服务器 Node01</th>
+<th>服务器 Node02</th>
+<th>服务器 Node03</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HDFS</td>
+<td>NameNode</td>
+<td>√</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>DataNode</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>SecondaryNameNode</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Yarn</td>
+<td>NodeManager</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>Resourcemanager</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Zookeeper</td>
+<td>Zookeeper Server</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>Flume(采集日志)</td>
+<td>Flume</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>Hive</td>
+<td>Hive</td>
+<td></td>
+<td></td>
+<td>√</td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>MySQL</td>
+<td></td>
+<td></td>
+<td>√</td>
+</tr>
+<tr>
+<td>Sqoop</td>
+<td>Sqoop</td>
+<td></td>
+<td></td>
+<td>√</td>
+</tr>
+<tr>
+<td>Azkaban</td>
+<td>AzkabanWebServer</td>
+<td></td>
+<td></td>
+<td>√</td>
+</tr>
+<tr>
+<td>AzkabanExecutorServer</td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>服务数总计</td>
+<td></td>
+<td>7</td>
+<td>4</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-数据生成模块"><a href="#3-数据生成模块" class="headerlink" title="3. 数据生成模块"></a>3. 数据生成模块</h2><h3 id="3-1-埋点数据的基本格式"><a href="#3-1-埋点数据的基本格式" class="headerlink" title="3.1 埋点数据的基本格式"></a>3.1 埋点数据的基本格式</h3><ul>
+<li>公共字段：基本所有安卓手机都包含的字段</li>
+<li><p>业务字段：埋点上报的字段，有具体的业务类型</p>
+</li>
+<li><p>下面就是一个示例，表示业务字段的上传。</p>
+</li>
+</ul>
+<pre><code class="json"> {
+    &quot;ap&quot;:&quot;xxxxx&quot;,//项目数据来源 app pc
+    &quot;cm&quot;: {  //公共字段
+            &quot;mid&quot;: &quot;&quot;,  // (String) 设备唯一标识
+            &quot;uid&quot;: &quot;&quot;,  // (String) 用户标识
+            &quot;vc&quot;: &quot;1&quot;,  // (String) versionCode，程序版本号
+            &quot;vn&quot;: &quot;1.0&quot;,  // (String) versionName，程序版本名
+            &quot;l&quot;: &quot;zh&quot;,  // (String) 系统语言
+            &quot;sr&quot;: &quot;&quot;,  // (String) 渠道号，应用从哪个渠道来的。
+            &quot;os&quot;: &quot;7.1.1&quot;,  // (String) Android系统版本
+            &quot;ar&quot;: &quot;CN&quot;,  // (String) 区域
+            &quot;md&quot;: &quot;BBB100-1&quot;,  // (String) 手机型号
+            &quot;ba&quot;: &quot;blackberry&quot;,  // (String) 手机品牌
+            &quot;sv&quot;: &quot;V2.2.1&quot;,  // (String) sdkVersion
+            &quot;g&quot;: &quot;&quot;,  // (String) gmail
+            &quot;hw&quot;: &quot;1620x1080&quot;,  // (String) heightXwidth，屏幕宽高
+            &quot;t&quot;: &quot;1506047606608&quot;,  // (String) 客户端日志产生时的时间
+            &quot;nw&quot;: &quot;WIFI&quot;,  // (String) 网络模式
+            &quot;ln&quot;: 0,  // (double) lng经度
+            &quot;la&quot;: 0  // (double) lat 纬度
+        },
+    &quot;et&quot;:  [  //事件
+                {
+                    &quot;ett&quot;: &quot;1506047605364&quot;,  //客户端事件产生时间
+                    &quot;en&quot;: &quot;display&quot;,  //事件名称
+                    &quot;kv&quot;: {  //事件结果，以key-value形式自行定义
+                        &quot;goodsid&quot;: &quot;236&quot;,
+                        &quot;action&quot;: &quot;1&quot;,
+                        &quot;extend1&quot;: &quot;1&quot;,
+                        &quot;place&quot;: &quot;2&quot;,
+                        &quot;category&quot;: &quot;75&quot;
+                    }
+                }
+            ]
+    }
+</code></pre>
+<ul>
+<li>示例日志（服务器时间戳 | 日志）</li>
+</ul>
+<pre><code class="json">1540934156385|{
+    &quot;ap&quot;: &quot;gmall&quot;, 
+    &quot;cm&quot;: {
+        &quot;uid&quot;: &quot;1234&quot;, 
+        &quot;vc&quot;: &quot;2&quot;, 
+        &quot;vn&quot;: &quot;1.0&quot;, 
+        &quot;la&quot;: &quot;EN&quot;, 
+        &quot;sr&quot;: &quot;&quot;, 
+        &quot;os&quot;: &quot;7.1.1&quot;, 
+        &quot;ar&quot;: &quot;CN&quot;, 
+        &quot;md&quot;: &quot;BBB100-1&quot;, 
+        &quot;ba&quot;: &quot;blackberry&quot;, 
+        &quot;sv&quot;: &quot;V2.2.1&quot;, 
+        &quot;g&quot;: &quot;abc@gmail.com&quot;, 
+        &quot;hw&quot;: &quot;1620x1080&quot;, 
+        &quot;t&quot;: &quot;1506047606608&quot;, 
+        &quot;nw&quot;: &quot;WIFI&quot;, 
+        &quot;ln&quot;: 0
+    }, 
+        &quot;et&quot;: [
+            {
+                &quot;ett&quot;: &quot;1506047605364&quot;,  //客户端事件产生时间
+                &quot;en&quot;: &quot;display&quot;,  //事件名称
+                &quot;kv&quot;: {  //事件结果，以key-value形式自行定义
+                    &quot;goodsid&quot;: &quot;236&quot;,
+                    &quot;action&quot;: &quot;1&quot;,
+                    &quot;extend1&quot;: &quot;1&quot;,
+                    &quot;place&quot;: &quot;2&quot;,
+                    &quot;category&quot;: &quot;75&quot;
+                }
+            },{
+                &quot;ett&quot;: &quot;1552352626835&quot;,
+                &quot;en&quot;: &quot;active_background&quot;,
+                &quot;kv&quot;: {
+                     &quot;active_source&quot;: &quot;1&quot;
+                }
+            }
+        ]
+    }
+}
+</code></pre>
+<h3 id="3-2-事件日志数据"><a href="#3-2-事件日志数据" class="headerlink" title="3.2 事件日志数据"></a>3.2 事件日志数据</h3><h4 id="3-2-1-商品列表页（loading）"><a href="#3-2-1-商品列表页（loading）" class="headerlink" title="3.2.1 商品列表页（loading）"></a>3.2.1 商品列表页（loading）</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>action</td>
+<td>动作：开始加载=1，加载成功=2，加载失败=3</td>
+</tr>
+<tr>
+<td>loading_time</td>
+<td><strong>加载时长：计算下拉开始到接口返回数据的时间，（开始加载报**</strong>0<strong>**，加载成功或加载失败才上报时间）</strong></td>
+</tr>
+<tr>
+<td>loading_way</td>
+<td>加载类型：1-读取缓存，2-从接口拉新数据  （加载成功才上报加载类型）</td>
+</tr>
+<tr>
+<td>extend1</td>
+<td><strong>扩展字段</strong> <strong>Extend1</strong></td>
+</tr>
+<tr>
+<td>extend2</td>
+<td>扩展字段 Extend2</td>
+</tr>
+<tr>
+<td>type</td>
+<td><strong>加载类型：自动加载**</strong>=1<strong><strong>，用户下拽加载</strong></strong>=2<strong><strong>，底部加载</strong></strong>=3<strong><strong>（底部条触发点击底部提示条</strong></strong>/<strong>**点击返回顶部加载）</strong></td>
+</tr>
+<tr>
+<td>type1</td>
+<td>加载失败码：把加载失败状态码报回来（报空为加载成功，没有失败）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-2-商品点击（display）"><a href="#3-2-2-商品点击（display）" class="headerlink" title="3.2.2 商品点击（display）"></a>3.2.2 商品点击（display）</h4><ul>
+<li>事件标签：display</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>action</td>
+<td>动作：曝光商品=1，点击商品=2，</td>
+</tr>
+<tr>
+<td>goodsid</td>
+<td>商品ID（服务端下发的ID）</td>
+</tr>
+<tr>
+<td>place</td>
+<td>顺序（第几条商品，第一条为0，第二条为1，如此类推）</td>
+</tr>
+<tr>
+<td>extend1</td>
+<td>曝光类型：1 - 首次曝光 2-重复曝光</td>
+</tr>
+<tr>
+<td>category</td>
+<td>分类ID（服务端定义的分类ID）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-3-商品详情页（NewsDetail）"><a href="#3-2-3-商品详情页（NewsDetail）" class="headerlink" title="3.2.3 商品详情页（NewsDetail）"></a>3.2.3 商品详情页（NewsDetail）</h4><ul>
+<li>事件标签：newsdetail</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>entry</td>
+<td>页面入口来源：应用首页=1、push=2、详情页相关推荐=3</td>
+</tr>
+<tr>
+<td>action</td>
+<td>动作：开始加载=1，加载成功=2（pv），加载失败=3, 退出页面=4</td>
+</tr>
+<tr>
+<td>goodsid</td>
+<td>商品ID（服务端下发的ID）</td>
+</tr>
+<tr>
+<td>show_style</td>
+<td>商品样式：0、无图、1、一张大图、2、两张图、3、三张小图、4、一张小图、5、一张大图两张小图</td>
+</tr>
+<tr>
+<td>news_staytime</td>
+<td>页面停留时长：从商品开始加载时开始计算，到用户关闭页面所用的时间。若中途用跳转到其它页面了，则暂停计时，待回到详情页时恢复计时。或中途划出的时间超过10分钟，则本次计时作废，不上报本次数据。如未加载成功退出，则报空。</td>
+</tr>
+<tr>
+<td>loading_time</td>
+<td>加载时长：计算页面开始加载到接口返回数据的时间 （开始加载报0，加载成功或加载失败才上报时间）</td>
+</tr>
+<tr>
+<td>type1</td>
+<td>加载失败码：把加载失败状态码报回来（报空为加载成功，没有失败）</td>
+</tr>
+<tr>
+<td>category</td>
+<td>分类ID（服务端定义的分类ID）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-4-广告（Ad）"><a href="#3-2-4-广告（Ad）" class="headerlink" title="3.2.4 广告（Ad）"></a>3.2.4 广告（Ad）</h4><ul>
+<li>事件名称：ad</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>entry</td>
+<td>入口：商品列表页=1 应用首页=2 商品详情页=3</td>
+</tr>
+<tr>
+<td>action</td>
+<td>动作：请求广告=1 取缓存广告=2 广告位展示=3 广告展示=4 广告点击=5</td>
+</tr>
+<tr>
+<td>content</td>
+<td>状态：成功=1 失败=2</td>
+</tr>
+<tr>
+<td>detail</td>
+<td>失败码（没有则上报空）</td>
+</tr>
+<tr>
+<td>source</td>
+<td>广告来源:admob=1 facebook=2 ADX（百度）=3 VK（俄罗斯）=4</td>
+</tr>
+<tr>
+<td>behavior</td>
+<td>用户行为：  主动获取广告=1   被动获取广告=2</td>
+</tr>
+<tr>
+<td>newstype</td>
+<td>Type: 1- 图文 2-图集 3-段子 4-GIF 5-视频 6-调查 7-纯文 8-视频+图文 9-GIF+图文 0-其他</td>
+</tr>
+<tr>
+<td>show_style</td>
+<td>内容样式：无图(纯文字)=6 一张大图=1 三站小图+文=4 一张小图=2 一张大图两张小图+文=3 图集+文 = 5   一张大图+文=11  GIF大图+文=12 视频(大图)+文 = 13  来源于详情页相关推荐的商品，上报样式都为0（因为都是左文右图）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-5-消息通知（notification）"><a href="#3-2-5-消息通知（notification）" class="headerlink" title="3.2.5 消息通知（notification）"></a>3.2.5 消息通知（notification）</h4><ul>
+<li>事件标签：notification</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>action</td>
+<td>动作：通知产生=1，通知弹出=2，通知点击=3，常驻通知展示（不重复上报，一天之内只报一次）=4</td>
+</tr>
+<tr>
+<td>type</td>
+<td>通知id：预警通知=1，天气预报（早=2，晚=3），常驻=4</td>
+</tr>
+<tr>
+<td>ap_time</td>
+<td>客户端弹出时间</td>
+</tr>
+<tr>
+<td>content</td>
+<td>备用字段</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-6-用户前台活跃-active-foreground"><a href="#3-2-6-用户前台活跃-active-foreground" class="headerlink" title="3.2.6 用户前台活跃(active_foreground)"></a>3.2.6 用户前台活跃(active_foreground)</h4><ul>
+<li>事件标签: active_foreground</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>push_id</td>
+<td>推送的消息的id，如果不是从推送消息打开，传空</td>
+</tr>
+<tr>
+<td>access</td>
+<td>1.push 2.icon 3.其他</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-7-用户后台活跃-active-background"><a href="#3-2-7-用户后台活跃-active-background" class="headerlink" title="3.2.7 用户后台活跃(active_background)"></a>3.2.7 用户后台活跃(active_background)</h4><ul>
+<li>事件标签: active_background</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>active_source</td>
+<td>1=upgrade,2=download(下载),3=plugin_upgrade</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-8-评论（comment）"><a href="#3-2-8-评论（comment）" class="headerlink" title="3.2.8 评论（comment）"></a>3.2.8 评论（comment）</h4><ul>
+<li>描述： 评论表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>序号</strong></th>
+<th><strong>字段名称</strong></th>
+<th><strong>字段描述</strong></th>
+<th><strong>字段类型</strong></th>
+<th><strong>长度</strong></th>
+<th><strong>允许空</strong></th>
+<th><strong>缺省值</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>comment_id</td>
+<td>评论表</td>
+<td>int</td>
+<td>10,0</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>userid</td>
+<td>用户id</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>p_comment_id</td>
+<td>父级评论id(为0则是一级评论,不为0则是回复)</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>content</td>
+<td>评论内容</td>
+<td>string</td>
+<td>1000</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>addtime</td>
+<td>创建时间</td>
+<td>string</td>
+<td></td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>other_id</td>
+<td>评论的相关id</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>praise_count</td>
+<td>点赞数量</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td>0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>reply_count</td>
+<td>回复数量</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-9-收藏（favorites）"><a href="#3-2-9-收藏（favorites）" class="headerlink" title="3.2.9 收藏（favorites）"></a>3.2.9 收藏（favorites）</h4><ul>
+<li>描述：收藏</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>序号</strong></th>
+<th><strong>字段名称</strong></th>
+<th><strong>字段描述</strong></th>
+<th><strong>字段类型</strong></th>
+<th><strong>长度</strong></th>
+<th><strong>允许空</strong></th>
+<th><strong>缺省值</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>id</td>
+<td>主键</td>
+<td>int</td>
+<td>10,0</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>course_id</td>
+<td>商品id</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>userid</td>
+<td>用户ID</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td>0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>add_time</td>
+<td>创建时间</td>
+<td>string</td>
+<td></td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-10-点赞（praise）"><a href="#3-2-10-点赞（praise）" class="headerlink" title="3.2.10 点赞（praise）"></a>3.2.10 点赞（praise）</h4><ul>
+<li>描述：所有的点赞表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>序号</strong></th>
+<th><strong>字段名称</strong></th>
+<th><strong>字段描述</strong></th>
+<th><strong>字段类型</strong></th>
+<th><strong>长度</strong></th>
+<th><strong>允许空</strong></th>
+<th><strong>缺省值</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>id</td>
+<td>主键id</td>
+<td>int</td>
+<td>10,0</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>userid</td>
+<td>用户id</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>target_id</td>
+<td>点赞的对象id</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>type</td>
+<td>点赞类型 1问答点赞 2问答评论点赞 3 文章点赞数4 评论点赞</td>
+<td>int</td>
+<td>10,0</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>add_time</td>
+<td>添加时间</td>
+<td>string</td>
+<td></td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-11错误日志-error"><a href="#3-2-11错误日志-error" class="headerlink" title="3.2.11错误日志(error)"></a>3.2.11错误日志(error)</h4><table>
+<thead>
+<tr>
+<th>errorBrief</th>
+<th>错误摘要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>errorDetail</td>
+<td>错误详情</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-12-启动日志数据-startlog"><a href="#3-2-12-启动日志数据-startlog" class="headerlink" title="3.2.12 启动日志数据(startlog)"></a>3.2.12 <strong>启动日志数据</strong>(startlog)</h4><ul>
+<li>事件标签: start action=1可以算成前台活跃</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>entry</td>
+<td>入口： push=1，widget=2，icon=3，notification=4, lockscreen_widget =5</td>
+</tr>
+<tr>
+<td>open_ad_type</td>
+<td>开屏广告类型: 开屏原生广告=1, 开屏插屏广告=2</td>
+</tr>
+<tr>
+<td>action</td>
+<td>状态：成功=1 失败=2</td>
+</tr>
+<tr>
+<td>loading_time</td>
+<td>加载时长：计算下拉开始到接口返回数据的时间，（开始加载报0，加载成功或加载失败才上报时间）</td>
+</tr>
+<tr>
+<td>detail</td>
+<td>失败码（没有则上报空）</td>
+</tr>
+<tr>
+<td>extend1</td>
+<td>失败的message（没有则上报空）</td>
+</tr>
+<tr>
+<td>en</td>
+<td>日志类型start</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-3-数据生成脚本"><a href="#3-3-数据生成脚本" class="headerlink" title="3.3 数据生成脚本"></a>3.3 数据生成脚本</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129165236180.png" alt="image-20191129165236180"></p>
+<h4 id="3-3-1-java代码"><a href="#3-3-1-java代码" class="headerlink" title="3.3.1 java代码"></a>3.3.1 java代码</h4><p>​        <a href="https://github.com/orchid-ding/hadoop-example/tree/master/topkfly" target="_blank" rel="noopener">点击查看</a></p>
+<h3 id="3-4-数据采集模块"><a href="#3-4-数据采集模块" class="headerlink" title="3.4 数据采集模块"></a>3.4 数据采集模块</h3><h4 id="3-4-1-生成日志脚本"><a href="#3-4-1-生成日志脚本" class="headerlink" title="3.4.1 生成日志脚本"></a>3.4.1 生成日志脚本</h4><ul>
+<li>node01,node02节点分别生成日志</li>
+</ul>
+<pre><code class="shell">#! /bin/bash
+for i in node01 node02
+do
+ssh $i &quot;source /etc/profile;java -classpath /kfly/topkfly/log-collector-1.0-SNAPSHOT-jar-with-dependencies.jar appclient.AppMain &gt; /kfly/topkfly/run.log&quot;
+done
+</code></pre>
+<h4 id="3-4-2-日志采集Flume"><a href="#3-4-2-日志采集Flume" class="headerlink" title="3.4.2 日志采集Flume"></a>3.4.2 日志采集Flume</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129170733892.png" alt="image-20191129170733892"></p>
+<h4 id="3-4-3-集群规划"><a href="#3-4-3-集群规划" class="headerlink" title="3.4.3 集群规划"></a>3.4.3 集群规划</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>服务器node01</th>
+<th>服务器node02</th>
+<th>服务器node03</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flume(采集日志)</td>
+<td>Flume</td>
+<td>Flume</td>
+<td>Flume</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-4-4-经验之谈"><a href="#3-4-4-经验之谈" class="headerlink" title="3.4.4 经验之谈"></a>3.4.4 经验之谈</h4><ol>
+<li><p>Source</p>
+<ul>
+<li><p>Taildir Source相比Exec Source、Spooling Directory Source的优势</p>
+<p>​    TailDir Source：断点续传、多目录。Flume1.6以前需要自己自定义Source记录每次读取文件位置，实现断点续传。</p>
+<p>​    Exec Source可以实时搜集数据，但是在Flume不运行或者Shell命令出错的情况下，数据将会丢失。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Spooling Directory Source监控目录，不支持断点续传。</p>
+<ol start="2">
+<li><p>batchSize大小如何设置？</p>
+<p>​    Event 1K左右时，500-1000合适（默认为100）</p>
+</li>
+<li><p>Channel</p>
+<p>​    保证数据的安全可靠，使用类型file，把数据缓存在磁盘中。</p>
+</li>
+</ol>
+<h2 id="4-Flume分类ETL和拦截器"><a href="#4-Flume分类ETL和拦截器" class="headerlink" title="4. Flume分类ETL和拦截器"></a>4. Flume分类ETL和拦截器</h2><h3 id="4-1-java代码"><a href="#4-1-java代码" class="headerlink" title="4.1 java代码"></a>4.1 java代码</h3><p>​    <a href="https://github.com/orchid-ding/hadoop-example/tree/master/topkfly" target="_blank" rel="noopener">点击查看</a></p>
+<h3 id="4-2-日志采集"><a href="#4-2-日志采集" class="headerlink" title="4.2 日志采集"></a>4.2 日志采集</h3><h4 id="4-2-1Flume配置分析"><a href="#4-2-1Flume配置分析" class="headerlink" title="4.2.1Flume配置分析"></a>4.2.1Flume配置分析</h4><ul>
+<li>Flume直接读log日志的数据，log日志的格式是app-yyyy-mm-dd.log。</li>
+</ul>
+<p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191129172516667.png" alt="image-20191129172516667"></p>
+<h4 id="4-2-2-具体配置如下"><a href="#4-2-2-具体配置如下" class="headerlink" title="4.2.2 具体配置如下"></a>4.2.2 具体配置如下</h4><ul>
+<li><p>node01，node02</p>
+<pre><code class="properties"># flume client配置
+a1.sources=r1
+a1.sinks=s1
+a1.channels=c1
+
+# 配置sources
+a1.sources.r1.type=taildir
+a1.sources.r1.positionFile=/kfly/topkfly/index/log_position.json
+a1.sources.r1.filegroups=f1
+a1.sources.r1.filegroups.f1=/kfly/topkfly/logs/app.+
+a1.sources.r1.fileHeader=true
+a1.sources.r1.channels=c1
+
+# interceptors
+a1.sources.r1.interceptors=i1 i2
+a1.sources.r1.interceptors.i1.type=intercaptor.LogETLInterceptor$Builder
+a1.sources.r1.interceptors.i2.type=intercaptor.LogTypeInterceptor$Builder
+
+# 配置channels
+a1.channels.c1.type=file
+a1.channels.c1.type.checkpointDir=/kfly/topkfly/flume_checkPoint
+a1.channels.c1.dataDirs=/kfly/topkfly/flume_data
+
+# 配置sink
+a1.sinks.s1.channel = c1
+a1.sinks.s1.type=avro
+# node03
+a1.sinks.s1.hostname=node03
+a1.sinks.s1.port=5211
+</code></pre>
+</li>
+<li><p>node03</p>
+<pre><code class="properties"># Name the components on this agent
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+
+#配置source
+a1.sources.r1.type = avro
+a1.sources.r1.bind = node03
+a1.sources.r1.port = 5211
+a1.sources.r1.channels = c1
+
+#配置channel
+a1.channels.c1.type = file
+#检查点文件目录
+a1.channels.c1.checkpointDir=/kfly/topkfly/flume_checkpoint
+#缓存数据文件夹
+a1.channels.c1.dataDirs=/kfly/topkfly/lume_data
+
+#配置sink
+a1.sinks.k1.channel = c1
+a1.sinks.k1.type = hdfs
+a1.sinks.k1.hdfs.path = hdfs://node01:8020/origin_data/gmall/log/%{topic}/%Y-%m-%d
+a1.sinks.k1.hdfs.filePrefix = logevent-
+a1.sinks.k1.hdfs.round = true
+a1.sinks.k1.hdfs.roundValue = 10
+a1.sinks.k1.hdfs.roundUnit = second
+
+#不要产生大量小文件
+a1.sinks.k1.hdfs.rollInterval = 10
+a1.sinks.k1.hdfs.rollSize = 134217728
+a1.sinks.k1.hdfs.rollCount = 1000
+a1.sinks.k1.hdfs.useLocalTimeStamp = true
+a1.sinks.k1.hdfs.minBlockReplicas=1
+a1.sinks.k1.hdfs.fileType = CompressedStream
+a1.sinks.k1.hdfs.codeC = lzop
+</code></pre>
+</li>
+</ul>
+<h4 id="4-2-3-修改hadoop配置文件"><a href="#4-2-3-修改hadoop配置文件" class="headerlink" title="4.2.3 修改hadoop配置文件"></a>4.2.3 修改hadoop配置文件</h4><ul>
+<li>支持lzo压缩</li>
+</ul>
+<pre><code class="shell"> # haddoop-lzo.jar     放入hadoop目录
+ scp hadoop-lzo-0.4.20.jar /kfly/install/hadoop-2.6.0/share/hadoop/common
+</code></pre>
+<ul>
+<li>修改hadoop 的core-site.xml</li>
+</ul>
+<pre><code class="xml">&lt;property&gt;
+        &lt;name&gt;io.compression.codecs&lt;/name&gt;
+        &lt;value&gt;org.apache.hadoop.io.compress.GzipCodec,
+                org.apache.hadoop.io.compress.DefaultCodec,
+                org.apache.hadoop.io.compress.BZip2Codec,
+                com.hadoop.compression.lzo.LzoCodec,
+                com.hadoop.compression.lzo.LzopCodec
+        &lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+        &lt;name&gt;io.compression.codec.lzo.class&lt;/name&gt;
+        &lt;value&gt;com.hadoop.compression.lzo.LzoCodec&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+<h4 id="4-2-4-Flume启动脚本"><a href="#4-2-4-Flume启动脚本" class="headerlink" title="4.2.4 Flume启动脚本"></a>4.2.4 Flume启动脚本</h4><pre><code class="sh">
+bin/flume-ng agent -n a1 -c myconf -f myconf/flume-hdfs.conf -Dflume.root.logger=info,console
+
+bin/flume-ng agent -n a1 -c myconf -f myconf/flume-client.conf -Dflume.root.logger=info,console
+
+
+ssh node01 &quot;source /etc/profile; ps -ef | grep flume | grep -v grep |awk &#39;{print \$2}&#39; | xargs kill&quot;
+ssh node02 &quot;source /etc/profile; ps -ef | grep flume | grep -v grep |awk &#39;{print \$2}&#39; | xargs kill&quot;
+ssh node03
+</code></pre>
+<pre><code class="sh">#! /bin/bash
+case $1 in
+&quot;start&quot;){
+        for i in node03 node02 node01
+    do
+                        echo &quot;------------启动 $i 采集日志，flume-------------&quot;
+                        if [ &quot;node03&quot; = $i ]; then
+                                ssh $i &quot;source /etc/profile; nohup /kfly/install/apache-flume-1.6.0-cdh5.14.2-bin/bin/flume-ng agent -n a1 -c /kfly/install/apache-flume-1.6.0-cdh5.14.2-bin/myconf -f /kfly/install/apache-flume-1.6.0-cdh5.14.2-bin/myconf/flume-hdfs.conf -Dflume.root.logger=info,console &gt; /dev/null 2 &gt;&amp;1 &amp;&quot;
+                                else
+                                ssh $i &quot;source /etc/profile; nohup /kfly/install/apache-flume-1.6.0-cdh5.14.2-bin/bin/flume-ng agent -n a1 -c /kfly/install/apache-flume-1.6.0-cdh5.14.2-bin/myconf -f /kfly/install/apache-flume-1.6.0-cdh5.14.2-bin/myconf/flume-client.conf -Dflume.root.logger=info,console &gt; /dev/null 2 &gt;&amp;1 &amp;&quot;
+                                fi
+    done
+};;
+&quot;stop&quot;){
+        for i in node01 node02 node03
+                do
+                        echo &quot;------------停止 $i 采集日志，flume-------------&quot;
+                        ssh $i &quot;source /etc/profile; ps -ef | grep flume | grep -v grep |awk &#39;{print \$2}&#39; | xargs kill&quot;
+                done
+};;
+esac
+</code></pre>
+<h2 id="5-数据仓库分层"><a href="#5-数据仓库分层" class="headerlink" title="5 数据仓库分层"></a>5 数据仓库分层</h2><h3 id="5-1-为什么要分层"><a href="#5-1-为什么要分层" class="headerlink" title="5.1 为什么要分层"></a>5.1 为什么要分层</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201172234918.png" alt="image-20191201172234918">  </p>
+<h3 id="5-2-数仓分层"><a href="#5-2-数仓分层" class="headerlink" title="5.2 数仓分层"></a>5.2 数仓分层</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201172314576.png" alt="image-20191201172314576"></p>
+<p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201172349777.png" alt="image-20191201172349777"></p>
+<h3 id="5-3-数据集市与数据仓库概念"><a href="#5-3-数据集市与数据仓库概念" class="headerlink" title="5.3 数据集市与数据仓库概念"></a>5.3 数据集市与数据仓库概念</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201172510618.png" alt="image-20191201172510618"></p>
+<h2 id="6-数仓搭建之ODS层"><a href="#6-数仓搭建之ODS层" class="headerlink" title="6. 数仓搭建之ODS层"></a>6. 数仓搭建之ODS层</h2><p>​            <a href="https://github.com/orchid-ding/hadoop-example/blob/master/topkfly/db/create-table-hive.sql" target="_blank" rel="noopener">创建数据库sql</a></p>
+<p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201172659677.png" alt="image-20191201172659677"></p>
+<h3 id="6-1-Shell中单引号和双引号区别"><a href="#6-1-Shell中单引号和双引号区别" class="headerlink" title="6.1  Shell中单引号和双引号区别"></a>6.1  Shell中单引号和双引号区别</h3><pre><code class="sh"># 1. sh 如下
+#!/bin/bash
+do_date=$1
+
+echo &#39;$do_date&#39;   # 单引号不取变量值
+echo &quot;$do_date&quot;   # 双引号取变量值
+echo &quot;&#39;$do_date&#39;&quot;    # 双引号内部嵌套单引号，取出变量值
+echo &#39;&quot;$do_date&quot;&#39;    # 单引号内部嵌套双引号，不取出变量值
+echo `date`                # （3）反引号`，执行引号中命令
+
+# 2. 运行
+sh test.sh 2019-10-21
+
+# 3. 结果
+$do_date
+2019-10-21
+&#39;2019-10-21&#39;
+&quot;$do_date&quot;
+Tue Oct 22 18:33:40 CST 2019
+</code></pre>
+<h3 id="6-1-创建数据库ODS层"><a href="#6-1-创建数据库ODS层" class="headerlink" title="6.1 创建数据库ODS层"></a>6.1 创建数据库ODS层</h3><ul>
+<li>原始数据层，存放原始数据，直接加载原始日志、数据，数据保持原貌不做处理。</li>
+</ul>
+<h4 id="6-1-1-创建启动日志ods-start-log"><a href="#6-1-1-创建启动日志ods-start-log" class="headerlink" title="6.1.1 创建启动日志ods_start_log"></a>6.1.1 创建启动日志ods_start_log</h4><pre><code class="sql">--1.  建表
+drop table if exists gmall.ods_start_log;
+CREATE EXTERNAL TABLE gmall.ods_start_log (`line` string)
+    PARTITIONED BY (`dt` string)
+    STORED AS
+        INPUTFORMAT &#39;com.hadoop.mapred.DeprecatedLzoTextInputFormat&#39;
+        OUTPUTFORMAT &#39;org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat&#39;
+    LOCATION &#39;/warehouse/gmall/ods/ods_start_log&#39;;
+
+load data inpath &#39;/origin_data/gmall/log/topic_start/2019-11-18&#39; into table gmall.ods_start_log partition(dt=&#39;2019-11-18&#39;);
+
+-- 2. 加载数据
+</code></pre>
+<h4 id="6-1-2-创建事件日志表ods-event-log"><a href="#6-1-2-创建事件日志表ods-event-log" class="headerlink" title="6.1.2 创建事件日志表ods_event_log"></a>6.1.2 创建事件日志表ods_event_log</h4><pre><code class="sql">-- 1. 建表
+drop table if exists gmall.ods_event_log;
+CREATE EXTERNAL TABLE gmall.ods_event_log
+(`line` string)
+    PARTITIONED BY (`dt` string)
+    STORED AS
+        INPUTFORMAT &#39;com.hadoop.mapred.DeprecatedLzoTextInputFormat&#39;
+        OUTPUTFORMAT &#39;org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat&#39;
+    LOCATION &#39;/warehouse/gmall/ods/ods_event_log&#39;;
+
+-- 2. 加载数据
+load data inpath &#39;/origin_data/gmall/log/topic_event/2019-11-18&#39; into table gmall.ods_event_log partition(dt=&#39;2019-11-18&#39;);
+</code></pre>
+<h4 id="6-1-3-ods加载数据脚本"><a href="#6-1-3-ods加载数据脚本" class="headerlink" title="6.1.3 ods加载数据脚本"></a>6.1.3 ods加载数据脚本</h4><pre><code class="sh">#!/bin/bash
+
+#  定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+#  如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+# -n 判断是否为空
+if  [  -n  &quot;$1&quot;  ]  ;then
+        do_date=$1
+else
+        # shellcheck disable=SC2006
+        do_date=`date  -d  &quot;-1  day&quot;  +%F`
+fi
+echo &quot;--------日志日期为 $do_date ----------&quot;
+sql=&quot;
+load data inpath &#39;/origin_data/gmall/log/topic_start/$do_date&#39; into table &quot;$APP&quot;.ods_start_log partition(dt=&#39;$do_date&#39;);
+load data inpath &#39;/origin_data/gmall/log/topic_event/$do_date&#39; into table &quot;$APP&quot;.ods_event_log partition(dt=&#39;$do_date&#39;);&quot;
+
+$hive  -e  &quot;$sql&quot;
+</code></pre>
+<h3 id="6-2-创建数据库DWD层"><a href="#6-2-创建数据库DWD层" class="headerlink" title="6.2 创建数据库DWD层"></a>6.2 创建数据库DWD层</h3><ul>
+<li>对ODS层数据进行清洗（去除空值，脏数据，超过极限范围的数据，行式存储改为列存储，改压缩格式）  </li>
+</ul>
+<h4 id="6-2-1-DWD层启动表"><a href="#6-2-1-DWD层启动表" class="headerlink" title="6.2.1 DWD层启动表"></a>6.2.1 DWD层启动表</h4><pre><code class="sql">-- 1. 创建启动表
+drop  table  if  exists  gmall.dwd_start_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_start_log(
+                                             `mid_id`  string,
+                                             `user_id`  string,
+                                             `version_code`  string,
+                                             `version_name`  string,
+                                             `lang`  string,
+                                             `source`  string,
+                                             `os`  string,
+                                             `area`  string,
+                                             `model`  string,
+                                             `brand`  string,
+                                             `sdk_version`  string,
+                                             `gmail`  string,
+                                             `height_width`  string,
+                                             `app_time`  string,
+                                             `network`  string,
+                                             `lng`  string,
+                                             `lat`  string,
+                                             `entry`  string,
+                                             `open_ad_type`  string,
+                                             `action`  string,
+                                             `loading_time`  string,
+                                             `detail`  string,
+                                             `extend1`  string
+)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_start_log/&#39;;
+
+-- 2. 加载数据
+insert  overwrite  table  gmall.dwd_start_log
+PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    get_json_object(line,&#39;$.mid&#39;)  mid_id,
+    get_json_object(line,&#39;$.uid&#39;)  user_id,
+    get_json_object(line,&#39;$.vc&#39;)  version_code,
+    get_json_object(line,&#39;$.vn&#39;)  version_name,
+    get_json_object(line,&#39;$.l&#39;)  lang,
+    get_json_object(line,&#39;$.sr&#39;)  source,
+    get_json_object(line,&#39;$.os&#39;)  os,
+    get_json_object(line,&#39;$.ar&#39;)  area,
+    get_json_object(line,&#39;$.md&#39;)  model,
+    get_json_object(line,&#39;$.ba&#39;)  brand,
+    get_json_object(line,&#39;$.sv&#39;)  sdk_version,
+    get_json_object(line,&#39;$.g&#39;)  gmail,
+    get_json_object(line,&#39;$.hw&#39;)  height_width,
+    get_json_object(line,&#39;$.t&#39;)  app_time,
+    get_json_object(line,&#39;$.nw&#39;)  network,
+    get_json_object(line,&#39;$.ln&#39;)  lng,
+    get_json_object(line,&#39;$.la&#39;)  lat,
+    get_json_object(line,&#39;$.entry&#39;)  entry,
+    get_json_object(line,&#39;$.open_ad_type&#39;)  open_ad_type,
+    get_json_object(line,&#39;$.action&#39;)  action,
+    get_json_object(line,&#39;$.loading_time&#39;)  loading_time,
+    get_json_object(line,&#39;$.detail&#39;)  detail,
+    get_json_object(line,&#39;$.extend1&#39;)  extend1
+from  gmall.ods_start_log
+where  dt=&#39;2019-11-18&#39;;
+</code></pre>
+<pre><code class="sh"># 3. 加载数据脚本
+#!/bin/bash
+
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else 
+    # shellcheck disable=SC2006
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi 
+
+sql=&quot;
+insert overwrite table &quot;$APP&quot;.dwd_start_log
+PARTITION (dt=&#39;$do_date&#39;)
+select 
+    get_json_object(line,&#39;$.mid&#39;) mid_id,
+    get_json_object(line,&#39;$.uid&#39;) user_id,
+    get_json_object(line,&#39;$.vc&#39;) version_code,
+    get_json_object(line,&#39;$.vn&#39;) version_name,
+    get_json_object(line,&#39;$.l&#39;) lang,
+    get_json_object(line,&#39;$.sr&#39;) source,
+    get_json_object(line,&#39;$.os&#39;) os,
+    get_json_object(line,&#39;$.ar&#39;) area,
+    get_json_object(line,&#39;$.md&#39;) model,
+    get_json_object(line,&#39;$.ba&#39;) brand,
+    get_json_object(line,&#39;$.sv&#39;) sdk_version,
+    get_json_object(line,&#39;$.g&#39;) gmail,
+    get_json_object(line,&#39;$.hw&#39;) height_width,
+    get_json_object(line,&#39;$.t&#39;) app_time,
+    get_json_object(line,&#39;$.nw&#39;) network,
+    get_json_object(line,&#39;$.ln&#39;) lng,
+    get_json_object(line,&#39;$.la&#39;) lat,
+    get_json_object(line,&#39;$.entry&#39;) entry,
+    get_json_object(line,&#39;$.open_ad_type&#39;) open_ad_type,
+    get_json_object(line,&#39;$.action&#39;) action,
+    get_json_object(line,&#39;$.loading_time&#39;) loading_time,
+    get_json_object(line,&#39;$.detail&#39;) detail,
+    get_json_object(line,&#39;$.extend1&#39;) extend1
+from &quot;$APP&quot;.ods_start_log 
+where dt=&#39;$do_date&#39;;
+&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h4 id="6-2-2-DWD层事件表数据解析"><a href="#6-2-2-DWD层事件表数据解析" class="headerlink" title="6.2.2 DWD层事件表数据解析"></a>6.2.2 DWD层事件表数据解析</h4><ul>
+<li>明细表用于存储ODS层原始表转换过来的明细数据  </li>
+</ul>
+<h5 id="6-2-2-1-创建事件基础明细表"><a href="#6-2-2-1-创建事件基础明细表" class="headerlink" title="6.2.2.1 创建事件基础明细表"></a>6.2.2.1 创建事件基础明细表</h5><pre><code class="sql">-- 1. 建表
+drop  table  if  exists  gmall.dwd_base_event_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_base_event_log(
+                                                  `mid_id`  string,
+                                                  `user_id`  string,
+                                                  `version_code`  string,
+                                                  `version_name`  string,
+                                                  `lang`  string,
+                                                  `source`  string,
+                                                  `os`  string,
+                                                  `area`  string,
+                                                  `model`  string,
+                                                  `brand`  string,
+                                                  `sdk_version`  string,
+                                                  `gmail`  string,
+                                                  `height_width`  string,
+                                                  `app_time`  string,
+                                                  `network`  string,
+                                                  `lng`  string,
+                                                  `lat`  string,
+                                                  `event_name`  string,
+                                                  `event_json`  string,
+                                                  `server_time`  string)
+    PARTITIONED  BY  (`dt`  string)
+    stored  as  parquet
+    location  &#39;/warehouse/gmall/dwd/dwd_base_event_log/&#39;;
+</code></pre>
+<h5 id="6-2-2-2-自定义UDF函数，解析（公公字段）"><a href="#6-2-2-2-自定义UDF函数，解析（公公字段）" class="headerlink" title="6.2.2.2 自定义UDF函数，解析（公公字段）"></a>6.2.2.2 自定义UDF函数，解析（公公字段）</h5><p>​        <a href="https://github.com/orchid-ding/hadoop-example/blob/master/topkfly/hive-function/src/main/java/udf/BaseFieldUDF.java" target="_blank" rel="noopener">代码</a></p>
+<ul>
+<li>自定义拦截器，解析数据<ul>
+<li>UDF拦截器实现公公字段解析</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201210713207.png" alt="image-20191201210713207"></p>
+<pre><code class="java">package udf;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hive.ql.exec.UDF;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * @author dingchuangshi
+ */
+public class BaseFieldUDF extends UDF {
+    public String evaluate(String line, String jsonkeysString) {
+        // 0 准备一个sb
+        StringBuilder sb = new StringBuilder();
+        // 1 切割jsonkeys  mid uid vc vn l sr os ar md
+        String[] jsonkeys = jsonkeysString.split(&quot;,&quot;);
+        // 2 处理line   服务器时间 | json
+        String[] logContents = line.split(&quot;\\|&quot;);
+        // 3 合法性校验
+        if (logContents.length != 2 || StringUtils.isBlank(logContents[1])) {
+            return &quot;&quot;;
+        }
+        // 4 开始处理json
+        try {
+            JSONObject jsonObject = new JSONObject(logContents[1]);
+            // 获取cm里面的对象
+            JSONObject base = jsonObject.getJSONObject(&quot;cm&quot;);
+            // 循环遍历取值
+            for (int i = 0; i &lt; jsonkeys.length; i++) {
+                String filedName = jsonkeys[i].trim();
+                if (base.has(filedName)) {
+                    sb.append(base.getString(filedName)).append(&quot;\t&quot;);
+                } else {
+                    sb.append(&quot;\t&quot;);
+                }
+            }
+
+            sb.append(jsonObject.getString(&quot;et&quot;)).append(&quot;\t&quot;);
+            sb.append(logContents[0]).append(&quot;\t&quot;);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+}
+
+</code></pre>
+<h5 id="6-2-2-3-自定义UDTF函数字段，（解析具体事件）"><a href="#6-2-2-3-自定义UDTF函数字段，（解析具体事件）" class="headerlink" title="6.2.2.3 自定义UDTF函数字段，（解析具体事件）"></a>6.2.2.3 自定义UDTF函数字段，（解析具体事件）</h5><p>​        <a href="https://github.com/orchid-ding/hadoop-example/blob/master/topkfly/hive-function/src/main/java/udtf/EventJsonUDTF.java" target="_blank" rel="noopener">代码</a></p>
+<p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191201211614119.png" alt="image-20191201211614119"></p>
+<pre><code class="java">public class EventJsonUDTF extends GenericUDTF {
+
+    /**
+     * 该方法中，我们将指定输出参数的名称和参数类型：
+     */
+    @Override
+    public StructObjectInspector initialize(ObjectInspector[] argOIs) throws UDFArgumentException {
+
+        ArrayList&lt;String&gt; fieldNames = new ArrayList&lt;String&gt;();
+        ArrayList&lt;ObjectInspector&gt; fieldOIs = new ArrayList&lt;ObjectInspector&gt;();
+        fieldNames.add(&quot;event_name&quot;);
+        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);
+        fieldNames.add(&quot;event_json&quot;);
+        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);
+
+        return ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames, fieldOIs);
+    }
+
+    /**
+     * 输入1条记录，输出若干条结果
+     * @param objects
+     * @throws HiveException
+     */
+    @Override
+    public void process(Object[] objects) throws HiveException {
+        // 获取传入的et
+        String input = objects[0].toString();
+        // 如果传进来的数据为空，直接返回过滤掉该数据
+        if (StringUtils.isBlank(input)) {
+            return;
+        } else {
+
+            try {
+                // 获取一共有几个事件（ad/facoriters）
+                JSONArray ja = new JSONArray(input);
+
+                if (ja == null)
+                    return;
+
+                // 循环遍历每一个事件
+                for (int i = 0; i &lt; ja.length(); i++) {
+                    //数组的第一个元素用于保存事件名称，第二个元素用于保存事件的信息
+                    String[] result = new String[2];
+
+                    try {
+                        // 取出每个的事件名称（ad/facoriters）
+                        result[0] = ja.getJSONObject(i).getString(&quot;en&quot;);
+
+                        // 取出每一个事件整体
+                        result[1] = ja.getString(i);
+                    } catch (JSONException e) {
+                        continue;
+                    }
+
+                    // 将结果返回
+                    forward(result);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //当没有记录处理的时候该方法会被调用，用来清理代码或者产生额外的输出
+    @Override
+    public void close() throws HiveException {
+    }
+}
+</code></pre>
+<h5 id="6-2-2-4-使用udf-amp-udtf函数"><a href="#6-2-2-4-使用udf-amp-udtf函数" class="headerlink" title="6.2.2.4 使用udf &amp; udtf函数"></a>6.2.2.4 使用udf &amp; udtf函数</h5><pre><code class="sql">-- 将jar 添加到hive
+add jar /kfly/install/hive-1.1.0-cdh5.14.2/lib/hive-function-1.0-SNAPSHOT.jar;
+--创建函数 udf
+create temporary function base_analizer as &#39;udf.BaseFieldUDF&#39;;
+-- 创建udtf函数
+create temporary function flat_analizer as &#39;udtf.EventJsonUDTF&#39;;
+</code></pre>
+<h5 id="6-2-2-5-解析事件日志到明细表"><a href="#6-2-2-5-解析事件日志到明细表" class="headerlink" title="6.2.2.5 解析事件日志到明细表"></a>6.2.2.5 解析事件日志到明细表</h5><pre><code class="sql">insert overwrite table gmall.dwd_base_event_log
+    PARTITION (dt=&#39;2019-02-12&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    event_name,
+    event_json,
+    server_time
+from
+    (
+        select
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[0]   as mid_id,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[1]   as user_id,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[2]   as version_code,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[3]   as version_name,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[4]   as lang,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[5]   as source,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[6]   as os,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[7]   as area,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[8]   as model,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[9]   as brand,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[10]   as sdk_version,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[11]  as gmail,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[12]  as height_width,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[13]  as app_time,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[14]  as network,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[15]  as lng,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[16]  as lat,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[17]  as ops,
+            split(base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;),&#39;\t&#39;)[18]  as server_time
+        from gmall.ods_event_log where dt=&#39;2019-02-12&#39;  and base_analizer(line,&#39;mid,uid,vc,vn,l,sr,os,ar,md,ba,sv,g,hw,t,nw,ln,la&#39;)&lt;&gt;&#39;&#39;
+    ) sdk_log lateral view flat_analizer(ops) tmp_k as event_name, event_json;
+
+</code></pre>
+<p>​    <a href="https://github.com/orchid-ding/hadoop-example/blob/master/topkfly/db/dwd_base_event_log.sh" target="_blank" rel="noopener">脚本</a></p>
+<h4 id="6-2-3-DWD层事件表"><a href="#6-2-3-DWD层事件表" class="headerlink" title="6.2.3 DWD层事件表"></a>6.2.3 DWD层事件表</h4><h5 id="6-2-3-1-商品点击表"><a href="#6-2-3-1-商品点击表" class="headerlink" title="6.2.3.1 商品点击表"></a>6.2.3.1 商品点击表</h5><pre><code class="sql">drop  table  if  exists  gmall.dwd_display_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_display_log(
+                                               `mid_id`  string,
+                                               `user_id`  string,
+                                               `version_code`  string,
+                                               `version_name`  string,
+                                               `lang`  string,
+                                               `source`  string,
+                                               `os`  string,
+                                               `area`  string,
+                                               `model`  string,
+                                               `brand`  string,
+                                               `sdk_version`  string,
+                                               `gmail`  string,
+                                               `height_width`  string,
+                                               `app_time`  string,
+                                               `network`  string,
+                                               `lng`  string,
+                                               `lat`  string,
+                                               `action`  string,
+                                               `goodsid`  string,
+                                               `place`  string,
+                                               `extend1`  string,
+                                               `category`  string,
+                                               `server_time`  string
+)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_display_log/&#39;;
+
+insert  overwrite  table  gmall.dwd_display_log
+PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.action&#39;)  action,
+    get_json_object(event_json,&#39;$.kv.goodsid&#39;)  goodsid,
+    get_json_object(event_json,&#39;$.kv.place&#39;)  place,
+    get_json_object(event_json,&#39;$.kv.extend1&#39;)  extend1,
+    get_json_object(event_json,&#39;$.kv.category&#39;)  category,
+    server_time
+from  gmall.dwd_base_event_log
+where  dt=&#39;2019-11-18&#39;  and  event_name=&#39;display&#39;;
+</code></pre>
+<h5 id="6-2-3-2-商品详情页表"><a href="#6-2-3-2-商品详情页表" class="headerlink" title="6.2.3.2 商品详情页表"></a>6.2.3.2 商品详情页表</h5><pre><code class="sql">drop  table  if  exists  gmall.dwd_newsdetail_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_newsdetail_log(
+                                                  `mid_id`  string,
+                                                  `user_id`  string,
+                                                  `version_code`  string,
+                                                  `version_name`  string,
+                                                  `lang`  string,
+                                                  `source`  string,
+                                                  `os`  string,
+                                                  `area`  string,
+                                                  `model`  string,
+                                                  `brand`  string,
+                                                  `sdk_version`  string,
+                                                  `gmail`  string,
+                                                  `height_width`  string,
+                                                  `app_time`  string,
+                                                  `network`  string,
+                                                  `lng`  string,
+                                                  `lat`  string,
+                                                  `entry`  string,
+                                                  `action`  string,
+                                                  `goodsid`  string,
+                                                  `showtype`  string,
+                                                  `news_staytime`  string,
+                                                  `loading_time`  string,
+                                                  `type1`  string,
+                                                  `category`  string,
+                                                  `server_time`  string)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_newsdetail_log/&#39;;
+
+insert  overwrite  table  gmall.dwd_newsdetail_log
+    PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.entry&#39;)  entry,
+    get_json_object(event_json,&#39;$.kv.action&#39;)  action,
+    get_json_object(event_json,&#39;$.kv.goodsid&#39;)  goodsid,
+    get_json_object(event_json,&#39;$.kv.showtype&#39;)  showtype,
+    get_json_object(event_json,&#39;$.kv.news_staytime&#39;)  news_staytime,
+    get_json_object(event_json,&#39;$.kv.loading_time&#39;)  loading_time,
+    get_json_object(event_json,&#39;$.kv.type1&#39;)  type1,
+    get_json_object(event_json,&#39;$.kv.category&#39;)  category,
+    server_time
+from  gmall.dwd_base_event_log
+where  dt=&#39;2019-11-18&#39;  and  event_name=&#39;newsdetail&#39;;
+</code></pre>
+<h5 id="6-2-3-3-广告表"><a href="#6-2-3-3-广告表" class="headerlink" title="6.2.3.3 广告表"></a>6.2.3.3 广告表</h5><pre><code class="sql">##### drop table if exists gmall.dwd_ad_log;
+CREATE EXTERNAL TABLE gmall.dwd_ad_log(
+                                          `mid_id` string,
+                                          `user_id` string,
+                                          `version_code` string,
+                                          `version_name` string,
+                                          `lang` string,
+                                          `source` string,
+                                          `os` string,
+                                          `area` string,
+                                          `model` string,
+                                          `brand` string,
+                                          `sdk_version` string,
+                                          `gmail` string,
+                                          `height_width` string,
+                                          `app_time` string,
+                                          `network` string,
+                                          `lng` string,
+                                          `lat` string,
+                                          `entry` string,
+                                          `action` string,
+                                          `content` string,
+                                          `detail` string,
+                                          `ad_source` string,
+                                          `behavior` string,
+                                          `newstype` string,
+                                          `show_style` string,
+                                          `server_time` string)
+    PARTITIONED BY (dt string)
+    location &#39;/warehouse/gmall/dwd/dwd_ad_log/&#39;;
+
+insert overwrite table gmall.dwd_ad_log
+    PARTITION (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.entry&#39;) entry,
+    get_json_object(event_json,&#39;$.kv.action&#39;) action,
+    get_json_object(event_json,&#39;$.kv.content&#39;) content,
+    get_json_object(event_json,&#39;$.kv.detail&#39;) detail,
+    get_json_object(event_json,&#39;$.kv.source&#39;) ad_source,
+    get_json_object(event_json,&#39;$.kv.behavior&#39;) behavior,
+    get_json_object(event_json,&#39;$.kv.newtypes&#39;) newstype,
+    get_json_object(event_json,&#39;$.kv.show_style&#39;) show_style,
+    server_time
+from gmall.dwd_base_event_log
+where dt=&#39;2019-11-18&#39; and event_name=&#39;ad&#39;;
+</code></pre>
+<h5 id="6-2-3-4-消息通知表"><a href="#6-2-3-4-消息通知表" class="headerlink" title="6.2.3.4 消息通知表"></a>6.2.3.4 消息通知表</h5><pre><code class="sql">drop table if exists gmall.dwd_notification_log;
+CREATE EXTERNAL TABLE gmall.dwd_notification_log(
+                                                    `mid_id` string,
+                                                    `user_id` string,
+                                                    `version_code` string,
+                                                    `version_name` string,
+                                                    `lang` string,
+                                                    `source` string,
+                                                    `os` string,
+                                                    `area` string,
+                                                    `model` string,
+                                                    `brand` string,
+                                                    `sdk_version` string,
+                                                    `gmail` string,
+                                                    `height_width` string,
+                                                    `app_time` string,
+                                                    `network` string,
+                                                    `lng` string,
+                                                    `lat` string,
+                                                    `action` string,
+                                                    `noti_type` string,
+                                                    `ap_time` string,
+                                                    `content` string,
+                                                    `server_time` string
+)
+    PARTITIONED BY (dt string)
+    location &#39;/warehouse/gmall/dwd/dwd_notification_log/&#39;;
+
+
+-- 2）导入数据
+insert overwrite table gmall.dwd_notification_log
+    PARTITION (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.action&#39;) action,
+    get_json_object(event_json,&#39;$.kv.noti_type&#39;) noti_type,
+    get_json_object(event_json,&#39;$.kv.ap_time&#39;) ap_time,
+    get_json_object(event_json,&#39;$.kv.content&#39;) content,
+    server_time
+from gmall.dwd_base_event_log
+where dt=&#39;2019-11-18&#39; and event_name=&#39;notification&#39;;
+
+
+select * from gmall.dwd_notification_log limit 2;
+</code></pre>
+<h5 id="6-2-3-5-商品列表页面"><a href="#6-2-3-5-商品列表页面" class="headerlink" title="6.2.3.5 商品列表页面"></a>6.2.3.5 商品列表页面</h5><pre><code class="sql">drop table if exists gmall.dwd_loading_log;
+CREATE EXTERNAL TABLE gmall.dwd_loading_log(
+                                               `mid_id` string,
+                                               `user_id` string,
+                                               `version_code` string,
+                                               `version_name` string,
+                                               `lang` string,
+                                               `source` string,
+                                               `os` string,
+                                               `area` string,
+                                               `model` string,
+                                               `brand` string,
+                                               `sdk_version` string,
+                                               `gmail` string,
+                                               `height_width` string,
+                                               `app_time` string,
+                                               `network` string,
+                                               `lng` string,
+                                               `lat` string,
+                                               `action` string,
+                                               `loading_time` string,
+                                               `loading_way` string,
+                                               `extend1` string,
+                                               `extend2` string,
+                                               `type` string,
+                                               `type1` string,
+                                               `server_time` string)
+    PARTITIONED BY (dt string)
+    location &#39;/warehouse/gmall/dwd/dwd_loading_log/&#39;;
+
+insert overwrite table gmall.dwd_loading_log
+    PARTITION (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.action&#39;) action,
+    get_json_object(event_json,&#39;$.kv.loading_time&#39;) loading_time,
+    get_json_object(event_json,&#39;$.kv.loading_way&#39;) loading_way,
+    get_json_object(event_json,&#39;$.kv.extend1&#39;) extend1,
+    get_json_object(event_json,&#39;$.kv.extend2&#39;) extend2,
+    get_json_object(event_json,&#39;$.kv.type&#39;) type,
+    get_json_object(event_json,&#39;$.kv.type1&#39;) type1,
+    server_time
+from gmall.dwd_base_event_log
+where dt=&#39;2019-11-18&#39; and event_name=&#39;loading&#39;;
+
+ select * from gmall.dwd_loading_log limit 2;
+</code></pre>
+<h5 id="6-2-3-6-用户后台活跃度"><a href="#6-2-3-6-用户后台活跃度" class="headerlink" title="6.2.3.6 用户后台活跃度"></a>6.2.3.6 用户后台活跃度</h5><pre><code class="sql">drop table if exists gmall.dwd_active_background_log;
+CREATE EXTERNAL TABLE gmall.dwd_active_background_log(
+                                                         `mid_id` string,
+                                                         `user_id` string,
+                                                         `version_code` string,
+                                                         `version_name` string,
+                                                         `lang` string,
+                                                         `source` string,
+                                                         `os` string,
+                                                         `area` string,
+                                                         `model` string,
+                                                         `brand` string,
+                                                         `sdk_version` string,
+                                                         `gmail` string,
+                                                         `height_width` string,
+                                                         `app_time` string,
+                                                         `network` string,
+                                                         `lng` string,
+                                                         `lat` string,
+                                                         `active_source` string,
+                                                         `server_time` string
+)
+    PARTITIONED BY (dt string)
+    location &#39;/warehouse/gmall/dwd/dwd_background_log/&#39;;
+
+insert overwrite table gmall.dwd_active_background_log
+    PARTITION (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.active_source&#39;) active_source,
+    server_time
+from gmall.dwd_base_event_log
+where dt=&#39;2019-11-18&#39; and event_name=&#39;active_background&#39;;
+
+select * from gmall.dwd_active_background_log limit 2;
+</code></pre>
+<h5 id="6-2-3-7-用户前台活跃表"><a href="#6-2-3-7-用户前台活跃表" class="headerlink" title="6.2.3.7 用户前台活跃表"></a>6.2.3.7 用户前台活跃表</h5><pre><code class="sql">drop table if exists gmall.dwd_active_foreground_log;
+CREATE EXTERNAL TABLE gmall.dwd_active_foreground_log(
+                                                         `mid_id` string,
+                                                         `user_id` string,
+                                                         `version_code` string,
+                                                         `version_name` string,
+                                                         `lang` string,
+                                                         `source` string,
+                                                         `os` string,
+                                                         `area` string,
+                                                         `model` string,
+                                                         `brand` string,
+                                                         `sdk_version` string,
+                                                         `gmail` string,
+                                                         `height_width` string,
+                                                         `app_time` string,
+                                                         `network` string,
+                                                         `lng` string,
+                                                         `lat` string,
+                                                         `push_id` string,
+                                                         `access` string,
+                                                         `server_time` string)
+    PARTITIONED BY (dt string)
+    location &#39;/warehouse/gmall/dwd/dwd_foreground_log/&#39;;
+
+insert overwrite table gmall.dwd_active_foreground_log
+    PARTITION (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.push_id&#39;) push_id,
+    get_json_object(event_json,&#39;$.kv.access&#39;) access,
+    server_time
+from gmall.dwd_base_event_log
+where dt=&#39;2019-11-18&#39; and event_name=&#39;active_foreground&#39;;
+
+select * from gmall.dwd_active_foreground_log limit 2;
+</code></pre>
+<h5 id="6-2-3-8-评论表"><a href="#6-2-3-8-评论表" class="headerlink" title="6.2.3.8 评论表"></a>6.2.3.8 评论表</h5><pre><code class="sql">drop  table  if  exists  gmall.dwd_comment_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_comment_log(
+                                               `mid_id`  string,
+                                               `user_id`  string,
+                                               `version_code`  string,
+                                               `version_name`  string,
+                                               `lang`  string,
+                                               `source`  string,
+                                               `os`  string,
+                                               `area`  string,
+                                               `model`  string,
+                                               `brand`  string,
+                                               `sdk_version`  string,
+                                               `gmail`  string,
+                                               `height_width`  string,
+                                               `app_time`  string,
+                                               `network`  string,
+                                               `lng`  string,
+                                               `lat`  string,
+                                               `comment_id`  int,
+                                               `userid`  int,
+                                               `p_comment_id`  int,
+                                               `content`  string,
+                                               `addtime`  string,
+                                               `other_id`  int,
+                                               `praise_count`  int,
+                                               `reply_count`  int,
+                                               `server_time`  string
+)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_comment_log/&#39;;
+
+
+insert  overwrite  table  gmall.dwd_comment_log
+    PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.comment_id&#39;)  comment_id,
+    get_json_object(event_json,&#39;$.kv.userid&#39;)  userid,
+    get_json_object(event_json,&#39;$.kv.p_comment_id&#39;)  p_comment_id,
+    get_json_object(event_json,&#39;$.kv.content&#39;)  content,
+    get_json_object(event_json,&#39;$.kv.addtime&#39;)  addtime,
+    get_json_object(event_json,&#39;$.kv.other_id&#39;)  other_id,
+    get_json_object(event_json,&#39;$.kv.praise_count&#39;)  praise_count,
+    get_json_object(event_json,&#39;$.kv.reply_count&#39;)  reply_count,
+    server_time
+from  gmall.dwd_base_event_log
+where  dt=&#39;2019-11-18&#39;  and  event_name=&#39;comment&#39;;
+
+select  *  from  gmall.dwd_comment_log  limit  2;    
+</code></pre>
+<h5 id="6-2-3-9-收藏表"><a href="#6-2-3-9-收藏表" class="headerlink" title="6.2.3.9 收藏表"></a>6.2.3.9 收藏表</h5><pre><code class="sql">drop  table  if  exists  gmall.dwd_favorites_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_favorites_log(
+                                                 `mid_id`  string,
+                                                 `user_id`  string,
+                                                 `version_code`  string,
+                                                 `version_name`  string,
+                                                 `lang`  string,
+                                                 `source`  string,
+                                                 `os`  string,
+                                                 `area`  string,
+                                                 `model`  string,
+                                                 `brand`  string,
+                                                 `sdk_version`  string,
+                                                 `gmail`  string,
+                                                 `height_width`  string,
+                                                 `app_time`  string,
+                                                 `network`  string,
+                                                 `lng`  string,
+                                                 `lat`  string,
+                                                 `id`  int,
+                                                 `course_id`  int,
+                                                 `userid`  int,
+                                                 `add_time`  string,
+                                                 `server_time`  string
+)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_favorites_log/&#39;;
+
+insert  overwrite  table  gmall.dwd_favorites_log
+    PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.id&#39;)  id,
+    get_json_object(event_json,&#39;$.kv.course_id&#39;)  course_id,
+    get_json_object(event_json,&#39;$.kv.userid&#39;)  userid,
+    get_json_object(event_json,&#39;$.kv.add_time&#39;)  add_time,
+    server_time
+from  gmall.dwd_base_event_log
+where  dt=&#39;2019-11-18&#39;  and  event_name=&#39;favorites&#39;;
+
+select  *  from  gmall.dwd_favorites_log  limit  2;
+</code></pre>
+<h5 id="6-2-3-10-点赞表"><a href="#6-2-3-10-点赞表" class="headerlink" title="6.2.3.10 点赞表"></a>6.2.3.10 点赞表</h5><pre><code class="sql">drop  table  if  exists  gmall.dwd_praise_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_praise_log(
+                                              `mid_id`  string,
+                                              `user_id`  string,
+                                              `version_code`  string,
+                                              `version_name`  string,
+                                              `lang`  string,
+                                              `source`  string,
+                                              `os`  string,
+                                              `area`  string,
+                                              `model`  string,
+                                              `brand`  string,
+                                              `sdk_version`  string,
+                                              `gmail`  string,
+                                              `height_width`  string,
+                                              `app_time`  string,
+                                              `network`  string,
+                                              `lng`  string,
+                                              `lat`  string,
+                                              `id`  string,
+                                              `userid`  string,
+                                              `target_id`  string,
+                                              `type`  string,
+                                              `add_time`  string,
+                                              `server_time`  string
+)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_praise_log/&#39;;
+
+insert  overwrite  table  gmall.dwd_praise_log
+    PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.id&#39;)  id,
+    get_json_object(event_json,&#39;$.kv.userid&#39;)  userid,
+    get_json_object(event_json,&#39;$.kv.target_id&#39;)  target_id,
+    get_json_object(event_json,&#39;$.kv.type&#39;)  type,
+    get_json_object(event_json,&#39;$.kv.add_time&#39;)  add_time,
+    server_time
+from  gmall.dwd_base_event_log
+where  dt=&#39;2019-11-18&#39;  and  event_name=&#39;praise&#39;;
+
+select  *  from  gmall.dwd_praise_log  limit  2;
+</code></pre>
+<h5 id="6-2-3-11-错误日志表"><a href="#6-2-3-11-错误日志表" class="headerlink" title="6.2.3.11 错误日志表"></a>6.2.3.11 错误日志表</h5><pre><code class="sql">drop  table  if  exists  gmall.dwd_error_log;
+CREATE  EXTERNAL  TABLE  gmall.dwd_error_log(
+                                             `mid_id`  string,
+                                             `user_id`  string,
+                                             `version_code`  string,
+                                             `version_name`  string,
+                                             `lang`  string,
+                                             `source`  string,
+                                             `os`  string,
+                                             `area`  string,
+                                             `model`  string,
+                                             `brand`  string,
+                                             `sdk_version`  string,
+                                             `gmail`  string,
+                                             `height_width`  string,
+                                             `app_time`  string,
+                                             `network`  string,
+                                             `lng`  string,
+                                             `lat`  string,
+                                             `errorBrief`  string,
+                                             `errorDetail`  string,
+                                             `server_time`  string)
+    PARTITIONED  BY  (dt  string)
+    location  &#39;/warehouse/gmall/dwd/dwd_error_log/&#39;;
+
+
+insert  overwrite  table  gmall.dwd_error_log
+    PARTITION  (dt=&#39;2019-11-18&#39;)
+select
+    mid_id,
+    user_id,
+    version_code,
+    version_name,
+    lang,
+    source,
+    os,
+    area,
+    model,
+    brand,
+    sdk_version,
+    gmail,
+    height_width,
+    app_time,
+    network,
+    lng,
+    lat,
+    get_json_object(event_json,&#39;$.kv.errorBrief&#39;)  errorBrief,
+    get_json_object(event_json,&#39;$.kv.errorDetail&#39;)  errorDetail,
+    server_time
+from  gmall.dwd_base_event_log
+where  dt=&#39;2019-11-18&#39;  and  event_name=&#39;error&#39;;
+
+ select  *  from  gmall.dwd_error_log  limit  2;
+</code></pre>
+<h2 id="7-业务说明"><a href="#7-业务说明" class="headerlink" title="7 业务说明"></a>7 业务说明</h2><h3 id="7-1-用户"><a href="#7-1-用户" class="headerlink" title="7.1. 用户"></a>7.1. 用户</h3><p>​        用户以设备为判断标准，在移动统计中，每个独立设备认为是一个独立用户。Android系统根据IMEI号，IOS系统根据OpenUDID来标识一个独立用户，每部手机一个用户。</p>
+<h3 id="7-2-新增用户"><a href="#7-2-新增用户" class="headerlink" title="7.2. 新增用户"></a>7.2. 新增用户</h3><p>​        首次联网使用应用的用户。如果一个用户首次打开某APP，那这个用户定义为新增用户；卸载再安装的设备，不会被算作一次新增。新增用户包括日新增用户、周新增用户、月新增用户。</p>
+<h3 id="7-3-活跃用户"><a href="#7-3-活跃用户" class="headerlink" title="7.3. 活跃用户"></a>7.3. 活跃用户</h3><p>​        打开应用的用户即为活跃用户，不考虑用户的使用情况。每天一台设备打开多次会被计为一个活跃用户。</p>
+<h3 id="7-4-周（月）活跃用户"><a href="#7-4-周（月）活跃用户" class="headerlink" title="7.4. 周（月）活跃用户"></a>7.4. 周（月）活跃用户</h3><p>​        某个自然周（月）内启动过应用的用户，该周（月）内的多次启动只记一个活跃用户。</p>
+<h3 id="7-5-月活跃率"><a href="#7-5-月活跃率" class="headerlink" title="7.5. 月活跃率"></a>7.5. 月活跃率</h3><p>​        月活跃用户与截止到该月累计的用户总和之间的比例。</p>
+<h3 id="7-6-沉默用户"><a href="#7-6-沉默用户" class="headerlink" title="7.6. 沉默用户"></a>7.6. 沉默用户</h3><p>​        用户仅在安装当天（次日）启动一次，后续时间无再启动行为。该指标可以反映新增用户质量和用户与APP的匹配程度。</p>
+<h3 id="7-7-版本分布"><a href="#7-7-版本分布" class="headerlink" title="7.7. 版本分布"></a>7.7. 版本分布</h3><p>​        不同版本的周内各天新增用户数，活跃用户数和启动次数。利于判断APP各个版本之间的优劣和用户行为习惯。</p>
+<h3 id="7-8-本周回流用户"><a href="#7-8-本周回流用户" class="headerlink" title="7.8. 本周回流用户"></a>7.8. 本周回流用户</h3><p>​        上周未启动过应用，本周启动了应用的用户。</p>
+<h3 id="7-9-连续n周活跃用户"><a href="#7-9-连续n周活跃用户" class="headerlink" title="7.9.  连续n周活跃用户"></a>7.9.  连续n周活跃用户</h3><p>​        连续n周，每周至少启动一次。</p>
+<h3 id="7-10-忠诚用户"><a href="#7-10-忠诚用户" class="headerlink" title="7.10. 忠诚用户"></a>7.10. 忠诚用户</h3><p>​        连续活跃5周以上的用户</p>
+<h3 id="7-11-连续活跃用户"><a href="#7-11-连续活跃用户" class="headerlink" title="7.11. 连续活跃用户"></a>7.11. 连续活跃用户</h3><p>​        连续2周及以上活跃的用户</p>
+<h3 id="7-12-近期流失用户"><a href="#7-12-近期流失用户" class="headerlink" title="7.12. 近期流失用户"></a>7.12. 近期流失用户</h3><p>​        连续n(2&lt;= n &lt;= 4)周没有启动应用的用户。（第n+1周没有启动过）</p>
+<h3 id="7-13-留存用户"><a href="#7-13-留存用户" class="headerlink" title="7.13.  留存用户"></a>7.13.  留存用户</h3><p>​        某段时间内的新增用户，经过一段时间后，仍然使用应用的被认作是留存用户；这部分用户占当时新增用户的比例即是留存率。</p>
+<p>​        例如: 5月份新增用户200，这200人在6月份启动过应用的有100人，7月份启动过应用的有80人，8月份启动过应用的有50人；则5月份新增用户一个月后的留存率是50%，二个月后的留存率是40%，三个月后的留存率是25%。</p>
+<h3 id="7-14-用户新鲜度"><a href="#7-14-用户新鲜度" class="headerlink" title="7.14. 用户新鲜度"></a>7.14. 用户新鲜度</h3><p>​        每天启动应用的新老用户比例，即新增用户数占活跃用户数的比例。</p>
+<h3 id="7-15-单次使用时长"><a href="#7-15-单次使用时长" class="headerlink" title="7.15.  单次使用时长"></a>7.15.  单次使用时长</h3><p>​        每次启动使用的时间长度。</p>
+<h3 id="7-16-日使用时长"><a href="#7-16-日使用时长" class="headerlink" title="7.16. 日使用时长"></a>7.16. 日使用时长</h3><p>​        累计一天内的使用时间长度。</p>
+<h3 id="7-17-启动次数计算标准"><a href="#7-17-启动次数计算标准" class="headerlink" title="7.17. 启动次数计算标准"></a>7.17. 启动次数计算标准</h3><p>​        IOS平台应用退到后台就算一次独立的启动；平台我们规定，两次启动之间的间隔小于秒，被计算一次启动。用户在使用过程中，若因收发短信或接电话等退出应用秒又再次返回应用中，那这两次行为应该是延续而非独立的，所以可以被算作一次使用行为，即一次启动。业内大多使用秒这个标准，但用户还是可以自定义此时间间隔。</p>
+<h2 id="8-用户需求"><a href="#8-用户需求" class="headerlink" title="8. 用户需求"></a>8. 用户需求</h2><h3 id="8-1-用户活跃主题"><a href="#8-1-用户活跃主题" class="headerlink" title="8.1 用户活跃主题"></a>8.1 用户活跃主题</h3><h4 id="8-1-1-DWS层"><a href="#8-1-1-DWS层" class="headerlink" title="8.1.1 DWS层"></a>8.1.1 DWS层</h4><h5 id="8-1-1-1-每日活跃设备明细"><a href="#8-1-1-1-每日活跃设备明细" class="headerlink" title="8.1.1.1 每日活跃设备明细"></a>8.1.1.1 每日活跃设备明细</h5><pre><code class="sql">-- 1. 建表
+drop table if exists gmall.dws_uv_detail_day;
+create external table gmall.dws_uv_detail_day
+(
+    `mid_id` string COMMENT &#39;设备唯一标识&#39;,
+    `user_id` string COMMENT &#39;用户标识&#39;,
+    `version_code` string COMMENT &#39;程序版本号&#39;,
+    `version_name` string COMMENT &#39;程序版本名&#39;,
+    `lang` string COMMENT &#39;系统语言&#39;,
+    `source` string COMMENT &#39;渠道号&#39;,
+    `os` string COMMENT &#39;安卓系统版本&#39;,
+    `area` string COMMENT &#39;区域&#39;,
+    `model` string COMMENT &#39;手机型号&#39;,
+    `brand` string COMMENT &#39;手机品牌&#39;,
+    `sdk_version` string COMMENT &#39;sdkVersion&#39;,
+    `gmail` string COMMENT &#39;gmail&#39;,
+    `height_width` string COMMENT &#39;屏幕宽高&#39;,
+    `app_time` string COMMENT &#39;客户端日志产生时的时间&#39;,
+    `network` string COMMENT &#39;网络模式&#39;,
+    `lng` string COMMENT &#39;经度&#39;,
+    `lat` string COMMENT &#39;纬度&#39;
+)
+    partitioned by(dt string)
+    stored as parquet
+    location &#39;/warehouse/gmall/dws/dws_uv_detail_day&#39;;
+-- 2. 插入数据
+insert overwrite table gmall.dws_uv_detail_day
+    partition(dt=&#39;2019-02-10&#39;)
+select
+    mid_id,
+    concat_ws(&#39;|&#39;, collect_set(user_id)) user_id,
+    concat_ws(&#39;|&#39;, collect_set(version_code)) version_code,
+    concat_ws(&#39;|&#39;, collect_set(version_name)) version_name,
+    concat_ws(&#39;|&#39;, collect_set(lang))lang,
+    concat_ws(&#39;|&#39;, collect_set(source)) source,
+    concat_ws(&#39;|&#39;, collect_set(os)) os,
+    concat_ws(&#39;|&#39;, collect_set(area)) area,
+    concat_ws(&#39;|&#39;, collect_set(model)) model,
+    concat_ws(&#39;|&#39;, collect_set(brand)) brand,
+    concat_ws(&#39;|&#39;, collect_set(sdk_version)) sdk_version,
+    concat_ws(&#39;|&#39;, collect_set(gmail)) gmail,
+    concat_ws(&#39;|&#39;, collect_set(height_width)) height_width,
+    concat_ws(&#39;|&#39;, collect_set(app_time)) app_time,
+    concat_ws(&#39;|&#39;, collect_set(network)) network,
+    concat_ws(&#39;|&#39;, collect_set(lng)) lng,
+    concat_ws(&#39;|&#39;, collect_set(lat)) lat
+from gmall.dwd_start_log
+where dt=&#39;2019-02-10&#39;
+group by mid_id;
+
+select * from gmall.dws_uv_detail_day limit 1;
+</code></pre>
+<h5 id="8-1-1-2-周活跃设备"><a href="#8-1-1-2-周活跃设备" class="headerlink" title="8.1.1.2 周活跃设备"></a>8.1.1.2 周活跃设备</h5><pre><code class="sql">drop table if exists gmall.dws_uv_detail_wk;
+create external table gmall.dws_uv_detail_wk(
+              `mid_id` string COMMENT &#39;设备唯一标识&#39;,
+              `user_id` string COMMENT &#39;用户标识&#39;,
+              `version_code` string COMMENT &#39;程序版本号&#39;,
+              `version_name` string COMMENT &#39;程序版本名&#39;,
+              `lang` string COMMENT &#39;系统语言&#39;,
+              `source` string COMMENT &#39;渠道号&#39;,
+              `os` string COMMENT &#39;安卓系统版本&#39;,
+              `area` string COMMENT &#39;区域&#39;,
+              `model` string COMMENT &#39;手机型号&#39;,
+              `brand` string COMMENT &#39;手机品牌&#39;,
+              `sdk_version` string COMMENT &#39;sdkVersion&#39;,
+              `gmail` string COMMENT &#39;gmail&#39;,
+              `height_width` string COMMENT &#39;屏幕宽高&#39;,
+              `app_time` string COMMENT &#39;客户端日志产生时的时间&#39;,
+              `network` string COMMENT &#39;网络模式&#39;,
+              `lng` string COMMENT &#39;经度&#39;,
+              `lat` string COMMENT &#39;纬度&#39;,
+              `monday_date` string COMMENT &#39;周一日期&#39;,
+              `sunday_date` string COMMENT  &#39;周日日期&#39;
+) COMMENT &#39;活跃用户按周明细&#39;
+    PARTITIONED BY (`wk_dt` string)
+    stored as parquet
+    location &#39;/warehouse/gmall/dws/dws_uv_detail_wk/&#39;;
+
+insert overwrite table gmall.dws_uv_detail_wk partition(wk_dt)
+select
+    mid_id,
+    concat_ws(&#39;|&#39;, collect_set(user_id)) user_id,
+    concat_ws(&#39;|&#39;, collect_set(version_code)) version_code,
+    concat_ws(&#39;|&#39;, collect_set(version_name)) version_name,
+    concat_ws(&#39;|&#39;, collect_set(lang)) lang,
+    concat_ws(&#39;|&#39;, collect_set(source)) source,
+    concat_ws(&#39;|&#39;, collect_set(os)) os,
+    concat_ws(&#39;|&#39;, collect_set(area)) area,
+    concat_ws(&#39;|&#39;, collect_set(model)) model,
+    concat_ws(&#39;|&#39;, collect_set(brand)) brand,
+    concat_ws(&#39;|&#39;, collect_set(sdk_version)) sdk_version,
+    concat_ws(&#39;|&#39;, collect_set(gmail)) gmail,
+    concat_ws(&#39;|&#39;, collect_set(height_width)) height_width,
+    concat_ws(&#39;|&#39;, collect_set(app_time)) app_time,
+    concat_ws(&#39;|&#39;, collect_set(network)) network,
+    concat_ws(&#39;|&#39;, collect_set(lng)) lng,
+    concat_ws(&#39;|&#39;, collect_set(lat)) lat,
+    date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-7),
+    date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-1),
+    concat(date_add( next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-7), &#39;_&#39; , date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-1)
+        )
+from gmall.dws_uv_detail_day
+where dt&gt;=date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-7) and dt&lt;=date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-1)
+group by mid_id;
+
+select * from gmall.dws_uv_detail_wk limit 1;
+</code></pre>
+<h5 id="8-1-1-3-月活跃设备"><a href="#8-1-1-3-月活跃设备" class="headerlink" title="8.1.1.3 月活跃设备"></a>8.1.1.3 月活跃设备</h5><pre><code class="sql">drop table if exists gmall.dws_uv_detail_mn;
+
+create external table gmall.dws_uv_detail_mn(
+                `mid_id` string COMMENT &#39;设备唯一标识&#39;,
+                `user_id` string COMMENT &#39;用户标识&#39;,
+                `version_code` string COMMENT &#39;程序版本号&#39;,
+                `version_name` string COMMENT &#39;程序版本名&#39;,
+                `lang` string COMMENT &#39;系统语言&#39;,
+                `source` string COMMENT &#39;渠道号&#39;,
+                `os` string COMMENT &#39;安卓系统版本&#39;,
+                `area` string COMMENT &#39;区域&#39;,
+                `model` string COMMENT &#39;手机型号&#39;,
+                `brand` string COMMENT &#39;手机品牌&#39;,
+                `sdk_version` string COMMENT &#39;sdkVersion&#39;,
+                `gmail` string COMMENT &#39;gmail&#39;,
+                `height_width` string COMMENT &#39;屏幕宽高&#39;,
+                `app_time` string COMMENT &#39;客户端日志产生时的时间&#39;,
+                `network` string COMMENT &#39;网络模式&#39;,
+                `lng` string COMMENT &#39;经度&#39;,
+                `lat` string COMMENT &#39;纬度&#39;
+) COMMENT &#39;活跃用户按月明细&#39;
+    PARTITIONED BY (`mn` string)
+    stored as parquet
+    location &#39;/warehouse/gmall/dws/dws_uv_detail_mn/&#39;;
+
+insert overwrite table gmall.dws_uv_detail_mn partition(mn)
+select
+    mid_id,
+    concat_ws(&#39;|&#39;, collect_set(user_id)) user_id,
+    concat_ws(&#39;|&#39;, collect_set(version_code)) version_code,
+    concat_ws(&#39;|&#39;, collect_set(version_name)) version_name,
+    concat_ws(&#39;|&#39;, collect_set(lang)) lang,
+    concat_ws(&#39;|&#39;, collect_set(source)) source,
+    concat_ws(&#39;|&#39;, collect_set(os)) os,
+    concat_ws(&#39;|&#39;, collect_set(area)) area,
+    concat_ws(&#39;|&#39;, collect_set(model)) model,
+    concat_ws(&#39;|&#39;, collect_set(brand)) brand,
+    concat_ws(&#39;|&#39;, collect_set(sdk_version)) sdk_version,
+    concat_ws(&#39;|&#39;, collect_set(gmail)) gmail,
+    concat_ws(&#39;|&#39;, collect_set(height_width)) height_width,
+    concat_ws(&#39;|&#39;, collect_set(app_time)) app_time,
+    concat_ws(&#39;|&#39;, collect_set(network)) network,
+    concat_ws(&#39;|&#39;, collect_set(lng)) lng,
+    concat_ws(&#39;|&#39;, collect_set(lat)) lat,
+    date_format(&#39;2019-02-10&#39;,&#39;yyyy-MM&#39;)
+from gmall.dws_uv_detail_day
+where date_format(dt,&#39;yyyy-MM&#39;) = date_format(&#39;2019-02-10&#39;,&#39;yyyy-MM&#39;)
+group by mid_id;
+
+select * from gmall.dws_uv_detail_mn limit 1;
+</code></pre>
+<h5 id="8-1-1-4-加载数据脚本"><a href="#8-1-1-4-加载数据脚本" class="headerlink" title="8.1.1.4 加载数据脚本"></a>8.1.1.4 加载数据脚本</h5><pre><code class="sh">#!/bin/bash
+
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else
+    # shellcheck disable=SC2006
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+sql=&quot;
+    # 设置动态分区规则，非严谨
+  set hive.exec.dynamic.partition.mode=nonstrict;
+
+  insert overwrite table &quot;$APP&quot;.dws_uv_detail_day partition(dt=&#39;$do_date&#39;)
+  select
+    mid_id,
+    concat_ws(&#39;|&#39;, collect_set(user_id)) user_id,
+    concat_ws(&#39;|&#39;, collect_set(version_code)) version_code,
+    concat_ws(&#39;|&#39;, collect_set(version_name)) version_name,
+    concat_ws(&#39;|&#39;, collect_set(lang)) lang,
+    concat_ws(&#39;|&#39;, collect_set(source)) source,
+    concat_ws(&#39;|&#39;, collect_set(os)) os,
+    concat_ws(&#39;|&#39;, collect_set(area)) area,
+    concat_ws(&#39;|&#39;, collect_set(model)) model,
+    concat_ws(&#39;|&#39;, collect_set(brand)) brand,
+    concat_ws(&#39;|&#39;, collect_set(sdk_version)) sdk_version,
+    concat_ws(&#39;|&#39;, collect_set(gmail)) gmail,
+    concat_ws(&#39;|&#39;, collect_set(height_width)) height_width,
+    concat_ws(&#39;|&#39;, collect_set(app_time)) app_time,
+    concat_ws(&#39;|&#39;, collect_set(network)) network,
+    concat_ws(&#39;|&#39;, collect_set(lng)) lng,
+    concat_ws(&#39;|&#39;, collect_set(lat)) lat
+  from &quot;$APP&quot;.dwd_start_log
+  where dt=&#39;$do_date&#39;
+  group by mid_id;
+
+  insert overwrite table &quot;$APP&quot;.dws_uv_detail_wk partition(wk_dt)
+  select
+    mid_id,
+    concat_ws(&#39;|&#39;, collect_set(user_id)) user_id,
+    concat_ws(&#39;|&#39;, collect_set(version_code)) version_code,
+    concat_ws(&#39;|&#39;, collect_set(version_name)) version_name,
+    concat_ws(&#39;|&#39;, collect_set(lang)) lang,
+    concat_ws(&#39;|&#39;, collect_set(source)) source,
+    concat_ws(&#39;|&#39;, collect_set(os)) os,
+    concat_ws(&#39;|&#39;, collect_set(area)) area,
+    concat_ws(&#39;|&#39;, collect_set(model)) model,
+    concat_ws(&#39;|&#39;, collect_set(brand)) brand,
+    concat_ws(&#39;|&#39;, collect_set(sdk_version)) sdk_version,
+    concat_ws(&#39;|&#39;, collect_set(gmail)) gmail,
+    concat_ws(&#39;|&#39;, collect_set(height_width)) height_width,
+    concat_ws(&#39;|&#39;, collect_set(app_time)) app_time,
+    concat_ws(&#39;|&#39;, collect_set(network)) network,
+    concat_ws(&#39;|&#39;, collect_set(lng)) lng,
+    concat_ws(&#39;|&#39;, collect_set(lat)) lat,
+    date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7),
+    date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1),
+    concat(date_add( next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7), &#39;_&#39; , date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1)
+  )
+  from &quot;$APP&quot;.dws_uv_detail_day
+  where dt&gt;=date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7) and dt&lt;=date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1)
+  group by mid_id;
+
+  insert overwrite table &quot;$APP&quot;.dws_uv_detail_mn partition(mn)
+  select
+    mid_id,
+    concat_ws(&#39;|&#39;, collect_set(user_id)) user_id,
+    concat_ws(&#39;|&#39;, collect_set(version_code)) version_code,
+    concat_ws(&#39;|&#39;, collect_set(version_name)) version_name,
+    concat_ws(&#39;|&#39;, collect_set(lang))lang,
+    concat_ws(&#39;|&#39;, collect_set(source)) source,
+    concat_ws(&#39;|&#39;, collect_set(os)) os,
+    concat_ws(&#39;|&#39;, collect_set(area)) area,
+    concat_ws(&#39;|&#39;, collect_set(model)) model,
+    concat_ws(&#39;|&#39;, collect_set(brand)) brand,
+    concat_ws(&#39;|&#39;, collect_set(sdk_version)) sdk_version,
+    concat_ws(&#39;|&#39;, collect_set(gmail)) gmail,
+    concat_ws(&#39;|&#39;, collect_set(height_width)) height_width,
+    concat_ws(&#39;|&#39;, collect_set(app_time)) app_time,
+    concat_ws(&#39;|&#39;, collect_set(network)) network,
+    concat_ws(&#39;|&#39;, collect_set(lng)) lng,
+    concat_ws(&#39;|&#39;, collect_set(lat)) lat,
+    date_format(&#39;$do_date&#39;,&#39;yyyy-MM&#39;)
+  from &quot;$APP&quot;.dws_uv_detail_day
+  where date_format(dt,&#39;yyyy-MM&#39;) = date_format(&#39;$do_date&#39;,&#39;yyyy-MM&#39;)
+  group by mid_id;
+&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<p>####8.1.2 ADS层</p>
+<h5 id="8-1-2-1-当日、当周、当月活跃设备数"><a href="#8-1-2-1-当日、当周、当月活跃设备数" class="headerlink" title="8.1.2.1 当日、当周、当月活跃设备数"></a>8.1.2.1 当日、当周、当月活跃设备数</h5><pre><code class="sql">-- 1. 建表
+drop table if exists gmall.ads_uv_count;
+create external table gmall.ads_uv_count( 
+`dt` string COMMENT &#39;统计日期&#39;,
+`day_count` bigint COMMENT &#39;当日用户数量&#39;,
+`wk_count`  bigint COMMENT &#39;当周用户数量&#39;,
+`mn_count`  bigint COMMENT &#39;当月用户数量&#39;,
+`is_weekend` string COMMENT &#39;Y,N是否是周末,用于得到本周最终结果&#39;,
+`is_monthend` string COMMENT &#39;Y,N是否是月末,用于得到本月最终结果&#39; 
+) COMMENT &#39;活跃设备数&#39; 
+row format delimited fields terminated by &#39;\t&#39; 
+location &#39;/warehouse/gmall/ads/ads_uv_count/&#39;;
+
+-- 2. 导入
+insert into table gmall.ads_uv_count 
+select  
+  &#39;2019-02-10&#39; dt,
+   daycount.ct,
+   wkcount.ct,
+   mncount.ct,
+   if(date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-1)=&#39;2019-02-10&#39;,&#39;Y&#39;,&#39;N&#39;) ,
+   if(last_day(&#39;2019-02-10&#39;)=&#39;2019-02-10&#39;,&#39;Y&#39;,&#39;N&#39;) 
+from 
+(
+   select  
+      &#39;2019-02-10&#39; dt,
+       count(*) ct
+   from gmall.dws_uv_detail_day
+   where dt=&#39;2019-02-10&#39;  
+)daycount join 
+( 
+   select  
+     &#39;2019-02-10&#39; dt,
+     count (*) ct
+   from gmall.dws_uv_detail_wk
+   where wk_dt=concat(date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-7),&#39;_&#39; ,date_add(next_day(&#39;2019-02-10&#39;,&#39;MO&#39;),-1) )
+) wkcount on daycount.dt=wkcount.dt
+join 
+( 
+   select  
+     &#39;2019-02-10&#39; dt,
+     count (*) ct
+   from gmall.dws_uv_detail_mn
+   where mn=date_format(&#39;2019-02-10&#39;,&#39;yyyy-MM&#39;)  
+)mncount on daycount.dt=mncount.dt;
+</code></pre>
+<h5 id="8-1-2-2-当周、日、月活跃脚本"><a href="#8-1-2-2-当周、日、月活跃脚本" class="headerlink" title="8.1.2.2 当周、日、月活跃脚本"></a>8.1.2.2 当周、日、月活跃脚本</h5><pre><code class="sh">#!/bin/bash
+
+#ads 当日、当月、当周活跃设备书
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+    if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else
+    # shellcheck disable=SC2006
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+sql=&quot;
+  set hive.exec.dynamic.partition.mode=nonstrict;
+
+insert into table &quot;$APP&quot;.ads_uv_count
+select
+  &#39;$do_date&#39; dt,
+   daycount.ct,
+   wkcount.ct,
+   mncount.ct,
+   if(date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1)=&#39;$do_date&#39;,&#39;Y&#39;,&#39;N&#39;) ,
+   if(last_day(&#39;$do_date&#39;)=&#39;$do_date&#39;,&#39;Y&#39;,&#39;N&#39;)
+from
+(
+   select
+      &#39;$do_date&#39; dt,
+       count(*) ct
+   from &quot;$APP&quot;.dws_uv_detail_day
+   where dt=&#39;$do_date&#39;
+)daycount   join
+(
+   select
+     &#39;$do_date&#39; dt,
+     count (*) ct
+   from &quot;$APP&quot;.dws_uv_detail_wk
+   where wk_dt=concat(date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7),&#39;_&#39; ,date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1) )
+)  wkcount  on daycount.dt=wkcount.dt
+join
+(
+   select
+     &#39;$do_date&#39; dt,
+     count (*) ct
+   from &quot;$APP&quot;.dws_uv_detail_mn
+   where mn=date_format(&#39;$do_date&#39;,&#39;yyyy-MM&#39;)
+)mncount on daycount.dt=mncount.dt;
+&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h3 id="8-2-用户新增主题"><a href="#8-2-用户新增主题" class="headerlink" title="8.2 用户新增主题"></a>8.2 用户新增主题</h3><ul>
+<li>首次联网使用应用的用户。如果一个用户首次打开某APP，那这个用户定义为新增用户；卸载再安装的设备，不会被算作一次新增。新增用户包括日新增用户、周新增用户、月新增用户。</li>
+</ul>
+<h4 id="8-2-1-DWS层-每日新增设备明细"><a href="#8-2-1-DWS层-每日新增设备明细" class="headerlink" title="8.2.1 DWS层 每日新增设备明细"></a>8.2.1 DWS层 每日新增设备明细</h4><p>​        <img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191202131344855.png" alt="image-20191202131344855"></p>
+<pre><code class="sql">-- 1.日新增设备明细
+drop table if exists gmall.dws_new_mid_day;
+create external table gmall.dws_new_mid_day
+(
+    `mid_id` string COMMENT &#39;设备唯一标识&#39;,
+    `user_id` string COMMENT &#39;用户标识&#39;, 
+    `version_code` string COMMENT &#39;程序版本号&#39;, 
+    `version_name` string COMMENT &#39;程序版本名&#39;, 
+    `lang` string COMMENT &#39;系统语言&#39;, 
+    `source` string COMMENT &#39;渠道号&#39;, 
+    `os` string COMMENT &#39;安卓系统版本&#39;, 
+    `area` string COMMENT &#39;区域&#39;, 
+    `model` string COMMENT &#39;手机型号&#39;, 
+    `brand` string COMMENT &#39;手机品牌&#39;, 
+    `sdk_version` string COMMENT &#39;sdkVersion&#39;, 
+    `gmail` string COMMENT &#39;gmail&#39;, 
+    `height_width` string COMMENT &#39;屏幕宽高&#39;,
+    `app_time` string COMMENT &#39;客户端日志产生时的时间&#39;,
+    `network` string COMMENT &#39;网络模式&#39;,
+    `lng` string COMMENT &#39;经度&#39;,
+    `lat` string COMMENT &#39;纬度&#39;,
+    `create_date`  string  comment &#39;创建时间&#39; 
+)  COMMENT &#39;每日新增设备信息&#39;
+stored as parquet
+location &#39;/warehouse/gmall/dws/dws_new_mid_day/&#39;;
+
+
+-- 2. 导入数据
+insert into table gmall.dws_new_mid_day
+select  
+    ud.mid_id,
+    ud.user_id , 
+    ud.version_code , 
+    ud.version_name , 
+    ud.lang , 
+    ud.source, 
+    ud.os, 
+    ud.area, 
+    ud.model, 
+    ud.brand, 
+    ud.sdk_version, 
+    ud.gmail, 
+    ud.height_width,
+    ud.app_time,
+    ud.network,
+    ud.lng,
+    ud.lat,
+    &#39;2019-02-10&#39;
+from gmall.dws_uv_detail_day ud left join gmall.dws_new_mid_day nm on ud.mid_id=nm.mid_id 
+where ud.dt=&#39;2019-02-10&#39; and nm.mid_id is null;
+</code></pre>
+<h4 id="8-2-2-ADS层-每日新增设备表"><a href="#8-2-2-ADS层-每日新增设备表" class="headerlink" title="8.2.2  ADS层 每日新增设备表"></a>8.2.2  ADS层 每日新增设备表</h4><pre><code class="sql">drop table if exists gmall.ads_new_mid_count;
+create external table gmall.ads_new_mid_count
+(
+`create_date` string comment &#39;创建时间&#39; ,
+`new_mid_count` BIGINT comment &#39;新增设备数量&#39; 
+)  COMMENT &#39;每日新增设备信息数量&#39; 
+row format delimited fields terminated by &#39;\t&#39; 
+location &#39;/warehouse/gmall/ads/ads_new_mid_count/&#39;;
+
+insert into table gmall.ads_new_mid_count 
+select
+create_date,
+count(*)
+from gmall.dws_new_mid_day
+where create_date=&#39;2019-02-10&#39;
+group by create_date;
+</code></pre>
+<h4 id="8-2-3-用户新增主题脚本"><a href="#8-2-3-用户新增主题脚本" class="headerlink" title="8.2.3 用户新增主题脚本"></a>8.2.3 用户新增主题脚本</h4><pre><code class="sh">#!/bin/bash
+
+# 新增设备数
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+    if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else
+    # shellcheck disable=SC2006
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+sql=&quot;
+insert into table gmall.dws_new_mid_day
+select
+    ud.mid_id,
+    ud.user_id ,
+    ud.version_code ,
+    ud.version_name ,
+    ud.lang ,
+    ud.source,
+    ud.os,
+    ud.area,
+    ud.model,
+    ud.brand,
+    ud.sdk_version,
+    ud.gmail,
+    ud.height_width,
+    ud.app_time,
+    ud.network,
+    ud.lng,
+    ud.lat,
+    &#39;$do_date&#39;
+from gmall.dws_uv_detail_day ud left join gmall.dws_new_mid_day nm on ud.mid_id=nm.mid_id
+where ud.dt=&#39;$do_date&#39; and nm.mid_id is null;
+
+insert into table gmall.ads_new_mid_count
+select
+create_date,
+count(*)
+from gmall.dws_new_mid_day
+where create_date=&#39;$do_date&#39;
+group by create_date;
+&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h3 id="8-3-用户留存主题"><a href="#8-3-用户留存主题" class="headerlink" title="8.3 用户留存主题"></a>8.3 用户留存主题</h3><h4 id="8-3-1-用户留存概念"><a href="#8-3-1-用户留存概念" class="headerlink" title="8.3.1 用户留存概念"></a>8.3.1 用户留存概念</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191202133738802.png" alt="image-20191202133738802"></p>
+<h4 id="8-3-2-需求描述"><a href="#8-3-2-需求描述" class="headerlink" title="8.3.2 需求描述"></a>8.3.2 需求描述</h4><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191202135432430.png" alt="image-20191202135432430"></p>
+<h4 id="8-3-3-DWS层"><a href="#8-3-3-DWS层" class="headerlink" title="8.3.3 DWS层"></a>8.3.3 DWS层</h4><h5 id="8-3-3-1-每日留存用户明细表"><a href="#8-3-3-1-每日留存用户明细表" class="headerlink" title="8.3.3.1 每日留存用户明细表"></a>8.3.3.1 每日留存用户明细表</h5><pre><code class="sql">drop table if exists gmall.dws_user_retention_day;
+create external table gmall.dws_user_retention_day 
+(
+    `mid_id` string COMMENT &#39;设备唯一标识&#39;,
+    `user_id` string COMMENT &#39;用户标识&#39;, 
+    `version_code` string COMMENT &#39;程序版本号&#39;, 
+    `version_name` string COMMENT &#39;程序版本名&#39;, 
+    `lang` string COMMENT &#39;系统语言&#39;, 
+    `source` string COMMENT &#39;渠道号&#39;, 
+    `os` string COMMENT &#39;安卓系统版本&#39;, 
+    `area` string COMMENT &#39;区域&#39;, 
+    `model` string COMMENT &#39;手机型号&#39;, 
+    `brand` string COMMENT &#39;手机品牌&#39;, 
+    `sdk_version` string COMMENT &#39;sdkVersion&#39;, 
+    `gmail` string COMMENT &#39;gmail&#39;, 
+    `height_width` string COMMENT &#39;屏幕宽高&#39;,
+    `app_time` string COMMENT &#39;客户端日志产生时的时间&#39;,
+    `network` string COMMENT &#39;网络模式&#39;,
+    `lng` string COMMENT &#39;经度&#39;,
+    `lat` string COMMENT &#39;纬度&#39;,
+   `create_date`    string  comment &#39;设备新增时间&#39;,
+   `retention_day`  int comment &#39;截止当前日期留存天数&#39;
+)  COMMENT &#39;每日用户留存情况&#39;
+PARTITIONED BY (`dt` string)
+stored as parquet
+location &#39;/warehouse/gmall/dws/dws_user_retention_day/&#39;
+;
+
+insert overwrite table gmall.dws_user_retention_day 
+partition(dt=&quot;2019-02-11&quot;) 
+select 
+ nm.mid_id,
+ nm.user_id , 
+ nm.version_code , 
+ nm.version_name , 
+ nm.lang , 
+ nm.source, 
+ nm.os, 
+ nm.area, 
+ nm.model, 
+ nm.brand, 
+ nm.sdk_version, 
+ nm.gmail, 
+ nm.height_width,
+ nm.app_time,
+ nm.network,
+ nm.lng,
+ nm.lat,
+ nm.create_date,
+ 1 retention_day 
+from gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm on ud.mid_id=nm.mid_id 
+where ud.dt=&#39;2019-02-11&#39; and nm.create_date=date_add(&#39;2019-02-11&#39;,-1);
+</code></pre>
+<h5 id="8-3-3-2-共1-2-3-n天留存用户明细表"><a href="#8-3-3-2-共1-2-3-n天留存用户明细表" class="headerlink" title="8.3.3.2 共1,2,3,n天留存用户明细表"></a>8.3.3.2 共1,2,3,n天留存用户明细表</h5><pre><code class="sql">insert overwrite table gmall.dws_user_retention_day
+partition(dt=&quot;2019-02-11&quot;)
+select
+    nm.mid_id,
+    nm.user_id,
+    nm.version_code,
+    nm.version_name,
+    nm.lang,
+    nm.source,
+    nm.os,
+    nm.area,
+    nm.model,
+    nm.brand,
+    nm.sdk_version,
+    nm.gmail,
+    nm.height_width,
+    nm.app_time,
+    nm.network,
+    nm.lng,
+    nm.lat,
+    nm.create_date,
+    1 retention_day 
+from gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm  on ud.mid_id =nm.mid_id 
+where ud.dt=&#39;2019-02-11&#39; and nm.create_date=date_add(&#39;2019-02-11&#39;,-1)
+
+union all
+select  
+    nm.mid_id,
+    nm.user_id , 
+    nm.version_code , 
+    nm.version_name , 
+    nm.lang , 
+    nm.source, 
+    nm.os, 
+    nm.area, 
+    nm.model, 
+    nm.brand, 
+    nm.sdk_version, 
+    nm.gmail, 
+    nm.height_width,
+    nm.app_time,
+    nm.network,
+    nm.lng,
+    nm.lat,
+    nm.create_date,
+    2 retention_day 
+from  gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm   on ud.mid_id =nm.mid_id 
+where ud.dt=&#39;2019-02-11&#39; and nm.create_date=date_add(&#39;2019-02-11&#39;,-2)
+
+union all
+select  
+    nm.mid_id,
+    nm.user_id , 
+    nm.version_code , 
+    nm.version_name , 
+    nm.lang , 
+    nm.source, 
+    nm.os, 
+    nm.area, 
+    nm.model, 
+    nm.brand, 
+    nm.sdk_version, 
+    nm.gmail, 
+    nm.height_width,
+    nm.app_time,
+    nm.network,
+    nm.lng,
+    nm.lat,
+    nm.create_date,
+    3 retention_day 
+from  gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm   on ud.mid_id =nm.mid_id 
+where ud.dt=&#39;2019-02-11&#39; and nm.create_date=date_add(&#39;2019-02-11&#39;,-3);
+</code></pre>
+<h5 id="8-3-3-3-留存用户脚本"><a href="#8-3-3-3-留存用户脚本" class="headerlink" title="8.3.3.3 留存用户脚本"></a>8.3.3.3 留存用户脚本</h5><pre><code class="sh">#!/bin/bash
+
+#ads 当日、当月、当周活跃设备书
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+    if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else
+    # shellcheck disable=SC2006
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+sql=&quot;
+insert overwrite table gmall.dws_user_retention_day
+partition(dt=&quot;$do_date&quot;)
+select
+ nm.mid_id,
+ nm.user_id ,
+ nm.version_code ,
+ nm.version_name ,
+ nm.lang ,
+ nm.source,
+ nm.os,
+ nm.area,
+ nm.model,
+ nm.brand,
+ nm.sdk_version,
+ nm.gmail,
+ nm.height_width,
+ nm.app_time,
+ nm.network,
+ nm.lng,
+ nm.lat,
+ nm.create_date,
+ 1 retention_day
+from gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm on ud.mid_id=nm.mid_id
+where ud.dt=&#39;$do_date&#39; and nm.create_date=date_add(&#39;$do_date&#39;,-1);
+
+insert overwrite table gmall.dws_user_retention_day
+partition(dt=&quot;$do_date&quot;)
+select
+    nm.mid_id,
+    nm.user_id,
+    nm.version_code,
+    nm.version_name,
+    nm.lang,
+    nm.source,
+    nm.os,
+    nm.area,
+    nm.model,
+    nm.brand,
+    nm.sdk_version,
+    nm.gmail,
+    nm.height_width,
+    nm.app_time,
+    nm.network,
+    nm.lng,
+    nm.lat,
+    nm.create_date,
+    1 retention_day
+from gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm  on ud.mid_id =nm.mid_id
+where ud.dt=&#39;$do_date&#39; and nm.create_date=date_add(&#39;$do_date&#39;,-1)
+
+union all
+select
+    nm.mid_id,
+    nm.user_id ,
+    nm.version_code ,
+    nm.version_name ,
+    nm.lang ,
+    nm.source,
+    nm.os,
+    nm.area,
+    nm.model,
+    nm.brand,
+    nm.sdk_version,
+    nm.gmail,
+    nm.height_width,
+    nm.app_time,
+    nm.network,
+    nm.lng,
+    nm.lat,
+    nm.create_date,
+    2 retention_day
+from  gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm   on ud.mid_id =nm.mid_id
+where ud.dt=&#39;$do_date&#39; and nm.create_date=date_add(&#39;$do_date&#39;,-2)
+
+union all
+select
+    nm.mid_id,
+    nm.user_id ,
+    nm.version_code ,
+    nm.version_name ,
+    nm.lang ,
+    nm.source,
+    nm.os,
+    nm.area,
+    nm.model,
+    nm.brand,
+    nm.sdk_version,
+    nm.gmail,
+    nm.height_width,
+    nm.app_time,
+    nm.network,
+    nm.lng,
+    nm.lat,
+    nm.create_date,
+    3 retention_day
+from  gmall.dws_uv_detail_day ud join gmall.dws_new_mid_day nm   on ud.mid_id =nm.mid_id
+where ud.dt=&#39;$do_date&#39; and nm.create_date=date_add(&#39;$do_date&#39;,-3);
+&quot;
+
+$hive -e &quot;$sql&quot;
+
+</code></pre>
+<h4 id="8-3-4-ADS层"><a href="#8-3-4-ADS层" class="headerlink" title="8.3.4 ADS层"></a>8.3.4 ADS层</h4><h5 id="8-3-4-1-用户留存数"><a href="#8-3-4-1-用户留存数" class="headerlink" title="8.3.4.1 用户留存数"></a>8.3.4.1 用户留存数</h5><pre><code class="sql">drop table if exists gmall.ads_user_retention_day_count;
+create external table gmall.ads_user_retention_day_count 
+(
+`create_date`     string  comment &#39;设备新增日期&#39;,
+`retention_day`   int comment &#39;截止当前日期留存天数&#39;,
+`retention_count` bigint comment  &#39;留存数量&#39; 
+)  COMMENT &#39;每日用户留存情况&#39; 
+row format delimited fields terminated by &#39;\t&#39; 
+location &#39;/warehouse/gmall/ads/ads_user_retention_day_count/&#39;;
+
+insert into table gmall.ads_user_retention_day_count 
+select
+    create_date,
+    retention_day,
+    count(*) retention_count
+from gmall.dws_user_retention_day
+where dt=&#39;2019-02-11&#39; 
+group by create_date,retention_day;
+</code></pre>
+<h5 id="8-3-4-2-用户留存率"><a href="#8-3-4-2-用户留存率" class="headerlink" title="8.3.4.2 用户留存率"></a>8.3.4.2 用户留存率</h5><pre><code class="sql">drop table if exists gmall.ads_user_retention_day_rate;
+
+create external table gmall.ads_user_retention_day_rate 
+(
+`stat_date`        string comment &#39;统计日期&#39;,
+`create_date`      string  comment &#39;设备新增日期&#39;,
+`retention_day`    int comment &#39;截止当前日期留存天数&#39;,
+`retention_count`  bigint comment  &#39;留存数量&#39;,
+`new_mid_count`    bigint comment &#39;当日设备新增数量&#39;,
+`retention_ratio`  decimal(10,2) comment &#39;留存率&#39;
+)  COMMENT &#39;每日用户留存情况&#39;
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_user_retention_day_rate/&#39;;
+
+insert into table gmall.ads_user_retention_day_rate
+select 
+    &#39;2019-02-11&#39;, 
+    ur.create_date,
+    ur.retention_day, 
+    ur.retention_count, 
+    nc.new_mid_count,
+    ur.retention_count/nc.new_mid_count*100
+from gmall.ads_user_retention_day_count ur join gmall.ads_new_mid_count nc
+on nc.create_date=ur.create_date;
+</code></pre>
+<h5 id="8-3-4-3-用户留存主题脚本"><a href="#8-3-4-3-用户留存主题脚本" class="headerlink" title="8.3.4.3 用户留存主题脚本"></a>8.3.4.3 用户留存主题脚本</h5><pre><code class="sh">#!/bin/bash
+
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+    if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else
+    # shellcheck disable=SC2006
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+sql=&quot;
+insert into table gmall.ads_user_retention_day_count
+select
+    create_date,
+    retention_day,
+    count(*) retention_count
+from gmall.dws_user_retention_day
+where dt=&#39;$do_date&#39;
+group by create_date,retention_day;
+
+insert into table gmall.ads_user_retention_day_rate
+select
+    &#39;$do_date&#39;,
+    ur.create_date,
+    ur.retention_day,
+    ur.retention_count,
+    nc.new_mid_count,
+    ur.retention_count/nc.new_mid_count*100
+from gmall.ads_user_retention_day_count ur join gmall.ads_new_mid_count nc
+on nc.create_date=ur.create_date;
+&quot;
+
+$hive -e &quot;$sql&quot;
+
+</code></pre>
+<h3 id="8-4-沉默用户数"><a href="#8-4-沉默用户数" class="headerlink" title="8.4 沉默用户数"></a>8.4 沉默用户数</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191203170322315.png" alt="image-20191203170322315"></p>
+<pre><code class="sql">-- 1. 使用日活明细表dws_uv_detail_day作为DWS层数据
+-- 2. 建表语句
+drop table if exists gmall.ads_silent_count;
+create external table gmall.ads_silent_count( 
+    `dt` string COMMENT &#39;统计日期&#39;,
+    `silent_count` bigint COMMENT &#39;沉默设备数&#39;
+) 
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_silent_count&#39;;
+
+-- 3. 插入数据
+insert into table gmall.ads_silent_count
+select 
+    &#39;2019-02-20&#39; dt,
+    count(*) silent_count
+from 
+(
+    select mid_id
+    from gmall.dws_uv_detail_day
+    where dt&lt;=&#39;2019-02-20&#39;
+    group by mid_id
+    having count(*)=1 and min(dt)&lt;date_add(&#39;2019-02-20&#39;,-7)
+) t1;
+</code></pre>
+<pre><code class="sh">#!/bin/bash
+
+hive=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive
+APP=gmall
+
+if [ -n &quot;$1&quot; ];then
+    do_date=$1
+else
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+echo &quot;-----------导入日期$do_date-----------&quot;
+
+sql=&quot;
+insert into table &quot;$APP&quot;.ads_silent_count
+select 
+    &#39;$do_date&#39; dt,
+    count(*) silent_count
+from 
+(
+    select 
+        mid_id
+    from &quot;$APP&quot;.dws_uv_detail_day
+    where dt&lt;=&#39;$do_date&#39;
+    group by mid_id
+    having count(*)=1 and min(dt)&lt;=date_add(&#39;$do_date&#39;,-7)
+)t1;&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h3 id="8-5-本周回流用户数"><a href="#8-5-本周回流用户数" class="headerlink" title="8.5 本周回流用户数"></a>8.5 本周回流用户数</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191203172746206.png" alt="image-20191203172746206"></p>
+<pre><code class="sql">-- 1. 使用日活明细表dws_uv_detail_day作为DWS层数据
+-- 2. 建表
+drop table if exists gmall.ads_back_count;
+create external table ads_back_count( 
+    `dt` string COMMENT &#39;统计日期&#39;,
+    `wk_dt` string COMMENT &#39;统计日期所在周&#39;,
+    `wastage_count` bigint COMMENT &#39;回流设备数&#39;
+) 
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_back_count&#39;;
+
+-- 3. 岛入数据
+insert into table gmall.ads_back_count
+select 
+   &#39;2019-02-20&#39; dt,
+   concat(date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7),&#39;_&#39;,date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-1)) wk_dt,
+   count(*)
+from 
+(
+    select t1.mid_id
+    from 
+    (
+        select  mid_id
+        from gmall.dws_uv_detail_wk
+        where wk_dt=concat(date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7),&#39;_&#39;,date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-1))
+    )t1
+    left join
+    (
+        select mid_id
+        from gmall.dws_new_mid_day
+        where create_date&lt;=date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-1) and create_date&gt;=date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7)
+    )t2
+    on t1.mid_id=t2.mid_id
+    left join
+    (
+        select mid_id
+        from gmall.dws_uv_detail_wk
+        where wk_dt=concat(date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7*2),&#39;_&#39;,date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7-1))
+    )t3
+    on t1.mid_id=t3.mid_id
+    where t2.mid_id is null and t3.mid_id is null
+)t4;
+</code></pre>
+<h3 id="8-6-本周流失用户"><a href="#8-6-本周流失用户" class="headerlink" title="8.6 本周流失用户"></a>8.6 本周流失用户</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191203174523306.png" alt="image-20191203174523306"></p>
+<pre><code class="sql">-- 使用日活明细表dws_uv_detail_day作为DWS层数据
+drop table if exists gmall.ads_wastage_count;
+create external table ads_wastage_count( 
+    `dt` string COMMENT &#39;统计日期&#39;,
+    `wastage_count` bigint COMMENT &#39;流失设备数&#39;
+) 
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_wastage_count&#39;;
+
+-- 2. 导入数据
+insert into table gmall.ads_wastage_count
+select
+     &#39;2019-02-20&#39;,
+     count(*)
+from 
+(
+    select mid_id
+from dws_uv_detail_day
+    group by mid_id
+    having max(dt)&lt;=date_add(&#39;2019-02-20&#39;,-7)
+)t1;
+</code></pre>
+<h3 id="8-7-连续三周活跃"><a href="#8-7-连续三周活跃" class="headerlink" title="8.7 连续三周活跃"></a>8.7 连续三周活跃</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191203175551679.png" alt="image-20191203175551679"></p>
+<pre><code class="sql">drop table if exists  gmall.ads_continuity_wk_count;
+create external table gmall.ads_continuity_wk_count( 
+    `dt` string COMMENT &#39;统计日期,一般用结束周周日日期,如果每天计算一次,可用当天日期&#39;,
+    `wk_dt` string COMMENT &#39;持续时间&#39;,
+    `continuity_count` bigint
+) 
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_continuity_wk_count&#39;;
+
+insert into table gmall.ads_continuity_wk_count
+select 
+     &#39;2019-02-20&#39;,
+     concat(date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7*3),&#39;_&#39;,date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-1)),
+     count(*)
+from 
+(
+    select mid_id
+    from gmall.dws_uv_detail_wk
+    where wk_dt&gt;=concat(date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7*3),&#39;_&#39;,date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7*2-1)) 
+    and wk_dt&lt;=concat(date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-7),&#39;_&#39;,date_add(next_day(&#39;2019-02-20&#39;,&#39;MO&#39;),-1))
+    group by mid_id
+    having count(*)=3
+)t1;
+</code></pre>
+<pre><code class="sh">#!/bin/bash
+
+if [ -n &quot;$1&quot; ];then
+    do_date=$1
+else
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+hive=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive
+APP=gmall
+
+echo &quot;-----------导入日期$do_date-----------&quot;
+
+sql=&quot;
+insert into table &quot;$APP&quot;.ads_continuity_wk_count
+select 
+     &#39;$do_date&#39;,
+     concat(date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7*3),&#39;_&#39;,date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1)),
+     count(*)
+from 
+(
+    select mid_id
+    from &quot;$APP&quot;.dws_uv_detail_wk
+    where wk_dt&gt;=concat(date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7*3),&#39;_&#39;,date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7*2-1)) 
+    and wk_dt&lt;=concat(date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-7),&#39;_&#39;,date_add(next_day(&#39;$do_date&#39;,&#39;MO&#39;),-1))
+    group by mid_id
+    having count(*)=3
+)t1;&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h3 id="8-7-最近七天内连续三周活跃"><a href="#8-7-最近七天内连续三周活跃" class="headerlink" title="8.7 最近七天内连续三周活跃"></a>8.7 最近七天内连续三周活跃</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191203181811343.png" alt="image-20191203181811343"></p>
+<pre><code class="sql">drop table if exists gmall.ads_continuity_uv_count;
+create external table gmall.ads_continuity_uv_count( 
+    `dt` string COMMENT &#39;统计日期&#39;,
+    `wk_dt` string COMMENT &#39;最近7天日期&#39;,
+    `continuity_count` bigint
+) COMMENT &#39;连续活跃设备数&#39;
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_continuity_uv_count&#39;;
+
+insert into table gmall.ads_continuity_uv_count
+select
+    &#39;2019-02-12&#39;,
+    concat(date_add(&#39;2019-02-12&#39;,-6),&#39;_&#39;,&#39;2019-02-12&#39;),
+    count(*)
+from
+(
+    select mid_id
+    from
+    (
+        select mid_id      
+        from
+        (
+            select 
+                mid_id,
+                date_sub(dt,rank) date_dif
+            from
+            (
+                select 
+                    mid_id,
+                    dt,
+                    rank() over(partition by mid_id order by dt) rank
+                from gmall.dws_uv_detail_day
+                where dt&gt;=date_add(&#39;2019-02-12&#39;,-6) and dt&lt;=&#39;2019-02-12&#39;
+            )t1
+        )t2 
+        group by mid_id,date_dif
+        having count(*)&gt;=3
+    )t3 
+    group by mid_id
+)t4;
+
+</code></pre>
+<pre><code class="sql">#!/bin/bash
+
+if [ -n &quot;$1&quot; ];then
+    do_date=$1
+else
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+hive=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive
+APP=gmall
+
+echo &quot;-----------导入日期$do_date-----------&quot;
+
+sql=&quot;
+insert into table &quot;$APP&quot;.ads_continuity_uv_count
+select 
+     &#39;$do_date&#39;,
+     concat(date_add(&#39;$do_date&#39;,-6),&#39;_&#39;,&#39;$do_date&#39;) dt,
+     count(*) 
+from 
+(
+    select mid_id
+    from
+    (
+        select mid_id
+        from 
+        (
+            select
+                mid_id,
+                date_sub(dt,rank) date_diff
+            from 
+            (
+                select 
+                    mid_id,
+                    dt,
+                    rank() over(partition by mid_id order by dt) rank
+                from &quot;$APP&quot;.dws_uv_detail_day
+                where dt&gt;=date_add(&#39;$do_date&#39;,-6) and dt&lt;=&#39;$do_date&#39;
+            )t1
+        )t2
+        group by mid_id,date_diff
+        having count(*)&gt;=3
+    )t3 
+    group by mid_id
+)t4;
+&quot;
+
+$hive -e &quot;$sql&quot;
+
+</code></pre>
+<h2 id="9-Hive总结"><a href="#9-Hive总结" class="headerlink" title="9. Hive总结"></a>9. Hive总结</h2><h3 id="9-1-Hive的架构"><a href="#9-1-Hive的架构" class="headerlink" title="9.1 Hive的架构"></a>9.1 Hive的架构</h3><p><img src="http://kfly.top/picture/kfly-top/数仓商城项目-用户行为数仓/assets/image-20191203212352142.png" alt="image-20191203212352142"></p>
+<h3 id="9-2-Hive和数据库比较"><a href="#9-2-Hive和数据库比较" class="headerlink" title="9.2 Hive和数据库比较"></a>9.2 Hive和数据库比较</h3><p>Hive 和数据库除了拥有类似的查询语言，再无类似之处。</p>
+<ul>
+<li>数据存储位置</li>
+</ul>
+<p>Hive 存储在 HDFS 。数据库将数据保存在块设备或者本地文件系统中。</p>
+<ul>
+<li>数据更新</li>
+</ul>
+<p>Hive中不建议对数据的改写。而数据库中的数据通常是需要经常进行修改的， </p>
+<ul>
+<li>执行延迟</li>
+</ul>
+<p>Hive 执行延迟较高。数据库的执行延迟较低。当然，这个是有条件的，即数据规模较小，当数据规模大到超过数据库的处理能力的时候，Hive的并行计算显然能体现出优势。</p>
+<ul>
+<li>数据规模</li>
+</ul>
+<p>Hive支持很大规模的数据计算；数据库可以支持的数据规模较小。</p>
+<h3 id="9-3-内部表和外部表"><a href="#9-3-内部表和外部表" class="headerlink" title="9.3 内部表和外部表"></a>9.3 内部表和外部表</h3><ol>
+<li><p>管理表：当我们删除一个管理表时，Hive也会删除这个表中数据。管理表不适合和其他工具共享数据。</p>
+</li>
+<li><p>外部表：删除该表并不会删除掉原始数据，删除的是表的元数据</p>
+</li>
+</ol>
+<h3 id="9-4-窗口函数"><a href="#9-4-窗口函数" class="headerlink" title="9.4 窗口函数"></a>9.4 窗口函数</h3><ol>
+<li>窗口函数</li>
+</ol>
+<ul>
+<li><p>OVER()：指定分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变而变化。常用partition by 分区order by排序。</p>
+</li>
+<li><p>CURRENT ROW：当前行</p>
+</li>
+<li><p>n PRECEDING：往前n行数据</p>
+</li>
+<li><p>n FOLLOWING：往后n行数据</p>
+</li>
+<li><p>UNBOUNDED：起点，UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING表示到后面的终点</p>
+</li>
+<li><p>LAG(col,n)：往前第n行数据</p>
+</li>
+<li><p>LEAD(col,n)：往后第n行数据</p>
+</li>
+<li><p>NTILE(n)：把有序分区中的行分发到指定数据的组中，各个组有编号，编号从1开始，对于每一行，NTILE返回此行所属的组的编号。注意：n必须为int类型。</p>
+</li>
+</ul>
+<ol start="2">
+<li>排序函数：</li>
+</ol>
+<ul>
+<li><p>RANK() 排序相同时会重复，总数不会变</p>
+</li>
+<li><p>DENSE_RANK() 排序相同时会重复，总数会减少</p>
+</li>
+<li><p>ROW_NUMBER() 会根据顺序计算</p>
+</li>
+</ul>
+<h3 id="9-5-在项目中是否自定义过UDF、UDTF函数，以及用他们处理了什么问题？"><a href="#9-5-在项目中是否自定义过UDF、UDTF函数，以及用他们处理了什么问题？" class="headerlink" title="9.5  在项目中是否自定义过UDF、UDTF函数，以及用他们处理了什么问题？"></a>9.5  在项目中是否自定义过UDF、UDTF函数，以及用他们处理了什么问题？</h3><ul>
+<li>1）自定义过。</li>
+<li>2）用UDF函数解析公共字段；用UDTF函数解析事件字段。</li>
+<li>3）自定义UDF步骤：定义一个类继承UDF，重写evaluate方法</li>
+<li>4）自定义UDTF步骤：定义一个类继承GenericUDTF，重写初始化方法、关闭方法和process方法。</li>
+</ul>
+<h3 id="9-6-个By区别"><a href="#9-6-个By区别" class="headerlink" title="9.6 个By区别"></a>9.6 个By区别</h3><ul>
+<li>1）Sort By：分区内有序；</li>
+<li>2）Order By：全局排序，只有一个Reducer；</li>
+<li>3）Distrbute By：类似MR中Partition，进行分区，结合sort by使用。</li>
+<li>4） Cluster By：当Distribute by和Sorts by字段相同时，可以使用Cluster by方式。Cluster by除了具有Distribute by的功能外还兼具Sort by的功能。但是排序只能是升序排序，不能指定排序规则为ASC或者DESC。</li>
+</ul>
+<h3 id="9-7-Hive优化"><a href="#9-7-Hive优化" class="headerlink" title="9.7 Hive优化"></a>9.7 Hive优化</h3><ul>
+<li><p>MapJoin</p>
+<p>​        如果不指定MapJoin或者不符合MapJoin的条件，那么Hive解析器会将Join操作转换成Common Join，即：在Reduce阶段完成join。容易发生数据倾斜。可以用MapJoin把小表全部加载到内存在map端进行join，避免reducer处理。</p>
+</li>
+<li><p>行列过滤</p>
+<p>​    列处理：在SELECT中，只拿需要的列，如果有，尽量使用分区过滤，少用SELECT *。</p>
+</li>
+</ul>
+<p>行处理：在分区剪裁中，当使用外关联时，如果将副表的过滤条件写在Where后面，那么就会先全表关联，之后再过滤。 </p>
+<ul>
+<li><p>采用分桶技术</p>
+</li>
+<li><p>采用分区技术</p>
+</li>
+<li><p>合理设置Map</p>
+<p>​        通常情况下，作业会通过input<strong><strong>的目录产生一个或者多个map</strong></strong>任务。**</p>
+</li>
+</ul>
+<p>主要的决定因素有：input的文件总个数，input的文件大小，集群设置的文件块大小。</p>
+<ul>
+<li><p>是不是map数越多越好？</p>
+<p>​        答案是否定的。如果一个任务有很多小文件（远远小于块大小128m），则每个小文件也会被当做一个块，用一个map任务来完成，而一个map任务启动和初始化的时间远远大于逻辑处理的时间，就会造成很大的资源浪费。而且，同时可执行的map数是受限的。</p>
+</li>
+<li><p>是不是保证每个map<strong><strong>处理接近128m</strong></strong>的文件块，就高枕无忧了？**</p>
+<p>​        答案也是不一定。比如有一个127m的文件，正常会用一个map去完成，但这个文件只有一个或者两个小字段，却有几千万的记录，如果map处理的逻辑比较复杂，用一个map任务去做，肯定也比较耗时。</p>
+</li>
+</ul>
+<p>针对上面的问题2和3，我们需要采取两种方式来解决：即减少map数和增加map数；</p>
+<ul>
+<li><p>小文件进行合并</p>
+<p>​    在Map执行前合并小文件，减少Map数：CombineHiveInputFormat具有对小文件进行合并的功能（系统默认的格式）。HiveInputFormat没有对小文件合并功能。</p>
+</li>
+<li><p>合理设置Reduce数</p>
+</li>
+<li><p>Reduce个数并不是越多越好</p>
+<ol>
+<li><p>过多的启动和初始化Reduce也会消耗时间和资源；</p>
+</li>
+<li><p>另外，有多少个Reduce，就会有多少个输出文件，如果生成了很多个小文件，那么如果这些小文件作为下一个任务的输入，则也会出现小文件过多的问题；</p>
+</li>
+<li><p>在设置Reduce个数的时候也需要考虑这两个原则：处理大数据量利用合适的Reduce数；使单个Reduce任务处理数据量大小要合适；</p>
+</li>
+</ol>
+</li>
+<li><p>常用参数-输出合并小文件</p>
+</li>
+</ul>
+<pre><code class="shell"># 默认true，在map-only任务结束时合并小文件
+SET hive.merge.mapfiles = true;
+# 默认false，在map-reduce任务结束时合并小文件
+SET hive.merge.mapredfiles = true;
+# 默认256M
+SET hive.merge.size.per.task = 268435456; 
+# 当输出文件的平均大小小于该值时，启动一个独立的map-reduce任务进行文件merge
+SET hive.merge.smallfiles.avgsize = 16777216;
+</code></pre>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: '数仓商城项目-用户行为数仓',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>

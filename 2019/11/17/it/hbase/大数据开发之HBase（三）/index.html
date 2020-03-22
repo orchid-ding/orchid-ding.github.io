@@ -212,7 +212,11 @@
 <li>通过修改 hbase-site.xml 这个文件来实现， 如启动全局 aggregation，能过操纵所有的表数据。只需要在hbase-site.xml里面添加以下配置即可</li>
 <li>==注意==：修改完配置之后需要<strong>重启HBase集群</strong></li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.coprocessor.user.region.classes<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hbase.coprocessor.AggregateImplementation<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+    &lt;name&gt;hbase.coprocessor.user.region.classes&lt;/name&gt;
+    &lt;value&gt;org.apache.hadoop.hbase.coprocessor.AggregateImplementation&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 <ul>
 <li>为所有table加载了一个 cp class，可以用” ,”分割加载多个 class，修改</li>
 </ul>
@@ -221,15 +225,18 @@
 <li>通过 HBase Shell 来实现。</li>
 <li>disable 指定表。</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; disable <span class="string">'mytable'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase&gt; disable &#39;mytable&#39;
+</code></pre>
 <ul>
 <li>添加 aggregation</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; alter <span class="string">'mytable'</span>, METHOD =&gt; <span class="string">'table_att'</span>,<span class="string">'coprocessor'</span>=&gt;<span class="string">'|org.apache.Hadoop.hbase.coprocessor.AggregateImplementation||'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase&gt; alter &#39;mytable&#39;, METHOD =&gt; &#39;table_att&#39;,&#39;coprocessor&#39;=&gt;&#39;|org.apache.Hadoop.hbase.coprocessor.AggregateImplementation||&#39;
+</code></pre>
 <ul>
 <li>重启指定表 </li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase&gt; enable <span class="string">'mytable'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase&gt; enable &#39;mytable&#39;
+</code></pre>
 <ul>
 <li><p>协处理器卸载</p>
 <p> <img src="assets/xxx.png" alt="xxx"></p>
@@ -242,40 +249,133 @@
 <h4 id="1-3-1-创建第一张表proc1"><a href="#1-3-1-创建第一张表proc1" class="headerlink" title="1.3.1 创建第一张表proc1"></a>1.3.1 创建第一张表proc1</h4><ul>
 <li>打开hbase shell</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd //install/hbase-1.2.0-cdh5.14.2/</span><br><span class="line">bin/hbase shell</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd //install/hbase-1.2.0-cdh5.14.2/
+bin/hbase shell
+</code></pre>
 <ul>
 <li>在HBase当中创建一张表，表名user2，并只有一个列族info</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):053:0&gt;</span> create <span class="string">'proc1'</span>,<span class="string">'info'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase(main):053:0&gt; create &#39;proc1&#39;,&#39;info&#39;
+</code></pre>
 <h4 id="1-3-2-创建第二张表proc2"><a href="#1-3-2-创建第二张表proc2" class="headerlink" title="1.3.2 创建第二张表proc2"></a>1.3.2 创建第二张表proc2</h4><ul>
 <li>创建第二张表proc2，作为目标表</li>
 <li>将第一张表当中插入数据的部分列，使用协处理器，复制到proc2表当中来</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):054:0&gt;</span> create <span class="string">'proc2'</span>,<span class="string">'info'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase(main):054:0&gt; create &#39;proc2&#39;,&#39;info&#39;
+</code></pre>
 <h4 id="1-3-3-开发HBase协处理器"><a href="#1-3-3-开发HBase协处理器" class="headerlink" title="1.3.3 开发HBase协处理器"></a>1.3.3 开发HBase协处理器</h4><ul>
 <li>创建maven工程所用的repositories、dependencies、plugins跟之前的一样</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-mr1-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+  &lt;version&gt;2.6.0-mr1-cdh5.14.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+  &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;
+  &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+  &lt;artifactId&gt;hbase-server&lt;/artifactId&gt;
+  &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 <ul>
 <li>开发HBase的协处理器</li>
 </ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.coprocessor.<span class="type">BaseRegionObserver</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyProcessor</span> <span class="keyword">extends</span> <span class="title">BaseRegionObserver</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * @param e</span></span><br><span class="line"><span class="comment">     * @param put   插入到proc1表里面的数据，都是封装在put对象里面了</span></span><br><span class="line"><span class="comment">     *              插入到proc1表里面的数据都在put对象里面，就可以解析put对象，获取数据，获取到了数据之后，插入到proc2表里面去</span></span><br><span class="line"><span class="comment">     * @param edit</span></span><br><span class="line"><span class="comment">     * @param durability</span></span><br><span class="line"><span class="comment">     * @throws IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void prePut(<span class="type">ObserverContext</span>&lt;<span class="type">RegionCoprocessorEnvironment</span>&gt; e, <span class="type">Put</span> put, <span class="type">WALEdit</span> edit, <span class="type">Durability</span> durability) <span class="keyword">throws</span> <span class="type">IOException</span> &#123;</span><br><span class="line">        <span class="comment">//获取连接</span></span><br><span class="line">        <span class="type">Configuration</span> configuration = <span class="type">HBaseConfiguration</span>.create();</span><br><span class="line">        configuration.set(<span class="string">"hbase.zookeeper.quorum"</span>, <span class="string">"node01:2181,node02:2181,node03:2181"</span>);</span><br><span class="line">        <span class="type">Connection</span> connection = <span class="type">ConnectionFactory</span>.createConnection(configuration);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//涉及到多个版本问题</span></span><br><span class="line">        <span class="type">List</span>&lt;<span class="type">Cell</span>&gt; cells = put.get(<span class="string">"info"</span>.getBytes(), <span class="string">"name"</span>.getBytes());</span><br><span class="line">        <span class="type">Cell</span> nameCell = cells.get(<span class="number">0</span>);<span class="comment">//获取最新的那个版本数据</span></span><br><span class="line">        <span class="comment">//Cell nameCell = put.get("info".getBytes(), "name".getBytes()).get(0);</span></span><br><span class="line">        <span class="type">Put</span> put1 = <span class="keyword">new</span> <span class="type">Put</span>(put.getRow());</span><br><span class="line">        put1.add(nameCell);</span><br><span class="line">        <span class="type">Table</span> reverseuser = connection.getTable(<span class="type">TableName</span>.valueOf(<span class="string">"proc2"</span>));</span><br><span class="line">        reverseuser.put(put1);</span><br><span class="line">        reverseuser.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="1-3-4-将项目打成jar包，并上传到HDFS上面"><a href="#1-3-4-将项目打成jar包，并上传到HDFS上面" class="headerlink" title="1.3.4 将项目打成jar包，并上传到HDFS上面"></a>1.3.4 将项目打成jar包，并上传到HDFS上面</h4><ul>
+<pre><code>import org.apache.hadoop.hbase.coprocessor.BaseRegionObserver;
+
+public class MyProcessor extends BaseRegionObserver {
+    /**
+     *
+     * @param e
+     * @param put   插入到proc1表里面的数据，都是封装在put对象里面了
+     *              插入到proc1表里面的数据都在put对象里面，就可以解析put对象，获取数据，获取到了数据之后，插入到proc2表里面去
+     * @param edit
+     * @param durability
+     * @throws IOException
+     */
+    @Override
+    public void prePut(ObserverContext&lt;RegionCoprocessorEnvironment&gt; e, Put put, WALEdit edit, Durability durability) throws IOException {
+        //获取连接
+        Configuration configuration = HBaseConfiguration.create();
+        configuration.set(&quot;hbase.zookeeper.quorum&quot;, &quot;node01:2181,node02:2181,node03:2181&quot;);
+        Connection connection = ConnectionFactory.createConnection(configuration);
+
+        //涉及到多个版本问题
+        List&lt;Cell&gt; cells = put.get(&quot;info&quot;.getBytes(), &quot;name&quot;.getBytes());
+        Cell nameCell = cells.get(0);//获取最新的那个版本数据
+        //Cell nameCell = put.get(&quot;info&quot;.getBytes(), &quot;name&quot;.getBytes()).get(0);
+        Put put1 = new Put(put.getRow());
+        put1.add(nameCell);
+        Table reverseuser = connection.getTable(TableName.valueOf(&quot;proc2&quot;));
+        reverseuser.put(put1);
+        reverseuser.close();
+        connection.close();
+    }
+}
+</code></pre><h4 id="1-3-4-将项目打成jar包，并上传到HDFS上面"><a href="#1-3-4-将项目打成jar包，并上传到HDFS上面" class="headerlink" title="1.3.4 将项目打成jar包，并上传到HDFS上面"></a>1.3.4 将项目打成jar包，并上传到HDFS上面</h4><ul>
 <li>将我们的协处理器打成一个jar包，此处不需要用任何的打包插件即可</li>
 <li>然后将打好的jar包上传到linux的/kfly/install路径下</li>
 <li>再将jar包上传到HDFS</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 名称必须为processor.jar</span></span><br><span class="line">mv original-hbaseStudy-1.0-SNAPSHOT.jar  processor.jar</span><br><span class="line">hdfs dfs -mkdir -p /processor</span><br><span class="line">hdfs dfs -put processor.jar /processor</span><br></pre></td></tr></table></figure>
-<h4 id="1-3-5-将jar包挂载到proc1表"><a href="#1-3-5-将jar包挂载到proc1表" class="headerlink" title="1.3.5 将jar包挂载到proc1表"></a>1.3.5 将jar包挂载到proc1表</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):056:0&gt;</span> describe <span class="string">'proc1'</span></span><br><span class="line"><span class="meta">hbase(main):055:0&gt;</span> alter <span class="string">'observer:source'</span>,METHOD =&gt; <span class="string">'table_att'</span>,<span class="string">'Coprocessor'</span>=&gt;<span class="string">'hdfs://node01:8020/processor/processor.jar|top.kfly.hbasemr.MyProcessor|1001|'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install
+# 名称必须为processor.jar
+mv original-hbaseStudy-1.0-SNAPSHOT.jar  processor.jar
+hdfs dfs -mkdir -p /processor
+hdfs dfs -put processor.jar /processor
+</code></pre>
+<h4 id="1-3-5-将jar包挂载到proc1表"><a href="#1-3-5-将jar包挂载到proc1表" class="headerlink" title="1.3.5 将jar包挂载到proc1表"></a>1.3.5 将jar包挂载到proc1表</h4><pre><code class="ruby">hbase(main):056:0&gt; describe &#39;proc1&#39;
+hbase(main):055:0&gt; alter &#39;observer:source&#39;,METHOD =&gt; &#39;table_att&#39;,&#39;Coprocessor&#39;=&gt;&#39;hdfs://node01:8020/processor/processor.jar|top.kfly.hbasemr.MyProcessor|1001|&#39;
+</code></pre>
 <ul>
 <li>再次查看’proc1’表；可以查看到我们的卸载器已经加载了</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):043:0&gt;</span> describe <span class="string">'proc1'</span></span><br></pre></td></tr></table></figure>
-<h4 id="1-3-6-向proc1表添加数据"><a href="#1-3-6-向proc1表添加数据" class="headerlink" title="1.3.6 向proc1表添加数据"></a>1.3.6 向proc1表添加数据</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">package com.kaikeba.hbase.cp.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Connection;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Put;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Table;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.testng.annotations.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestObserver</span> </span>&#123;</span><br><span class="line">    @<span class="type">Test</span></span><br><span class="line">    <span class="keyword">public</span> void testPut() <span class="keyword">throws</span> <span class="type">Exception</span>&#123;</span><br><span class="line">        <span class="comment">//获取连接</span></span><br><span class="line">        <span class="type">Configuration</span> configuration = <span class="type">HBaseConfiguration</span>.create();</span><br><span class="line">        configuration.<span class="keyword">set</span>(<span class="string">"hbase.zookeeper.quorum"</span>, <span class="string">"node01,node02"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Connection</span> connection = <span class="type">ConnectionFactory</span>.createConnection(configuration);</span><br><span class="line"></span><br><span class="line">        <span class="type">Table</span> user5 = connection.getTable(<span class="type">TableName</span>.valueOf(<span class="string">"proc1"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="type">Put</span> put1 = new <span class="type">Put</span>(<span class="type">Bytes</span>.toBytes(<span class="string">"hello_world"</span>));</span><br><span class="line"></span><br><span class="line">        put1.addColumn(<span class="type">Bytes</span>.toBytes(<span class="string">"info"</span>),<span class="string">"name"</span>.getBytes(),<span class="string">"helloworld"</span>.getBytes());</span><br><span class="line">        put1.addColumn(<span class="type">Bytes</span>.toBytes(<span class="string">"info"</span>),<span class="string">"gender"</span>.getBytes(),<span class="string">"abc"</span>.getBytes());</span><br><span class="line">        put1.addColumn(<span class="type">Bytes</span>.toBytes(<span class="string">"info"</span>),<span class="string">"nationality"</span>.getBytes(),<span class="string">"test"</span>.getBytes());</span><br><span class="line">        user5.put(put1);</span><br><span class="line">        byte[] row = put1.getRow();</span><br><span class="line">        <span class="type">System</span>.out.<span class="built_in">println</span>(<span class="type">Bytes</span>.<span class="built_in">toString</span>(row));</span><br><span class="line">        user5.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code class="ruby">hbase(main):043:0&gt; describe &#39;proc1&#39;
+</code></pre>
+<h4 id="1-3-6-向proc1表添加数据"><a href="#1-3-6-向proc1表添加数据" class="headerlink" title="1.3.6 向proc1表添加数据"></a>1.3.6 向proc1表添加数据</h4><pre><code>package com.kaikeba.hbase.cp.test;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.testng.annotations.Test;
+
+public class TestObserver {
+    @Test
+    public void testPut() throws Exception{
+        //获取连接
+        Configuration configuration = HBaseConfiguration.create();
+        configuration.set(&quot;hbase.zookeeper.quorum&quot;, &quot;node01,node02&quot;);
+
+        Connection connection = ConnectionFactory.createConnection(configuration);
+
+        Table user5 = connection.getTable(TableName.valueOf(&quot;proc1&quot;));
+
+        Put put1 = new Put(Bytes.toBytes(&quot;hello_world&quot;));
+
+        put1.addColumn(Bytes.toBytes(&quot;info&quot;),&quot;name&quot;.getBytes(),&quot;helloworld&quot;.getBytes());
+        put1.addColumn(Bytes.toBytes(&quot;info&quot;),&quot;gender&quot;.getBytes(),&quot;abc&quot;.getBytes());
+        put1.addColumn(Bytes.toBytes(&quot;info&quot;),&quot;nationality&quot;.getBytes(),&quot;test&quot;.getBytes());
+        user5.put(put1);
+        byte[] row = put1.getRow();
+        System.out.println(Bytes.toString(row));
+        user5.close();
+    }
+}
+</code></pre><ul>
 <li>注意：如果需要卸载我们的协处理器，那么进入hbase的shell命令行，执行以下命令即可</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">disable <span class="string">'proc1'</span></span><br><span class="line">alter <span class="string">'proc1'</span>,METHOD=&gt;<span class="string">'table_att_unset'</span>,NAME=&gt;<span class="string">'coprocessor$1'</span></span><br><span class="line">enable <span class="string">'proc1'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">disable &#39;proc1&#39;
+alter &#39;proc1&#39;,METHOD=&gt;&#39;table_att_unset&#39;,NAME=&gt;&#39;coprocessor$1&#39;
+enable &#39;proc1&#39;
+</code></pre>
 <h2 id="2-HBase表的rowkey设计"><a href="#2-HBase表的rowkey设计" class="headerlink" title="2. HBase表的rowkey设计"></a>2. HBase表的rowkey设计</h2><ul>
 <li>rowkey设计三原则</li>
 </ul>
@@ -311,34 +411,57 @@
 <h4 id="3-2-4-哈希"><a href="#3-2-4-哈希" class="headerlink" title="3.2.4 哈希"></a>3.2.4 哈希</h4><ul>
 <li>哈希会使同一行永远用一个前缀加盐。哈希也可以使负载分散到整个集群，但是读却是可以预测的。使用确定的哈希可以让客户端重构完整的rowkey，可以使用get操作准确获取某一个行数据。</li>
 </ul>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">rowkey</span>=MD5(username).subString(<span class="number">0</span>,<span class="number">10</span>)+时间戳</span><br></pre></td></tr></table></figure>
-<h4 id="3-2-4-反转"><a href="#3-2-4-反转" class="headerlink" title="3.2.4 反转"></a>3.2.4 反转</h4><ul>
+<pre><code>rowkey=MD5(username).subString(0,10)+时间戳    
+</code></pre><h4 id="3-2-4-反转"><a href="#3-2-4-反转" class="headerlink" title="3.2.4 反转"></a>3.2.4 反转</h4><ul>
 <li>反转固定长度或者数字格式的rowkey。这样可以使得rowkey中经常改变的部分（最没有意义的部分）放在前面。</li>
 <li>这样可以有效的随机rowkey，但是牺牲了rowkey的有序性。</li>
 </ul>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">电信公司：</span><br><span class="line">移动-----------&gt; <span class="number">136</span>xxxx9301  -----&gt;<span class="number">1039</span>xxxx631</span><br><span class="line">				<span class="number">136</span>xxxx1234  </span><br><span class="line">				<span class="number">136</span>xxxx2341 </span><br><span class="line">电信</span><br><span class="line">联通</span><br><span class="line"></span><br><span class="line">user表</span><br><span class="line">rowkey    name    age   sex    <span class="keyword">address</span></span><br><span class="line"><span class="keyword">	</span>	  lisi1    <span class="number">21</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi2    <span class="number">22</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi3    <span class="number">25</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi4    <span class="number">30</span>     m       <span class="keyword">beijing</span></span><br><span class="line"><span class="keyword">	</span>	  lisi5    <span class="number">40</span>     f       <span class="keyword">shanghai</span></span><br><span class="line"><span class="keyword">	</span>	  lisi6    <span class="number">50</span>     f       tianjin</span><br><span class="line">	          </span><br><span class="line">需求：后期想经常按照居住地和年龄进行查询？	</span><br><span class="line">rowkey= <span class="keyword">address+age+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing21+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing22+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing25+随机数</span></span><br><span class="line"><span class="keyword"> </span>       <span class="keyword">beijing30+随机数</span></span><br><span class="line"><span class="keyword"> </span>  </span><br><span class="line">rowkey= <span class="keyword">address+age+随机数</span></span><br></pre></td></tr></table></figure>
-<h2 id="4-HBase的数据备份"><a href="#4-HBase的数据备份" class="headerlink" title="4. HBase的数据备份"></a>4. HBase的数据备份</h2><h3 id="4-1-基于HBase提供的类对表进行备份"><a href="#4-1-基于HBase提供的类对表进行备份" class="headerlink" title="4.1 基于HBase提供的类对表进行备份"></a>4.1 基于HBase提供的类对表进行备份</h3><ul>
+<pre><code>电信公司：
+移动-----------&gt; 136xxxx9301  -----&gt;1039xxxx631
+                136xxxx1234  
+                136xxxx2341 
+电信
+联通
+
+user表
+rowkey    name    age   sex    address
+          lisi1    21     m       beijing
+          lisi2    22     m       beijing
+          lisi3    25     m       beijing
+          lisi4    30     m       beijing
+          lisi5    40     f       shanghai
+          lisi6    50     f       tianjin
+
+需求：后期想经常按照居住地和年龄进行查询？    
+rowkey= address+age+随机数
+        beijing21+随机数
+        beijing22+随机数
+        beijing25+随机数
+        beijing30+随机数
+
+rowkey= address+age+随机数
+</code></pre><h2 id="4-HBase的数据备份"><a href="#4-HBase的数据备份" class="headerlink" title="4. HBase的数据备份"></a>4. HBase的数据备份</h2><h3 id="4-1-基于HBase提供的类对表进行备份"><a href="#4-1-基于HBase提供的类对表进行备份" class="headerlink" title="4.1 基于HBase提供的类对表进行备份"></a>4.1 基于HBase提供的类对表进行备份</h3><ul>
 <li><p>使用HBase提供的类把HBase中某张表的数据导出到HDFS，之后再导出到测试hbase表中。</p>
 </li>
 <li><p>(1)  ==从hbase表导出到HDFS==</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 shells]$ hbase org.apache.hadoop.hbase.mapreduce.Export myuser /hbase_data/myuser_bak</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 shells]$ hbase org.apache.hadoop.hbase.mapreduce.Export myuser /hbase_data/myuser_bak
+
+</code></pre>
 </li>
-</ul>
-<ul>
 <li><p>(2) ==文件导入hbase表==</p>
 <p>hbase shell中创建备份目标表</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'myuser_bak'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">create &#39;myuser_bak&#39;,&#39;f1&#39;,&#39;f2&#39;
+</code></pre>
 </li>
-</ul>
-<ul>
 <li><p>将HDFS上的数据导入到备份目标表中</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.mapreduce.Driver import myuser_bak /hbase_data/myuser_bak/*</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">hbase org.apache.hadoop.hbase.mapreduce.Driver import myuser_bak /hbase_data/myuser_bak/*
+</code></pre>
 </li>
 <li><p>补充说明</p>
 <p>以上都是对数据进行了全量备份，后期也可以实现表的<strong>增量数据备份</strong>，增量备份跟全量备份操作差不多，只不过要在后面加上时间戳。</p>
 <p>例如：<br>HBase数据导出到HDFS</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase org<span class="selector-class">.apache</span><span class="selector-class">.hadoop</span><span class="selector-class">.hbase</span><span class="selector-class">.mapreduce</span><span class="selector-class">.Export</span> test /hbase_data/test_bak_increment 开始时间戳  结束时间戳</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>hbase org.apache.hadoop.hbase.mapreduce.Export test /hbase_data/test_bak_increment 开始时间戳  结束时间戳
+</code></pre></li>
 </ul>
 <h3 id="4-2-基于snapshot快照对表进行备份"><a href="#4-2-基于snapshot快照对表进行备份" class="headerlink" title="4.2 基于snapshot快照对表进行备份"></a>4.2 基于snapshot快照对表进行备份</h3><ul>
 <li><p>通过snapshot快照的方式实现HBase数据的迁移和拷贝。这种方式比较常用，效率高，也是最为推荐的数据迁移方式。</p>
@@ -354,32 +477,54 @@
 <h3 id="4-3-快照实战"><a href="#4-3-快照实战" class="headerlink" title="4.3 快照实战"></a>4.3 <strong>快照实战</strong></h3><ul>
 <li>1、创建表的snapshot</li>
 </ul>
-<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">snapshot</span> <span class="string">'tableName'</span>, <span class="string">'snapshotName'</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>snapshot &#39;tableName&#39;, &#39;snapshotName&#39;
+</code></pre><ul>
 <li><p>2、查看snapshot</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list_snapshots</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>list_snapshots  
+</code></pre></li>
 </ul>
 <p>​        查找以test开头的snapshot</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">list_snapshots</span> <span class="string">'test.*'</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>list_snapshots &#39;test.*&#39;
+</code></pre><ul>
 <li>3、恢复snapshot</li>
 </ul>
 <p>​        ps:这里需要对表进行disable操作，先把表置为不可用状态，然后在进行进行restore_snapshot的操作</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">disable</span> <span class="string">'tableName'</span></span><br><span class="line">restore_snapshot <span class="string">'snapshotName'</span></span><br><span class="line"><span class="built_in">enable</span> <span class="string">'tableName'</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>disable &#39;tableName&#39;
+restore_snapshot &#39;snapshotName&#39;
+enable &#39;tableName&#39;
+</code></pre><ul>
 <li><p>4、删除snapshot</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">delete_snapshot</span> <span class="string">'snapshotName'</span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>delete_snapshot &#39;snapshotName&#39;
+</code></pre></li>
 <li><p>5、迁移 snapshot</p>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot \</span><br><span class="line">-<span class="ruby">snapshot snapshotName  \</span></span><br><span class="line"><span class="ruby">-copy-from <span class="symbol">hdfs:</span>/<span class="regexp">/src-hbase-root-dir/hbase</span> \</span></span><br><span class="line"><span class="ruby">-copy-to <span class="symbol">hdfs:</span>/<span class="regexp">/dst-hbase-root-dir/hbase</span> \</span></span><br><span class="line"><span class="ruby">-mappers <span class="number">1</span> \</span></span><br><span class="line"><span class="ruby">-bandwidth <span class="number">1024</span></span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">例如：</span></span><br><span class="line"><span class="ruby">hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot \</span></span><br><span class="line"><span class="ruby">-snapshot test  \</span></span><br><span class="line"><span class="ruby">-copy-from <span class="symbol">hdfs:</span>/<span class="regexp">/node01:8020/hbase</span> \</span></span><br><span class="line"><span class="ruby">-copy-to <span class="symbol">hdfs:</span>/<span class="regexp">/node01:8020/hbase</span>1 \</span></span><br><span class="line"><span class="ruby">-mappers <span class="number">1</span> \</span></span><br><span class="line"><span class="ruby">-bandwidth <span class="number">1024</span></span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot \
+-snapshot snapshotName  \
+-copy-from hdfs://src-hbase-root-dir/hbase \
+-copy-to hdfs://dst-hbase-root-dir/hbase \
+-mappers 1 \
+-bandwidth 1024
+
+例如：
+hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot \
+-snapshot test  \
+-copy-from hdfs://node01:8020/hbase \
+-copy-to hdfs://node01:8020/hbase1 \
+-mappers 1 \
+-bandwidth 1024
+</code></pre></li>
 </ul>
 <p>​        注意：这种方式用于将快照表迁移到另外一个集群的时候使用，使用MR进行数据的拷贝，速度很快，使用的时候记得设置好bandwidth参数，以免由于网络打满导致的线上业务故障。</p>
 <ul>
 <li><p>6、将snapshot使用bulkload的方式导入</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hbase org<span class="selector-class">.apache</span><span class="selector-class">.hadoop</span><span class="selector-class">.hbase</span><span class="selector-class">.mapreduce</span><span class="selector-class">.LoadIncrementalHFiles</span> \</span><br><span class="line">hdfs:<span class="comment">//dst-hbase-root-dir/hbase/archive/datapath/tablename/filename \</span></span><br><span class="line">tablename</span><br><span class="line"></span><br><span class="line">例如：</span><br><span class="line">创建一个新表</span><br><span class="line">create <span class="string">'newTest'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span></span><br><span class="line">hbase org<span class="selector-class">.apache</span><span class="selector-class">.hadoop</span><span class="selector-class">.hbase</span><span class="selector-class">.mapreduce</span><span class="selector-class">.LoadIncrementalHFiles</span> hdfs:<span class="comment">//node1:9000/hbase1/archive/data/default/test/6325fabb429bf45c5dcbbe672225f1fb newTest</span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles \
+hdfs://dst-hbase-root-dir/hbase/archive/datapath/tablename/filename \
+tablename
+
+例如：
+创建一个新表
+create &#39;newTest&#39;,&#39;f1&#39;,&#39;f2&#39;
+hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles hdfs://node1:9000/hbase1/archive/data/default/test/6325fabb429bf45c5dcbbe672225f1fb newTest
+</code></pre></li>
 </ul>
 <h2 id="5-HBase二级索引"><a href="#5-HBase二级索引" class="headerlink" title="5. HBase二级索引"></a>5. HBase二级索引</h2><p><img src="assets/hbase寻址.png" alt="hbase寻址"></p>
 <ul>
@@ -418,7 +563,24 @@
 <li><p>Region服务器组：一个命名或一张表，可以被固定到一组RegionServers上，从而保证了数据隔离性</p>
 </li>
 </ul>
-<h3 id="6-3-namespace的基本操作"><a href="#6-3-namespace的基本操作" class="headerlink" title="6.3 namespace的基本操作"></a>6.3 namespace的基本操作</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">创建namespace</span><br><span class="line">hbase&gt;create_namespace 'nametest'  </span><br><span class="line"></span><br><span class="line">查看namespace</span><br><span class="line">hbase&gt;describe_namespace 'nametest'  </span><br><span class="line"></span><br><span class="line">列出所有namespace</span><br><span class="line">hbase&gt;list_namespace  </span><br><span class="line"></span><br><span class="line">在namespace下创建表</span><br><span class="line">hbase&gt;create 'nametest:testtable', 'fm1' </span><br><span class="line"></span><br><span class="line">查看namespace下的表</span><br><span class="line">hbase&gt;list_namespace_tables 'nametest'  </span><br><span class="line"></span><br><span class="line">删除namespace</span><br><span class="line">hbase&gt;drop_namespace 'nametest'</span><br></pre></td></tr></table></figure>
+<h3 id="6-3-namespace的基本操作"><a href="#6-3-namespace的基本操作" class="headerlink" title="6.3 namespace的基本操作"></a>6.3 namespace的基本操作</h3><pre><code class="sql">创建namespace
+hbase&gt;create_namespace &#39;nametest&#39;  
+
+查看namespace
+hbase&gt;describe_namespace &#39;nametest&#39;  
+
+列出所有namespace
+hbase&gt;list_namespace  
+
+在namespace下创建表
+hbase&gt;create &#39;nametest:testtable&#39;, &#39;fm1&#39; 
+
+查看namespace下的表
+hbase&gt;list_namespace_tables &#39;nametest&#39;  
+
+删除namespace
+hbase&gt;drop_namespace &#39;nametest&#39;  
+</code></pre>
 <h2 id="7-HBase的数据版本的确界以及TTL"><a href="#7-HBase的数据版本的确界以及TTL" class="headerlink" title="7. HBase的数据版本的确界以及TTL"></a>7. HBase的数据版本的确界以及TTL</h2><h3 id="7-1-数据的确界"><a href="#7-1-数据的确界" class="headerlink" title="7.1 数据的确界"></a>7.1 数据的确界</h3><ul>
 <li><p>在HBase当中，我们可以为数据设置上界和下界，其实就是定义数据的历史版本保留多少个，通过自定义历史版本保存的数量，我们可以实现数据多个历史版本的数据查询</p>
 </li>
@@ -444,8 +606,83 @@
 <h4 id="7-2-1-创建maven工程"><a href="#7-2-1-创建maven工程" class="headerlink" title="7.2.1 创建maven工程"></a>7.2.1 创建maven工程</h4><ul>
 <li>创建maven工程，导入jar包坐标</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-mr1-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="7-2-2-代码开发"><a href="#7-2-2-代码开发" class="headerlink" title="7.2.2 代码开发"></a>7.2.2 代码开发</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 初始化连接</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Configuration conf = HBaseConfiguration.create();</span><br><span class="line">       conf.set(<span class="string">"hbase.zookeeper.quorum"</span>,<span class="string">"node01:2181,node02:2181,node03:2181"</span>);</span><br><span class="line">       conf.set(<span class="string">"zookeeper.znode.parent"</span>,<span class="string">"/HBase"</span>);</span><br><span class="line">       conf.set(<span class="string">"fs.fefaultFS"</span>,<span class="string">"hadoop.hdfs://node01:8020"</span>);</span><br><span class="line">       connection = ConnectionFactory.createConnection(conf);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 创建表</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createTable</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Admin admin = connection.getAdmin();</span><br><span class="line">       <span class="keyword">if</span>(!admin.tableExists(TableName.valueOf(TABLE_NAME)))&#123;</span><br><span class="line">           <span class="comment">// table</span></span><br><span class="line">           HTableDescriptor table = <span class="keyword">new</span> HTableDescriptor(TableName.valueOf(TABLE_NAME));</span><br><span class="line">           <span class="comment">// columa family</span></span><br><span class="line">           HColumnDescriptor column = <span class="keyword">new</span> HColumnDescriptor(<span class="string">"f1"</span>);</span><br><span class="line">           <span class="comment">// version</span></span><br><span class="line">           column.setMaxVersions(<span class="number">5</span>);</span><br><span class="line">           column.setMinVersions(<span class="number">3</span>);</span><br><span class="line">           <span class="comment">// ttl unit s</span></span><br><span class="line">           column.setTimeToLive(<span class="number">30</span>);</span><br><span class="line">           table.addFamily(column);</span><br><span class="line">           admin.createTable(table);</span><br><span class="line">       &#125;</span><br><span class="line">       admin.close();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * insert data</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertData</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span> ; i++) &#123;</span><br><span class="line">           Put put = <span class="keyword">new</span> Put((<span class="string">"column"</span>).getBytes());</span><br><span class="line">           put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"col1"</span>.getBytes(), System.currentTimeMillis(),Bytes.toBytes(<span class="string">"column"</span> + i));</span><br><span class="line">           table.put(put);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * get raw cell</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getRawCell</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">       Get get = <span class="keyword">new</span> Get(<span class="string">"column"</span>.getBytes());</span><br><span class="line">       get.setMaxVersions();</span><br><span class="line">       Result result = table.get(get);</span><br><span class="line">       Cell[] cells = result.rawCells();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cells.length; i++) &#123;</span><br><span class="line">           System.out.println(Bytes.toString(CellUtil.cloneValue(cells[i])));</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+  &lt;version&gt;2.6.0-mr1-cdh5.14.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+  &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;
+  &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+  &lt;artifactId&gt;hbase-server&lt;/artifactId&gt;
+  &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h4 id="7-2-2-代码开发"><a href="#7-2-2-代码开发" class="headerlink" title="7.2.2 代码开发"></a>7.2.2 代码开发</h4><pre><code class="java"> /**
+     * 初始化连接
+     * @throws IOException
+     */
+    public void init() throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        conf.set(&quot;hbase.zookeeper.quorum&quot;,&quot;node01:2181,node02:2181,node03:2181&quot;);
+        conf.set(&quot;zookeeper.znode.parent&quot;,&quot;/HBase&quot;);
+        conf.set(&quot;fs.fefaultFS&quot;,&quot;hadoop.hdfs://node01:8020&quot;);
+        connection = ConnectionFactory.createConnection(conf);
+    }
+
+    /**
+     * 创建表
+     */
+    public void createTable() throws IOException {
+        Admin admin = connection.getAdmin();
+        if(!admin.tableExists(TableName.valueOf(TABLE_NAME))){
+            // table
+            HTableDescriptor table = new HTableDescriptor(TableName.valueOf(TABLE_NAME));
+            // columa family
+            HColumnDescriptor column = new HColumnDescriptor(&quot;f1&quot;);
+            // version
+            column.setMaxVersions(5);
+            column.setMinVersions(3);
+            // ttl unit s
+            column.setTimeToLive(30);
+            table.addFamily(column);
+            admin.createTable(table);
+        }
+        admin.close();
+    }
+
+    /**
+     * insert data
+     * @throws IOException
+     */
+    public void insertData() throws IOException {
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        for (int i = 0; i &lt; 6 ; i++) {
+            Put put = new Put((&quot;column&quot;).getBytes());
+            put.addColumn(&quot;f1&quot;.getBytes(),&quot;col1&quot;.getBytes(), System.currentTimeMillis(),Bytes.toBytes(&quot;column&quot; + i));
+            table.put(put);
+        }
+    }
+
+    /**
+     * get raw cell
+     * @throws IOException
+     */
+    public void getRawCell() throws IOException {
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        Get get = new Get(&quot;column&quot;.getBytes());
+        get.setMaxVersions();
+        Result result = table.get(get);
+        Cell[] cells = result.rawCells();
+        for (int i = 0; i &lt; cells.length; i++) {
+            System.out.println(Bytes.toString(CellUtil.cloneValue(cells[i])));
+        }
+    }
+</code></pre>
 
         
         <br />

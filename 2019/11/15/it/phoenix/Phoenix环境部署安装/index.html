@@ -161,79 +161,206 @@
 <h1 id="2、上传解压"><a href="#2、上传解压" class="headerlink" title="2、上传解压"></a>2、上传解压</h1><ul>
 <li>将安装包上传到node02服务器的/kfly/soft路径下，然后进行解压</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/soft/</span><br><span class="line">tar -zxf apache-phoenix-4.14.0-cdh5.14.2-bin.tar.gz -C /kfly/install/</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/soft/
+tar -zxf apache-phoenix-4.14.0-cdh5.14.2-bin.tar.gz -C /kfly/install/
+</code></pre>
 <h1 id="3、修改配置"><a href="#3、修改配置" class="headerlink" title="3、修改配置"></a>3、修改配置</h1><h2 id="3-1-拷贝jar包"><a href="#3-1-拷贝jar包" class="headerlink" title="3.1 拷贝jar包"></a>3.1 拷贝jar包</h2><ul>
 <li><p>将phoenix目录下的==phoenix-4.8.2-HBase-1.2-server.jar==、==phoenix-core-4.8.2-HBase-1.2.jar==拷贝到==各个 HBase节点的lib目录==下。</p>
 </li>
 <li><p>node02执行以下命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin</span><br><span class="line"></span><br><span class="line">scp phoenix-4.14.0-cdh5.14.2-server.jar phoenix-core-4.14.0-cdh5.14.2.jar node01:/kfly/install/hbase-1.2.0-cdh5.14.2/lib/ </span><br><span class="line"></span><br><span class="line">scp phoenix-4.14.0-cdh5.14.2-server.jar phoenix-core-4.14.0-cdh5.14.2.jar node02:/kfly/install/hbase-1.2.0-cdh5.14.2/lib/ </span><br><span class="line"></span><br><span class="line">scp phoenix-4.14.0-cdh5.14.2-server.jar phoenix-core-4.14.0-cdh5.14.2.jar node03:/kfly/install/hbase-1.2.0-cdh5.14.2/lib/</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin
+
+scp phoenix-4.14.0-cdh5.14.2-server.jar phoenix-core-4.14.0-cdh5.14.2.jar node01:/kfly/install/hbase-1.2.0-cdh5.14.2/lib/ 
+
+scp phoenix-4.14.0-cdh5.14.2-server.jar phoenix-core-4.14.0-cdh5.14.2.jar node02:/kfly/install/hbase-1.2.0-cdh5.14.2/lib/ 
+
+scp phoenix-4.14.0-cdh5.14.2-server.jar phoenix-core-4.14.0-cdh5.14.2.jar node03:/kfly/install/hbase-1.2.0-cdh5.14.2/lib/ 
+</code></pre>
 </li>
 </ul>
 <h2 id="3-2-拷贝配置文件"><a href="#3-2-拷贝配置文件" class="headerlink" title="3.2 拷贝配置文件"></a>3.2 拷贝配置文件</h2><ul>
 <li><p>将HBase的配置文件==hbase-site.xml==、 hadoop下的配置文件==core-site.xml== 、==hdfs-site.xml==放到phoenix/bin/下，替换phoenix原来的配置文件。</p>
 <p>node02执行以下命令，进行拷贝配置文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cp /kfly/install/hadoop-2.6.0/etc/hadoop/core-site.xml  /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/</span><br><span class="line"></span><br><span class="line">scp /kfly/install/hadoop-2.6.0/etc/hadoop/hdfs-site.xml /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/</span><br><span class="line"></span><br><span class="line">scp /kfly/install/hbase-1.2.0-cdh5.14.2/conf/hbase-site.xml /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cp /kfly/install/hadoop-2.6.0/etc/hadoop/core-site.xml  /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/
+
+scp /kfly/install/hadoop-2.6.0/etc/hadoop/hdfs-site.xml /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/
+
+scp /kfly/install/hbase-1.2.0-cdh5.14.2/conf/hbase-site.xml /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/
+</code></pre>
 </li>
 <li><p>重启hbase集群，使Phoenix的jar包生效。</p>
 <p>node01执行以下命令来重启hbase的集群</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/<span class="keyword">install</span>/hbase<span class="number">-1.2</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>/</span><br><span class="line"><span class="keyword">bin</span>/<span class="keyword">stop</span>-hbase.sh </span><br><span class="line"><span class="keyword">bin</span>/<span class="keyword">start</span>-hbase.sh</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>cd /kfly/install/hbase-1.2.0-cdh5.14.2/
+bin/stop-hbase.sh 
+bin/start-hbase.sh 
+</code></pre></li>
 </ul>
 <h1 id="4、验证是否成功"><a href="#4、验证是否成功" class="headerlink" title="4、验证是否成功"></a>4、验证是否成功</h1><ul>
 <li><p>在phoenix/bin下输入命令, 进入到命令行，接下来就可以操作了</p>
 </li>
 <li><p>node02执行以下命令，进入phoenix客户端</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/</span><br><span class="line">bin/sqlline.py node01:2181</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/
+bin/sqlline.py node01:2181
+</code></pre>
 </li>
 </ul>
 <h1 id="5、Phoenix使用"><a href="#5、Phoenix使用" class="headerlink" title="5、Phoenix使用"></a>5、Phoenix使用</h1><h2 id="5-1-批处理方式"><a href="#5-1-批处理方式" class="headerlink" title="5.1 批处理方式"></a>5.1 批处理方式</h2><ul>
 <li>node02执行以下命令创建user_phoenix.sql文件</li>
 </ul>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p <span class="meta-keyword">/kfly/</span>doc/phoenixsql</span><br><span class="line">cd <span class="meta-keyword">/kfly/</span>install<span class="meta-keyword">/phoenixsql/</span></span><br><span class="line">vi user_phoenix.sql</span><br></pre></td></tr></table></figure>
-<p>​    内容如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> user_phoenix (state <span class="built_in">varchar</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,  city <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,  population <span class="built_in">BIGINT</span>  <span class="keyword">CONSTRAINT</span> my_pk PRIMARY <span class="keyword">KEY</span> (state, city));</span><br></pre></td></tr></table></figure>
+<pre><code>mkdir -p /kfly/doc/phoenixsql
+cd /kfly/install/phoenixsql/
+vi user_phoenix.sql
+</code></pre><p>​    内容如下</p>
+<pre><code class="sql">create table if not exists user_phoenix (state varchar(10) NOT NULL,  city varchar(20) NOT NULL,  population BIGINT  CONSTRAINT my_pk PRIMARY KEY (state, city));
+</code></pre>
 <ul>
 <li>node02执行以下命令，创建user_phoenix.csv数据文件</li>
 </ul>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd <span class="regexp">/kfly/i</span>nstall<span class="regexp">/phoenixsql/</span></span><br><span class="line">vi user_phoenix.csv</span><br></pre></td></tr></table></figure>
-<p>​    内容如下</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NY,</span><span class="keyword">New</span> York,<span class="number">8143197</span></span><br><span class="line"><span class="built_in">CA,</span>Los Angeles,<span class="number">3844829</span></span><br><span class="line"><span class="built_in">IL,</span>Chicago,<span class="number">2842518</span></span><br><span class="line"><span class="built_in">TX,</span>Houston,<span class="number">2016582</span></span><br><span class="line"><span class="built_in">PA,</span>Philadelphia,<span class="number">1463281</span></span><br><span class="line"><span class="built_in">AZ,</span>Phoenix,<span class="number">1461575</span></span><br><span class="line"><span class="built_in">TX,</span>San Antonio,<span class="number">1256509</span></span><br><span class="line"><span class="built_in">CA,</span>San Diego,<span class="number">1255540</span></span><br><span class="line"><span class="built_in">TX,</span>Dallas,<span class="number">1213825</span></span><br><span class="line"><span class="built_in">CA,</span>San Jose,<span class="number">912332</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>cd /kfly/install/phoenixsql/
+vi user_phoenix.csv
+</code></pre><p>​    内容如下</p>
+<pre><code>NY,New York,8143197
+CA,Los Angeles,3844829
+IL,Chicago,2842518
+TX,Houston,2016582
+PA,Philadelphia,1463281
+AZ,Phoenix,1461575
+TX,San Antonio,1256509
+CA,San Diego,1255540
+TX,Dallas,1213825
+CA,San Jose,912332
+</code></pre><ul>
 <li>创建user_phoenix_query.sql文件</li>
 </ul>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> <span class="string">/kfly/doc/phoenixsql</span></span><br><span class="line">vi user_phoenix_query.sql</span><br></pre></td></tr></table></figure>
-<p>​        内容如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> state <span class="keyword">as</span> <span class="string">"userState"</span>,<span class="keyword">count</span>(city) <span class="keyword">as</span> <span class="string">"City Count"</span>,<span class="keyword">sum</span>(population) <span class="keyword">as</span> <span class="string">"Population Sum"</span> <span class="keyword">FROM</span> user_phoenix <span class="keyword">GROUP</span> <span class="keyword">BY</span> state;</span><br></pre></td></tr></table></figure>
+<pre><code>cd /kfly/doc/phoenixsql
+vi user_phoenix_query.sql
+</code></pre><p>​        内容如下</p>
+<pre><code class="sql">select state as &quot;userState&quot;,count(city) as &quot;City Count&quot;,sum(population) as &quot;Population Sum&quot; FROM user_phoenix GROUP BY state; 
+</code></pre>
 <ul>
 <li>执行sql语句</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/doc/phoenixsql</span><br><span class="line"></span><br><span class="line">/kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/psql.py  node01:2181 user_phoenix.sql user_phoenix.csv user_phoenix_query.sql</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/doc/phoenixsql
+
+/kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/bin/psql.py  node01:2181 user_phoenix.sql user_phoenix.csv user_phoenix_query.sql
+</code></pre>
 <h2 id="5-2-命令行方式"><a href="#5-2-命令行方式" class="headerlink" title="5.2 命令行方式"></a>5.2 命令行方式</h2><ul>
 <li>执行命令</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/</span><br><span class="line">bin/sqlline.py node01:2181</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/
+bin/sqlline.py node01:2181
+</code></pre>
 <ul>
 <li><p>退出命令行方式</p>
 <p>phoenix的命令都需要一个==感叹号==</p>
 </li>
 </ul>
-<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!<span class="keyword">quit</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>!quit
+</code></pre><ul>
 <li><p>查看phoenix的帮助文档，显示所有命令；用!help</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:phoenix:node01:2181&gt; !help</span><br><span class="line">!all                Execute the specified SQL against all the current</span><br><span class="line">                  connections</span><br><span class="line">!autocommit         <span class="builtin-name">Set</span> autocommit mode on <span class="keyword">or</span> off</span><br><span class="line">!batch              Start <span class="keyword">or</span> execute a batch of statements</span><br><span class="line">!brief              <span class="builtin-name">Set</span> verbose mode off</span><br><span class="line">!call               Execute a callable statement</span><br><span class="line">!close              Close the current<span class="built_in"> connection </span><span class="keyword">to</span> the database</span><br><span class="line">!closeall           Close all current open connections</span><br><span class="line">!columns            List all the columns <span class="keyword">for</span> the specified table</span><br><span class="line">!commit             Commit the current transaction (<span class="keyword">if</span> autocommit is off)</span><br><span class="line">!connect            Open a new<span class="built_in"> connection </span><span class="keyword">to</span> the database.</span><br><span class="line">!dbinfo             Give metadata information about the database</span><br><span class="line">!describe           Describe a table</span><br><span class="line">!dropall            Drop all tables <span class="keyword">in</span> the current database</span><br><span class="line">!exportedkeys       List all the exported keys <span class="keyword">for</span> the specified table</span><br><span class="line">!go                 Select the current connection</span><br><span class="line">!help               <span class="builtin-name">Print</span> a summary of command usage</span><br><span class="line">!history            Display the command history</span><br><span class="line">!importedkeys       List all the imported keys <span class="keyword">for</span> the specified table</span><br><span class="line">!indexes            List all the indexes <span class="keyword">for</span> the specified table</span><br><span class="line">!isolation          <span class="builtin-name">Set</span> the transaction isolation <span class="keyword">for</span> this connection</span><br><span class="line">!list               List the current connections</span><br><span class="line">!manual             Display the SQLLine manual</span><br><span class="line">!metadata           Obtain metadata information</span><br><span class="line">!nativesql          Show the native SQL <span class="keyword">for</span> the specified statement</span><br><span class="line">!outputformat       <span class="builtin-name">Set</span> the output format <span class="keyword">for</span> displaying results</span><br><span class="line">                  (table,vertical,csv,tsv,xmlattrs,xmlelements)</span><br><span class="line">!primarykeys        List all the primary keys <span class="keyword">for</span> the specified table</span><br><span class="line">!procedures         List all the procedures</span><br><span class="line">!properties         Connect <span class="keyword">to</span> the database specified <span class="keyword">in</span> the properties file(s)</span><br><span class="line">!quit               Exits the program</span><br><span class="line">!reconnect          Reconnect <span class="keyword">to</span> the database</span><br><span class="line">!record             Record all output <span class="keyword">to</span> the specified file</span><br><span class="line">!rehash             Fetch table <span class="keyword">and</span> column names <span class="keyword">for</span> command completion</span><br><span class="line">!rollback           Roll back the current transaction (<span class="keyword">if</span> autocommit is off)</span><br><span class="line">!<span class="builtin-name">run</span>                <span class="builtin-name">Run</span> a<span class="built_in"> script </span><span class="keyword">from</span> the specified file</span><br><span class="line">!save               Save the current variabes <span class="keyword">and</span> aliases</span><br><span class="line">!scan               Scan <span class="keyword">for</span> installed JDBC drivers</span><br><span class="line">!script             Start saving a<span class="built_in"> script </span><span class="keyword">to</span> a file</span><br><span class="line">!<span class="builtin-name">set</span>                <span class="builtin-name">Set</span> a sqlline variable</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>0: jdbc:phoenix:node01:2181&gt; !help
+!all                Execute the specified SQL against all the current
+                  connections
+!autocommit         Set autocommit mode on or off
+!batch              Start or execute a batch of statements
+!brief              Set verbose mode off
+!call               Execute a callable statement
+!close              Close the current connection to the database
+!closeall           Close all current open connections
+!columns            List all the columns for the specified table
+!commit             Commit the current transaction (if autocommit is off)
+!connect            Open a new connection to the database.
+!dbinfo             Give metadata information about the database
+!describe           Describe a table
+!dropall            Drop all tables in the current database
+!exportedkeys       List all the exported keys for the specified table
+!go                 Select the current connection
+!help               Print a summary of command usage
+!history            Display the command history
+!importedkeys       List all the imported keys for the specified table
+!indexes            List all the indexes for the specified table
+!isolation          Set the transaction isolation for this connection
+!list               List the current connections
+!manual             Display the SQLLine manual
+!metadata           Obtain metadata information
+!nativesql          Show the native SQL for the specified statement
+!outputformat       Set the output format for displaying results
+                  (table,vertical,csv,tsv,xmlattrs,xmlelements)
+!primarykeys        List all the primary keys for the specified table
+!procedures         List all the procedures
+!properties         Connect to the database specified in the properties file(s)
+!quit               Exits the program
+!reconnect          Reconnect to the database
+!record             Record all output to the specified file
+!rehash             Fetch table and column names for command completion
+!rollback           Roll back the current transaction (if autocommit is off)
+!run                Run a script from the specified file
+!save               Save the current variabes and aliases
+!scan               Scan for installed JDBC drivers
+!script             Start saving a script to a file
+!set                Set a sqlline variable
+</code></pre></li>
 </ul>
 <p>Variable        Value      Description<br>=============== ========== ================================<br>autoCommit      true/false Enable/disable automatic<br>                           transaction commit<br>autoSave        true/false Automatically save preferences<br>color           true/false Control whether color is used<br>                           for display<br>fastConnect     true/false Skip building table/column list<br>                           for tab-completion<br>force           true/false Continue running script even<br>                           after errors<br>headerInterval  integer    The interval between which<br>                           headers are displayed<br>historyFile     path       File in which to save command<br>                           history. Default is<br>                           $HOME/.sqlline/history (UNIX,<br>                           Linux, Mac OS),<br>                           $HOME/sqlline/history (Windows)<br>incremental     true/false Do not receive all rows from<br>                           server before printing the first<br>                           row. Uses fewer resources,<br>                           especially for long-running<br>                           queries, but column widths may<br>                           be incorrect.<br>isolation       LEVEL      Set transaction isolation level<br>maxColumnWidth  integer    The maximum width to use when<br>                           displaying columns<br>maxHeight       integer    The maximum height of the<br>                           terminal<br>maxWidth        integer    The maximum width of the<br>                           terminal<br>numberFormat    pattern    Format numbers using<br>                           DecimalFormat pattern<br>outputFormat    table/vertical/csv/tsv Format mode for<br>                           result display<br>propertiesFile  path       File from which SqlLine reads<br>                           properties on startup; default is<br>                           $HOME/.sqlline/sqlline.properties<br>                           (UNIX, Linux, Mac OS),<br>                           $HOME/sqlline/sqlline.properties<br>                           (Windows)<br>rowLimit        integer    Maximum number of rows returned<br>                           from a query; zero means no<br>                           limit<br>showElapsedTime true/false Display execution time when<br>                           verbose<br>showHeader      true/false Show column names in query<br>                           results<br>showNestedErrs  true/false Display nested errors<br>showWarnings    true/false Display connection warnings<br>silent          true/false Be more silent<br>timeout         integer    Query timeout in seconds; less<br>                           than zero means no timeout<br>trimScripts     true/false Remove trailing spaces from<br>                           lines read from script files<br>verbose         true/false Show verbose error messages and<br>                           debug info<br>!sql                Execute a SQL command<br>!tables             List all the tables in the database<br>!typeinfo           Display the type map for the current connection<br>!verbose            Set verbose mode on</p>
-  <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">* 1、建立employee的映射表</span></span><br><span class="line"></span><br><span class="line">  进入hbase客户端，创建一个普通表employee，并且有两个列族 company 和family</span><br><span class="line"></span><br><span class="line">  ~~~</span><br><span class="line">  cd /kfly/install/hbase<span class="number">-1.2</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>/</span><br><span class="line">  bin/hbase shell</span><br><span class="line">  hbase(main):<span class="number">001</span>:<span class="number">0</span>&gt; create <span class="string">'employee'</span>,<span class="string">'company'</span>,<span class="string">'family'</span></span><br><span class="line">  ~~~</span><br><span class="line"></span><br><span class="line"><span class="comment">* 2、添加数据</span></span><br><span class="line"></span><br><span class="line">  ~~~</span><br><span class="line">  <span class="keyword">put</span> <span class="string">'employee'</span>,<span class="string">'row1'</span>,<span class="string">'company:name'</span>,<span class="string">'ted'</span></span><br><span class="line">  <span class="keyword">put</span> <span class="string">'employee'</span>,<span class="string">'row1'</span>,<span class="string">'company:position'</span>,<span class="string">'worker'</span></span><br><span class="line">  <span class="keyword">put</span> <span class="string">'employee'</span>,<span class="string">'row1'</span>,<span class="string">'family:tel'</span>,<span class="string">'13600912345'</span></span><br><span class="line">  <span class="keyword">put</span> <span class="string">'employee'</span>,<span class="string">'row2'</span>,<span class="string">'company:name'</span>,<span class="string">'michael'</span></span><br><span class="line">  <span class="keyword">put</span> <span class="string">'employee'</span>,<span class="string">'row2'</span>,<span class="string">'company:position'</span>,<span class="string">'manager'</span></span><br><span class="line">  <span class="keyword">put</span> <span class="string">'employee'</span>,<span class="string">'row2'</span>,<span class="string">'family:tel'</span>,<span class="string">'1894225698'</span></span><br><span class="line">  ~~~</span><br><span class="line"></span><br><span class="line"><span class="comment">* 3、建立hbase到phoenix的映射表</span></span><br><span class="line"></span><br><span class="line">  node02进入到phoenix的客户端，然后创建映射表</span><br><span class="line"></span><br><span class="line">  ~~~</span><br><span class="line">  cd kflyb/install/apache-phoenix<span class="number">-4.14</span><span class="number">.0</span>-cdh5<span class="number">.14</span><span class="number">.2</span>-bin</span><br><span class="line">  bin/sqlline.py node01:<span class="number">2181</span></span><br><span class="line">  ~~~</span><br><span class="line"></span><br><span class="line">  执行语句</span><br><span class="line"></span><br><span class="line">  ```sql</span><br><span class="line">  CREATE <span class="keyword">TABLE</span> IF <span class="comment">NOT EXISTS</span> <span class="comment">"employee"</span><span class="comment"> (</span><span class="comment">"no"</span><span class="comment"> VARCHAR(10) NOT NULL PRIMARY KEY,</span> <span class="comment">"company"</span><span class="comment">.</span><span class="comment">"name"</span><span class="comment"> VARCHAR(30),</span><span class="comment">"company"</span><span class="comment">.</span><span class="comment">"position"</span><span class="comment"> VARCHAR(20),</span> <span class="comment">"family"</span><span class="comment">.</span><span class="comment">"tel"</span><span class="comment"> VARCHAR(20),</span> <span class="comment">"family"</span><span class="comment">.</span><span class="comment">"age"</span><span class="comment"> INTEGER) column_encoded_bytes=0</span>;</span><br></pre></td></tr></table></figure>
-<blockquote>
+<pre><code>* 1、建立employee的映射表
+
+  进入hbase客户端，创建一个普通表employee，并且有两个列族 company 和family
+
+  ~~~
+  cd /kfly/install/hbase-1.2.0-cdh5.14.2/
+  bin/hbase shell
+  hbase(main):001:0&gt; create &#39;employee&#39;,&#39;company&#39;,&#39;family&#39;
+  ~~~
+
+* 2、添加数据
+
+  ~~~
+  put &#39;employee&#39;,&#39;row1&#39;,&#39;company:name&#39;,&#39;ted&#39;
+  put &#39;employee&#39;,&#39;row1&#39;,&#39;company:position&#39;,&#39;worker&#39;
+  put &#39;employee&#39;,&#39;row1&#39;,&#39;family:tel&#39;,&#39;13600912345&#39;
+  put &#39;employee&#39;,&#39;row2&#39;,&#39;company:name&#39;,&#39;michael&#39;
+  put &#39;employee&#39;,&#39;row2&#39;,&#39;company:position&#39;,&#39;manager&#39;
+  put &#39;employee&#39;,&#39;row2&#39;,&#39;family:tel&#39;,&#39;1894225698&#39;
+  ~~~
+
+* 3、建立hbase到phoenix的映射表
+
+  node02进入到phoenix的客户端，然后创建映射表
+
+  ~~~
+  cd kflyb/install/apache-phoenix-4.14.0-cdh5.14.2-bin
+  bin/sqlline.py node01:2181
+  ~~~
+
+  执行语句
+
+  ```sql
+  CREATE TABLE IF NOT EXISTS &quot;employee&quot; (&quot;no&quot; VARCHAR(10) NOT NULL PRIMARY KEY, &quot;company&quot;.&quot;name&quot; VARCHAR(30),&quot;company&quot;.&quot;position&quot; VARCHAR(20), &quot;family&quot;.&quot;tel&quot; VARCHAR(20), &quot;family&quot;.&quot;age&quot; INTEGER) column_encoded_bytes=0;
+
+</code></pre><blockquote>
 <p>说明</p>
 <p>在建立映射表之前要说明的是，Phoenix是==大小写敏感==的，并且所有命令都是大写，如果你建的表名没有用双引号括起来，那么无论你输入的是大写还是小写，建立出来的表名都是大写的，如果你需要建立出同时包含大写和小写的表名和字段名，请把表名或者字段名用双引号括起来。 </p>
 </blockquote>
 <ul>
 <li>4、查询映射表数据</li>
 </ul>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:phoenix:node1:2181&gt; select * from "employee";</span><br><span class="line"><span class="code">+-------+</span>----------<span class="code">+-----------+</span>--------------<span class="code">+-------+</span></span><br><span class="line">|  no   |   name   | position  |     tel      |  age  |</span><br><span class="line"><span class="code">+-------+</span>----------<span class="code">+-----------+</span>--------------<span class="code">+-------+</span></span><br><span class="line">| row1  | ted      | worker    | 13600912345  | null  |</span><br><span class="line">| row2  | michael  | manager   | 1894225698   | null  |</span><br><span class="line"><span class="code">+-------+</span>----------<span class="code">+-----------+</span>--------------<span class="code">+-------+</span></span><br><span class="line"></span><br><span class="line">0: jdbc:phoenix:node01:2181&gt; select * from "employee" where "tel" = <span class="emphasis">'13600912345'</span>;</span><br><span class="line"><span class="code">+-------+</span>-------<span class="code">+-----------+</span>--------------<span class="code">+-------+</span></span><br><span class="line">|  no   | name  | position  |     tel      |  age  |</span><br><span class="line"><span class="code">+-------+</span>-------<span class="code">+-----------+</span>--------------<span class="code">+-------+</span></span><br><span class="line">| row1  | ted   | worker    | 13600912345  | null  |</span><br><span class="line"><span class="code">+-------+</span>-------<span class="code">+-----------+</span>--------------<span class="code">+-------+</span></span><br></pre></td></tr></table></figure>
-<h2 id="5-3-GUI方式"><a href="#5-3-GUI方式" class="headerlink" title="5.3 GUI方式"></a>5.3 GUI方式</h2><ul>
+<pre><code>0: jdbc:phoenix:node1:2181&gt; select * from &quot;employee&quot;;
++-------+----------+-----------+--------------+-------+
+|  no   |   name   | position  |     tel      |  age  |
++-------+----------+-----------+--------------+-------+
+| row1  | ted      | worker    | 13600912345  | null  |
+| row2  | michael  | manager   | 1894225698   | null  |
++-------+----------+-----------+--------------+-------+
+
+0: jdbc:phoenix:node01:2181&gt; select * from &quot;employee&quot; where &quot;tel&quot; = &#39;13600912345&#39;;
++-------+-------+-----------+--------------+-------+
+|  no   | name  | position  |     tel      |  age  |
++-------+-------+-----------+--------------+-------+
+| row1  | ted   | worker    | 13600912345  | null  |
++-------+-------+-----------+--------------+-------+
+
+
+</code></pre><h2 id="5-3-GUI方式"><a href="#5-3-GUI方式" class="headerlink" title="5.3 GUI方式"></a>5.3 GUI方式</h2><ul>
 <li>通过dbeaver来连接phoenix</li>
 <li><a href="https://dbeaver.io/files/6.2.4/dbeaver-ce-6.2.4-macos.dmg" target="_blank" rel="noopener">点击下载</a></li>
 </ul>
@@ -249,13 +376,17 @@
 <p>找到 phoenix-4.14.0-cdh5.14.2-client.jar  这个jar包，并将其下载下来备用</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin
+
+</code></pre>
 <ul>
 <li><p>然后进入到node02服务器的hbase的安装配置文件路径，获取hbase-site.xml这个文件</p>
 <p>找到hbase-site.xml，将其下载下来备用</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/hbase-1.2.0-cdh5.14.2/conf/</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/hbase-1.2.0-cdh5.14.2/conf/
+
+</code></pre>
 <h3 id="5-3-2-更新jar包"><a href="#5-3-2-更新jar包" class="headerlink" title="5.3.2 更新jar包"></a>5.3.2 更新jar包</h3><ul>
 <li><p>将hbase-site.xml放到phoenix-4.14.0-cdh5.14.2-client.jar这个jar包里面去</p>
 </li>
@@ -272,15 +403,94 @@
 <h3 id="5-4-4-创建数据库表，并实现sql进行操作"><a href="#5-4-4-创建数据库表，并实现sql进行操作" class="headerlink" title="5.4.4 创建数据库表，并实现sql进行操作"></a>5.4.4 创建数据库表，并实现sql进行操作</h3><ul>
 <li>直接在phoenix当中通过sql语句的方式来创建表并</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> US_POPULATION (</span><br><span class="line">      state <span class="built_in">CHAR</span>(<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">      city <span class="built_in">VARCHAR</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">      population <span class="built_in">BIGINT</span></span><br><span class="line">      <span class="keyword">CONSTRAINT</span> my_pk PRIMARY <span class="keyword">KEY</span> (state, city));</span><br><span class="line"></span><br><span class="line">UPSERT INTO US_POPULATION (state, city, population) values ('NY','New York',8143197);</span><br><span class="line">UPSERT INTO US_POPULATION (state, city, population) values ('CA','Los Angeles',3844829);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> US_POPULATION <span class="keyword">WHERE</span> population &gt; <span class="number">8000000</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">CREATE TABLE IF NOT EXISTS US_POPULATION (
+      state CHAR(2) NOT NULL,
+      city VARCHAR NOT NULL,
+      population BIGINT
+      CONSTRAINT my_pk PRIMARY KEY (state, city));
+
+UPSERT INTO US_POPULATION (state, city, population) values (&#39;NY&#39;,&#39;New York&#39;,8143197);
+UPSERT INTO US_POPULATION (state, city, population) values (&#39;CA&#39;,&#39;Los Angeles&#39;,3844829);
+
+SELECT * FROM US_POPULATION WHERE population &gt; 8000000;
+</code></pre>
 <h2 id="5-4-JDBC调用方式"><a href="#5-4-JDBC调用方式" class="headerlink" title="5.4 JDBC调用方式"></a>5.4 JDBC调用方式</h2><ul>
 <li>创建maven工程并导入jar包</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.phoenix<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>phoenix-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.14.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.testng<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testng<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.14.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 限制jdk版本插件 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.phoenix&lt;/groupId&gt;
+        &lt;artifactId&gt;phoenix-core&lt;/artifactId&gt;
+        &lt;version&gt;4.14.0-cdh5.14.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;junit&lt;/groupId&gt;
+        &lt;artifactId&gt;junit&lt;/artifactId&gt;
+        &lt;version&gt;4.12&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.testng&lt;/groupId&gt;
+        &lt;artifactId&gt;testng&lt;/artifactId&gt;
+        &lt;version&gt;6.14.3&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;!-- 限制jdk版本插件 --&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.0&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;source&gt;1.8&lt;/source&gt;
+                    &lt;target&gt;1.8&lt;/target&gt;
+                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+</code></pre>
 <ul>
 <li>代码开发</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.testng.annotations.BeforeTest;</span><br><span class="line"><span class="keyword">import</span> org.testng.annotations.Test;</span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhoenixSearch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Connection connection;</span><br><span class="line">    <span class="keyword">private</span> Statement statement;</span><br><span class="line">    <span class="keyword">private</span> ResultSet rs;</span><br><span class="line">    <span class="meta">@BeforeTest</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">        <span class="comment">//定义phoenix的连接url地址</span></span><br><span class="line">        String url=<span class="string">"jdbc:phoenix:node01:2181"</span>;</span><br><span class="line">        connection = DriverManager.getConnection(url);</span><br><span class="line">        <span class="comment">//构建Statement对象</span></span><br><span class="line">        statement = connection.createStatement();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">queryTable</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">        <span class="comment">//定义查询的sql语句，注意大小写</span></span><br><span class="line">        String sql=<span class="string">"select * from US_POPULATION"</span>;</span><br><span class="line">        <span class="comment">//执行sql语句</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            rs=statement.executeQuery(sql);</span><br><span class="line">            <span class="keyword">while</span>(rs.next())&#123;</span><br><span class="line">                System.out.println(<span class="string">"state:"</span>+rs.getString(<span class="string">"state"</span>));</span><br><span class="line">                System.out.println(<span class="string">"city:"</span>+rs.getString(<span class="string">"city"</span>));</span><br><span class="line">                System.out.println(<span class="string">"population:"</span>+rs.getInt(<span class="string">"population"</span>));</span><br><span class="line">                System.out.println(<span class="string">"-------------------------"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(connection!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                connection.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import java.sql.*;
+public class PhoenixSearch {
+    private Connection connection;
+    private Statement statement;
+    private ResultSet rs;
+    @BeforeTest
+    public void init() throws SQLException {
+        //定义phoenix的连接url地址
+        String url=&quot;jdbc:phoenix:node01:2181&quot;;
+        connection = DriverManager.getConnection(url);
+        //构建Statement对象
+        statement = connection.createStatement();
+    }
+    @Test
+    public void queryTable() throws SQLException {
+        //定义查询的sql语句，注意大小写
+        String sql=&quot;select * from US_POPULATION&quot;;
+        //执行sql语句
+        try {
+            rs=statement.executeQuery(sql);
+            while(rs.next()){
+                System.out.println(&quot;state:&quot;+rs.getString(&quot;state&quot;));
+                System.out.println(&quot;city:&quot;+rs.getString(&quot;city&quot;));
+                System.out.println(&quot;population:&quot;+rs.getInt(&quot;population&quot;));
+                System.out.println(&quot;-------------------------&quot;);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if(connection!=null){
+                connection.close();
+            }
+        }
+    }
+}
+</code></pre>
 
         
         <br />

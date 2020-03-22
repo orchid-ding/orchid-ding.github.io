@@ -172,7 +172,20 @@
 <li><p>如果要启用phoenix的二级索引功能，需要修改配置文件hbase-site.xml</p>
 </li>
 <li><p>vim hbase-site.xml      </p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 添加配置 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.regionserver.wal.codec<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hbase.regionserver.wal.IndexedWALEditCodec<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.region.server.rpc.scheduler.factory.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hbase.ipc.PhoenixRpcSchedulerFactory<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.rpc.controllerfactory.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hbase.ipc.controller.ServerRpcControllerFactory<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;!-- 添加配置 --&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.regionserver.wal.codec&lt;/name&gt;
+    &lt;value&gt;org.apache.hadoop.hbase.regionserver.wal.IndexedWALEditCodec&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+   &lt;name&gt;hbase.region.server.rpc.scheduler.factory.class&lt;/name&gt;
+   &lt;value&gt;org.apache.hadoop.hbase.ipc.PhoenixRpcSchedulerFactory&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+        &lt;name&gt;hbase.rpc.controllerfactory.class&lt;/name&gt;
+        &lt;value&gt;org.apache.hadoop.hbase.ipc.controller.ServerRpcControllerFactory&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 </li>
 </ul>
 <h4 id="4-2-重启hbase"><a href="#4-2-重启hbase" class="headerlink" title="4.2 重启hbase"></a>4.2 重启hbase</h4><ul>
@@ -184,104 +197,178 @@
 <li><p>node02执行以下命令，进入phoenix客户端</p>
 </li>
 </ul>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd <span class="regexp">/kfly/</span>install<span class="regexp">/apache-phoenix-4.14.0-cdh5.14.2-bin/</span></span><br><span class="line">bin/sqlline.py <span class="string">node01:</span><span class="number">2181</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/
+bin/sqlline.py node01:2181    
+</code></pre><ul>
 <li>创建表</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span>  <span class="keyword">table</span> <span class="keyword">user</span> (</span><br><span class="line"><span class="string">"session_id"</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">not</span> <span class="literal">null</span> primary <span class="keyword">key</span>, </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"cookie_id"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"visit_time"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"user_id"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"age"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"sex"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"visit_url"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"visit_os"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"browser_name"</span> <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line"><span class="string">"f"</span>.<span class="string">"visit_ip"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"province"</span> <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line"><span class="string">"f"</span>.<span class="string">"city"</span> <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line"><span class="string">"f"</span>.<span class="string">"page_id"</span> <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line"><span class="string">"f"</span>.<span class="string">"goods_id"</span> <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line"><span class="string">"f"</span>.<span class="string">"shop_id"</span> <span class="built_in">varchar</span>(<span class="number">100</span>)) column_encoded_bytes=<span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">create  table user (
+&quot;session_id&quot; varchar(100) not null primary key, 
+&quot;f&quot;.&quot;cookie_id&quot; varchar(100), 
+&quot;f&quot;.&quot;visit_time&quot; varchar(100), 
+&quot;f&quot;.&quot;user_id&quot; varchar(100), 
+&quot;f&quot;.&quot;age&quot; varchar(100), 
+&quot;f&quot;.&quot;sex&quot; varchar(100), 
+&quot;f&quot;.&quot;visit_url&quot; varchar(100), 
+&quot;f&quot;.&quot;visit_os&quot; varchar(100), 
+&quot;f&quot;.&quot;browser_name&quot; varchar(100),
+&quot;f&quot;.&quot;visit_ip&quot; varchar(100), 
+&quot;f&quot;.&quot;province&quot; varchar(100),
+&quot;f&quot;.&quot;city&quot; varchar(100),
+&quot;f&quot;.&quot;page_id&quot; varchar(100), 
+&quot;f&quot;.&quot;goods_id&quot; varchar(100),
+&quot;f&quot;.&quot;shop_id&quot; varchar(100)) column_encoded_bytes=0;
+</code></pre>
 <h4 id="5-2-导入测试数据"><a href="#5-2-导入测试数据" class="headerlink" title="5.2 导入测试数据"></a>5.2 导入测试数据</h4><ul>
 <li>将课件当中的user50w.csv 这个文件上传到node02的/kkb/install/phoenixsql 这个路径下<br>该CSV文件中有250万条记录<br>node02执行以下命令，导入50W的测试数据</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/apache-phoenix-4.14.0-cdh5.14.2-bin/</span><br><span class="line">bin/psql.py -t USER node01:2181 /kkb/install/phoenixsql/user50w.csv</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kkb/install/apache-phoenix-4.14.0-cdh5.14.2-bin/
+bin/psql.py -t USER node01:2181 /kkb/install/phoenixsql/user50w.csv
+</code></pre>
 <h4 id="5-3-Global-Indexing的二级索引测试"><a href="#5-3-Global-Indexing的二级索引测试" class="headerlink" title="5.3 Global Indexing的二级索引测试"></a>5.3 Global Indexing的二级索引测试</h4><h5 id="5-3-1-正常查询一条数据所需的时间"><a href="#5-3-1-正常查询一条数据所需的时间" class="headerlink" title="5.3.1 正常查询一条数据所需的时间"></a>5.3.1 正常查询一条数据所需的时间</h5><ul>
 <li>在为表USER创建secondary index之前，先看看查询一条数据所需的时间<br>在node02服务器，进入phoenix的客户端</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/sqlline.py node01:2181</span><br><span class="line">cd /kkb/install/apache-phoenix-4.14.0-cdh5.14.2-bin</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">bin/sqlline.py node01:2181
+cd /kkb/install/apache-phoenix-4.14.0-cdh5.14.2-bin
+</code></pre>
 <ul>
 <li><p>然后执行以下sql语句，查询数据，查看耗费时间</p>
 <p>可以看到，对名为cookie_id的列进行按值查询需要10秒左右。</p>
 </li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span> = <span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">select * from user where &quot;cookie_id&quot; = &#39;99738fd1-2084-44e9&#39;;
+</code></pre>
 <ul>
 <li><p>我们可以通过explain来查看执行计划<br>EXPLAIN(语句的执行逻辑及计划):</p>
 <p>由图看知先进行了全表扫描再通过过滤器来筛选出目标数据，显示这种查询方式效率是很低的。</p>
 </li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span> = <span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<h5 id="5-3-2-给表USER创建基于Global-Indexing的二级索引"><a href="#5-3-2-给表USER创建基于Global-Indexing的二级索引" class="headerlink" title="5.3.2 给表USER创建基于Global Indexing的二级索引"></a>5.3.2 给表USER创建基于Global Indexing的二级索引</h5><ul>
+<pre><code>explain select * from user where &quot;cookie_id&quot; = &#39;99738fd1-2084-44e9&#39;;
+</code></pre><h5 id="5-3-2-给表USER创建基于Global-Indexing的二级索引"><a href="#5-3-2-给表USER创建基于Global-Indexing的二级索引" class="headerlink" title="5.3.2 给表USER创建基于Global Indexing的二级索引"></a>5.3.2 给表USER创建基于Global Indexing的二级索引</h5><ul>
 <li><p>进入到phoenix的客户端，然后执行以下命令进行创建索引<br>在cookie_id列上面创建二级索引：</p>
 <p>查看当前所有表会发现多一张USER_COOKIE_ID_INDEX索引表，查询该表数据。</p>
 </li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:phoenix:node01:2181&gt; create index USER_COOKIE_ID_INDEX on<span class="built_in"> USER </span>(<span class="string">"f"</span>.<span class="string">"cookie_id"</span>);</span><br></pre></td></tr></table></figure>
-<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/user_cookie_id_index.PNG" alt=""></p>
+<pre><code>0: jdbc:phoenix:node01:2181&gt; create index USER_COOKIE_ID_INDEX on USER (&quot;f&quot;.&quot;cookie_id&quot;); 
+</code></pre><p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/user_cookie_id_index.PNG" alt=""></p>
 <ul>
 <li><p>再次执行查询”cookie_id”=’99738fd1-2084-44e9’的数据记录</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">"cookie_id"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span> = <span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/3.PNG" alt=""></p>
+<pre><code>select &quot;cookie_id&quot; from user where &quot;cookie_id&quot; = &#39;99738fd1-2084-44e9&#39;;
+</code></pre><p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/3.PNG" alt=""></p>
 <p>此时：查询速度由10秒左右减少到了毫秒级别。</p>
 <p>注意：select所带的字段必须包含在覆盖索引内</p>
 <p>EXPLAIN(语句的执行逻辑及计划):</p>
 <p>可以看到使用到了创建的索引USER_COOKIE_ID_INDEX。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> <span class="string">"cookie_id"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
+<pre><code>explain select &quot;cookie_id&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre><p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/4.PNG" alt="">    </p>
 </li>
 </ul>
-<p>  <img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/4.PNG" alt="">    </p>
-<h5 id="5-3-3-以下查询不会用到索引表"><a href="#5-3-3-以下查询不会用到索引表" class="headerlink" title="5.3.3 以下查询不会用到索引表"></a>5.3.3 以下查询不会用到索引表</h5>  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">"cookie_id"</span>,<span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<ul>
+<h5 id="5-3-3-以下查询不会用到索引表"><a href="#5-3-3-以下查询不会用到索引表" class="headerlink" title="5.3.3 以下查询不会用到索引表"></a>5.3.3 以下查询不会用到索引表</h5><pre><code>select &quot;cookie_id&quot;,&quot;age&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre><ul>
 <li>(虽然cookie_id是索引字段，但age不是索引字段，所以不会使用到索引)<br>  也可以通过EXPLAIN查询语句的执行逻辑及计划</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPLAIN</span>	<span class="keyword">select</span> <span class="string">"cookie_id"</span>,<span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>EXPLAIN    select &quot;cookie_id&quot;,&quot;age&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre><ul>
 <li><p>同理要查询的字段不是索引字段，也不会使用到索引表。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">"sex"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>select &quot;sex&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre></li>
 </ul>
 <h4 id="5-4-Local-Indexing的二级索引测试"><a href="#5-4-Local-Indexing的二级索引测试" class="headerlink" title="5.4  Local Indexing的二级索引测试"></a>5.4  Local Indexing的二级索引测试</h4><h5 id="5-4-1-正常查询一条数据所需的时间"><a href="#5-4-1-正常查询一条数据所需的时间" class="headerlink" title="5.4.1 正常查询一条数据所需的时间"></a>5.4.1 正常查询一条数据所需的时间</h5><ul>
 <li>在为表USER创建secondary index之前，先看看查询一条数据所需的时间</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"user_id"</span>=<span class="string">'371e963d-c-487065'</span>;</span><br></pre></td></tr></table></figure>
-<p>可以看到，对名为user_id的列进行按值查询需要11秒左右。</p>
+<pre><code>select * from user where &quot;user_id&quot;=&#39;371e963d-c-487065&#39;;
+</code></pre><p>可以看到，对名为user_id的列进行按值查询需要11秒左右。</p>
 <ul>
 <li>EXPLAIN(语句的执行逻辑及计划):</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"user_id"</span>=<span class="string">'371e963d-c-487065'</span>;</span><br></pre></td></tr></table></figure>
-<p>由图看知先进行了全表扫描再通过过滤器来筛选出目标数据，显示这种查询方式效率是很低的。</p>
+<pre><code>explain select * from user where &quot;user_id&quot;=&#39;371e963d-c-487065&#39;;
+</code></pre><p>由图看知先进行了全表扫描再通过过滤器来筛选出目标数据，显示这种查询方式效率是很低的。</p>
 <h5 id="5-4-2-给表USER创建基于Local-Indexing的二级索引"><a href="#5-4-2-给表USER创建基于Local-Indexing的二级索引" class="headerlink" title="5.4.2 给表USER创建基于Local Indexing的二级索引"></a>5.4.2 给表USER创建基于Local Indexing的二级索引</h5><ul>
 <li>在user_id列上面创建二级索引：</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create local index USER_USER_ID_INDEX on<span class="built_in"> USER </span>(<span class="string">"f"</span>.<span class="string">"user_id"</span>);</span><br></pre></td></tr></table></figure>
-<p>查看当前所有表会发现多一张USER_USER_ID_INDEX索引表，查询该表数据。</p>
+<pre><code>create local index USER_USER_ID_INDEX on USER (&quot;f&quot;.&quot;user_id&quot;);
+</code></pre><p>查看当前所有表会发现多一张USER_USER_ID_INDEX索引表，查询该表数据。</p>
 <ul>
 <li><p>再次执行查询”user_id”=’371e963d-c-487065’的数据记录</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"user_id"</span>=<span class="string">'371e963d-c-487065'</span>;</span><br><span class="line">  可以看到，对名为user_id的列进行按值查询需要0.3秒左右。</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>select * from user where &quot;user_id&quot;=&#39;371e963d-c-487065&#39;;
+可以看到，对名为user_id的列进行按值查询需要0.3秒左右。
+</code></pre></li>
 <li><p>EXPLAIN(语句的执行逻辑及计划):</p>
 </li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"user_id"</span>=<span class="string">'371e963d-c-487065'</span>;</span><br></pre></td></tr></table></figure>
-<p>查看执行计划，没有执行全表扫描，效率更高了</p>
+<pre><code>    explain select * from user where &quot;user_id&quot;=&#39;371e963d-c-487065&#39;;
+</code></pre><p>查看执行计划，没有执行全表扫描，效率更高了</p>
 <p>此时：查询速度由11秒左右减少到了毫秒级别。</p>
 <p>EXPLAIN(语句的执行逻辑及计划):</p>
-  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> <span class="string">"user_id"</span>,<span class="string">"age"</span>,<span class="string">"sex"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"user_id"</span>=<span class="string">'371e963d-c-487065'</span>;</span><br></pre></td></tr></table></figure>
-<p>可以看到使用到了创建的索引USER_USER_ID_INDEX.</p>
+<pre><code>explain select &quot;user_id&quot;,&quot;age&quot;,&quot;sex&quot; from user where &quot;user_id&quot;=&#39;371e963d-c-487065&#39;;
+</code></pre><p>可以看到使用到了创建的索引USER_USER_ID_INDEX.</p>
 <h4 id="5-5-如何确保query查询使用Index"><a href="#5-5-如何确保query查询使用Index" class="headerlink" title="5.5 如何确保query查询使用Index"></a>5.5 如何确保query查询使用Index</h4><p>​    要想让一个查询使用index，有三种方式实现。</p>
-<h5 id="5-5-1-创建-convered-index"><a href="#5-5-1-创建-convered-index" class="headerlink" title="5.5.1  创建 convered index"></a>5.5.1  创建 convered index</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果在某次查询中，查询项或者查询条件中包含除被索引列之外的列（主键MY_PK除外）。默认情况下，该查询会触发full table scan（全表扫描），但是使用covered index则可以避免全表扫描。 </span><br><span class="line">创建包含某个字段的覆盖索引,创建方式如下：</span><br><span class="line"> create index USER_COOKIE_ID_AGE_INDEX on<span class="built_in"> USER </span>(<span class="string">"f"</span>.<span class="string">"cookie_id"</span>) include(<span class="string">"f"</span>.<span class="string">"age"</span>);</span><br><span class="line"> </span><br><span class="line"> 查看当前所有表会发现多一张USER_COOKIE_ID_AGE_INDEX索引表，查询该表数据。</span><br></pre></td></tr></table></figure>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">查询数据</span><br><span class="line"><span class="keyword">select</span> <span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span>  <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="string">"age"</span>,<span class="string">"sex"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span>  <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/16.PNG" alt=""></p>
+<h5 id="5-5-1-创建-convered-index"><a href="#5-5-1-创建-convered-index" class="headerlink" title="5.5.1  创建 convered index"></a>5.5.1  创建 convered index</h5><pre><code>    如果在某次查询中，查询项或者查询条件中包含除被索引列之外的列（主键MY_PK除外）。默认情况下，该查询会触发full table scan（全表扫描），但是使用covered index则可以避免全表扫描。 
+    创建包含某个字段的覆盖索引,创建方式如下：
+     create index USER_COOKIE_ID_AGE_INDEX on USER (&quot;f&quot;.&quot;cookie_id&quot;) include(&quot;f&quot;.&quot;age&quot;);
+
+     查看当前所有表会发现多一张USER_COOKIE_ID_AGE_INDEX索引表，查询该表数据。
+</code></pre><pre><code>查询数据
+select &quot;age&quot; from user where  &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+select &quot;age&quot;,&quot;sex&quot; from user where  &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre><p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/16.PNG" alt=""></p>
 <p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/17.PNG" alt=""></p>
-<h5 id="5-5-2-在查询中提示其使用index"><a href="#5-5-2-在查询中提示其使用index" class="headerlink" title="5.5.2 在查询中提示其使用index"></a>5.5.2 在查询中提示其使用index</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在<span class="keyword">select</span>和column_name之间加上<span class="comment">/*+ Index(&lt;表名&gt; &lt;index名&gt;)*/</span>，通过这种方式强制使用索引。</span><br><span class="line">例如：</span><br><span class="line"><span class="keyword">select</span> <span class="comment">/*+ index(user,USER_COOKIE_ID_AGE_INDEX) */</span> <span class="string">"age"</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="string">"cookie_id"</span>=<span class="string">'99738fd1-2084-44e9'</span>;</span><br><span class="line"></span><br><span class="line">如果sex是索引字段，那么就会直接从索引表中查询</span><br><span class="line">如果sex不是索引字段，那么将会进行全表扫描，所以当用户明确知道表中数据较少且符合检索条件时才适用，此时的性能才是最佳的。</span><br></pre></td></tr></table></figure>
-<p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/18.PNG" alt=""></p>
+<h5 id="5-5-2-在查询中提示其使用index"><a href="#5-5-2-在查询中提示其使用index" class="headerlink" title="5.5.2 在查询中提示其使用index"></a>5.5.2 在查询中提示其使用index</h5><pre><code>在select和column_name之间加上/*+ Index(&lt;表名&gt; &lt;index名&gt;)*/，通过这种方式强制使用索引。
+例如：
+select /*+ index(user,USER_COOKIE_ID_AGE_INDEX) */ &quot;age&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+
+如果sex是索引字段，那么就会直接从索引表中查询
+如果sex不是索引字段，那么将会进行全表扫描，所以当用户明确知道表中数据较少且符合检索条件时才适用，此时的性能才是最佳的。
+</code></pre><p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/18.PNG" alt=""></p>
 <p><img src="https://kfly.top/picture/kfly-top/Phoenix构建二级索引/assets/19.PNG" alt=""></p>
 <h5 id="5-5-3-使用本地索引-创建Local-Indexing-索引"><a href="#5-5-3-使用本地索引-创建Local-Indexing-索引" class="headerlink" title="5.5.3 使用本地索引 (创建Local Indexing 索引)"></a>5.5.3 使用本地索引 (创建Local Indexing 索引)</h5><ul>
 <li>详细见上面</li>
 </ul>
-<h4 id="5-6-索引重建"><a href="#5-6-索引重建" class="headerlink" title="5.6 索引重建"></a>5.6 索引重建</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Phoenix的索引重建是把索引表清空后重新装配数据。</span><br><span class="line">alter index USER_COOKIE_ID_INDEX on<span class="built_in"> user </span>rebuild;</span><br></pre></td></tr></table></figure>
-<h4 id="5-7-删除索引"><a href="#5-7-删除索引" class="headerlink" title="5.7 删除索引"></a>5.7 删除索引</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">删除某个表的某张索引：</span><br><span class="line">语法	drop index 索引名称 on 表名</span><br><span class="line">例如：  </span><br><span class="line">drop index USER_COOKIE_ID_INDEX on user;</span><br><span class="line"></span><br><span class="line">如果表中的一个索引列被删除，则索引也将被自动删除，如果删除的是</span><br><span class="line">覆盖索引上的列，则此列将从覆盖索引中被自动删除。</span><br></pre></td></tr></table></figure>
-<h3 id="6、索引性能调优"><a href="#6、索引性能调优" class="headerlink" title="6、索引性能调优"></a>6、索引性能调优</h3><p>​    一般来说，索引已经很快了，不需要特别的优化。这里也提供了一些方法，让你在面对特定的环境和负载的时候可以进行一些调优。下面的这些需要在hbase-site.xml文件中设置，针对所有的服务器。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. index<span class="selector-class">.builder</span><span class="selector-class">.threads</span><span class="selector-class">.max</span> </span><br><span class="line">创建索引时，使用的最大线程数。 </span><br><span class="line">默认值: <span class="number">10</span>。</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>. index<span class="selector-class">.builder</span><span class="selector-class">.threads</span><span class="selector-class">.keepalivetime</span> </span><br><span class="line">创建索引的创建线程池中线程的存活时间，单位：秒。 </span><br><span class="line">默认值: <span class="number">60</span></span><br><span class="line"></span><br><span class="line"><span class="number">3</span>. index<span class="selector-class">.writer</span><span class="selector-class">.threads</span><span class="selector-class">.max</span> </span><br><span class="line">写索引表数据的写线程池的最大线程数。 </span><br><span class="line">更新索引表可以用的最大线程数，也就是同时可以更新多少张索引表，数量最好和索引表的数量一致。 </span><br><span class="line">默认值: <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="number">4</span>. index<span class="selector-class">.writer</span><span class="selector-class">.threads</span><span class="selector-class">.keepalivetime</span> </span><br><span class="line">索引写线程池中，线程的存活时间，单位：秒。</span><br><span class="line">默认值：<span class="number">60</span></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="number">5</span>. hbase<span class="selector-class">.htable</span><span class="selector-class">.threads</span><span class="selector-class">.max</span> </span><br><span class="line">每一张索引表可用于写的线程数。 </span><br><span class="line">默认值: <span class="number">2</span>,<span class="number">147</span>,<span class="number">483</span>,<span class="number">647</span></span><br><span class="line"></span><br><span class="line"><span class="number">6</span>. hbase<span class="selector-class">.htable</span><span class="selector-class">.threads</span><span class="selector-class">.keepalivetime</span> </span><br><span class="line">索引表线程池中线程的存活时间，单位：秒。 </span><br><span class="line">默认值: <span class="number">60</span></span><br><span class="line"></span><br><span class="line"><span class="number">7</span>. index<span class="selector-class">.tablefactory</span><span class="selector-class">.cache</span><span class="selector-class">.size</span> </span><br><span class="line">允许缓存的索引表的数量。 </span><br><span class="line">增加此值，可以在写索引表时不用每次都去重复的创建htable，这个值越大，内存消耗越多。 </span><br><span class="line">默认值: <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="number">8</span>. org<span class="selector-class">.apache</span><span class="selector-class">.phoenix</span><span class="selector-class">.regionserver</span><span class="selector-class">.index</span><span class="selector-class">.handler</span><span class="selector-class">.count</span> </span><br><span class="line">处理全局索引写请求时，可以使用的线程数。 </span><br><span class="line">默认值: <span class="number">30</span></span><br></pre></td></tr></table></figure>
+<h4 id="5-6-索引重建"><a href="#5-6-索引重建" class="headerlink" title="5.6 索引重建"></a>5.6 索引重建</h4><pre><code>Phoenix的索引重建是把索引表清空后重新装配数据。
+alter index USER_COOKIE_ID_INDEX on user rebuild;
+</code></pre><h4 id="5-7-删除索引"><a href="#5-7-删除索引" class="headerlink" title="5.7 删除索引"></a>5.7 删除索引</h4><pre><code>删除某个表的某张索引：
+语法    drop index 索引名称 on 表名
+例如：  
+drop index USER_COOKIE_ID_INDEX on user;
 
+如果表中的一个索引列被删除，则索引也将被自动删除，如果删除的是
+覆盖索引上的列，则此列将从覆盖索引中被自动删除。
+</code></pre><h3 id="6、索引性能调优"><a href="#6、索引性能调优" class="headerlink" title="6、索引性能调优"></a>6、索引性能调优</h3><p>​    一般来说，索引已经很快了，不需要特别的优化。这里也提供了一些方法，让你在面对特定的环境和负载的时候可以进行一些调优。下面的这些需要在hbase-site.xml文件中设置，针对所有的服务器。</p>
+<pre><code>1. index.builder.threads.max 
+创建索引时，使用的最大线程数。 
+默认值: 10。
+
+2. index.builder.threads.keepalivetime 
+创建索引的创建线程池中线程的存活时间，单位：秒。 
+默认值: 60
+
+3. index.writer.threads.max 
+写索引表数据的写线程池的最大线程数。 
+更新索引表可以用的最大线程数，也就是同时可以更新多少张索引表，数量最好和索引表的数量一致。 
+默认值: 10
+
+4. index.writer.threads.keepalivetime 
+索引写线程池中，线程的存活时间，单位：秒。
+默认值：60
+
+
+5. hbase.htable.threads.max 
+每一张索引表可用于写的线程数。 
+默认值: 2,147,483,647
+
+6. hbase.htable.threads.keepalivetime 
+索引表线程池中线程的存活时间，单位：秒。 
+默认值: 60
+
+7. index.tablefactory.cache.size 
+允许缓存的索引表的数量。 
+增加此值，可以在写索引表时不用每次都去重复的创建htable，这个值越大，内存消耗越多。 
+默认值: 10
+
+8. org.apache.phoenix.regionserver.index.handler.count 
+处理全局索引写请求时，可以使用的线程数。 
+默认值: 30
+</code></pre>
         
         <br />
         <div id="comment-container">

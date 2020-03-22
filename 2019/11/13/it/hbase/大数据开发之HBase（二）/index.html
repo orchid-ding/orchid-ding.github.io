@@ -134,10 +134,10 @@
         
         <span class="attr">标签：/
         
-        <a class="tag" href="/tags/#hadoop" title="hadoop">hadoop</a>
+        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
         <span>/</span>
         
-        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
+        <a class="tag" href="/tags/#hadoop" title="hadoop">hadoop</a>
         <span>/</span>
         
         <a class="tag" href="/tags/#hbase与hive整合" title="hbase与hive整合">hbase与hive整合</a>
@@ -202,22 +202,44 @@
 <li>5、memstore达到阈值后把数据刷到磁盘，生成storeFile文件</li>
 <li>6、删除HLog中的历史数据</li>
 </ul>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">补充：</span><br><span class="line">HLog（<span class="built_in">write</span> ahead <span class="built_in">log</span>）：</span><br><span class="line">  也称为WAL意为<span class="built_in">Write</span> ahead <span class="built_in">log</span>，类似mysql中的binlog,用来做灾难恢复时用，HLog记录数据的所有变更,一旦数据修改，就可以从<span class="built_in">log</span>中进行恢复。</span><br></pre></td></tr></table></figure>
-<h2 id="4-HBase的flush、compact机制"><a href="#4-HBase的flush、compact机制" class="headerlink" title="4. HBase的flush、compact机制"></a>4. HBase的flush、compact机制</h2><p><img src="assets/hbase-split-compaction.png" alt=""></p>
+<pre><code>补充：
+HLog（write ahead log）：
+  也称为WAL意为Write ahead log，类似mysql中的binlog,用来做灾难恢复时用，HLog记录数据的所有变更,一旦数据修改，就可以从log中进行恢复。
+</code></pre><h2 id="4-HBase的flush、compact机制"><a href="#4-HBase的flush、compact机制" class="headerlink" title="4. HBase的flush、compact机制"></a>4. HBase的flush、compact机制</h2><p><img src="assets/hbase-split-compaction.png" alt=""></p>
 <h3 id="4-1-Flush触发条件"><a href="#4-1-Flush触发条件" class="headerlink" title="4.1 Flush触发条件"></a>4.1 Flush触发条件</h3><h4 id="4-1-1-memstore级别限制"><a href="#4-1-1-memstore级别限制" class="headerlink" title="4.1.1 memstore级别限制"></a>4.1.1 memstore级别限制</h4><ul>
 <li>当Region中任意一个MemStore的大小达到了上限（hbase.hregion.memstore.flush.size，默认128MB），会触发Memstore刷新。</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hregion.memstore.flush.size<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>134217728<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+    &lt;name&gt;hbase.hregion.memstore.flush.size&lt;/name&gt;
+    &lt;value&gt;134217728&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 <h4 id="4-1-2-region级别限制"><a href="#4-1-2-region级别限制" class="headerlink" title="4.1.2 region级别限制"></a>4.1.2 region级别限制</h4><ul>
 <li>当Region中所有Memstore的大小总和达到了上限（hbase.hregion.memstore.block.multiplier <em> hbase.hregion.memstore.flush.size，默认 2</em> 128M = 256M），会触发memstore刷新。</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hregion.memstore.flush.size<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>134217728<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hregion.memstore.block.multiplier<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+    &lt;name&gt;hbase.hregion.memstore.flush.size&lt;/name&gt;
+    &lt;value&gt;134217728&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.hregion.memstore.block.multiplier&lt;/name&gt;
+    &lt;value&gt;2&lt;/value&gt;
+&lt;/property&gt;   
+</code></pre>
 <h4 id="4-1-3-Region-Server级别限制"><a href="#4-1-3-Region-Server级别限制" class="headerlink" title="4.1.3 Region Server级别限制"></a>4.1.3 Region Server级别限制</h4><ul>
 <li>当一个Region Server中所有Memstore的大小总和超过低水位阈值hbase.regionserver.global.memstore.size.lower.limit*hbase.regionserver.global.memstore.size（前者默认值0.95），RegionServer开始强制flush；</li>
 <li>先Flush Memstore最大的Region，再执行次大的，依次执行；</li>
 <li>如写入速度大于flush写出的速度，导致总MemStore大小超过高水位阈值hbase.regionserver.global.memstore.size（默认为JVM内存的40%），此时RegionServer会阻塞更新并强制执行flush，直到总MemStore大小低于低水位阈值</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.regionserver.global.memstore.size.lower.limit<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>0.95<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.regionserver.global.memstore.size<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>0.4<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+    &lt;name&gt;hbase.regionserver.global.memstore.size.lower.limit&lt;/name&gt;
+    &lt;value&gt;0.95&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.regionserver.global.memstore.size&lt;/name&gt;
+    &lt;value&gt;0.4&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 <h4 id="4-1-4-HLog数量上限"><a href="#4-1-4-HLog数量上限" class="headerlink" title="4.1.4 HLog数量上限"></a>4.1.4 HLog数量上限</h4><ul>
 <li>当一个Region Server中HLog数量达到上限（可通过参数hbase.regionserver.maxlogs配置）时，系统会选取最早的一个 HLog对应的一个或多个Region进行flush</li>
 </ul>
@@ -255,16 +277,49 @@
 <li><p>minor compaction触发条件由以下几个参数共同决定：</p>
 </li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--表示至少需要三个满足条件的store file时，minor compaction才会启动--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hstore.compactionThreshold<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--表示一次minor compaction中最多选取10个store file--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hstore.compaction.max<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>10<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--默认值为128m,</span></span><br><span class="line"><span class="comment">表示文件大小小于该值的store file 一定会加入到minor compaction的store file中</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hstore.compaction.min.size<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>134217728<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--默认值为LONG.MAX_VALUE，</span></span><br><span class="line"><span class="comment">表示文件大小大于该值的store file 一定会被minor compaction排除--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hstore.compaction.max.size<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>9223372036854775807<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;!--表示至少需要三个满足条件的store file时，minor compaction才会启动--&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.hstore.compactionThreshold&lt;/name&gt;
+    &lt;value&gt;3&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;!--表示一次minor compaction中最多选取10个store file--&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.hstore.compaction.max&lt;/name&gt;
+    &lt;value&gt;10&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;!--默认值为128m,
+表示文件大小小于该值的store file 一定会加入到minor compaction的store file中
+--&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.hstore.compaction.min.size&lt;/name&gt;
+    &lt;value&gt;134217728&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;!--默认值为LONG.MAX_VALUE，
+表示文件大小大于该值的store file 一定会被minor compaction排除--&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.hstore.compaction.max.size&lt;/name&gt;
+    &lt;value&gt;9223372036854775807&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 <h4 id="4-3-2-major-compaction-大合并"><a href="#4-3-2-major-compaction-大合并" class="headerlink" title="4.3.2 major compaction 大合并"></a>4.3.2 major compaction 大合并</h4><ul>
 <li><p>合并Store中所有的HFile为一个HFile</p>
 <p>将所有的StoreFile合并成一个StoreFile，这个过程还会清理三类无意义数据：被删除的数据、TTL过期数据、版本号超过设定版本号的数据。合并频率比较低，默认7天执行一次，并且性能消耗非常大，建议生产关闭(设置为0)，在应用空闲时间手动触发。一般可以是手动控制进行合并，防止出现在业务高峰期。</p>
 </li>
 <li><p>major compaction触发时间条件</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--默认值为7天进行一次大合并，--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.hregion.majorcompaction<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>604800000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;!--默认值为7天进行一次大合并，--&gt;
+&lt;property&gt;
+    &lt;name&gt;hbase.hregion.majorcompaction&lt;/name&gt;
+    &lt;value&gt;604800000&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 </li>
 <li><p>手动触发</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##使用major_compact命令</span></span><br><span class="line">major_compact tableName</span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">##使用major_compact命令
+major_compact tableName
+</code></pre>
 </li>
 </ul>
 <h2 id="5-region-拆分机制"><a href="#5-region-拆分机制" class="headerlink" title="5. region 拆分机制"></a>5. region 拆分机制</h2><ul>
@@ -341,19 +396,27 @@
 <li><p>方式一</p>
 </li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'person'</span>,<span class="string">'info1'</span>,<span class="string">'info2'</span>,SPLITS =&gt; [<span class="string">'1000'</span>,<span class="string">'2000'</span>,<span class="string">'3000'</span>,<span class="string">'4000'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">create &#39;person&#39;,&#39;info1&#39;,&#39;info2&#39;,SPLITS =&gt; [&#39;1000&#39;,&#39;2000&#39;,&#39;3000&#39;,&#39;4000&#39;]
+</code></pre>
 <p><img src="assets/personSplit.png" alt="personSplit"></p>
 <ul>
 <li><p>方式二：也可以把分区规则创建于文件中</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/doc</span><br><span class="line"></span><br><span class="line">vim split.txt</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/doc
+
+vim split.txt
+</code></pre>
 <ul>
 <li>文件内容</li>
 </ul>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">aaa</span></span><br><span class="line"><span class="keyword">bbb</span></span><br><span class="line"><span class="keyword">ccc</span></span><br><span class="line"><span class="keyword">ddd</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>aaa
+bbb
+ccc
+ddd
+</code></pre><ul>
 <li>hbase shell中，执行命令</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'student'</span>,<span class="string">'info'</span>,SPLITS_FILE =&gt; <span class="string">'/kfly/install/split.txt'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">create &#39;student&#39;,&#39;info&#39;,SPLITS_FILE =&gt; &#39;/kfly/install/split.txt&#39;
+</code></pre>
 <ul>
 <li>成功后查看web界面</li>
 </ul>
@@ -364,7 +427,8 @@
 <li><p>HexStringSplit会将数据从“00000000”到“FFFFFFFF”之间的数据长度按照<strong>n等分</strong>之后算出每一段的其实rowkey和结束rowkey，以此作为拆分点。</p>
 </li>
 <li><p>例如：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'mytable'</span>, <span class="string">'base_info'</span>,<span class="string">' extra_info'</span>, &#123;NUMREGIONS =&gt; <span class="number">15</span>, SPLITALGO =&gt; <span class="string">'HexStringSplit'</span>&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">create &#39;mytable&#39;, &#39;base_info&#39;,&#39; extra_info&#39;, {NUMREGIONS =&gt; 15, SPLITALGO =&gt; &#39;HexStringSplit&#39;}
+</code></pre>
 </li>
 </ul>
 <p><img src="assets/hbasePreSplit.png" alt="hbasePreSplit"></p>
@@ -378,7 +442,8 @@
 <li><p>创建一张hbase表：</p>
 </li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'test'</span>,<span class="string">'info1'</span>,SPLITS =&gt; [<span class="string">'1000'</span>,<span class="string">'2000'</span>,<span class="string">'3000'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">create &#39;test&#39;,&#39;info1&#39;,SPLITS =&gt; [&#39;1000&#39;,&#39;2000&#39;,&#39;3000&#39;]
+</code></pre>
 <ul>
 <li>查看表region</li>
 </ul>
@@ -401,7 +466,8 @@
 <li><p>需求：需要把test表中的2个region数据进行合并：<br>test,2000,1565940912661.c2212a3956b814a6f0d57a90983a8515.<br>test,3000,1565940912661.553dd4db667814cf2f050561167ca030.</p>
 </li>
 <li><p>需要进入hbase shell：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">merge_region <span class="string">'c2212a3956b814a6f0d57a90983a8515'</span>,<span class="string">'553dd4db667814cf2f050561167ca030'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">merge_region &#39;c2212a3956b814a6f0d57a90983a8515&#39;,&#39;553dd4db667814cf2f050561167ca030&#39;
+</code></pre>
 </li>
 <li><p>成功后观察界面</p>
 </li>
@@ -421,36 +487,245 @@
 <p><strong>注意：</strong>列族的名字要与myuser表的列族名字相同</p>
 </li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):010:0&gt;</span> create <span class="string">'myuser2'</span>,<span class="string">'f1'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase(main):010:0&gt; create &#39;myuser2&#39;,&#39;f1&#39;
+</code></pre>
 <ul>
 <li>第二步：创建maven工程并导入jar包</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">id</span>&gt;</span>cloudera<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-mr1-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hbase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.testng<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testng<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.14.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">                   <span class="comment">&lt;!--    &lt;verbal&gt;true&lt;/verbal&gt;--&gt;</span></span><br><span class="line">               <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-shade-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                           <span class="tag">&lt;<span class="name">goal</span>&gt;</span>shade<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                           <span class="tag">&lt;<span class="name">filters</span>&gt;</span></span><br><span class="line">                               <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">                                   <span class="tag">&lt;<span class="name">artifact</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">artifact</span>&gt;</span></span><br><span class="line">                                   <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                                       <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.SF<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                       <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.DSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                       <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*/RSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                   <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">                               <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">                           <span class="tag">&lt;/<span class="name">filters</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">    &lt;repositories&gt;
+        &lt;repository&gt;
+            &lt;id&gt;cloudera&lt;/id&gt;
+            &lt;url&gt;https://repository.cloudera.com/artifactory/cloudera-repos/&lt;/url&gt;
+        &lt;/repository&gt;
+    &lt;/repositories&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+            &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+            &lt;version&gt;2.6.0-mr1-cdh5.14.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;
+            &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-server&lt;/artifactId&gt;
+            &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.testng&lt;/groupId&gt;
+            &lt;artifactId&gt;testng&lt;/artifactId&gt;
+            &lt;version&gt;6.14.3&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.0&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;source&gt;1.8&lt;/source&gt;
+                    &lt;target&gt;1.8&lt;/target&gt;
+                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+                    &lt;!--    &lt;verbal&gt;true&lt;/verbal&gt;--&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+                &lt;version&gt;2.2&lt;/version&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;phase&gt;package&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;shade&lt;/goal&gt;
+                        &lt;/goals&gt;
+                        &lt;configuration&gt;
+                            &lt;filters&gt;
+                                &lt;filter&gt;
+                                    &lt;artifact&gt;*:*&lt;/artifact&gt;
+                                    &lt;excludes&gt;
+                                        &lt;exclude&gt;META-INF/*.SF&lt;/exclude&gt;
+                                        &lt;exclude&gt;META-INF/*.DSA&lt;/exclude&gt;
+                                        &lt;exclude&gt;META-INF/*/RSA&lt;/exclude&gt;
+                                    &lt;/excludes&gt;
+                                &lt;/filter&gt;
+                            &lt;/filters&gt;
+                        &lt;/configuration&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+</code></pre>
 <ul>
 <li>第三步：开发MR程序实现功能</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.Cell;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.CellUtil;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Put;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Result;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Scan;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.io.ImmutableBytesWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableMapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableReducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HBaseMR</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HBaseMapper</span> <span class="keyword">extends</span> <span class="title">TableMapper</span>&lt;<span class="title">Text</span>,<span class="title">Put</span>&gt;</span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(ImmutableBytesWritable key, Result value, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">             <span class="comment">//获取rowkey的字节数组</span></span><br><span class="line">            <span class="keyword">byte</span>[] bytes = key.get();</span><br><span class="line">            String rowkey = Bytes.toString(bytes);</span><br><span class="line">            <span class="comment">//构建一个put对象</span></span><br><span class="line">            Put put = <span class="keyword">new</span> Put(bytes);</span><br><span class="line">            <span class="comment">//获取一行中所有的cell对象</span></span><br><span class="line">            Cell[] cells = value.rawCells();</span><br><span class="line">            <span class="keyword">for</span> (Cell cell : cells) &#123;</span><br><span class="line">                  <span class="comment">// f1列族</span></span><br><span class="line">                <span class="keyword">if</span>(<span class="string">"f1"</span>.equals(Bytes.toString(CellUtil.cloneFamily(cell))))&#123;</span><br><span class="line">                    <span class="comment">// name列名</span></span><br><span class="line">                     <span class="keyword">if</span>(<span class="string">"name"</span>.equals(Bytes.toString(CellUtil.cloneQualifier(cell))))&#123;</span><br><span class="line">                          put.add(cell);</span><br><span class="line">                     &#125;</span><br><span class="line">                     <span class="comment">// age列名</span></span><br><span class="line">                    <span class="keyword">if</span>(<span class="string">"age"</span>.equals(Bytes.toString(CellUtil.cloneQualifier(cell))))&#123;</span><br><span class="line">                        put.add(cell);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!put.isEmpty())&#123;</span><br><span class="line">              context.write(<span class="keyword">new</span> Text(rowkey),put);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">public</span>  <span class="keyword">static</span>  <span class="class"><span class="keyword">class</span> <span class="title">HbaseReducer</span> <span class="keyword">extends</span> <span class="title">TableReducer</span>&lt;<span class="title">Text</span>,<span class="title">Put</span>,<span class="title">ImmutableBytesWritable</span>&gt;</span>&#123;</span><br><span class="line">         <span class="meta">@Override</span></span><br><span class="line">         <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(Text key, Iterable&lt;Put&gt; values, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">             <span class="keyword">for</span> (Put put : values) &#123;</span><br><span class="line">                 context.write(<span class="keyword">null</span>,put);</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, InterruptedException </span>&#123;</span><br><span class="line">        Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line"></span><br><span class="line">        Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line"></span><br><span class="line">        Job job = Job.getInstance(conf);</span><br><span class="line">        job.setJarByClass(HBaseMR.class);</span><br><span class="line">        <span class="comment">//使用TableMapReduceUtil 工具类来初始化我们的mapper</span></span><br><span class="line">        TableMapReduceUtil.initTableMapperJob(TableName.valueOf(args[<span class="number">0</span>]),scan,HBaseMapper.class,Text.class,Put.class,job);</span><br><span class="line">        <span class="comment">//使用TableMapReduceUtil 工具类来初始化我们的reducer</span></span><br><span class="line">        TableMapReduceUtil.initTableReducerJob(args[<span class="number">1</span>],HbaseReducer.class,job);</span><br><span class="line">        <span class="comment">//设置reduce task个数</span></span><br><span class="line">         job.setNumReduceTasks(<span class="number">1</span>);</span><br><span class="line">        System.exit(job.waitForCompletion(<span class="keyword">true</span>) ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.kaikeba;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
+import org.apache.hadoop.hbase.mapreduce.TableMapper;
+import org.apache.hadoop.hbase.mapreduce.TableReducer;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+
+import java.io.IOException;
+
+public class HBaseMR {
+
+    public static class HBaseMapper extends TableMapper&lt;Text,Put&gt;{
+        @Override
+        protected void map(ImmutableBytesWritable key, Result value, Context context) throws IOException, InterruptedException {
+             //获取rowkey的字节数组
+            byte[] bytes = key.get();
+            String rowkey = Bytes.toString(bytes);
+            //构建一个put对象
+            Put put = new Put(bytes);
+            //获取一行中所有的cell对象
+            Cell[] cells = value.rawCells();
+            for (Cell cell : cells) {
+                  // f1列族
+                if(&quot;f1&quot;.equals(Bytes.toString(CellUtil.cloneFamily(cell)))){
+                    // name列名
+                     if(&quot;name&quot;.equals(Bytes.toString(CellUtil.cloneQualifier(cell)))){
+                          put.add(cell);
+                     }
+                     // age列名
+                    if(&quot;age&quot;.equals(Bytes.toString(CellUtil.cloneQualifier(cell)))){
+                        put.add(cell);
+                    }
+                }
+            }
+            if(!put.isEmpty()){
+              context.write(new Text(rowkey),put);
+            }
+        }
+    }
+
+     public  static  class HbaseReducer extends TableReducer&lt;Text,Put,ImmutableBytesWritable&gt;{
+         @Override
+         protected void reduce(Text key, Iterable&lt;Put&gt; values, Context context) throws IOException, InterruptedException {
+             for (Put put : values) {
+                 context.write(null,put);
+             }
+         }
+     }
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+        Configuration conf = new Configuration();
+
+        Scan scan = new Scan();
+
+        Job job = Job.getInstance(conf);
+        job.setJarByClass(HBaseMR.class);
+        //使用TableMapReduceUtil 工具类来初始化我们的mapper
+        TableMapReduceUtil.initTableMapperJob(TableName.valueOf(args[0]),scan,HBaseMapper.class,Text.class,Put.class,job);
+        //使用TableMapReduceUtil 工具类来初始化我们的reducer
+        TableMapReduceUtil.initTableReducerJob(args[1],HbaseReducer.class,job);
+        //设置reduce task个数
+         job.setNumReduceTasks(1);
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
+}
+</code></pre>
 <ul>
 <li><p>打成jar包提交到集群中运行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar hbase_java_api-1.0-SNAPSHOT.jar com.kaikeba.HBaseMR t1 t2</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">hadoop jar hbase_java_api-1.0-SNAPSHOT.jar com.kaikeba.HBaseMR t1 t2
+</code></pre>
 </li>
 </ul>
 <h3 id="8-2-实战二"><a href="#8-2-实战二" class="headerlink" title="8.2 实战二"></a>8.2 实战二</h3><ul>
 <li><p>需求 读取hdfs上面的数据，写入到hbase表里面去</p>
 <p>node03执行以下命令准备数据文件，并将数据文件上传到HDFS上面去</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -mkdir -<span class="selector-tag">p</span> /hbase/input</span><br><span class="line">cd /kfly/install</span><br><span class="line">vim </span><br><span class="line">user.txt</span><br><span class="line"></span><br><span class="line"><span class="number">0007</span>	zhangsan	<span class="number">18</span></span><br><span class="line"><span class="number">0008</span>	lisi	<span class="number">25</span></span><br><span class="line"><span class="number">0009</span>	wangwu	<span class="number">20</span></span><br><span class="line"></span><br><span class="line">将文件上传到hdfs的路径下面去</span><br><span class="line">hdfs dfs -put kflyb/install/user<span class="selector-class">.txt</span>   /hbase/input/</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>hdfs dfs -mkdir -p /hbase/input
+cd /kfly/install
+vim 
+user.txt
+
+0007    zhangsan    18
+0008    lisi    25
+0009    wangwu    20
+
+将文件上传到hdfs的路径下面去
+hdfs dfs -put kflyb/install/user.txt   /hbase/input/
+</code></pre></li>
 <li><p>代码开发</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Put;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.io.ImmutableBytesWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableReducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.LongWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.NullWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.TextInputFormat;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hdfs2Hbase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HdfsMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>,<span class="title">Text</span>,<span class="title">Text</span>,<span class="title">NullWritable</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable key, Text value, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">            context.write(value,NullWritable.get());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HBASEReducer</span> <span class="keyword">extends</span> <span class="title">TableReducer</span>&lt;<span class="title">Text</span>,<span class="title">NullWritable</span>,<span class="title">ImmutableBytesWritable</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(Text key, Iterable&lt;NullWritable&gt; values, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">            String[] split = key.toString().split(<span class="string">" "</span>);</span><br><span class="line">            Put put = <span class="keyword">new</span> Put(Bytes.toBytes(split[<span class="number">0</span>]));</span><br><span class="line">            put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),split[<span class="number">1</span>].getBytes());</span><br><span class="line">            put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(), split[<span class="number">2</span>].getBytes());</span><br><span class="line">            context.write(<span class="keyword">new</span> ImmutableBytesWritable(Bytes.toBytes(split[<span class="number">0</span>])),put);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, InterruptedException </span>&#123;</span><br><span class="line">        Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">        Job job = Job.getInstance(conf);</span><br><span class="line"></span><br><span class="line">        job.setJarByClass(Hdfs2Hbase.class);</span><br><span class="line"></span><br><span class="line">        job.setInputFormatClass(TextInputFormat.class);</span><br><span class="line">        <span class="comment">//输入文件路径</span></span><br><span class="line">        TextInputFormat.addInputPath(job,<span class="keyword">new</span> Path(args[<span class="number">0</span>]));</span><br><span class="line">        job.setMapperClass(HdfsMapper.class);</span><br><span class="line">        <span class="comment">//map端的输出的key value 类型</span></span><br><span class="line">        job.setMapOutputKeyClass(Text.class);</span><br><span class="line">        job.setMapOutputValueClass(NullWritable.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//指定输出到hbase的表名</span></span><br><span class="line">        TableMapReduceUtil.initTableReducerJob(args[<span class="number">1</span>],HBASEReducer.class,job);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置reduce个数</span></span><br><span class="line">        job.setNumReduceTasks(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.exit(job.waitForCompletion(<span class="keyword">true</span>)?<span class="number">0</span>:<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建hbase表 t3</p>
+<p>~~~java<br>package com.kaikeba;</p>
 </li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'t3'</span>,<span class="string">'f1'</span></span><br></pre></td></tr></table></figure>
-<ul>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;<br>import java.io.IOException;</p>
+<p>public class Hdfs2Hbase {</p>
+<pre><code>public static class HdfsMapper extends Mapper&lt;LongWritable,Text,Text,NullWritable&gt; {
+
+    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        context.write(value,NullWritable.get());
+    }
+}
+
+public static class HBASEReducer extends TableReducer&lt;Text,NullWritable,ImmutableBytesWritable&gt; {
+
+    protected void reduce(Text key, Iterable&lt;NullWritable&gt; values, Context context) throws IOException, InterruptedException {
+        String[] split = key.toString().split(&quot; &quot;);
+        Put put = new Put(Bytes.toBytes(split[0]));
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),split[1].getBytes());
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(), split[2].getBytes());
+        context.write(new ImmutableBytesWritable(Bytes.toBytes(split[0])),put);
+    }
+}
+
+public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+
+    job.setJarByClass(Hdfs2Hbase.class);
+
+    job.setInputFormatClass(TextInputFormat.class);
+    //输入文件路径
+    TextInputFormat.addInputPath(job,new Path(args[0]));
+    job.setMapperClass(HdfsMapper.class);
+    //map端的输出的key value 类型
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(NullWritable.class);
+
+    //指定输出到hbase的表名
+    TableMapReduceUtil.initTableReducerJob(args[1],HBASEReducer.class,job);
+
+    //设置reduce个数
+    job.setNumReduceTasks(1);
+
+    System.exit(job.waitForCompletion(true)?0:1);
+}
+</code></pre><p>}</p>
+<pre><code>
+* 创建hbase表 t3
+
+~~~ruby
+create &#39;t3&#39;,&#39;f1&#39;
+</code></pre><ul>
 <li>打成jar包提交到集群中运行</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar hbase_java_api-1.0-SNAPSHOT.jar com.kaikeba.Hdfs2Hbase /data/user.txt t3</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">hadoop jar hbase_java_api-1.0-SNAPSHOT.jar com.kaikeba.Hdfs2Hbase /data/user.txt t3
+
+</code></pre>
 <h3 id="8-3-实战三"><a href="#8-3-实战三" class="headerlink" title="8.3 实战三"></a>8.3 实战三</h3><ul>
 <li><p>需求</p>
 <ul>
@@ -482,11 +757,73 @@
 <li><p>==1、开发生成HFile文件的代码==</p>
 </li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Connection;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Put;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Table;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.io.ImmutableBytesWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.LongWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HBaseLoad</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LoadMapper</span>  <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>,<span class="title">Text</span>,<span class="title">ImmutableBytesWritable</span>,<span class="title">Put</span>&gt; </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable key, Text value, Mapper.Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">            String[] split = value.toString().split(<span class="string">" "</span>);</span><br><span class="line">            Put put = <span class="keyword">new</span> Put(Bytes.toBytes(split[<span class="number">0</span>]));</span><br><span class="line">            put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),split[<span class="number">1</span>].getBytes());</span><br><span class="line">            put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(), split[<span class="number">2</span>].getBytes());</span><br><span class="line">            context.write(<span class="keyword">new</span> ImmutableBytesWritable(Bytes.toBytes(split[<span class="number">0</span>])),put);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, InterruptedException </span>&#123;</span><br><span class="line">            <span class="keyword">final</span> String INPUT_PATH=  <span class="string">"hdfs://node01:8020/hbase/input"</span>;</span><br><span class="line">            <span class="keyword">final</span> String OUTPUT_PATH= <span class="string">"hdfs://node01:8020/hbase/output_file"</span>;</span><br><span class="line">            Configuration conf = HBaseConfiguration.create();</span><br><span class="line"></span><br><span class="line">            Connection connection = ConnectionFactory.createConnection(conf);</span><br><span class="line">            Table table = connection.getTable(TableName.valueOf(<span class="string">"t4"</span>));</span><br><span class="line">            Job job= Job.getInstance(conf);</span><br><span class="line"></span><br><span class="line">            job.setJarByClass(HBaseLoad.class);</span><br><span class="line">            job.setMapperClass(LoadMapper.class);</span><br><span class="line">            job.setMapOutputKeyClass(ImmutableBytesWritable.class);</span><br><span class="line">            job.setMapOutputValueClass(Put.class);</span><br><span class="line">        </span><br><span class="line">            <span class="comment">//指定输出的类型HFileOutputFormat2</span></span><br><span class="line">            job.setOutputFormatClass(HFileOutputFormat2.class);</span><br><span class="line"></span><br><span class="line">         HFileOutputFormat2.configureIncrementalLoad(job,table,connection.getRegionLocator(TableName.valueOf(<span class="string">"t4"</span>)));</span><br><span class="line">            FileInputFormat.addInputPath(job,<span class="keyword">new</span> Path(INPUT_PATH));</span><br><span class="line">            FileOutputFormat.setOutputPath(job,<span class="keyword">new</span> Path(OUTPUT_PATH));</span><br><span class="line">            System.exit(job.waitForCompletion(<span class="keyword">true</span>)?<span class="number">0</span>:<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.kaikeba;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import java.io.IOException;
+
+public class HBaseLoad {
+
+    public static class LoadMapper  extends Mapper&lt;LongWritable,Text,ImmutableBytesWritable,Put&gt; {
+        @Override
+        protected void map(LongWritable key, Text value, Mapper.Context context) throws IOException, InterruptedException {
+            String[] split = value.toString().split(&quot; &quot;);
+            Put put = new Put(Bytes.toBytes(split[0]));
+            put.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),split[1].getBytes());
+            put.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(), split[2].getBytes());
+            context.write(new ImmutableBytesWritable(Bytes.toBytes(split[0])),put);
+        }
+    }
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+            final String INPUT_PATH=  &quot;hdfs://node01:8020/hbase/input&quot;;
+            final String OUTPUT_PATH= &quot;hdfs://node01:8020/hbase/output_file&quot;;
+            Configuration conf = HBaseConfiguration.create();
+
+            Connection connection = ConnectionFactory.createConnection(conf);
+            Table table = connection.getTable(TableName.valueOf(&quot;t4&quot;));
+            Job job= Job.getInstance(conf);
+
+            job.setJarByClass(HBaseLoad.class);
+            job.setMapperClass(LoadMapper.class);
+            job.setMapOutputKeyClass(ImmutableBytesWritable.class);
+            job.setMapOutputValueClass(Put.class);
+
+            //指定输出的类型HFileOutputFormat2
+            job.setOutputFormatClass(HFileOutputFormat2.class);
+
+         HFileOutputFormat2.configureIncrementalLoad(job,table,connection.getRegionLocator(TableName.valueOf(&quot;t4&quot;)));
+            FileInputFormat.addInputPath(job,new Path(INPUT_PATH));
+            FileOutputFormat.setOutputPath(job,new Path(OUTPUT_PATH));
+            System.exit(job.waitForCompletion(true)?0:1);
+
+
+    }
+}
+
+</code></pre>
 <ul>
 <li>==2、打成jar包提交到集群中运行==</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar hbase_java_api-1.0-SNAPSHOT.jar com.kaikeba.HBaseLoad</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">hadoop jar hbase_java_api-1.0-SNAPSHOT.jar com.kaikeba.HBaseLoad
+</code></pre>
 <ul>
 <li>==3、观察HDFS上输出的结果==</li>
 </ul>
@@ -497,17 +834,50 @@
 <ul>
 <li>方式一：代码加载</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Admin;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Connection;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.Table;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoadData</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">        configuration.set(<span class="string">"hbase.zookeeper.quorum"</span>, <span class="string">"node01,node02,node03"</span>);</span><br><span class="line">    <span class="comment">//获取数据库连接</span></span><br><span class="line">    Connection connection =  ConnectionFactory.createConnection(configuration);</span><br><span class="line">    <span class="comment">//获取表的管理器对象</span></span><br><span class="line">    Admin admin = connection.getAdmin();</span><br><span class="line">    <span class="comment">//获取table对象</span></span><br><span class="line">    TableName tableName = TableName.valueOf(<span class="string">"t4"</span>);</span><br><span class="line">    Table table = connection.getTable(tableName);</span><br><span class="line">    <span class="comment">//构建LoadIncrementalHFiles加载HFile文件</span></span><br><span class="line">    LoadIncrementalHFiles load = <span class="keyword">new</span> LoadIncrementalHFiles(configuration);</span><br><span class="line">    load.doBulkLoad(<span class="keyword">new</span> Path(<span class="string">"hdfs://node01:8020/hbase/output_file"</span>), admin,table,connection.getRegionLocator(tableName));</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.kaikeba;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;
+
+public class LoadData {
+    public static void main(String[] args) throws Exception {
+        Configuration configuration = HBaseConfiguration.create();
+        configuration.set(&quot;hbase.zookeeper.quorum&quot;, &quot;node01,node02,node03&quot;);
+    //获取数据库连接
+    Connection connection =  ConnectionFactory.createConnection(configuration);
+    //获取表的管理器对象
+    Admin admin = connection.getAdmin();
+    //获取table对象
+    TableName tableName = TableName.valueOf(&quot;t4&quot;);
+    Table table = connection.getTable(tableName);
+    //构建LoadIncrementalHFiles加载HFile文件
+    LoadIncrementalHFiles load = new LoadIncrementalHFiles(configuration);
+    load.doBulkLoad(new Path(&quot;hdfs://node01:8020/hbase/output_file&quot;), admin,table,connection.getRegionLocator(tableName));
+ }
+}
+</code></pre>
 <ul>
 <li>方式二：命令加载</li>
 </ul>
 <p>先将hbase的jar包添加到hadoop的classpath路径下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">先将hbase的jar包添加到hadoop的classpath路径下</span><br><span class="line">export HBASE_HOME=/kfly/install/hbase-1.2.0-cdh5.14.2/</span><br><span class="line">export HADOOP_HOME=/kfly/install/hadoop-2.6.0/</span><br><span class="line">export HADOOP_CLASSPATH=`$&#123;HBASE_HOME&#125;/bin/hbase mapredcp`</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">先将hbase的jar包添加到hadoop的classpath路径下
+export HBASE_HOME=/kfly/install/hbase-1.2.0-cdh5.14.2/
+export HADOOP_HOME=/kfly/install/hadoop-2.6.0/
+export HADOOP_CLASSPATH=`${HBASE_HOME}/bin/hbase mapredcp`
+</code></pre>
 </li>
 </ul>
 <ul>
 <li><p>运行命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn jar /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-server-1.2.0-cdh5.14.2.jar   completebulkload /hbase/output_hfile myuser2</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">yarn jar /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-server-1.2.0-cdh5.14.2.jar   completebulkload /hbase/output_hfile myuser2
+</code></pre>
 </li>
 </ul>
 <p>​    </p>
@@ -550,74 +920,142 @@
 <li><p>我们需要拷贝五个jar包名字如下</p>
 </li>
 </ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">hbase-client-1</span><span class="selector-class">.2</span><span class="selector-class">.0-cdh5</span><span class="selector-class">.14</span><span class="selector-class">.2</span><span class="selector-class">.jar</span>                  </span><br><span class="line"><span class="selector-tag">hbase-hadoop2-compat-1</span><span class="selector-class">.2</span><span class="selector-class">.0-cdh5</span><span class="selector-class">.14</span><span class="selector-class">.2</span><span class="selector-class">.jar</span> </span><br><span class="line"><span class="selector-tag">hbase-hadoop-compat-1</span><span class="selector-class">.2</span><span class="selector-class">.0-cdh5</span><span class="selector-class">.14</span><span class="selector-class">.2</span><span class="selector-class">.jar</span>  </span><br><span class="line"><span class="selector-tag">hbase-it-1</span><span class="selector-class">.2</span><span class="selector-class">.0-cdh5</span><span class="selector-class">.14</span><span class="selector-class">.2</span><span class="selector-class">.jar</span>    </span><br><span class="line"><span class="selector-tag">hbase-server-1</span><span class="selector-class">.2</span><span class="selector-class">.0-cdh5</span><span class="selector-class">.14</span><span class="selector-class">.2</span><span class="selector-class">.jar</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>hbase-client-1.2.0-cdh5.14.2.jar                  
+hbase-hadoop2-compat-1.2.0-cdh5.14.2.jar 
+hbase-hadoop-compat-1.2.0-cdh5.14.2.jar  
+hbase-it-1.2.0-cdh5.14.2.jar    
+hbase-server-1.2.0-cdh5.14.2.jar
+</code></pre><ul>
 <li>我们直接在node03执行以下命令，通过创建软连接的方式来进行jar包的依赖</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-client-1.2.0-cdh5.14.2.jar              /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-client-1.2.0-cdh5.14.2.jar   </span><br><span class="line"></span><br><span class="line">ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-hadoop2-compat-1.2.0-cdh5.14.2.jar      /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-hadoop2-compat-1.2.0-cdh5.14.2.jar             </span><br><span class="line">ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-hadoop-compat-1.2.0-cdh5.14.2.jar       /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-hadoop-compat-1.2.0-cdh5.14.2.jar            </span><br><span class="line">ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-it-1.2.0-cdh5.14.2.jar     /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-it-1.2.0-cdh5.14.2.jar    </span><br><span class="line"></span><br><span class="line">ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-server-1.2.0-cdh5.14.2.jar          /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-server-1.2.0-cdh5.14.2.jar</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-client-1.2.0-cdh5.14.2.jar              /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-client-1.2.0-cdh5.14.2.jar   
+
+ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-hadoop2-compat-1.2.0-cdh5.14.2.jar      /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-hadoop2-compat-1.2.0-cdh5.14.2.jar             
+ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-hadoop-compat-1.2.0-cdh5.14.2.jar       /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-hadoop-compat-1.2.0-cdh5.14.2.jar            
+ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-it-1.2.0-cdh5.14.2.jar     /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-it-1.2.0-cdh5.14.2.jar    
+
+ln -s /kfly/install/hbase-1.2.0-cdh5.14.2/lib/hbase-server-1.2.0-cdh5.14.2.jar          /kfly/install/hive-1.1.0-cdh5.14.2/lib/hbase-server-1.2.0-cdh5.14.2.jar  
+</code></pre>
 <h4 id="9-2-2-修改hive的配置文件"><a href="#9-2-2-修改hive的配置文件" class="headerlink" title="9.2.2 修改hive的配置文件"></a>9.2.2 修改hive的配置文件</h4><ul>
 <li>编辑<strong>node03</strong>服务器上面的hive的配置文件hive-site.xml</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/hive-1.1.0-cdh5.14.2/conf</span><br><span class="line">vim hive-site.xml</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/hive-1.1.0-cdh5.14.2/conf
+vim hive-site.xml
+</code></pre>
 <ul>
 <li>添加以下两个属性的配置</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hive.zookeeper.quorum<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>node01,node02,node03<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.zookeeper.quorum<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>node01,node02,node03<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="9-2-3-修改hive-env-sh配置文件"><a href="#9-2-3-修改hive-env-sh配置文件" class="headerlink" title="9.2.3 修改hive-env.sh配置文件"></a>9.2.3 修改hive-env.sh配置文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/hive-1.1.0-cdh5.14.2/conf</span><br><span class="line">vim hive-env.sh</span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+        &lt;name&gt;hive.zookeeper.quorum&lt;/name&gt;
+        &lt;value&gt;node01,node02,node03&lt;/value&gt;
+&lt;/property&gt;
+ &lt;property&gt;
+        &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
+        &lt;value&gt;node01,node02,node03&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+<h4 id="9-2-3-修改hive-env-sh配置文件"><a href="#9-2-3-修改hive-env-sh配置文件" class="headerlink" title="9.2.3 修改hive-env.sh配置文件"></a>9.2.3 修改hive-env.sh配置文件</h4><pre><code class="shell">cd /kfly/install/hive-1.1.0-cdh5.14.2/conf
+vim hive-env.sh
+</code></pre>
 <ul>
 <li>添加以下配置</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">HADOOP_HOME</span>=/export/servers/hadoop-2.6.0</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">HBASE_HOME</span>=/export/servers/hbase-1.2.0-cdh5.14.2</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">HIVE_CONF_DIR</span>=/export/servers/hive-1.1.0-cdh5.14.2/conf</span><br></pre></td></tr></table></figure>
-<h3 id="9-3-需求一：将hive表当中分析的结果保存到hbase表当中去"><a href="#9-3-需求一：将hive表当中分析的结果保存到hbase表当中去" class="headerlink" title="9.3 需求一：将hive表当中分析的结果保存到hbase表当中去"></a>9.3 需求一：将hive表当中分析的结果保存到hbase表当中去</h3><h4 id="9-3-1-hive当中建表"><a href="#9-3-1-hive当中建表" class="headerlink" title="9.3.1 hive当中建表"></a>9.3.1 hive当中建表</h4><ul>
+<pre><code>export HADOOP_HOME=/export/servers/hadoop-2.6.0
+export HBASE_HOME=/export/servers/hbase-1.2.0-cdh5.14.2
+export HIVE_CONF_DIR=/export/servers/hive-1.1.0-cdh5.14.2/conf
+</code></pre><h3 id="9-3-需求一：将hive表当中分析的结果保存到hbase表当中去"><a href="#9-3-需求一：将hive表当中分析的结果保存到hbase表当中去" class="headerlink" title="9.3 需求一：将hive表当中分析的结果保存到hbase表当中去"></a>9.3 需求一：将hive表当中分析的结果保存到hbase表当中去</h3><h4 id="9-3-1-hive当中建表"><a href="#9-3-1-hive当中建表" class="headerlink" title="9.3.1 hive当中建表"></a>9.3.1 hive当中建表</h4><ul>
 <li>node03执行以下命令，进入hive客户端，并创建hive表</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/hive-1.1.0-cdh5.14.2/</span><br><span class="line">bin/hive</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/hive-1.1.0-cdh5.14.2/
+bin/hive
+</code></pre>
 <ul>
 <li>创建hive数据库与hive对应的数据库表</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create database course;</span><br><span class="line">use course;</span><br><span class="line"></span><br><span class="line">create external table if not exists course.score(id int,cname string,score int) row format delimited fields terminated by &apos;\t&apos; stored as textfile ;</span><br></pre></td></tr></table></figure>
+<pre><code class="mysql">create database course;
+use course;
+
+create external table if not exists course.score(id int,cname string,score int) row format delimited fields terminated by &#39;\t&#39; stored as textfile ;
+</code></pre>
 <h4 id="9-3-2-准备数据内容如下并加载到hive表"><a href="#9-3-2-准备数据内容如下并加载到hive表" class="headerlink" title="9.3.2 准备数据内容如下并加载到hive表"></a>9.3.2 准备数据内容如下并加载到hive表</h4><ul>
 <li>node03执行以下命令，创建数据文件</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/hivedatas</span><br><span class="line">vi hive-hbase.txt</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/hivedatas
+vi hive-hbase.txt
+</code></pre>
 <ul>
 <li>文件内容如下</li>
 </ul>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>	zhangsan	<span class="number">80</span></span><br><span class="line"><span class="number">2</span>	lisi	<span class="number">60</span></span><br><span class="line"><span class="number">3</span>	wangwu	<span class="number">30</span></span><br><span class="line"><span class="number">4</span>	zhaoliu	<span class="number">70</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>1    zhangsan    80
+2    lisi    60
+3    wangwu    30
+4    zhaoliu    70
+</code></pre><ul>
 <li>进入hive客户端进行加载数据</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive (course)&gt; load data local inpath &apos;/kfly/doc/hive-hbase.txt&apos; into table score;</span><br><span class="line">hive (course)&gt; select * from score;</span><br></pre></td></tr></table></figure>
+<pre><code class="mysql">hive (course)&gt; load data local inpath &#39;/kfly/doc/hive-hbase.txt&#39; into table score;
+hive (course)&gt; select * from score;
+</code></pre>
 <h4 id="9-3-3-创建hive管理表与HBase进行映射"><a href="#9-3-3-创建hive管理表与HBase进行映射" class="headerlink" title="9.3.3 创建hive管理表与HBase进行映射"></a>9.3.3 创建hive管理表与HBase进行映射</h4><ul>
 <li><p>我们可以创建一个hive的管理表与hbase当中的表进行映射，hive管理表当中的数据，都会存储到hbase上面去</p>
 </li>
 <li><p>hive当中创建内部表</p>
 </li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> course.hbase_score(<span class="keyword">id</span> <span class="built_in">int</span>,cname <span class="keyword">string</span>,score <span class="built_in">int</span>) <span class="keyword">stored</span> <span class="keyword">by</span> <span class="string">'org.apache.hadoop.hive.hbase.HBaseStorageHandler'</span>  <span class="keyword">with</span> serdeproperties(<span class="string">"hbase.columns.mapping"</span> = <span class="string">"cf:name,cf:score"</span>) tblproperties(<span class="string">"hbase.table.name"</span> = <span class="string">"hbase_score"</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">create table course.hbase_score(id int,cname string,score int) stored by &#39;org.apache.hadoop.hive.hbase.HBaseStorageHandler&#39;  with serdeproperties(&quot;hbase.columns.mapping&quot; = &quot;cf:name,cf:score&quot;) tblproperties(&quot;hbase.table.name&quot; = &quot;hbase_score&quot;);
+</code></pre>
 <ul>
 <li>通过insert  overwrite select  插入数据</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert overwrite table course.hbase_score select id,cname,score from course.score;</span><br></pre></td></tr></table></figure>
+<pre><code class="mysql">insert overwrite table course.hbase_score select id,cname,score from course.score;
+</code></pre>
 <h4 id="9-3-4-hbase当中查看表hbase-score"><a href="#9-3-4-hbase当中查看表hbase-score" class="headerlink" title="9.3.4 hbase当中查看表hbase_score"></a>9.3.4 hbase当中查看表hbase_score</h4><ul>
 <li>进入hbase的客户端查看表hbase_score，并查看当中的数据</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hbase(main):023:0&gt;</span> list</span><br><span class="line"></span><br><span class="line">TABLE                                                                                 hbase_score                                                                           myuser                                                                                 myuser2                                                                               student                                                                               user                                                                                   <span class="number">5</span> row(s) <span class="keyword">in</span> <span class="number">0</span>.<span class="number">0210</span> seconds</span><br><span class="line">=&gt; [<span class="string">"hbase_score"</span>, <span class="string">"myuser"</span>, <span class="string">"myuser2"</span>, <span class="string">"student"</span>, <span class="string">"user"</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">hbase(main):024:0&gt;</span> scan <span class="string">'hbase_score'</span></span><br><span class="line"></span><br><span class="line">ROW                      COLUMN+CELL                                                   </span><br><span class="line"> <span class="number">1</span>                       column=<span class="symbol">cf:</span>name, timestamp=<span class="number">1550628395266</span>, value=zhangsan       </span><br><span class="line"> <span class="number">1</span>                       column=<span class="symbol">cf:</span>score, timestamp=<span class="number">1550628395266</span>, value=<span class="number">80</span>           </span><br><span class="line"> <span class="number">2</span>                       column=<span class="symbol">cf:</span>name, timestamp=<span class="number">1550628395266</span>, value=lisi           </span><br><span class="line"> <span class="number">2</span>                       column=<span class="symbol">cf:</span>score, timestamp=<span class="number">1550628395266</span>, value=<span class="number">60</span>           </span><br><span class="line"> <span class="number">3</span>                       column=<span class="symbol">cf:</span>name, timestamp=<span class="number">1550628395266</span>, value=wangwu         </span><br><span class="line"> <span class="number">3</span>                       column=<span class="symbol">cf:</span>score, timestamp=<span class="number">1550628395266</span>, value=<span class="number">30</span>           </span><br><span class="line"> <span class="number">4</span>                       column=<span class="symbol">cf:</span>name, timestamp=<span class="number">1550628395266</span>, value=zhaoliu       </span><br><span class="line"> <span class="number">4</span>                       column=<span class="symbol">cf:</span>score, timestamp=<span class="number">1550628395266</span>, value=<span class="number">70</span>           </span><br><span class="line"><span class="number">4</span> row(s) <span class="keyword">in</span> <span class="number">0</span>.<span class="number">0360</span> seconds</span><br></pre></td></tr></table></figure>
+<pre><code class="ruby">hbase(main):023:0&gt; list
+
+TABLE                                                                                 hbase_score                                                                           myuser                                                                                 myuser2                                                                               student                                                                               user                                                                                   5 row(s) in 0.0210 seconds
+=&gt; [&quot;hbase_score&quot;, &quot;myuser&quot;, &quot;myuser2&quot;, &quot;student&quot;, &quot;user&quot;]
+
+hbase(main):024:0&gt; scan &#39;hbase_score&#39;
+
+ROW                      COLUMN+CELL                                                   
+ 1                       column=cf:name, timestamp=1550628395266, value=zhangsan       
+ 1                       column=cf:score, timestamp=1550628395266, value=80           
+ 2                       column=cf:name, timestamp=1550628395266, value=lisi           
+ 2                       column=cf:score, timestamp=1550628395266, value=60           
+ 3                       column=cf:name, timestamp=1550628395266, value=wangwu         
+ 3                       column=cf:score, timestamp=1550628395266, value=30           
+ 4                       column=cf:name, timestamp=1550628395266, value=zhaoliu       
+ 4                       column=cf:score, timestamp=1550628395266, value=70           
+4 row(s) in 0.0360 seconds
+</code></pre>
 <h3 id="9-4-需求二：创建hive外部表，映射HBase当中已有的表模型（5分钟）"><a href="#9-4-需求二：创建hive外部表，映射HBase当中已有的表模型（5分钟）" class="headerlink" title="9.4 需求二：创建hive外部表，映射HBase当中已有的表模型（5分钟）"></a>9.4 需求二：创建hive外部表，映射HBase当中已有的表模型（5分钟）</h3><h4 id="9-4-1-HBase当中创建表并手动插入加载一些数据"><a href="#9-4-1-HBase当中创建表并手动插入加载一些数据" class="headerlink" title="9.4.1 HBase当中创建表并手动插入加载一些数据"></a>9.4.1 HBase当中创建表并手动插入加载一些数据</h4><ul>
 <li>进入HBase的shell客户端，</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hbase shell</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">bin/hbase shell
+</code></pre>
 <ul>
 <li>手动创建一张表，并插入加载一些数据进去</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一张表</span></span><br><span class="line">create <span class="string">'hbase_hive_score'</span>,&#123; NAME =&gt;<span class="string">'cf'</span>&#125;</span><br><span class="line"><span class="comment"># 通过put插入数据到hbase表</span></span><br><span class="line">put <span class="string">'hbase_hive_score'</span>,<span class="string">'1'</span>,<span class="string">'cf:name'</span>,<span class="string">'zhangsan'</span></span><br><span class="line">put <span class="string">'hbase_hive_score'</span>,<span class="string">'1'</span>,<span class="string">'cf:score'</span>, <span class="string">'95'</span></span><br><span class="line">put <span class="string">'hbase_hive_score'</span>,<span class="string">'2'</span>,<span class="string">'cf:name'</span>,<span class="string">'lisi'</span></span><br><span class="line">put <span class="string">'hbase_hive_score'</span>,<span class="string">'2'</span>,<span class="string">'cf:score'</span>, <span class="string">'96'</span></span><br><span class="line">put <span class="string">'hbase_hive_score'</span>,<span class="string">'3'</span>,<span class="string">'cf:name'</span>,<span class="string">'wangwu'</span></span><br><span class="line">put <span class="string">'hbase_hive_score'</span>,<span class="string">'3'</span>,<span class="string">'cf:score'</span>, <span class="string">'97'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="ruby"># 创建一张表
+create &#39;hbase_hive_score&#39;,{ NAME =&gt;&#39;cf&#39;}
+# 通过put插入数据到hbase表
+put &#39;hbase_hive_score&#39;,&#39;1&#39;,&#39;cf:name&#39;,&#39;zhangsan&#39;
+put &#39;hbase_hive_score&#39;,&#39;1&#39;,&#39;cf:score&#39;, &#39;95&#39;
+put &#39;hbase_hive_score&#39;,&#39;2&#39;,&#39;cf:name&#39;,&#39;lisi&#39;
+put &#39;hbase_hive_score&#39;,&#39;2&#39;,&#39;cf:score&#39;, &#39;96&#39;
+put &#39;hbase_hive_score&#39;,&#39;3&#39;,&#39;cf:name&#39;,&#39;wangwu&#39;
+put &#39;hbase_hive_score&#39;,&#39;3&#39;,&#39;cf:score&#39;, &#39;97&#39;
+</code></pre>
 <h4 id="9-4-2-建立hive的外部表，映射HBase当中的表以及字段"><a href="#9-4-2-建立hive的外部表，映射HBase当中的表以及字段" class="headerlink" title="9.4.2 建立hive的外部表，映射HBase当中的表以及字段"></a>9.4.2 建立hive的外部表，映射HBase当中的表以及字段</h4><ul>
 <li><p>在hive当中建立外部表</p>
 </li>
 <li><p>进入hive客户端，然后执行以下命令进行创建hive外部表，就可以实现映射HBase当中的表数据</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE external TABLE course.hbase2hive(id int, name string, score int) STORED BY &apos;org.apache.hadoop.hive.hbase.HBaseStorageHandler&apos; WITH SERDEPROPERTIES (&quot;hbase.columns.mapping&quot; = &quot;:key,cf:name,cf:score&quot;) TBLPROPERTIES(&quot;hbase.table.name&quot; =&quot;hbase_hive_score&quot;);</span><br></pre></td></tr></table></figure>
+<pre><code class="mysql">CREATE external TABLE course.hbase2hive(id int, name string, score int) STORED BY &#39;org.apache.hadoop.hive.hbase.HBaseStorageHandler&#39; WITH SERDEPROPERTIES (&quot;hbase.columns.mapping&quot; = &quot;:key,cf:name,cf:score&quot;) TBLPROPERTIES(&quot;hbase.table.name&quot; =&quot;hbase_hive_score&quot;);
+</code></pre>
 
         
         <br />

@@ -162,173 +162,504 @@
 <p><a href="https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties</a></p>
 <p>开发Hive应用时，不可避免地需要设定Hive的参数。设定Hive的参数可以调优HQL代码的执行效率，或帮助定位问题。然而实践中经常遇到的一个问题是，为什么设定的参数没有起作用？这通常是错误的设定方式导致的。</p>
 <p><strong>对于一般参数，有以下三种设定方式：</strong></p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">配置文件  hive-site.xml</span><br><span class="line"></span><br><span class="line">命令行参数  启动hive客户端的时候可以设置参数</span><br><span class="line"></span><br><span class="line">参数声明   进入客户单以后设置的一些参数  set</span><br></pre></td></tr></table></figure>
-<p><strong>配置文件</strong>：Hive的配置文件包括</p>
+<pre><code>配置文件  hive-site.xml
+
+命令行参数  启动hive客户端的时候可以设置参数
+
+参数声明   进入客户单以后设置的一些参数  set  
+</code></pre><p><strong>配置文件</strong>：Hive的配置文件包括</p>
 <p> 用户自定义配置文件：$HIVE_CONF_DIR/hive-site.xml </p>
 <p>默认配置文件：$HIVE_CONF_DIR/hive-default.xml </p>
 <p>用户自定义配置会覆盖默认配置。</p>
 <p>另外，Hive也会读入Hadoop的配置，因为Hive是作为Hadoop的客户端启动的，Hive的配置会覆盖Hadoop的配置。配置文件的设定对本机启动的所有Hive进程都有效。</p>
 <p><strong>命令行参数</strong>：启动Hive（客户端或Server方式）时，可以在命令行添加-hiveconf param=value来设定参数，例如：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hive -hiveconf hive.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">bin/hive -hiveconf hive.root.logger=INFO,console
+</code></pre>
 <p>这一设定对本次启动的Session（对于Server方式启动，则是所有请求的Sessions）有效。</p>
 <p><strong>参数声明</strong>：可以在HQL中使用SET关键字设定参数，例如：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">set</span> mapred.reduce.<span class="attribute">tasks</span>=100;</span><br></pre></td></tr></table></figure>
-<p>这一设定的作用域也是session级的。</p>
+<pre><code>set mapred.reduce.tasks=100;
+</code></pre><p>这一设定的作用域也是session级的。</p>
 <p>上述三种设定方式的优先级依次递增。即参数声明覆盖命令行参数，命令行参数覆盖配置文件设定。注意某些系统级的参数，例如log4j相关的设定，必须用前两种方式设定，因为那些参数的读取在Session建立以前已经完成了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">参数声明  &gt;   命令行参数   &gt;  配置文件参数（hive）</span><br></pre></td></tr></table></figure>
-<h4 id="3、使用变量传递参数"><a href="#3、使用变量传递参数" class="headerlink" title="3、使用变量传递参数"></a>3、使用变量传递参数</h4><p>实际工作当中，我们一般都是将hive的hql语法开发完成之后，就写入到一个脚本里面去，然后定时的通过命令 hive  -f  去执行hive的语法即可，然后通过定义变量来传递参数到hive的脚本当中去，那么我们接下来就来看看如何使用hive来传递参数。</p>
+<pre><code>参数声明  &gt;   命令行参数   &gt;  配置文件参数（hive）
+</code></pre><h4 id="3、使用变量传递参数"><a href="#3、使用变量传递参数" class="headerlink" title="3、使用变量传递参数"></a>3、使用变量传递参数</h4><p>实际工作当中，我们一般都是将hive的hql语法开发完成之后，就写入到一个脚本里面去，然后定时的通过命令 hive  -f  去执行hive的语法即可，然后通过定义变量来传递参数到hive的脚本当中去，那么我们接下来就来看看如何使用hive来传递参数。</p>
 <p>hive0.9以及之前的版本是不支持传参的<br> hive1.0版本之后支持  hive -f 传递参数</p>
 <p>在hive当中我们一般可以使用hivevar或者hiveconf来进行参数的传递</p>
 <h5 id="hiveconf使用说明"><a href="#hiveconf使用说明" class="headerlink" title="hiveconf使用说明"></a>hiveconf使用说明</h5><p>hiveconf用于定义HIVE执行上下文的属性(配置参数)，可覆盖覆盖hive-site.xml（hive-default.xml）中的参数值，如用户执行目录、日志打印级别、执行队列等。例如我们可以使用hiveconf来覆盖我们的hive属性配置，</p>
 <p>hiveconf变量取值必须要使用hiveconf作为前缀参数，具体格式如下:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&#123;hiveconf:key&#125; </span><br><span class="line">bin/hive <span class="comment">--hiveconf "mapred.job.queue.name=root.default"</span></span><br></pre></td></tr></table></figure>
+<pre><code class="sql">${hiveconf:key} 
+bin/hive --hiveconf &quot;mapred.job.queue.name=root.default&quot;
+</code></pre>
 <h5 id="hivevar使用说明"><a href="#hivevar使用说明" class="headerlink" title="hivevar使用说明"></a>hivevar使用说明</h5><p>hivevar用于定义HIVE运行时的变量替换，类似于JAVA中的“PreparedStatement”，与\${key}配合使用或者与 ${hivevar:key}</p>
 <p>对于hivevar取值可以不使用前缀hivevar，具体格式如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">使用前缀:</span><br><span class="line"> $&#123;hivevar:key&#125;</span><br><span class="line">不使用前缀:</span><br><span class="line"> $&#123;key&#125;</span><br><span class="line"><span class="comment">--hivevar  name=zhangsan    $&#123;hivevar:name&#125;  </span></span><br><span class="line">也可以这样取值  $&#123;name&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="define使用说明"><a href="#define使用说明" class="headerlink" title="define使用说明"></a>define使用说明</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">define与hivevar用途完全一样，还有一种简写“-d</span><br><span class="line">bin/hive <span class="comment">--hiveconf "mapred.job.queue.name=root.default" -d my="201809" --database mydb</span></span><br><span class="line">执行SQL</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> mydb <span class="keyword">where</span> <span class="keyword">concat</span>(<span class="keyword">year</span>, <span class="keyword">month</span>) = $&#123;my&#125; <span class="keyword">limit</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">使用前缀:
+ ${hivevar:key}
+不使用前缀:
+ ${key}
+--hivevar  name=zhangsan    ${hivevar:name}  
+也可以这样取值  ${name}
+</code></pre>
+<h5 id="define使用说明"><a href="#define使用说明" class="headerlink" title="define使用说明"></a>define使用说明</h5><pre><code class="sql">define与hivevar用途完全一样，还有一种简写“-d
+bin/hive --hiveconf &quot;mapred.job.queue.name=root.default&quot; -d my=&quot;201809&quot; --database mydb
+执行SQL
+select * from mydb where concat(year, month) = ${my} limit 10;
+</code></pre>
 <h5 id="hiveconf与hivevar使用实战"><a href="#hiveconf与hivevar使用实战" class="headerlink" title="hiveconf与hivevar使用实战"></a>hiveconf与hivevar使用实战</h5><p>需求：hive当中执行以下hql语句，并将参数全部都传递进去</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> student <span class="keyword">left</span> <span class="keyword">join</span> score <span class="keyword">on</span> student.s_id = score.s_id <span class="keyword">where</span> score.month = <span class="string">'201807'</span> <span class="keyword">and</span> score.s_score &gt; <span class="number">80</span> <span class="keyword">and</span> score.c_id = <span class="number">03</span>;</span><br></pre></td></tr></table></figure>
-<h6 id="第一步：创建student表并加载数据"><a href="#第一步：创建student表并加载数据" class="headerlink" title="第一步：创建student表并加载数据"></a>第一步：创建student表并加载数据</h6><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive (myhive)&gt; create external table student</span><br><span class="line">(s_id string,s_name string,s_birth string , s_sex string ) row format delimited</span><br><span class="line">fields terminated by '\t';</span><br><span class="line"></span><br><span class="line">hive (myhive)&gt; load data local inpath '/kkb/install/hivedatas/student.csv' overwrite into table student;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">select * from student left join score on student.s_id = score.s_id where score.month = &#39;201807&#39; and score.s_score &gt; 80 and score.c_id = 03;
+</code></pre>
+<h6 id="第一步：创建student表并加载数据"><a href="#第一步：创建student表并加载数据" class="headerlink" title="第一步：创建student表并加载数据"></a>第一步：创建student表并加载数据</h6><pre><code class="sql">hive (myhive)&gt; create external table student
+(s_id string,s_name string,s_birth string , s_sex string ) row format delimited
+fields terminated by &#39;\t&#39;;
+
+hive (myhive)&gt; load data local inpath &#39;/kkb/install/hivedatas/student.csv&#39; overwrite into table student;
+
+</code></pre>
 <h6 id="第二步：定义hive脚本"><a href="#第二步：定义hive脚本" class="headerlink" title="第二步：定义hive脚本"></a>第二步：定义hive脚本</h6><p>开发hql脚本，并使用hiveconf和hivevar进行参数穿肚</p>
 <p>node03执行以下命令定义hql脚本</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/instal/hivedatas</span><br><span class="line"></span><br><span class="line">vim hivevariable.hql</span><br><span class="line"><span class="keyword">use</span> myhive;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> student <span class="keyword">left</span> <span class="keyword">join</span> score <span class="keyword">on</span> student.s_id = score.s_id <span class="keyword">where</span> score.month = $&#123;hiveconf:<span class="keyword">month</span>&#125; <span class="keyword">and</span> score.s_score &gt; $&#123;hivevar:s_score&#125; <span class="keyword">and</span> score.c_id = $&#123;c_id&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">cd /kkb/instal/hivedatas
+
+vim hivevariable.hql
+use myhive;
+select * from student left join score on student.s_id = score.s_id where score.month = ${hiveconf:month} and score.s_score &gt; ${hivevar:s_score} and score.c_id = ${c_id};   
+</code></pre>
 <h6 id="第三步：调用hive脚本并传递参数"><a href="#第三步：调用hive脚本并传递参数" class="headerlink" title="第三步：调用hive脚本并传递参数"></a>第三步：调用hive脚本并传递参数</h6><p>node03执行以下命令并</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node03 hive-1.1.0-cdh5.14.2]# bin/hive --hiveconf month=201807 --hivevar s_score=80 --hivevar c_id=03  -f /kkb/install/hivedatas/hivevariable.hql</span><br></pre></td></tr></table></figure>
-<h3 id="2、hive的常用函数介绍"><a href="#2、hive的常用函数介绍" class="headerlink" title="2、hive的常用函数介绍"></a>2、hive的常用函数介绍</h3><h4 id="系统内置函数"><a href="#系统内置函数" class="headerlink" title="系统内置函数"></a>系统内置函数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1．查看系统自带的函数</span><br><span class="line"><span class="meta">hive&gt;</span><span class="bash"> show <span class="built_in">functions</span>;</span></span><br><span class="line">2．显示自带的函数的用法</span><br><span class="line"><span class="meta">hive&gt;</span><span class="bash"> desc <span class="keyword">function</span> upper;</span></span><br><span class="line">3．详细显示自带的函数的用法</span><br><span class="line"><span class="meta">hive&gt;</span><span class="bash"> desc <span class="keyword">function</span> extended upper;</span></span><br></pre></td></tr></table></figure>
-<h4 id="1、数值计算"><a href="#1、数值计算" class="headerlink" title="1、数值计算"></a>1、数值计算</h4><h5 id="1、取整函数-round"><a href="#1、取整函数-round" class="headerlink" title="1、取整函数: round"></a>1、取整函数: round</h5><p><strong>语法</strong>: round(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 返回double类型的整数值部分 （遵循四舍五入）</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">round</span>(<span class="number">3.1415926</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">3</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">round</span>(<span class="number">3.5</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">4</span><br><span class="line">hive&gt; <span class="keyword">create</span> table tableName <span class="keyword">as</span> <span class="keyword">select</span> <span class="built_in">round</span>(<span class="number">9542.158</span>) <span class="keyword">from</span> tableName;</span><br></pre></td></tr></table></figure>
-<h5 id="2、指定精度取整函数-round"><a href="#2、指定精度取整函数-round" class="headerlink" title="2、指定精度取整函数: round"></a>2、指定精度取整函数: round</h5><p><strong>语法</strong>: round(double a, int d)<br> <strong>返回值</strong>: DOUBLE<br> <strong>说明</strong>: 返回指定精度d的double类型</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">round</span>(<span class="number">3.1415926</span>,<span class="number">4</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">3.1416</span><br></pre></td></tr></table></figure>
-<h5 id="3、向下取整函数-floor"><a href="#3、向下取整函数-floor" class="headerlink" title="3、向下取整函数: floor"></a>3、向下取整函数: floor</h5><p><strong>语法</strong>: floor(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 返回等于或者小于该double变量的最大的整数</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">floor</span>(<span class="number">3.1415926</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">3</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">floor</span>(<span class="number">25</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">25</span><br></pre></td></tr></table></figure>
-<h5 id="4、向上取整函数-ceil"><a href="#4、向上取整函数-ceil" class="headerlink" title="4、向上取整函数: ceil"></a>4、向上取整函数: ceil</h5><p><strong>语法</strong>: ceil(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 返回等于或者大于该double变量的最小的整数</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">ceil</span>(<span class="number">3.1415926</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">4</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">ceil</span>(<span class="number">46</span>) <span class="keyword">from</span> tableName;</span><br><span class="line">46</span><br></pre></td></tr></table></figure>
-<h5 id="5、向上取整函数-ceiling"><a href="#5、向上取整函数-ceiling" class="headerlink" title="5、向上取整函数: ceiling"></a>5、向上取整函数: ceiling</h5><p><strong>语法</strong>: ceiling(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 与ceil功能相同</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">ceiling</span>(<span class="params"><span class="number">3.1415926</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">4</span></span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">ceiling</span>(<span class="params"><span class="number">46</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">46</span></span><br></pre></td></tr></table></figure>
-<h5 id="6、取随机数函数-rand"><a href="#6、取随机数函数-rand" class="headerlink" title="6、取随机数函数: rand"></a>6、取随机数函数: rand</h5><p><strong>语法</strong>: rand(),rand(int seed)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: 返回一个0到1范围内的随机数。如果指定种子seed，则会等到一个稳定的随机数序列</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">rand</span>(<span class="params"></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">0.5577432776034763</span></span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">rand</span>(<span class="params"></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">0.6638336467363424</span></span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">rand</span>(<span class="params"><span class="number">100</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">0.7220096548596434</span></span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">rand</span>(<span class="params"><span class="number">100</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">0.7220096548596434</span></span><br></pre></td></tr></table></figure>
-<h4 id="2、日期函数"><a href="#2、日期函数" class="headerlink" title="2、日期函数"></a>2、日期函数</h4><h5 id="1、UNIX时间戳转日期函数-from-unixtime"><a href="#1、UNIX时间戳转日期函数-from-unixtime" class="headerlink" title="1、UNIX时间戳转日期函数: from_unixtime"></a>1、UNIX时间戳转日期函数: from_unixtime</h5><p><strong>语法</strong>: from_unixtime(bigint unixtime[, string format])<br> <strong>返回值</strong>: string<br> <strong>说明</strong>: 转化UNIX时间戳（从1970-01-01 00:00:00 UTC到指定时间的秒数）到当前时区的时间格式</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select from_unixtime(1323308943,'yyyyMMdd') from tableName;</span><br><span class="line">20111208</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">[root@node03 hive-1.1.0-cdh5.14.2]# bin/hive --hiveconf month=201807 --hivevar s_score=80 --hivevar c_id=03  -f /kkb/install/hivedatas/hivevariable.hql
+</code></pre>
+<h3 id="2、hive的常用函数介绍"><a href="#2、hive的常用函数介绍" class="headerlink" title="2、hive的常用函数介绍"></a>2、hive的常用函数介绍</h3><h4 id="系统内置函数"><a href="#系统内置函数" class="headerlink" title="系统内置函数"></a>系统内置函数</h4><pre><code>1．查看系统自带的函数
+hive&gt; show functions;
+2．显示自带的函数的用法
+hive&gt; desc function upper;
+3．详细显示自带的函数的用法
+hive&gt; desc function extended upper;
+</code></pre><h4 id="1、数值计算"><a href="#1、数值计算" class="headerlink" title="1、数值计算"></a>1、数值计算</h4><h5 id="1、取整函数-round"><a href="#1、取整函数-round" class="headerlink" title="1、取整函数: round"></a>1、取整函数: round</h5><p><strong>语法</strong>: round(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 返回double类型的整数值部分 （遵循四舍五入）</p>
+<pre><code>hive&gt; select round(3.1415926) from tableName;
+3
+hive&gt; select round(3.5) from tableName;
+4
+hive&gt; create table tableName as select round(9542.158) from tableName;
+
+</code></pre><h5 id="2、指定精度取整函数-round"><a href="#2、指定精度取整函数-round" class="headerlink" title="2、指定精度取整函数: round"></a>2、指定精度取整函数: round</h5><p><strong>语法</strong>: round(double a, int d)<br> <strong>返回值</strong>: DOUBLE<br> <strong>说明</strong>: 返回指定精度d的double类型</p>
+<pre><code>hive&gt; select round(3.1415926,4) from tableName;
+3.1416
+
+</code></pre><h5 id="3、向下取整函数-floor"><a href="#3、向下取整函数-floor" class="headerlink" title="3、向下取整函数: floor"></a>3、向下取整函数: floor</h5><p><strong>语法</strong>: floor(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 返回等于或者小于该double变量的最大的整数</p>
+<pre><code>hive&gt; select floor(3.1415926) from tableName;
+3
+hive&gt; select floor(25) from tableName;
+25
+
+
+</code></pre><h5 id="4、向上取整函数-ceil"><a href="#4、向上取整函数-ceil" class="headerlink" title="4、向上取整函数: ceil"></a>4、向上取整函数: ceil</h5><p><strong>语法</strong>: ceil(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 返回等于或者大于该double变量的最小的整数</p>
+<pre><code>hive&gt; select ceil(3.1415926) from tableName;
+4
+hive&gt; select ceil(46) from tableName;
+46
+
+
+</code></pre><h5 id="5、向上取整函数-ceiling"><a href="#5、向上取整函数-ceiling" class="headerlink" title="5、向上取整函数: ceiling"></a>5、向上取整函数: ceiling</h5><p><strong>语法</strong>: ceiling(double a)<br> <strong>返回值</strong>: BIGINT<br> <strong>说明</strong>: 与ceil功能相同</p>
+<pre><code>hive&gt; select ceiling(3.1415926) from tableName;
+4
+hive&gt; select ceiling(46) from tableName;
+46
+
+</code></pre><h5 id="6、取随机数函数-rand"><a href="#6、取随机数函数-rand" class="headerlink" title="6、取随机数函数: rand"></a>6、取随机数函数: rand</h5><p><strong>语法</strong>: rand(),rand(int seed)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: 返回一个0到1范围内的随机数。如果指定种子seed，则会等到一个稳定的随机数序列</p>
+<pre><code>hive&gt; select rand() from tableName;
+0.5577432776034763
+hive&gt; select rand() from tableName;
+0.6638336467363424
+hive&gt; select rand(100) from tableName;
+0.7220096548596434
+hive&gt; select rand(100) from tableName;
+0.7220096548596434
+</code></pre><h4 id="2、日期函数"><a href="#2、日期函数" class="headerlink" title="2、日期函数"></a>2、日期函数</h4><h5 id="1、UNIX时间戳转日期函数-from-unixtime"><a href="#1、UNIX时间戳转日期函数-from-unixtime" class="headerlink" title="1、UNIX时间戳转日期函数: from_unixtime"></a>1、UNIX时间戳转日期函数: from_unixtime</h5><p><strong>语法</strong>: from_unixtime(bigint unixtime[, string format])<br> <strong>返回值</strong>: string<br> <strong>说明</strong>: 转化UNIX时间戳（从1970-01-01 00:00:00 UTC到指定时间的秒数）到当前时区的时间格式</p>
+<pre><code class="sql">hive&gt; select from_unixtime(1323308943,&#39;yyyyMMdd&#39;) from tableName;
+20111208
+
+
+</code></pre>
 <h5 id="2、获取当前UNIX时间戳函数-unix-timestamp"><a href="#2、获取当前UNIX时间戳函数-unix-timestamp" class="headerlink" title="2、获取当前UNIX时间戳函数: unix_timestamp"></a>2、获取当前UNIX时间戳函数: unix_timestamp</h5><p><strong>语法</strong>: unix_timestamp()<br> <strong>返回值</strong>: bigint<br> <strong>说明</strong>: 获得当前时区的UNIX时间戳</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select unix_timestamp() from tableName;</span><br><span class="line">1323309615</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select unix_timestamp() from tableName;
+1323309615
+
+</code></pre>
 <h5 id="3、日期转UNIX时间戳函数-unix-timestamp"><a href="#3、日期转UNIX时间戳函数-unix-timestamp" class="headerlink" title="3、日期转UNIX时间戳函数: unix_timestamp"></a>3、日期转UNIX时间戳函数: unix_timestamp</h5><p><strong>语法</strong>: unix_timestamp(string date)<br> <strong>返回值</strong>: bigint<br> <strong>说明</strong>: 转换格式为”yyyy-MM-dd HH:mm:ss”的日期到UNIX时间戳。如果转化失败，则返回0。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select unix_timestamp('2011-12-07 13:01:03') from tableName;</span><br><span class="line">1323234063</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select unix_timestamp(&#39;2011-12-07 13:01:03&#39;) from tableName;
+1323234063
+</code></pre>
 <h5 id="4、指定格式日期转UNIX时间戳函数-unix-timestamp"><a href="#4、指定格式日期转UNIX时间戳函数-unix-timestamp" class="headerlink" title="4、指定格式日期转UNIX时间戳函数: unix_timestamp"></a>4、指定格式日期转UNIX时间戳函数: unix_timestamp</h5><p><strong>语法</strong>: unix_timestamp(string date, string pattern)<br> <strong>返回值</strong>: bigint<br> <strong>说明</strong>: 转换pattern格式的日期到UNIX时间戳。如果转化失败，则返回0。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select unix_timestamp('20111207 13:01:03','yyyyMMdd HH:mm:ss') from tableName;</span><br><span class="line">1323234063</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select unix_timestamp(&#39;20111207 13:01:03&#39;,&#39;yyyyMMdd HH:mm:ss&#39;) from tableName;
+1323234063
+
+</code></pre>
 <h5 id="5、日期时间转日期函数-to-date"><a href="#5、日期时间转日期函数-to-date" class="headerlink" title="5、日期时间转日期函数: to_date"></a>5、日期时间转日期函数: to_date</h5><p><strong>语法</strong>: to_date(string timestamp)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>: 返回日期时间字段中的日期部分。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select to_date('2011-12-08 10:03:01') from tableName;</span><br><span class="line">2011-12-08</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select to_date(&#39;2011-12-08 10:03:01&#39;) from tableName;
+2011-12-08
+</code></pre>
 <h5 id="6、日期转年函数-year"><a href="#6、日期转年函数-year" class="headerlink" title="6、日期转年函数: year"></a>6、日期转年函数: year</h5><p><strong>语法</strong>: year(string date)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回日期中的年。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select year('2011-12-08 10:03:01') from tableName;</span><br><span class="line">2011</span><br><span class="line">hive&gt; select year('2012-12-08') from tableName;</span><br><span class="line">2012</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select year(&#39;2011-12-08 10:03:01&#39;) from tableName;
+2011
+hive&gt; select year(&#39;2012-12-08&#39;) from tableName;
+2012
+
+
+</code></pre>
 <h5 id="7、日期转月函数-month"><a href="#7、日期转月函数-month" class="headerlink" title="7、日期转月函数: month"></a>7、日期转月函数: month</h5><p><strong>语法</strong>: month (string date)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回日期中的月份。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select month('2011-12-08 10:03:01') from tableName;</span><br><span class="line">12</span><br><span class="line">hive&gt; select month('2011-08-08') from tableName;</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select month(&#39;2011-12-08 10:03:01&#39;) from tableName;
+12
+hive&gt; select month(&#39;2011-08-08&#39;) from tableName;
+8
+
+
+</code></pre>
 <h5 id="8、日期转天函数-day"><a href="#8、日期转天函数-day" class="headerlink" title="8、日期转天函数: day"></a>8、日期转天函数: day</h5><p><strong>语法</strong>: day (string date)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回日期中的天。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select day('2011-12-08 10:03:01') from tableName;</span><br><span class="line">8</span><br><span class="line">hive&gt; select day('2011-12-24') from tableName;</span><br><span class="line">24</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select day(&#39;2011-12-08 10:03:01&#39;) from tableName;
+8
+hive&gt; select day(&#39;2011-12-24&#39;) from tableName;
+24
+
+
+</code></pre>
 <h5 id="9、日期转小时函数-hour"><a href="#9、日期转小时函数-hour" class="headerlink" title="9、日期转小时函数: hour"></a>9、日期转小时函数: hour</h5><p><strong>语法</strong>: hour (string date)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回日期中的小时。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select hour('2011-12-08 10:03:01') from tableName;</span><br><span class="line">10</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select hour(&#39;2011-12-08 10:03:01&#39;) from tableName;
+10
+
+</code></pre>
 <h5 id="10、日期转分钟函数-minute"><a href="#10、日期转分钟函数-minute" class="headerlink" title="10、日期转分钟函数: minute"></a>10、日期转分钟函数: minute</h5><p><strong>语法</strong>: minute (string date)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回日期中的分钟。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select minute('2011-12-08 10:03:01') from tableName;</span><br><span class="line">3</span><br><span class="line"></span><br><span class="line">hive&gt; select second('2011-12-08 10:03:01') from tableName;</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select minute(&#39;2011-12-08 10:03:01&#39;) from tableName;
+3
+
+hive&gt; select second(&#39;2011-12-08 10:03:01&#39;) from tableName;
+1
+</code></pre>
 <h5 id="12、日期转周函数-weekofyear"><a href="#12、日期转周函数-weekofyear" class="headerlink" title="12、日期转周函数: weekofyear"></a>12、日期转周函数: weekofyear</h5><p><strong>语法</strong>: weekofyear (string date)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回日期在当前的周数。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select weekofyear('2011-12-08 10:03:01') from tableName;</span><br><span class="line">49</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select weekofyear(&#39;2011-12-08 10:03:01&#39;) from tableName;
+49
+
+</code></pre>
 <h5 id="13、日期比较函数-datediff"><a href="#13、日期比较函数-datediff" class="headerlink" title="13、日期比较函数: datediff"></a>13、日期比较函数: datediff</h5><p><strong>语法</strong>: datediff(string enddate, string startdate)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回结束日期减去开始日期的天数。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select datediff('2012-12-08','2012-05-09') from tableName;</span><br><span class="line">213</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hive&gt; select datediff(&#39;2012-12-08&#39;,&#39;2012-05-09&#39;) from tableName;
+213
+
+</code></pre>
 <h5 id="14、日期增加函数-date-add"><a href="#14、日期增加函数-date-add" class="headerlink" title="14、日期增加函数: date_add"></a>14、日期增加函数: date_add</h5><p><strong>语法</strong>: date_add(string startdate, int days)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>: 返回开始日期startdate增加days天后的日期。</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select date_add('<span class="number">2012</span><span class="number">-12</span><span class="number">-08</span>',<span class="number">10</span>) from tableName;</span><br><span class="line"><span class="number">2012</span><span class="number">-12</span><span class="number">-18</span></span><br></pre></td></tr></table></figure>
-<h5 id="15、日期减少函数-date-sub"><a href="#15、日期减少函数-date-sub" class="headerlink" title="15、日期减少函数: date_sub"></a>15、日期减少函数: date_sub</h5><p><strong>语法</strong>: date_sub (string startdate, int days)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>: 返回开始日期startdate减少days天后的日期。</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select date_sub('<span class="number">2012</span><span class="number">-12</span><span class="number">-08</span>',<span class="number">10</span>) from tableName;</span><br><span class="line"><span class="number">2012</span><span class="number">-11</span><span class="number">-28</span></span><br></pre></td></tr></table></figure>
-<h4 id="3、条件函数"><a href="#3、条件函数" class="headerlink" title="3、条件函数"></a>3、条件函数</h4><h5 id="1、If函数-if"><a href="#1、If函数-if" class="headerlink" title="1、If函数: if"></a>1、If函数: if</h5><p><strong>语法</strong>: if(boolean testCondition, T valueTrue, T valueFalseOrNull)<br> <strong>返回值</strong>: T<br> <strong>说明</strong>: 当条件testCondition为TRUE时，返回valueTrue；否则返回valueFalseOrNull</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select if(<span class="number">1</span>=<span class="number">2</span>,<span class="number">100</span>,<span class="number">200</span>) from tableName;</span><br><span class="line"><span class="number">200</span></span><br><span class="line">hive&gt; select if(<span class="number">1</span>=<span class="number">1</span>,<span class="number">100</span>,<span class="number">200</span>) from tableName;</span><br><span class="line"><span class="number">100</span></span><br></pre></td></tr></table></figure>
-<h5 id="2、非空查找函数-COALESCE"><a href="#2、非空查找函数-COALESCE" class="headerlink" title="2、非空查找函数: COALESCE"></a>2、非空查找函数: COALESCE</h5><p><strong>语法</strong>: COALESCE(T v1, T v2, …)<br> <strong>返回值</strong>: T<br> <strong>说明</strong>: 返回参数中的第一个非空值；如果所有值都为NULL，那么返回NULL</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">COALESCE</span>(<span class="params"><span class="literal">null</span>,<span class="string">'100'</span>,<span class="string">'50'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">100</span></span><br></pre></td></tr></table></figure>
-<h5 id="3、条件判断函数：CASE"><a href="#3、条件判断函数：CASE" class="headerlink" title="3、条件判断函数：CASE"></a>3、条件判断函数：CASE</h5><p><strong>语法</strong>: CASE a WHEN b THEN c [WHEN d THEN e]* [ELSE f] END<br> <strong>返回值</strong>: T<br> <strong>说明</strong>：如果a等于b，那么返回c；如果a等于d，那么返回e；否则返回f</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">Select</span> <span class="keyword">case</span> <span class="number">100</span> <span class="keyword">when</span> <span class="number">50</span> <span class="keyword">then</span> <span class="symbol">'tom</span>' <span class="keyword">when</span> <span class="number">100</span> <span class="keyword">then</span> <span class="symbol">'mary</span>' <span class="keyword">else</span> <span class="symbol">'tim</span>' <span class="keyword">end</span> from tableName;</span><br><span class="line">mary</span><br><span class="line">hive&gt; <span class="keyword">Select</span> <span class="keyword">case</span> <span class="number">200</span> <span class="keyword">when</span> <span class="number">50</span> <span class="keyword">then</span> <span class="symbol">'tom</span>' <span class="keyword">when</span> <span class="number">100</span> <span class="keyword">then</span> <span class="symbol">'mary</span>' <span class="keyword">else</span> <span class="symbol">'tim</span>' <span class="keyword">end</span> from tableName;</span><br><span class="line">tim</span><br></pre></td></tr></table></figure>
-<h5 id="4、条件判断函数：CASE"><a href="#4、条件判断函数：CASE" class="headerlink" title="4、条件判断函数：CASE"></a>4、条件判断函数：CASE</h5><p><strong>语法</strong>: CASE WHEN a THEN b [WHEN c THEN d]* [ELSE e] END<br> <strong>返回值</strong>: T<br> <strong>说明</strong>：如果a为TRUE,则返回b；如果c为TRUE，则返回d；否则返回e</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="keyword">case</span> <span class="keyword">when</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">then</span> <span class="symbol">'tom</span>' <span class="keyword">when</span> <span class="number">2</span>=<span class="number">2</span> <span class="keyword">then</span> <span class="symbol">'mary</span>' <span class="keyword">else</span> <span class="symbol">'tim</span>' <span class="keyword">end</span> from tableName;</span><br><span class="line">mary</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="keyword">case</span> <span class="keyword">when</span> <span class="number">1</span>=<span class="number">1</span> <span class="keyword">then</span> <span class="symbol">'tom</span>' <span class="keyword">when</span> <span class="number">2</span>=<span class="number">2</span> <span class="keyword">then</span> <span class="symbol">'mary</span>' <span class="keyword">else</span> <span class="symbol">'tim</span>' <span class="keyword">end</span> from tableName;</span><br><span class="line">tom</span><br></pre></td></tr></table></figure>
-<h4 id="4、字符串函数"><a href="#4、字符串函数" class="headerlink" title="4、字符串函数"></a>4、字符串函数</h4><h5 id="1、字符串长度函数：length"><a href="#1、字符串长度函数：length" class="headerlink" title="1、字符串长度函数：length"></a>1、字符串长度函数：length</h5><p><strong>语法</strong>: length(string A)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>：返回字符串A的长度</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">length</span>(<span class="params"><span class="string">'abcedfg'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br></pre></td></tr></table></figure>
-<h5 id="2、字符串反转函数：reverse"><a href="#2、字符串反转函数：reverse" class="headerlink" title="2、字符串反转函数：reverse"></a>2、字符串反转函数：reverse</h5><p><strong>语法</strong>: reverse(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A的反转结果</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">reverse</span>(<span class="params"><span class="string">'abcedfg'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">gfdecba</span><br></pre></td></tr></table></figure>
-<h5 id="3、字符串连接函数：concat"><a href="#3、字符串连接函数：concat" class="headerlink" title="3、字符串连接函数：concat"></a>3、字符串连接函数：concat</h5><p><strong>语法</strong>: concat(string A, string B…)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回输入字符串连接后的结果，支持任意个输入字符串</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">concat</span>(<span class="params"><span class="string">'abc'</span>,<span class="string">'def'</span>,<span class="string">'gh'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">abcdefgh</span><br></pre></td></tr></table></figure>
-<h5 id="4、字符串连接并指定字符串分隔符：concat-ws"><a href="#4、字符串连接并指定字符串分隔符：concat-ws" class="headerlink" title="4、字符串连接并指定字符串分隔符：concat_ws"></a>4、字符串连接并指定字符串分隔符：concat_ws</h5><p><strong>语法</strong>: concat_ws(string SEP, string A, string B…)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回输入字符串连接后的结果，SEP表示各个字符串间的分隔符</p>
-<figure class="highlight flix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select concat_ws(<span class="string">','</span>,'abc<span class="string">','</span><span class="function"><span class="keyword">def</span>','<span class="title">gh</span>')<span class="title">from</span> <span class="title">tableName</span></span>;</span><br><span class="line">abc,<span class="function"><span class="keyword">def</span>,<span class="title">gh</span></span></span><br></pre></td></tr></table></figure>
-<h5 id="5、字符串截取函数：substr"><a href="#5、字符串截取函数：substr" class="headerlink" title="5、字符串截取函数：substr"></a>5、字符串截取函数：substr</h5><p><strong>语法</strong>: substr(string A, int start),substring(string A, int start)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A从start位置到结尾的字符串</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">substr</span>(<span class="params"><span class="string">'abcde'</span>,<span class="number">3</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">cde</span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">substring</span>(<span class="params"><span class="string">'abcde'</span>,<span class="number">3</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">cde</span><br><span class="line">hive&gt;  <span class="function"><span class="keyword">select</span> <span class="title">substr</span>(<span class="params"><span class="string">'abcde'</span>,<span class="number">-1</span></span>) <span class="keyword">from</span> tableName</span>;  （和ORACLE相同）</span><br><span class="line">e</span><br></pre></td></tr></table></figure>
-<h5 id="6、字符串截取函数：substr-substring"><a href="#6、字符串截取函数：substr-substring" class="headerlink" title="6、字符串截取函数：substr,substring"></a>6、字符串截取函数：substr,substring</h5><p><strong>语法</strong>: substr(string A, int start, int len),substring(string A, int start, int len)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A从start位置开始，长度为len的字符串</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">substr</span>(<span class="params"><span class="string">'abcde'</span>,<span class="number">3</span>,<span class="number">2</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">cd</span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">substring</span>(<span class="params"><span class="string">'abcde'</span>,<span class="number">3</span>,<span class="number">2</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">cd</span><br><span class="line">hive&gt;<span class="function"><span class="keyword">select</span> <span class="title">substring</span>(<span class="params"><span class="string">'abcde'</span>,<span class="number">-2</span>,<span class="number">2</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">de</span><br></pre></td></tr></table></figure>
-<h5 id="7、字符串转大写函数：upper-ucase"><a href="#7、字符串转大写函数：upper-ucase" class="headerlink" title="7、字符串转大写函数：upper,ucase"></a>7、字符串转大写函数：upper,ucase</h5><p><strong>语法</strong>: upper(string A) ucase(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A的大写格式</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">upper</span>(<span class="params"><span class="string">'abSEd'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">ABSED</span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">ucase</span>(<span class="params"><span class="string">'abSEd'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">ABSED</span><br></pre></td></tr></table></figure>
-<h5 id="8、字符串转小写函数：lower-lcase"><a href="#8、字符串转小写函数：lower-lcase" class="headerlink" title="8、字符串转小写函数：lower,lcase"></a>8、字符串转小写函数：lower,lcase</h5><p><strong>语法</strong>: lower(string A) lcase(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A的小写格式</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">lower</span>(<span class="params"><span class="string">'abSEd'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">absed</span><br><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">lcase</span>(<span class="params"><span class="string">'abSEd'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">absed</span><br></pre></td></tr></table></figure>
-<h5 id="9、去空格函数：trim"><a href="#9、去空格函数：trim" class="headerlink" title="9、去空格函数：trim"></a>9、去空格函数：trim</h5><p><strong>语法</strong>: trim(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：去除字符串两边的空格</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">trim</span>(<span class="params"><span class="string">' abc '</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
-<h5 id="10、url解析函数-parse-url"><a href="#10、url解析函数-parse-url" class="headerlink" title="10、url解析函数  parse_url"></a>10、url解析函数  parse_url</h5><p><strong>语法</strong>:<br>parse_url(string urlString, string partToExtract [, string keyToExtract])<br><strong>返回值</strong>: string<br><strong>说明</strong>：返回URL中指定的部分。partToExtract的有效值为：HOST, PATH,<br>QUERY, REF, PROTOCOL, AUTHORITY, FILE, and USERINFO.</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> parse_url</span><br><span class="line">(<span class="string">'https://www.tableName.com/path1/p.php?k1=v1&amp;k2=v2#Ref1'</span>, <span class="string">'HOST'</span>) </span><br><span class="line"><span class="keyword">from</span> tableName;</span><br><span class="line">www.tableName.com </span><br><span class="line">hive&gt; <span class="keyword">select</span> parse_url</span><br><span class="line">(<span class="string">'https://www.tableName.com/path1/p.php?k1=v1&amp;k2=v2#Ref1'</span>, <span class="string">'QUERY'</span>, <span class="string">'k1'</span>)</span><br><span class="line"> <span class="keyword">from</span> tableName;</span><br><span class="line">v1</span><br></pre></td></tr></table></figure>
-<h5 id="11、json解析-get-json-object"><a href="#11、json解析-get-json-object" class="headerlink" title="11、json解析  get_json_object"></a>11、json解析  get_json_object</h5><p><strong>语法</strong>: get_json_object(string json_string, string path)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：解析json的字符串json_string,返回path指定的内容。如果输入的json字符串无效，那么返回NULL。</p>
-<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span>  get_json_object(<span class="string">'&#123;"</span>store<span class="string">":&#123;"</span>fruit<span class="string">":\[&#123;"</span>weight<span class="string">":8,"</span><span class="built_in">type</span><span class="string">":"</span>apple<span class="string">"&#125;,&#123;"</span>weight<span class="string">":9,"</span><span class="built_in">type</span><span class="string">":"</span>pear<span class="string">"&#125;], "</span>bicycle<span class="string">":&#123;"</span>price<span class="string">":19.95,"</span>color<span class="string">":"</span>red<span class="string">"&#125; &#125;,"</span>email<span class="string">":"</span>amy@only_for_json_udf_test.net<span class="string">","</span>owner<span class="string">":"</span>amy<span class="string">"&#125;'</span>,<span class="string">'$.owner'</span>) from tableName;</span><br></pre></td></tr></table></figure>
-<h5 id="12、重复字符串函数：repeat"><a href="#12、重复字符串函数：repeat" class="headerlink" title="12、重复字符串函数：repeat"></a>12、重复字符串函数：repeat</h5><p><strong>语法</strong>: repeat(string str, int n)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回重复n次后的str字符串</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">repeat</span>(<span class="params"><span class="string">'abc'</span>,<span class="number">5</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">abcabcabcabcabc</span><br></pre></td></tr></table></figure>
-<h5 id="13、分割字符串函数-split"><a href="#13、分割字符串函数-split" class="headerlink" title="13、分割字符串函数: split"></a>13、分割字符串函数: split</h5><p><strong>语法</strong>: split(string str, string pat)<br> <strong>返回值</strong>: array<br> <strong>说明</strong>: 按照pat字符串分割str，会返回分割后的字符串数组</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">split</span>(<span class="params"><span class="string">'abtcdtef'</span>,<span class="string">'t'</span></span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line">[<span class="meta"><span class="meta-string">"ab"</span>,<span class="meta-string">"cd"</span>,<span class="meta-string">"ef"</span></span>]</span><br></pre></td></tr></table></figure>
-<h4 id="5、集合统计函数"><a href="#5、集合统计函数" class="headerlink" title="5、集合统计函数"></a>5、集合统计函数</h4><h5 id="1、个数统计函数-count"><a href="#1、个数统计函数-count" class="headerlink" title="1、个数统计函数: count"></a>1、个数统计函数: count</h5><p><strong>语法</strong>: count(*), count(expr), count(DISTINCT expr[, expr_.])<br><strong>返回值</strong>：Int</p>
+<pre><code>hive&gt; select date_add(&#39;2012-12-08&#39;,10) from tableName;
+2012-12-18
+
+</code></pre><h5 id="15、日期减少函数-date-sub"><a href="#15、日期减少函数-date-sub" class="headerlink" title="15、日期减少函数: date_sub"></a>15、日期减少函数: date_sub</h5><p><strong>语法</strong>: date_sub (string startdate, int days)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>: 返回开始日期startdate减少days天后的日期。</p>
+<pre><code>hive&gt; select date_sub(&#39;2012-12-08&#39;,10) from tableName;
+2012-11-28
+
+</code></pre><h4 id="3、条件函数"><a href="#3、条件函数" class="headerlink" title="3、条件函数"></a>3、条件函数</h4><h5 id="1、If函数-if"><a href="#1、If函数-if" class="headerlink" title="1、If函数: if"></a>1、If函数: if</h5><p><strong>语法</strong>: if(boolean testCondition, T valueTrue, T valueFalseOrNull)<br> <strong>返回值</strong>: T<br> <strong>说明</strong>: 当条件testCondition为TRUE时，返回valueTrue；否则返回valueFalseOrNull</p>
+<pre><code>hive&gt; select if(1=2,100,200) from tableName;
+200
+hive&gt; select if(1=1,100,200) from tableName;
+100
+
+
+</code></pre><h5 id="2、非空查找函数-COALESCE"><a href="#2、非空查找函数-COALESCE" class="headerlink" title="2、非空查找函数: COALESCE"></a>2、非空查找函数: COALESCE</h5><p><strong>语法</strong>: COALESCE(T v1, T v2, …)<br> <strong>返回值</strong>: T<br> <strong>说明</strong>: 返回参数中的第一个非空值；如果所有值都为NULL，那么返回NULL</p>
+<pre><code>hive&gt; select COALESCE(null,&#39;100&#39;,&#39;50&#39;) from tableName;
+100
+
+
+</code></pre><h5 id="3、条件判断函数：CASE"><a href="#3、条件判断函数：CASE" class="headerlink" title="3、条件判断函数：CASE"></a>3、条件判断函数：CASE</h5><p><strong>语法</strong>: CASE a WHEN b THEN c [WHEN d THEN e]* [ELSE f] END<br> <strong>返回值</strong>: T<br> <strong>说明</strong>：如果a等于b，那么返回c；如果a等于d，那么返回e；否则返回f</p>
+<pre><code>hive&gt; Select case 100 when 50 then &#39;tom&#39; when 100 then &#39;mary&#39; else &#39;tim&#39; end from tableName;
+mary
+hive&gt; Select case 200 when 50 then &#39;tom&#39; when 100 then &#39;mary&#39; else &#39;tim&#39; end from tableName;
+tim
+
+
+</code></pre><h5 id="4、条件判断函数：CASE"><a href="#4、条件判断函数：CASE" class="headerlink" title="4、条件判断函数：CASE"></a>4、条件判断函数：CASE</h5><p><strong>语法</strong>: CASE WHEN a THEN b [WHEN c THEN d]* [ELSE e] END<br> <strong>返回值</strong>: T<br> <strong>说明</strong>：如果a为TRUE,则返回b；如果c为TRUE，则返回d；否则返回e</p>
+<pre><code>hive&gt; select case when 1=2 then &#39;tom&#39; when 2=2 then &#39;mary&#39; else &#39;tim&#39; end from tableName;
+mary
+hive&gt; select case when 1=1 then &#39;tom&#39; when 2=2 then &#39;mary&#39; else &#39;tim&#39; end from tableName;
+tom
+
+
+</code></pre><h4 id="4、字符串函数"><a href="#4、字符串函数" class="headerlink" title="4、字符串函数"></a>4、字符串函数</h4><h5 id="1、字符串长度函数：length"><a href="#1、字符串长度函数：length" class="headerlink" title="1、字符串长度函数：length"></a>1、字符串长度函数：length</h5><p><strong>语法</strong>: length(string A)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>：返回字符串A的长度</p>
+<pre><code>hive&gt; select length(&#39;abcedfg&#39;) from tableName;
+
+</code></pre><h5 id="2、字符串反转函数：reverse"><a href="#2、字符串反转函数：reverse" class="headerlink" title="2、字符串反转函数：reverse"></a>2、字符串反转函数：reverse</h5><p><strong>语法</strong>: reverse(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A的反转结果</p>
+<pre><code>hive&gt; select reverse(&#39;abcedfg&#39;) from tableName;
+gfdecba
+</code></pre><h5 id="3、字符串连接函数：concat"><a href="#3、字符串连接函数：concat" class="headerlink" title="3、字符串连接函数：concat"></a>3、字符串连接函数：concat</h5><p><strong>语法</strong>: concat(string A, string B…)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回输入字符串连接后的结果，支持任意个输入字符串</p>
+<pre><code>hive&gt; select concat(&#39;abc&#39;,&#39;def&#39;,&#39;gh&#39;) from tableName;
+abcdefgh
+
+</code></pre><h5 id="4、字符串连接并指定字符串分隔符：concat-ws"><a href="#4、字符串连接并指定字符串分隔符：concat-ws" class="headerlink" title="4、字符串连接并指定字符串分隔符：concat_ws"></a>4、字符串连接并指定字符串分隔符：concat_ws</h5><p><strong>语法</strong>: concat_ws(string SEP, string A, string B…)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回输入字符串连接后的结果，SEP表示各个字符串间的分隔符</p>
+<pre><code>hive&gt; select concat_ws(&#39;,&#39;,&#39;abc&#39;,&#39;def&#39;,&#39;gh&#39;)from tableName;
+abc,def,gh
+
+</code></pre><h5 id="5、字符串截取函数：substr"><a href="#5、字符串截取函数：substr" class="headerlink" title="5、字符串截取函数：substr"></a>5、字符串截取函数：substr</h5><p><strong>语法</strong>: substr(string A, int start),substring(string A, int start)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A从start位置到结尾的字符串</p>
+<pre><code>hive&gt; select substr(&#39;abcde&#39;,3) from tableName;
+cde
+hive&gt; select substring(&#39;abcde&#39;,3) from tableName;
+cde
+hive&gt;  select substr(&#39;abcde&#39;,-1) from tableName;  （和ORACLE相同）
+e
+
+</code></pre><h5 id="6、字符串截取函数：substr-substring"><a href="#6、字符串截取函数：substr-substring" class="headerlink" title="6、字符串截取函数：substr,substring"></a>6、字符串截取函数：substr,substring</h5><p><strong>语法</strong>: substr(string A, int start, int len),substring(string A, int start, int len)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A从start位置开始，长度为len的字符串</p>
+<pre><code>hive&gt; select substr(&#39;abcde&#39;,3,2) from tableName;
+cd
+hive&gt; select substring(&#39;abcde&#39;,3,2) from tableName;
+cd
+hive&gt;select substring(&#39;abcde&#39;,-2,2) from tableName;
+de
+
+</code></pre><h5 id="7、字符串转大写函数：upper-ucase"><a href="#7、字符串转大写函数：upper-ucase" class="headerlink" title="7、字符串转大写函数：upper,ucase"></a>7、字符串转大写函数：upper,ucase</h5><p><strong>语法</strong>: upper(string A) ucase(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A的大写格式</p>
+<pre><code>hive&gt; select upper(&#39;abSEd&#39;) from tableName;
+ABSED
+hive&gt; select ucase(&#39;abSEd&#39;) from tableName;
+ABSED
+
+</code></pre><h5 id="8、字符串转小写函数：lower-lcase"><a href="#8、字符串转小写函数：lower-lcase" class="headerlink" title="8、字符串转小写函数：lower,lcase"></a>8、字符串转小写函数：lower,lcase</h5><p><strong>语法</strong>: lower(string A) lcase(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回字符串A的小写格式</p>
+<pre><code>hive&gt; select lower(&#39;abSEd&#39;) from tableName;
+absed
+hive&gt; select lcase(&#39;abSEd&#39;) from tableName;
+absed
+
+</code></pre><h5 id="9、去空格函数：trim"><a href="#9、去空格函数：trim" class="headerlink" title="9、去空格函数：trim"></a>9、去空格函数：trim</h5><p><strong>语法</strong>: trim(string A)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：去除字符串两边的空格</p>
+<pre><code>hive&gt; select trim(&#39; abc &#39;) from tableName;
+abc
+
+</code></pre><h5 id="10、url解析函数-parse-url"><a href="#10、url解析函数-parse-url" class="headerlink" title="10、url解析函数  parse_url"></a>10、url解析函数  parse_url</h5><p><strong>语法</strong>:<br>parse_url(string urlString, string partToExtract [, string keyToExtract])<br><strong>返回值</strong>: string<br><strong>说明</strong>：返回URL中指定的部分。partToExtract的有效值为：HOST, PATH,<br>QUERY, REF, PROTOCOL, AUTHORITY, FILE, and USERINFO.</p>
+<pre><code>hive&gt; select parse_url
+(&#39;https://www.tableName.com/path1/p.php?k1=v1&amp;k2=v2#Ref1&#39;, &#39;HOST&#39;) 
+from tableName;
+www.tableName.com 
+hive&gt; select parse_url
+(&#39;https://www.tableName.com/path1/p.php?k1=v1&amp;k2=v2#Ref1&#39;, &#39;QUERY&#39;, &#39;k1&#39;)
+ from tableName;
+v1
+
+</code></pre><h5 id="11、json解析-get-json-object"><a href="#11、json解析-get-json-object" class="headerlink" title="11、json解析  get_json_object"></a>11、json解析  get_json_object</h5><p><strong>语法</strong>: get_json_object(string json_string, string path)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：解析json的字符串json_string,返回path指定的内容。如果输入的json字符串无效，那么返回NULL。</p>
+<pre><code>hive&gt; select  get_json_object(&#39;{&quot;store&quot;:{&quot;fruit&quot;:\[{&quot;weight&quot;:8,&quot;type&quot;:&quot;apple&quot;},{&quot;weight&quot;:9,&quot;type&quot;:&quot;pear&quot;}], &quot;bicycle&quot;:{&quot;price&quot;:19.95,&quot;color&quot;:&quot;red&quot;} },&quot;email&quot;:&quot;amy@only_for_json_udf_test.net&quot;,&quot;owner&quot;:&quot;amy&quot;}&#39;,&#39;$.owner&#39;) from tableName;
+
+</code></pre><h5 id="12、重复字符串函数：repeat"><a href="#12、重复字符串函数：repeat" class="headerlink" title="12、重复字符串函数：repeat"></a>12、重复字符串函数：repeat</h5><p><strong>语法</strong>: repeat(string str, int n)<br> <strong>返回值</strong>: string<br> <strong>说明</strong>：返回重复n次后的str字符串</p>
+<pre><code>hive&gt; select repeat(&#39;abc&#39;,5) from tableName;
+abcabcabcabcabc
+
+</code></pre><h5 id="13、分割字符串函数-split"><a href="#13、分割字符串函数-split" class="headerlink" title="13、分割字符串函数: split"></a>13、分割字符串函数: split</h5><p><strong>语法</strong>: split(string str, string pat)<br> <strong>返回值</strong>: array<br> <strong>说明</strong>: 按照pat字符串分割str，会返回分割后的字符串数组</p>
+<pre><code>hive&gt; select split(&#39;abtcdtef&#39;,&#39;t&#39;) from tableName;
+[&quot;ab&quot;,&quot;cd&quot;,&quot;ef&quot;]
+
+</code></pre><h4 id="5、集合统计函数"><a href="#5、集合统计函数" class="headerlink" title="5、集合统计函数"></a>5、集合统计函数</h4><h5 id="1、个数统计函数-count"><a href="#1、个数统计函数-count" class="headerlink" title="1、个数统计函数: count"></a>1、个数统计函数: count</h5><p><strong>语法</strong>: count(*), count(expr), count(DISTINCT expr[, expr_.])<br><strong>返回值</strong>：Int</p>
 <p><strong>说明</strong>: count(*)统计检索出的行的个数，包括NULL值的行；count(expr)返回指定字段的非空值的个数；count(DISTINCT<br>expr[, expr_.])返回指定字段的不同的非空值的个数</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">count</span>(*) <span class="keyword">from</span> tableName;</span><br><span class="line">20</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">count</span>(<span class="keyword">distinct</span> t) <span class="keyword">from</span> tableName;</span><br><span class="line">10</span><br></pre></td></tr></table></figure>
-<h5 id="2、总和统计函数-sum"><a href="#2、总和统计函数-sum" class="headerlink" title="2、总和统计函数: sum"></a>2、总和统计函数: sum</h5><p><strong>语法</strong>: sum(col), sum(DISTINCT col)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: sum(col)统计结果集中col的相加的结果；sum(DISTINCT col)统计结果中col不同值相加的结果</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">sum</span>(t) <span class="keyword">from</span> tableName;</span><br><span class="line">100</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">sum</span>(<span class="keyword">distinct</span> t) <span class="keyword">from</span> tableName;</span><br><span class="line">70</span><br></pre></td></tr></table></figure>
-<h5 id="3、平均值统计函数-avg"><a href="#3、平均值统计函数-avg" class="headerlink" title="3、平均值统计函数: avg"></a>3、平均值统计函数: avg</h5><p><strong>语法</strong>: avg(col), avg(DISTINCT col)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: avg(col)统计结果集中col的平均值；avg(DISTINCT col)统计结果中col不同值相加的平均值</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">avg</span>(t) <span class="keyword">from</span> tableName;</span><br><span class="line">50</span><br><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">avg</span> (<span class="keyword">distinct</span> t) <span class="keyword">from</span> tableName;</span><br><span class="line">30</span><br></pre></td></tr></table></figure>
-<h5 id="4、最小值统计函数-min"><a href="#4、最小值统计函数-min" class="headerlink" title="4、最小值统计函数: min"></a>4、最小值统计函数: min</h5><p><strong>语法</strong>: min(col)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: 统计结果集中col字段的最小值</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">min</span>(t) <span class="keyword">from</span> tableName;</span><br><span class="line">20</span><br></pre></td></tr></table></figure>
-<h5 id="5、最大值统计函数-max"><a href="#5、最大值统计函数-max" class="headerlink" title="5、最大值统计函数: max"></a>5、最大值统计函数: max</h5><p><strong>语法</strong>: maxcol)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: 统计结果集中col字段的最大值</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="keyword">select</span> <span class="built_in">max</span>(t) <span class="keyword">from</span> tableName;</span><br><span class="line">120</span><br></pre></td></tr></table></figure>
-<h4 id="6、复合类型构建函数"><a href="#6、复合类型构建函数" class="headerlink" title="6、复合类型构建函数"></a>6、复合类型构建函数</h4><h5 id="1、Map类型构建-map"><a href="#1、Map类型构建-map" class="headerlink" title="1、Map类型构建: map"></a>1、Map类型构建: map</h5><p><strong>语法</strong>: map (key1, value1, key2, value2, …)<br> <strong>说明</strong>：根据输入的key和value对构建map类型</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> score_map(<span class="keyword">name</span> <span class="keyword">string</span>, score <span class="keyword">map</span>&lt;<span class="keyword">string</span>,<span class="built_in">int</span>&gt;)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span> </span><br><span class="line">collection items <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span> <span class="keyword">map</span> <span class="keyword">keys</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">':'</span>;</span><br><span class="line"></span><br><span class="line">创建数据内容如下并加载数据</span><br><span class="line">cd /kkb/<span class="keyword">install</span>/hivedatas/</span><br><span class="line">vim score_map.txt</span><br><span class="line"></span><br><span class="line">zhangsan	数学:<span class="number">80</span>,语文:<span class="number">89</span>,英语:<span class="number">95</span></span><br><span class="line">lisi	语文:<span class="number">60</span>,数学:<span class="number">80</span>,英语:<span class="number">99</span></span><br><span class="line"></span><br><span class="line">加载数据到hive表当中去</span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/kkb/install/hivedatas/score_map.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> score_map;</span><br><span class="line"></span><br><span class="line">map结构数据访问：</span><br><span class="line">获取所有的value：</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,map_values(score) <span class="keyword">from</span> score_map;</span><br><span class="line"></span><br><span class="line">获取所有的key：</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,map_keys(score) <span class="keyword">from</span> score_map;</span><br><span class="line"></span><br><span class="line">按照key来进行获取value值</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,score[<span class="string">"数学"</span>]  <span class="keyword">from</span> score_map;</span><br><span class="line"></span><br><span class="line">查看map元素个数</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,<span class="keyword">size</span>(score) <span class="keyword">from</span> score_map;</span><br></pre></td></tr></table></figure>
-<h5 id="2、Struct类型构建-struct"><a href="#2、Struct类型构建-struct" class="headerlink" title="2、Struct类型构建: struct"></a>2、Struct类型构建: struct</h5><p><strong>语法</strong>: struct(val1, val2, val3, …)<br> <strong>说明</strong>：根据输入的参数构建结构体struct类型，似于C语言中的结构体，内部数据通过X.X来获取，假设我们的数据格式是这样的，电影ABC，有1254人评价过，打分为7.4分</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">创建<span class="keyword">struct表</span></span><br><span class="line"><span class="keyword">hive&gt; </span>create table <span class="keyword">movie_score( </span>name <span class="keyword">string, </span> <span class="meta">info</span> <span class="keyword">struct&lt;number:int,score:float&gt; </span>)row format delimited fields terminated <span class="keyword">by </span><span class="string">"\t"</span>  collection <span class="keyword">items </span>terminated <span class="keyword">by </span><span class="string">":"</span><span class="comment">; </span></span><br><span class="line"></span><br><span class="line">加载数据</span><br><span class="line"><span class="symbol">cd</span> /kkb/install/hivedatas/</span><br><span class="line"><span class="symbol">vim</span> <span class="keyword">struct.txt</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">ABC	</span><span class="number">1254</span>:<span class="number">7</span>.<span class="number">4</span>  </span><br><span class="line"><span class="symbol">DEF</span>	<span class="number">256</span>:<span class="number">4</span>.<span class="number">9</span>  </span><br><span class="line"><span class="symbol">XYZ</span>	<span class="number">456</span>:<span class="number">5</span>.<span class="number">4</span></span><br><span class="line"></span><br><span class="line">加载数据</span><br><span class="line"><span class="symbol">load</span> <span class="meta">data</span> local inpath <span class="string">'/kkb/install/hivedatas/struct.txt'</span> overwrite into table <span class="keyword">movie_score;</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">hive当中查询数据</span></span><br><span class="line"><span class="keyword">hive&gt; </span><span class="keyword">select </span>* from <span class="keyword">movie_score; </span> </span><br><span class="line"><span class="symbol">hive</span>&gt; <span class="keyword">select </span><span class="meta">info</span>.number,<span class="meta">info</span>.score from <span class="keyword">movie_score; </span> </span><br><span class="line"><span class="symbol">OK</span>  </span><br><span class="line"><span class="number">1254</span>    <span class="number">7</span>.<span class="number">4</span>  </span><br><span class="line"><span class="number">256</span>     <span class="number">4</span>.<span class="number">9</span>  </span><br><span class="line"><span class="number">456</span>     <span class="number">5</span>.<span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h5 id="3、array类型构建-array"><a href="#3、array类型构建-array" class="headerlink" title="3、array类型构建: array"></a>3、array类型构建: array</h5><p><strong>语法</strong>: array(val1, val2, …)<br> <strong>说明</strong>：根据输入的参数构建数组array类型</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; create table  person(name string,work_locations array&lt;string&gt;)</span><br><span class="line">ROW FORMAT DELIMITED</span><br><span class="line">FIELDS TERMINATED BY '\t'</span><br><span class="line">COLLECTION ITEMS TERMINATED BY ',';</span><br><span class="line"></span><br><span class="line">加载数据到person表当中去</span><br><span class="line">cd /kkb/<span class="keyword">install</span>/hivedatas/</span><br><span class="line">vim person.txt</span><br><span class="line"></span><br><span class="line">数据内容格式如下</span><br><span class="line">biansutao	beijing,shanghai,tianjin,hangzhou</span><br><span class="line">linan	changchu,chengdu,wuhan</span><br><span class="line"></span><br><span class="line">加载数据</span><br><span class="line">hive &gt; <span class="keyword">load</span>  <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/kkb/install/hivedatas/person.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> person;</span><br><span class="line"></span><br><span class="line">查询所有数据数据</span><br><span class="line">hive &gt; select * from person;</span><br><span class="line"></span><br><span class="line">按照下表索引进行查询</span><br><span class="line">hive &gt; select work_locations[0] from person;</span><br><span class="line"></span><br><span class="line">查询所有集合数据</span><br><span class="line">hive  &gt; select work_locations from person; </span><br><span class="line"></span><br><span class="line">查询元素个数</span><br><span class="line">hive &gt;  select size(work_locations) from person;</span><br></pre></td></tr></table></figure>
+<pre><code>hive&gt; select count(*) from tableName;
+20
+hive&gt; select count(distinct t) from tableName;
+10
+
+
+</code></pre><h5 id="2、总和统计函数-sum"><a href="#2、总和统计函数-sum" class="headerlink" title="2、总和统计函数: sum"></a>2、总和统计函数: sum</h5><p><strong>语法</strong>: sum(col), sum(DISTINCT col)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: sum(col)统计结果集中col的相加的结果；sum(DISTINCT col)统计结果中col不同值相加的结果</p>
+<pre><code>hive&gt; select sum(t) from tableName;
+100
+hive&gt; select sum(distinct t) from tableName;
+70
+
+
+</code></pre><h5 id="3、平均值统计函数-avg"><a href="#3、平均值统计函数-avg" class="headerlink" title="3、平均值统计函数: avg"></a>3、平均值统计函数: avg</h5><p><strong>语法</strong>: avg(col), avg(DISTINCT col)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: avg(col)统计结果集中col的平均值；avg(DISTINCT col)统计结果中col不同值相加的平均值</p>
+<pre><code>hive&gt; select avg(t) from tableName;
+50
+hive&gt; select avg (distinct t) from tableName;
+30
+
+
+</code></pre><h5 id="4、最小值统计函数-min"><a href="#4、最小值统计函数-min" class="headerlink" title="4、最小值统计函数: min"></a>4、最小值统计函数: min</h5><p><strong>语法</strong>: min(col)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: 统计结果集中col字段的最小值</p>
+<pre><code>hive&gt; select min(t) from tableName;
+20
+
+
+</code></pre><h5 id="5、最大值统计函数-max"><a href="#5、最大值统计函数-max" class="headerlink" title="5、最大值统计函数: max"></a>5、最大值统计函数: max</h5><p><strong>语法</strong>: maxcol)<br> <strong>返回值</strong>: double<br> <strong>说明</strong>: 统计结果集中col字段的最大值</p>
+<pre><code>hive&gt; select max(t) from tableName;
+120
+
+</code></pre><h4 id="6、复合类型构建函数"><a href="#6、复合类型构建函数" class="headerlink" title="6、复合类型构建函数"></a>6、复合类型构建函数</h4><h5 id="1、Map类型构建-map"><a href="#1、Map类型构建-map" class="headerlink" title="1、Map类型构建: map"></a>1、Map类型构建: map</h5><p><strong>语法</strong>: map (key1, value1, key2, value2, …)<br> <strong>说明</strong>：根据输入的key和value对构建map类型</p>
+<pre><code>create table score_map(name string, score map&lt;string,int&gt;)
+row format delimited fields terminated by &#39;\t&#39; 
+collection items terminated by &#39;,&#39; map keys terminated by &#39;:&#39;;
+
+创建数据内容如下并加载数据
+cd /kkb/install/hivedatas/
+vim score_map.txt
+
+zhangsan    数学:80,语文:89,英语:95
+lisi    语文:60,数学:80,英语:99
+
+加载数据到hive表当中去
+load data local inpath &#39;/kkb/install/hivedatas/score_map.txt&#39; overwrite into table score_map;
+
+map结构数据访问：
+获取所有的value：
+select name,map_values(score) from score_map;
+
+获取所有的key：
+select name,map_keys(score) from score_map;
+
+按照key来进行获取value值
+select name,score[&quot;数学&quot;]  from score_map;
+
+查看map元素个数
+select name,size(score) from score_map;
+
+</code></pre><h5 id="2、Struct类型构建-struct"><a href="#2、Struct类型构建-struct" class="headerlink" title="2、Struct类型构建: struct"></a>2、Struct类型构建: struct</h5><p><strong>语法</strong>: struct(val1, val2, val3, …)<br> <strong>说明</strong>：根据输入的参数构建结构体struct类型，似于C语言中的结构体，内部数据通过X.X来获取，假设我们的数据格式是这样的，电影ABC，有1254人评价过，打分为7.4分</p>
+<pre><code>创建struct表
+hive&gt; create table movie_score( name string,  info struct&lt;number:int,score:float&gt; )row format delimited fields terminated by &quot;\t&quot;  collection items terminated by &quot;:&quot;; 
+
+加载数据
+cd /kkb/install/hivedatas/
+vim struct.txt
+
+ABC    1254:7.4  
+DEF    256:4.9  
+XYZ    456:5.4
+
+加载数据
+load data local inpath &#39;/kkb/install/hivedatas/struct.txt&#39; overwrite into table movie_score;
+
+
+hive当中查询数据
+hive&gt; select * from movie_score;  
+hive&gt; select info.number,info.score from movie_score;  
+OK  
+1254    7.4  
+256     4.9  
+456     5.4  
+
+</code></pre><h5 id="3、array类型构建-array"><a href="#3、array类型构建-array" class="headerlink" title="3、array类型构建: array"></a>3、array类型构建: array</h5><p><strong>语法</strong>: array(val1, val2, …)<br> <strong>说明</strong>：根据输入的参数构建数组array类型</p>
+<pre><code class="sql">hive&gt; create table  person(name string,work_locations array&lt;string&gt;)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY &#39;\t&#39;
+COLLECTION ITEMS TERMINATED BY &#39;,&#39;;
+
+加载数据到person表当中去
+cd /kkb/install/hivedatas/
+vim person.txt
+
+数据内容格式如下
+biansutao    beijing,shanghai,tianjin,hangzhou
+linan    changchu,chengdu,wuhan
+
+加载数据
+hive &gt; load  data local inpath &#39;/kkb/install/hivedatas/person.txt&#39; overwrite into table person;
+
+查询所有数据数据
+hive &gt; select * from person;
+
+按照下表索引进行查询
+hive &gt; select work_locations[0] from person;
+
+查询所有集合数据
+hive  &gt; select work_locations from person; 
+
+查询元素个数
+hive &gt;  select size(work_locations) from person;   
+</code></pre>
 <h4 id="7、复杂类型长度统计函数"><a href="#7、复杂类型长度统计函数" class="headerlink" title="7、复杂类型长度统计函数"></a>7、复杂类型长度统计函数</h4><h5 id="1-Map类型长度函数-size-Map"><a href="#1-Map类型长度函数-size-Map" class="headerlink" title="1.Map类型长度函数: size(Map)"></a>1.Map类型长度函数: size(Map<k .v="">)</k></h5><p><strong>语法</strong>: size(Map<k .v="">)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回map类型的长度</k></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">size</span>(<span class="params">t</span>) <span class="keyword">from</span> map_table2</span>;</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-array类型长度函数-size-Array"><a href="#2-array类型长度函数-size-Array" class="headerlink" title="2.array类型长度函数: size(Array)"></a>2.array类型长度函数: size(Array<t>)</t></h5><p><strong>语法</strong>: size(Array<t>)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回array类型的长度</t></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">size</span>(<span class="params">t</span>) <span class="keyword">from</span> arr_table2</span>;</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h5 id="3-类型转换函数"><a href="#3-类型转换函数" class="headerlink" title="3.类型转换函数"></a>3.类型转换函数</h5><p><strong>类型转换函数</strong>: cast<br> <strong>语法</strong>: cast(expr as <type>)<br> <strong>返回值</strong>: Expected “=” to follow “type”<br> <strong>说明</strong>: 返回转换后的数据类型</type></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; <span class="function"><span class="keyword">select</span> <span class="title">cast</span>(<span class="params"><span class="string">'1'</span> <span class="keyword">as</span> bigint</span>) <span class="keyword">from</span> tableName</span>;</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h4 id="8、hive当中的lateral-view-与-explode以及reflect和分析函数"><a href="#8、hive当中的lateral-view-与-explode以及reflect和分析函数" class="headerlink" title="8、hive当中的lateral view 与 explode以及reflect和分析函数"></a>8、hive当中的lateral view 与 explode以及reflect和分析函数</h4><h5 id="1、使用explode函数将hive表中的Map和Array字段数据进行拆分"><a href="#1、使用explode函数将hive表中的Map和Array字段数据进行拆分" class="headerlink" title="1、使用explode函数将hive表中的Map和Array字段数据进行拆分"></a>1、使用explode函数将hive表中的Map和Array字段数据进行拆分</h5><p>lateral view用于和split、explode等UDTF一起使用的，能将一行数据拆分成多行数据，在此基础上可以对拆分的数据进行聚合，lateral view首先为原始表的每行调用UDTF，UDTF会把一行拆分成一行或者多行，lateral view在把结果组合，产生一个支持别名表的虚拟表。<br>其中explode还可以用于将hive一列中复杂的array或者map结构拆分成多行</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">需求：现在有数据格式如下</span><br><span class="line">zhangsan	child1,child2,child3,child4	k1:v1,k2:v2</span><br><span class="line">lisi	child5,child6,child7,child8	 k3:v3,k4:v4</span><br><span class="line"></span><br><span class="line">字段之间使用\t分割，需求将所有的child进行拆开成为一列</span><br><span class="line"><span class="code"> </span></span><br><span class="line"><span class="code">+----------+</span>--+</span><br><span class="line">| mychild  |</span><br><span class="line"><span class="code">+----------+</span>--+</span><br><span class="line">| child1   |</span><br><span class="line">| child2   |</span><br><span class="line">| child3   |</span><br><span class="line">| child4   |</span><br><span class="line">| child5   |</span><br><span class="line">| child6   |</span><br><span class="line">| child7   |</span><br><span class="line">| child8   |</span><br><span class="line"><span class="code">+----------+</span>--+</span><br><span class="line"></span><br><span class="line">将map的key和value也进行拆开，成为如下结果</span><br><span class="line"></span><br><span class="line"><span class="code">+-----------+</span>-------------<span class="code">+--+</span></span><br><span class="line">| mymapkey  | mymapvalue  |</span><br><span class="line"><span class="code">+-----------+</span>-------------<span class="code">+--+</span></span><br><span class="line">| k1        | v1          |</span><br><span class="line">| k2        | v2          |</span><br><span class="line">| k3        | v3          |</span><br><span class="line">| k4        | v4          |</span><br><span class="line"><span class="code">+-----------+</span>-------------<span class="code">+--+</span></span><br></pre></td></tr></table></figure>
-<h6 id="第一步：创建hive数据库"><a href="#第一步：创建hive数据库" class="headerlink" title="第一步：创建hive数据库"></a>第一步：创建hive数据库</h6><p>创建hive数据库</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">hive</span> (<span class="keyword">default</span>)&gt; create database hive_explode;</span><br><span class="line"><span class="title">hive</span> (<span class="keyword">default</span>)&gt; use hive_explode;</span><br></pre></td></tr></table></figure>
-<h6 id="第二步：创建hive表，然后使用explode拆分map和array"><a href="#第二步：创建hive表，然后使用explode拆分map和array" class="headerlink" title="第二步：创建hive表，然后使用explode拆分map和array"></a>第二步：创建hive表，然后使用explode拆分map和array</h6><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">create</span>  table hive_explode.t3(name <span class="keyword">string</span>,children <span class="keyword">array</span>&lt;<span class="keyword">string</span>&gt;,address <span class="keyword">Map</span>&lt;<span class="keyword">string</span>,<span class="keyword">string</span>&gt;) row format delimited fields terminated <span class="keyword">by</span> <span class="string">'\t'</span>  <span class="keyword">collection</span> items    terminated <span class="keyword">by</span> <span class="string">','</span>  <span class="keyword">map</span> <span class="keyword">keys</span> terminated <span class="keyword">by</span> <span class="string">':'</span> stored <span class="keyword">as</span> textFile;</span><br></pre></td></tr></table></figure>
-<h6 id="第三步：加载数据"><a href="#第三步：加载数据" class="headerlink" title="第三步：加载数据"></a>第三步：加载数据</h6><p>node03执行以下命令创建表数据文件</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd  <span class="regexp">/kkb/</span>install<span class="regexp">/hivedatas/</span></span><br><span class="line"></span><br><span class="line">vim maparray</span><br><span class="line">数据内容格式如下</span><br><span class="line"></span><br><span class="line">zhangsan	child1,child2,child3,child4	<span class="string">k1:</span>v1,<span class="string">k2:</span>v2</span><br><span class="line">lisi	child5,child6,child7,child8	<span class="string">k3:</span>v3,<span class="string">k4:</span>v4</span><br></pre></td></tr></table></figure>
-<p>hive表当中加载数据</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; load <span class="built_in">data</span> <span class="built_in">local</span> inpath <span class="string">'/kkb/install/hivedatas/maparray'</span> <span class="keyword">into</span> table hive_explode.t3;</span><br></pre></td></tr></table></figure>
-<h6 id="第四步：使用explode将hive当中数据拆开"><a href="#第四步：使用explode将hive当中数据拆开" class="headerlink" title="第四步：使用explode将hive当中数据拆开"></a>第四步：使用explode将hive当中数据拆开</h6><p>将array当中的数据拆分开</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">SELECT</span> explode(children) <span class="keyword">AS</span> myChild <span class="keyword">FROM</span> hive_explode.t3;</span><br></pre></td></tr></table></figure>
-<p>将map当中的数据拆分开</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">SELECT</span> explode(address) <span class="keyword">AS</span> (myMapKey, myMapValue) <span class="keyword">FROM</span> hive_explode.t3;</span><br></pre></td></tr></table></figure>
-<h5 id="2、使用explode拆分json字符串"><a href="#2、使用explode拆分json字符串" class="headerlink" title="2、使用explode拆分json字符串"></a>2、使用explode拆分json字符串</h5><p>需求：现在有一些数据格式如下：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">a:</span>shandong,<span class="string">b:</span>beijing,<span class="string">c:</span>hebei|<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>|[&#123;<span class="string">"source"</span>:<span class="string">"7fresh"</span>,<span class="string">"monthSales"</span>:<span class="number">4900</span>,<span class="string">"userCount"</span>:<span class="number">1900</span>,<span class="string">"score"</span>:<span class="string">"9.9"</span>&#125;,&#123;<span class="string">"source"</span>:<span class="string">"jd"</span>,<span class="string">"monthSales"</span>:<span class="number">2090</span>,<span class="string">"userCount"</span>:<span class="number">78981</span>,<span class="string">"score"</span>:<span class="string">"9.8"</span>&#125;,&#123;<span class="string">"source"</span>:<span class="string">"jdmart"</span>,<span class="string">"monthSales"</span>:<span class="number">6987</span>,<span class="string">"userCount"</span>:<span class="number">1600</span>,<span class="string">"score"</span>:<span class="string">"9.0"</span>&#125;]</span><br></pre></td></tr></table></figure>
-<p>其中字段与字段之间的分隔符是 | </p>
+<pre><code>hive&gt; select size(t) from map_table2;
+2
+</code></pre><h5 id="2-array类型长度函数-size-Array"><a href="#2-array类型长度函数-size-Array" class="headerlink" title="2.array类型长度函数: size(Array)"></a>2.array类型长度函数: size(Array<t>)</t></h5><p><strong>语法</strong>: size(Array<t>)<br> <strong>返回值</strong>: int<br> <strong>说明</strong>: 返回array类型的长度</t></p>
+<pre><code>hive&gt; select size(t) from arr_table2;
+4
+
+
+</code></pre><h5 id="3-类型转换函数"><a href="#3-类型转换函数" class="headerlink" title="3.类型转换函数"></a>3.类型转换函数</h5><p><strong>类型转换函数</strong>: cast<br> <strong>语法</strong>: cast(expr as <type>)<br> <strong>返回值</strong>: Expected “=” to follow “type”<br> <strong>说明</strong>: 返回转换后的数据类型</type></p>
+<pre><code>hive&gt; select cast(&#39;1&#39; as bigint) from tableName;
+1
+
+</code></pre><h4 id="8、hive当中的lateral-view-与-explode以及reflect和分析函数"><a href="#8、hive当中的lateral-view-与-explode以及reflect和分析函数" class="headerlink" title="8、hive当中的lateral view 与 explode以及reflect和分析函数"></a>8、hive当中的lateral view 与 explode以及reflect和分析函数</h4><h5 id="1、使用explode函数将hive表中的Map和Array字段数据进行拆分"><a href="#1、使用explode函数将hive表中的Map和Array字段数据进行拆分" class="headerlink" title="1、使用explode函数将hive表中的Map和Array字段数据进行拆分"></a>1、使用explode函数将hive表中的Map和Array字段数据进行拆分</h5><p>lateral view用于和split、explode等UDTF一起使用的，能将一行数据拆分成多行数据，在此基础上可以对拆分的数据进行聚合，lateral view首先为原始表的每行调用UDTF，UDTF会把一行拆分成一行或者多行，lateral view在把结果组合，产生一个支持别名表的虚拟表。<br>其中explode还可以用于将hive一列中复杂的array或者map结构拆分成多行</p>
+<pre><code>需求：现在有数据格式如下
+zhangsan    child1,child2,child3,child4    k1:v1,k2:v2
+lisi    child5,child6,child7,child8     k3:v3,k4:v4
+
+字段之间使用\t分割，需求将所有的child进行拆开成为一列
+
++----------+--+
+| mychild  |
++----------+--+
+| child1   |
+| child2   |
+| child3   |
+| child4   |
+| child5   |
+| child6   |
+| child7   |
+| child8   |
++----------+--+
+
+将map的key和value也进行拆开，成为如下结果
+
++-----------+-------------+--+
+| mymapkey  | mymapvalue  |
++-----------+-------------+--+
+| k1        | v1          |
+| k2        | v2          |
+| k3        | v3          |
+| k4        | v4          |
++-----------+-------------+--+
+</code></pre><h6 id="第一步：创建hive数据库"><a href="#第一步：创建hive数据库" class="headerlink" title="第一步：创建hive数据库"></a>第一步：创建hive数据库</h6><p>创建hive数据库</p>
+<pre><code>hive (default)&gt; create database hive_explode;
+hive (default)&gt; use hive_explode;
+</code></pre><h6 id="第二步：创建hive表，然后使用explode拆分map和array"><a href="#第二步：创建hive表，然后使用explode拆分map和array" class="headerlink" title="第二步：创建hive表，然后使用explode拆分map和array"></a>第二步：创建hive表，然后使用explode拆分map和array</h6><pre><code>hive (hive_explode)&gt; create  table hive_explode.t3(name string,children array&lt;string&gt;,address Map&lt;string,string&gt;) row format delimited fields terminated by &#39;\t&#39;  collection items    terminated by &#39;,&#39;  map keys terminated by &#39;:&#39; stored as textFile;
+</code></pre><h6 id="第三步：加载数据"><a href="#第三步：加载数据" class="headerlink" title="第三步：加载数据"></a>第三步：加载数据</h6><p>node03执行以下命令创建表数据文件</p>
+<pre><code>cd  /kkb/install/hivedatas/
+
+vim maparray
+数据内容格式如下
+
+zhangsan    child1,child2,child3,child4    k1:v1,k2:v2
+lisi    child5,child6,child7,child8    k3:v3,k4:v4
+</code></pre><p>hive表当中加载数据</p>
+<pre><code>hive (hive_explode)&gt; load data local inpath &#39;/kkb/install/hivedatas/maparray&#39; into table hive_explode.t3;
+
+</code></pre><h6 id="第四步：使用explode将hive当中数据拆开"><a href="#第四步：使用explode将hive当中数据拆开" class="headerlink" title="第四步：使用explode将hive当中数据拆开"></a>第四步：使用explode将hive当中数据拆开</h6><p>将array当中的数据拆分开</p>
+<pre><code>hive (hive_explode)&gt; SELECT explode(children) AS myChild FROM hive_explode.t3;
+
+</code></pre><p>将map当中的数据拆分开</p>
+<pre><code>hive (hive_explode)&gt; SELECT explode(address) AS (myMapKey, myMapValue) FROM hive_explode.t3;
+
+</code></pre><h5 id="2、使用explode拆分json字符串"><a href="#2、使用explode拆分json字符串" class="headerlink" title="2、使用explode拆分json字符串"></a>2、使用explode拆分json字符串</h5><p>需求：现在有一些数据格式如下：</p>
+<pre><code>a:shandong,b:beijing,c:hebei|1,2,3,4,5,6,7,8,9|[{&quot;source&quot;:&quot;7fresh&quot;,&quot;monthSales&quot;:4900,&quot;userCount&quot;:1900,&quot;score&quot;:&quot;9.9&quot;},{&quot;source&quot;:&quot;jd&quot;,&quot;monthSales&quot;:2090,&quot;userCount&quot;:78981,&quot;score&quot;:&quot;9.8&quot;},{&quot;source&quot;:&quot;jdmart&quot;,&quot;monthSales&quot;:6987,&quot;userCount&quot;:1600,&quot;score&quot;:&quot;9.0&quot;}]
+
+</code></pre><p>其中字段与字段之间的分隔符是 | </p>
 <p>我们要解析得到所有的monthSales对应的值为以下这一列（行转列）</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">4900</span></span><br><span class="line"><span class="number">2090</span></span><br><span class="line"><span class="number">6987</span></span><br></pre></td></tr></table></figure>
-<h6 id="第一步：创建hive表"><a href="#第一步：创建hive表" class="headerlink" title="第一步：创建hive表"></a>第一步：创建hive表</h6><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">create</span> table hive_explode.explode_lateral_view  (area <span class="keyword">string</span>, goods_id <span class="keyword">string</span>, sale_info <span class="keyword">string</span>)  ROW FORMAT DELIMITED FIELDS TERMINATED <span class="keyword">BY</span> <span class="string">'|'</span> STORED <span class="keyword">AS</span> textfile;</span><br></pre></td></tr></table></figure>
-<h6 id="第二步：准备数据并加载数据"><a href="#第二步：准备数据并加载数据" class="headerlink" title="第二步：准备数据并加载数据"></a>第二步：准备数据并加载数据</h6><p>准备数据如下</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /kkb/install/hivedatas</span><br><span class="line"><span class="keyword">vim</span> explode_json</span><br><span class="line"></span><br><span class="line"><span class="variable">a:shandong</span>,<span class="variable">b:beijing</span>,<span class="keyword">c</span>:hebei|<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>|[&#123;<span class="string">"source"</span>:<span class="string">"7fresh"</span>,<span class="string">"monthSales"</span>:<span class="number">4900</span>,<span class="string">"userCount"</span>:<span class="number">1900</span>,<span class="string">"score"</span>:<span class="string">"9.9"</span>&#125;,&#123;<span class="string">"source"</span>:<span class="string">"jd"</span>,<span class="string">"monthSales"</span>:<span class="number">2090</span>,<span class="string">"userCount"</span>:<span class="number">78981</span>,<span class="string">"score"</span>:<span class="string">"9.8"</span>&#125;,&#123;<span class="string">"source"</span>:<span class="string">"jdmart"</span>,<span class="string">"monthSales"</span>:<span class="number">6987</span>,<span class="string">"userCount"</span>:<span class="number">1600</span>,<span class="string">"score"</span>:<span class="string">"9.0"</span>&#125;]</span><br></pre></td></tr></table></figure>
-<p>加载数据到hive表当中去</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; load <span class="built_in">data</span> <span class="built_in">local</span> inpath <span class="string">'/kkb/install/hivedatas/explode_json'</span> overwrite <span class="keyword">into</span> table hive_explode.explode_lateral_view;</span><br></pre></td></tr></table></figure>
-<h6 id="第三步：使用explode拆分Array"><a href="#第三步：使用explode拆分Array" class="headerlink" title="第三步：使用explode拆分Array"></a>第三步：使用explode拆分Array</h6><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="function"><span class="keyword">select</span> <span class="title">explode</span>(<span class="params">split(goods_id,<span class="string">','</span></span>)) <span class="keyword">as</span> goods_id <span class="keyword">from</span> hive_explode.explode_lateral_view</span>;</span><br></pre></td></tr></table></figure>
-<h6 id="第四步：使用explode拆解Map"><a href="#第四步：使用explode拆解Map" class="headerlink" title="第四步：使用explode拆解Map"></a>第四步：使用explode拆解Map</h6><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="function"><span class="keyword">select</span> <span class="title">explode</span>(<span class="params">split(area,<span class="string">','</span></span>)) <span class="keyword">as</span> area <span class="keyword">from</span> hive_explode.explode_lateral_view</span>;</span><br></pre></td></tr></table></figure>
-<h6 id="第五步：拆解json字段"><a href="#第五步：拆解json字段" class="headerlink" title="第五步：拆解json字段"></a>第五步：拆解json字段</h6><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">select</span> explode(split(regexp_replace(regexp_replace(sale_info,<span class="string">'\\[\\&#123;'</span>,<span class="string">''</span>),<span class="string">'&#125;]'</span>,<span class="string">''</span>),<span class="string">'&#125;,\\&#123;'</span>)) <span class="keyword">as</span>  sale_info <span class="keyword">from</span> hive_explode.explode_lateral_view;</span><br></pre></td></tr></table></figure>
-<p>然后我们想用get_json_object来获取key为monthSales的数据：</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">select</span> get_json_object(explode(<span class="built_in">split</span>(<span class="built_in">regexp_replace</span>(<span class="built_in">regexp_replace</span>(sale_info,<span class="string">'\\[\\&#123;'</span>,<span class="string">''</span>),<span class="string">'&#125;]'</span>,<span class="string">''</span>),<span class="string">'&#125;,\\&#123;'</span>)),<span class="string">'$.monthSales'</span>) <span class="keyword">as</span>  sale_info <span class="keyword">from</span> hive_explode.explode_lateral_view;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">然后出现异常FAILED: SemanticException [Error 10081]: UDTF's are not supported outside the <span class="keyword">SELECT</span> clause, nor nested <span class="keyword">in</span> expressions</span><br><span class="line">UDTF explode不能写在别的函数内</span><br><span class="line">如果你这么写，想查两个字段，<span class="keyword">select</span> explode(<span class="built_in">split</span>(area,<span class="string">','</span>)) <span class="keyword">as</span> area,good_id <span class="keyword">from</span> explode_lateral_view;</span><br><span class="line">会报错FAILED: SemanticException 1:40 Only a single expression in the <span class="keyword">SELECT</span> clause <span class="keyword">is</span> supported <span class="keyword">with</span> UDTF<span class="string">'s. Error encountered near token '</span>good_id<span class="string">'</span></span><br><span class="line"><span class="string">使用UDTF的时候，只支持一个字段，这时候就需要LATERAL VIEW出场了</span></span><br></pre></td></tr></table></figure>
-<h5 id="3、配合LATERAL-VIEW使用"><a href="#3、配合LATERAL-VIEW使用" class="headerlink" title="3、配合LATERAL  VIEW使用"></a>3、配合LATERAL  VIEW使用</h5><p>配合lateral view查询多个字段</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">select</span> goods_id2,sale_info <span class="keyword">from</span> explode_lateral_view LATERAL <span class="keyword">VIEW</span> explode(<span class="built_in">split</span>(goods_id,<span class="string">','</span>))goods <span class="keyword">as</span> goods_id2;</span><br></pre></td></tr></table></figure>
-<p>其中LATERAL VIEW explode(split(goods_id,’,’))goods相当于一个虚拟表，与原表explode_lateral_view笛卡尔积关联。</p>
+<pre><code>4900
+2090
+6987
+
+</code></pre><h6 id="第一步：创建hive表"><a href="#第一步：创建hive表" class="headerlink" title="第一步：创建hive表"></a>第一步：创建hive表</h6><pre><code>hive (hive_explode)&gt; create table hive_explode.explode_lateral_view  (area string, goods_id string, sale_info string)  ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;|&#39; STORED AS textfile;
+</code></pre><h6 id="第二步：准备数据并加载数据"><a href="#第二步：准备数据并加载数据" class="headerlink" title="第二步：准备数据并加载数据"></a>第二步：准备数据并加载数据</h6><p>准备数据如下</p>
+<pre><code>cd /kkb/install/hivedatas
+vim explode_json
+
+a:shandong,b:beijing,c:hebei|1,2,3,4,5,6,7,8,9|[{&quot;source&quot;:&quot;7fresh&quot;,&quot;monthSales&quot;:4900,&quot;userCount&quot;:1900,&quot;score&quot;:&quot;9.9&quot;},{&quot;source&quot;:&quot;jd&quot;,&quot;monthSales&quot;:2090,&quot;userCount&quot;:78981,&quot;score&quot;:&quot;9.8&quot;},{&quot;source&quot;:&quot;jdmart&quot;,&quot;monthSales&quot;:6987,&quot;userCount&quot;:1600,&quot;score&quot;:&quot;9.0&quot;}]
+
+
+
+</code></pre><p>加载数据到hive表当中去</p>
+<pre><code>hive (hive_explode)&gt; load data local inpath &#39;/kkb/install/hivedatas/explode_json&#39; overwrite into table hive_explode.explode_lateral_view;
+</code></pre><h6 id="第三步：使用explode拆分Array"><a href="#第三步：使用explode拆分Array" class="headerlink" title="第三步：使用explode拆分Array"></a>第三步：使用explode拆分Array</h6><pre><code>hive (hive_explode)&gt; select explode(split(goods_id,&#39;,&#39;)) as goods_id from hive_explode.explode_lateral_view;
+</code></pre><h6 id="第四步：使用explode拆解Map"><a href="#第四步：使用explode拆解Map" class="headerlink" title="第四步：使用explode拆解Map"></a>第四步：使用explode拆解Map</h6><pre><code>hive (hive_explode)&gt; select explode(split(area,&#39;,&#39;)) as area from hive_explode.explode_lateral_view;
+</code></pre><h6 id="第五步：拆解json字段"><a href="#第五步：拆解json字段" class="headerlink" title="第五步：拆解json字段"></a>第五步：拆解json字段</h6><pre><code>hive (hive_explode)&gt; select explode(split(regexp_replace(regexp_replace(sale_info,&#39;\\[\\{&#39;,&#39;&#39;),&#39;}]&#39;,&#39;&#39;),&#39;},\\{&#39;)) as  sale_info from hive_explode.explode_lateral_view;
+</code></pre><p>然后我们想用get_json_object来获取key为monthSales的数据：</p>
+<pre><code>hive (hive_explode)&gt; select get_json_object(explode(split(regexp_replace(regexp_replace(sale_info,&#39;\\[\\{&#39;,&#39;&#39;),&#39;}]&#39;,&#39;&#39;),&#39;},\\{&#39;)),&#39;$.monthSales&#39;) as  sale_info from hive_explode.explode_lateral_view;
+
+
+然后出现异常FAILED: SemanticException [Error 10081]: UDTF&#39;s are not supported outside the SELECT clause, nor nested in expressions
+UDTF explode不能写在别的函数内
+如果你这么写，想查两个字段，select explode(split(area,&#39;,&#39;)) as area,good_id from explode_lateral_view;
+会报错FAILED: SemanticException 1:40 Only a single expression in the SELECT clause is supported with UDTF&#39;s. Error encountered near token &#39;good_id&#39;
+使用UDTF的时候，只支持一个字段，这时候就需要LATERAL VIEW出场了
+</code></pre><h5 id="3、配合LATERAL-VIEW使用"><a href="#3、配合LATERAL-VIEW使用" class="headerlink" title="3、配合LATERAL  VIEW使用"></a>3、配合LATERAL  VIEW使用</h5><p>配合lateral view查询多个字段</p>
+<pre><code>hive (hive_explode)&gt; select goods_id2,sale_info from explode_lateral_view LATERAL VIEW explode(split(goods_id,&#39;,&#39;))goods as goods_id2;
+
+</code></pre><p>其中LATERAL VIEW explode(split(goods_id,’,’))goods相当于一个虚拟表，与原表explode_lateral_view笛卡尔积关联。</p>
 <p>也可以多重使用</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">select</span> goods_id2,sale_info,area2 <span class="keyword">from</span> explode_lateral_view  LATERAL <span class="keyword">VIEW</span> explode(<span class="built_in">split</span>(goods_id,<span class="string">','</span>))goods <span class="keyword">as</span> goods_id2 LATERAL <span class="keyword">VIEW</span> explode(<span class="built_in">split</span>(area,<span class="string">','</span>))area <span class="keyword">as</span> area2;</span><br></pre></td></tr></table></figure>
-<p>也是三个表笛卡尔积的结果</p>
+<pre><code>hive (hive_explode)&gt; select goods_id2,sale_info,area2 from explode_lateral_view  LATERAL VIEW explode(split(goods_id,&#39;,&#39;))goods as goods_id2 LATERAL VIEW explode(split(area,&#39;,&#39;))area as area2;
+
+</code></pre><p>也是三个表笛卡尔积的结果</p>
 <p>最终，我们可以通过下面的句子，把这个json格式的一行数据，完全转换成二维表的方式展现</p>
-<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">select</span> get_json_object(<span class="keyword">concat</span>(<span class="string">'&#123;'</span>,sale_info_1,<span class="string">'&#125;'</span>),<span class="string">'$.source'</span>) <span class="keyword">as</span> source, get_json_object(<span class="keyword">concat</span>(<span class="string">'&#123;'</span>,sale_info_1,<span class="string">'&#125;'</span>),<span class="string">'$.monthSales'</span>) <span class="keyword">as</span> monthSales, get_json_object(<span class="keyword">concat</span>(<span class="string">'&#123;'</span>,sale_info_1,<span class="string">'&#125;'</span>),<span class="string">'$.userCount'</span>) <span class="keyword">as</span> monthSales,  get_json_object(<span class="keyword">concat</span>(<span class="string">'&#123;'</span>,sale_info_1,<span class="string">'&#125;'</span>),<span class="string">'$.score'</span>) <span class="keyword">as</span> monthSales <span class="keyword">from</span> explode_lateral_view   LATERAL VIEW explode(split(regexp_replace(regexp_replace(sale_info,<span class="string">'\\[\\&#123;'</span>,<span class="string">''</span>),<span class="string">'&#125;]'</span>,<span class="string">''</span>),<span class="string">'&#125;,\\&#123;'</span>))sale_info <span class="keyword">as</span> sale_info_1;</span><br></pre></td></tr></table></figure>
-<p>总结：</p>
+<pre><code>hive (hive_explode)&gt; select get_json_object(concat(&#39;{&#39;,sale_info_1,&#39;}&#39;),&#39;$.source&#39;) as source, get_json_object(concat(&#39;{&#39;,sale_info_1,&#39;}&#39;),&#39;$.monthSales&#39;) as monthSales, get_json_object(concat(&#39;{&#39;,sale_info_1,&#39;}&#39;),&#39;$.userCount&#39;) as monthSales,  get_json_object(concat(&#39;{&#39;,sale_info_1,&#39;}&#39;),&#39;$.score&#39;) as monthSales from explode_lateral_view   LATERAL VIEW explode(split(regexp_replace(regexp_replace(sale_info,&#39;\\[\\{&#39;,&#39;&#39;),&#39;}]&#39;,&#39;&#39;),&#39;},\\{&#39;))sale_info as sale_info_1;
+
+</code></pre><p>总结：</p>
 <p>Lateral View通常和UDTF一起出现，为了解决UDTF不允许在select字段的问题。<br> Multiple Lateral View可以实现类似笛卡尔乘积。<br> Outer关键字可以把不输出的UDTF的空结果，输出成NULL，防止丢失数据。</p>
 <h4 id="9、列转行"><a href="#9、列转行" class="headerlink" title="9、列转行"></a>9、列转行</h4><h5 id="1．相关函数说明"><a href="#1．相关函数说明" class="headerlink" title="1．相关函数说明"></a>1．相关函数说明</h5><p>CONCAT(string A/col, string B/col…)：返回输入字符串连接后的结果，支持任意个输入字符串;</p>
 <p>CONCAT_WS(separator, str1, str2,…)：它是一个特殊形式的 CONCAT()。第一个参数剩余参数间的分隔符。分隔符可以是与剩余参数一样的字符串。如果分隔符是 NULL，返回值也将为 NULL。这个函数会跳过分隔符参数后的任何 NULL 和空字符串。分隔符将被加到被连接的字符串之间;</p>
@@ -371,49 +702,87 @@
 </tbody>
 </table>
 <h5 id="3．需求"><a href="#3．需求" class="headerlink" title="3．需求"></a>3．需求</h5><p>把星座和血型一样的人归类到一起。结果如下：</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">射手座,A            老王<span class="string">|冰冰</span></span><br><span class="line">白羊座,A            孙悟空<span class="string">|猪八戒</span></span><br><span class="line">白羊座,B            宋宋</span><br></pre></td></tr></table></figure>
-<h5 id="4．创建本地constellation-txt，导入数据"><a href="#4．创建本地constellation-txt，导入数据" class="headerlink" title="4．创建本地constellation.txt，导入数据"></a>4．创建本地constellation.txt，导入数据</h5><p>node03服务器执行以下命令创建文件，注意数据使用\t进行分割</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> <span class="string">/kkb/install/hivedatas</span></span><br><span class="line">vim constellation.txt</span><br></pre></td></tr></table></figure>
-<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">孙悟空	白羊座	<span class="keyword">A</span></span><br><span class="line">老王	射手座	<span class="keyword">A</span></span><br><span class="line">宋宋	白羊座	B       </span><br><span class="line">猪八戒	白羊座	<span class="keyword">A</span></span><br><span class="line">凤姐	射手座	<span class="keyword">A</span></span><br></pre></td></tr></table></figure>
-<h5 id="5．创建hive表并导入数据"><a href="#5．创建hive表并导入数据" class="headerlink" title="5．创建hive表并导入数据"></a>5．创建hive表并导入数据</h5><p>创建hive表并加载数据</p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="built_in">create</span> <span class="built_in">table</span> person_info(  name <span class="built_in">string</span>,  constellation <span class="built_in">string</span>,  blood_type <span class="built_in">string</span>)  row <span class="built_in">format</span> delimited fields terminated by <span class="string">"\t"</span>;</span><br></pre></td></tr></table></figure>
-<p>加载数据</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; load <span class="built_in">data</span> <span class="built_in">local</span> inpath <span class="string">'/kkb/install/hivedatas/constellation.txt'</span> <span class="keyword">into</span> table person_info;</span><br></pre></td></tr></table></figure>
-<h5 id="6．按需求查询数据"><a href="#6．按需求查询数据" class="headerlink" title="6．按需求查询数据"></a>6．按需求查询数据</h5><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="keyword">select</span> t1.<span class="keyword">base</span>, concat_ws(<span class="string">'|'</span>, collect_set(t1.name)) <span class="function">name <span class="title">from</span>    (<span class="params"><span class="keyword">select</span> name, concat(constellation, <span class="string">","</span> , blood_type</span>) <span class="keyword">base</span> <span class="keyword">from</span> person_info) t1 <span class="keyword">group</span> <span class="keyword">by</span>  t1.<span class="keyword">base</span></span>;</span><br></pre></td></tr></table></figure>
-<h4 id="10、行转列"><a href="#10、行转列" class="headerlink" title="10、行转列"></a>10、行转列</h4><h5 id="1．函数说明"><a href="#1．函数说明" class="headerlink" title="1．函数说明"></a>1．函数说明</h5><p>EXPLODE(col)：将hive一列中复杂的array或者map结构拆分成多行。</p>
+<pre><code>射手座,A            老王|冰冰
+白羊座,A            孙悟空|猪八戒
+白羊座,B            宋宋
+
+</code></pre><h5 id="4．创建本地constellation-txt，导入数据"><a href="#4．创建本地constellation-txt，导入数据" class="headerlink" title="4．创建本地constellation.txt，导入数据"></a>4．创建本地constellation.txt，导入数据</h5><p>node03服务器执行以下命令创建文件，注意数据使用\t进行分割</p>
+<pre><code>cd /kkb/install/hivedatas
+vim constellation.txt
+</code></pre><pre><code>孙悟空    白羊座    A
+老王    射手座    A
+宋宋    白羊座    B       
+猪八戒    白羊座    A
+凤姐    射手座    A
+</code></pre><h5 id="5．创建hive表并导入数据"><a href="#5．创建hive表并导入数据" class="headerlink" title="5．创建hive表并导入数据"></a>5．创建hive表并导入数据</h5><p>创建hive表并加载数据</p>
+<pre><code>hive (hive_explode)&gt; create table person_info(  name string,  constellation string,  blood_type string)  row format delimited fields terminated by &quot;\t&quot;;
+</code></pre><p>加载数据</p>
+<pre><code>hive (hive_explode)&gt; load data local inpath &#39;/kkb/install/hivedatas/constellation.txt&#39; into table person_info;
+</code></pre><h5 id="6．按需求查询数据"><a href="#6．按需求查询数据" class="headerlink" title="6．按需求查询数据"></a>6．按需求查询数据</h5><pre><code>hive (hive_explode)&gt; select t1.base, concat_ws(&#39;|&#39;, collect_set(t1.name)) name from    (select name, concat(constellation, &quot;,&quot; , blood_type) base from person_info) t1 group by  t1.base;
+</code></pre><h4 id="10、行转列"><a href="#10、行转列" class="headerlink" title="10、行转列"></a>10、行转列</h4><h5 id="1．函数说明"><a href="#1．函数说明" class="headerlink" title="1．函数说明"></a>1．函数说明</h5><p>EXPLODE(col)：将hive一列中复杂的array或者map结构拆分成多行。</p>
 <p>LATERAL VIEW</p>
 <p>用法：LATERAL VIEW udtf(expression) tableAlias AS columnAlias</p>
 <p>解释：用于和split, explode等UDTF一起使用，它能够将一列数据拆成多行数据，在此基础上可以对拆分后的数据进行聚合。</p>
 <h5 id="2．数据准备-1"><a href="#2．数据准备-1" class="headerlink" title="2．数据准备"></a>2．数据准备</h5><p>数据内容如下，字段之间都是使用\t进行分割</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /kkb/install/hivedatas</span><br><span class="line"></span><br><span class="line"><span class="keyword">vim</span> movie.txt</span><br><span class="line">《疑犯追踪》	悬疑,动作,科幻,剧情</span><br><span class="line">《Lie <span class="keyword">to</span> <span class="keyword">me</span>》	悬疑,警匪,动作,心理,剧情</span><br><span class="line">《战狼<span class="number">2</span>》	战争,动作,灾难</span><br></pre></td></tr></table></figure>
-<h5 id="3．需求-1"><a href="#3．需求-1" class="headerlink" title="3．需求"></a>3．需求</h5><p>将电影分类中的数组数据展开。结果如下：</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">《疑犯追踪》	悬疑</span><br><span class="line">《疑犯追踪》	动作</span><br><span class="line">《疑犯追踪》	科幻</span><br><span class="line">《疑犯追踪》	剧情</span><br><span class="line">《Lie <span class="keyword">to</span> <span class="keyword">me</span>》	悬疑</span><br><span class="line">《Lie <span class="keyword">to</span> <span class="keyword">me</span>》	警匪</span><br><span class="line">《Lie <span class="keyword">to</span> <span class="keyword">me</span>》	动作</span><br><span class="line">《Lie <span class="keyword">to</span> <span class="keyword">me</span>》	心理</span><br><span class="line">《Lie <span class="keyword">to</span> <span class="keyword">me</span>》	剧情</span><br><span class="line">《战狼<span class="number">2</span>》	战争</span><br><span class="line">《战狼<span class="number">2</span>》	动作</span><br><span class="line">《战狼<span class="number">2</span>》	灾难</span><br></pre></td></tr></table></figure>
-<h5 id="4．创建hive表并导入数据"><a href="#4．创建hive表并导入数据" class="headerlink" title="4．创建hive表并导入数据"></a>4．创建hive表并导入数据</h5><p>创建hive表</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">hive</span> (hive_explode)&gt; create table <span class="keyword">movie_info(movie </span><span class="keyword">string, </span>category array&lt;<span class="keyword">string&gt;) </span>row format delimited fields terminated <span class="keyword">by </span><span class="string">"\t"</span> collection <span class="keyword">items </span>terminated <span class="keyword">by </span><span class="string">","</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<p>加载数据</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">"/kkb/install/hivedatas/movie.txt"</span> <span class="keyword">into</span> <span class="keyword">table</span> movie_info;</span><br></pre></td></tr></table></figure>
-<h5 id="5．按需求查询数据"><a href="#5．按需求查询数据" class="headerlink" title="5．按需求查询数据"></a>5．按需求查询数据</h5><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt;  <span class="keyword">select</span> movie, category_name  <span class="keyword">from</span>  movie_info lateral <span class="keyword">view</span> explode(category) table_tmp <span class="keyword">as</span> category_name;</span><br></pre></td></tr></table></figure>
-<h4 id="11、reflect函数"><a href="#11、reflect函数" class="headerlink" title="11、reflect函数"></a>11、reflect函数</h4><p>reflect函数可以支持在sql中调用java中的自带函数，秒杀一切udf函数。</p>
+<pre><code>cd /kkb/install/hivedatas
+
+vim movie.txt
+《疑犯追踪》    悬疑,动作,科幻,剧情
+《Lie to me》    悬疑,警匪,动作,心理,剧情
+《战狼2》    战争,动作,灾难
+</code></pre><h5 id="3．需求-1"><a href="#3．需求-1" class="headerlink" title="3．需求"></a>3．需求</h5><p>将电影分类中的数组数据展开。结果如下：</p>
+<pre><code>《疑犯追踪》    悬疑
+《疑犯追踪》    动作
+《疑犯追踪》    科幻
+《疑犯追踪》    剧情
+《Lie to me》    悬疑
+《Lie to me》    警匪
+《Lie to me》    动作
+《Lie to me》    心理
+《Lie to me》    剧情
+《战狼2》    战争
+《战狼2》    动作
+《战狼2》    灾难
+</code></pre><h5 id="4．创建hive表并导入数据"><a href="#4．创建hive表并导入数据" class="headerlink" title="4．创建hive表并导入数据"></a>4．创建hive表并导入数据</h5><p>创建hive表</p>
+<pre><code>hive (hive_explode)&gt; create table movie_info(movie string, category array&lt;string&gt;) row format delimited fields terminated by &quot;\t&quot; collection items terminated by &quot;,&quot;;
+</code></pre><p>加载数据</p>
+<pre><code>load data local inpath &quot;/kkb/install/hivedatas/movie.txt&quot; into table movie_info;
+</code></pre><h5 id="5．按需求查询数据"><a href="#5．按需求查询数据" class="headerlink" title="5．按需求查询数据"></a>5．按需求查询数据</h5><pre><code>hive (hive_explode)&gt;  select movie, category_name  from  movie_info lateral view explode(category) table_tmp as category_name;
+</code></pre><h4 id="11、reflect函数"><a href="#11、reflect函数" class="headerlink" title="11、reflect函数"></a>11、reflect函数</h4><p>reflect函数可以支持在sql中调用java中的自带函数，秒杀一切udf函数。</p>
 <h5 id="使用java-lang-Math当中的Max求两列中最大值"><a href="#使用java-lang-Math当中的Max求两列中最大值" class="headerlink" title="使用java.lang.Math当中的Max求两列中最大值"></a>使用java.lang.Math当中的Max求两列中最大值</h5><p>创建hive表</p>
-<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt;  create table test_udf(col1 <span class="keyword">int</span>,col2 <span class="keyword">int</span>) row format delimited fields terminated <span class="keyword">by</span> <span class="string">','</span>;</span><br></pre></td></tr></table></figure>
-<p>准备数据并加载数据</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hivedatas</span><br><span class="line"></span><br><span class="line">vim test_udf</span><br><span class="line"></span><br><span class="line"><span class="number">1</span>,<span class="number">2</span></span><br><span class="line"><span class="number">4</span>,<span class="number">3</span></span><br><span class="line"><span class="number">6</span>,<span class="number">4</span></span><br><span class="line"><span class="number">7</span>,<span class="number">5</span></span><br><span class="line"><span class="number">5</span>,<span class="number">6</span></span><br></pre></td></tr></table></figure>
-<p>加载数据</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; load <span class="built_in">data</span> <span class="built_in">local</span> inpath <span class="string">'/kkb/install/hivedatas/test_udf'</span> overwrite <span class="keyword">into</span> table test_udf;</span><br></pre></td></tr></table></figure>
-<p>使用java.lang.Math当中的Max求两列当中的最大值</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="function"><span class="keyword">select</span> <span class="title">reflect</span>(<span class="params"><span class="string">"java.lang.Math"</span>,<span class="string">"max"</span>,col1,col2</span>) <span class="keyword">from</span> test_udf</span>;</span><br></pre></td></tr></table></figure>
-<h5 id="不同记录执行不同的java内置函数"><a href="#不同记录执行不同的java内置函数" class="headerlink" title="不同记录执行不同的java内置函数"></a>不同记录执行不同的java内置函数</h5><p>创建hive表</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; <span class="function">create table <span class="title">test_udf2</span>(<span class="params">class_name <span class="keyword">string</span>,method_name <span class="keyword">string</span>,col1 <span class="keyword">int</span> , col2 <span class="keyword">int</span></span>) row format delimited fields terminated <span class="keyword">by</span> ','</span>;</span><br></pre></td></tr></table></figure>
-<p>准备数据</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /export/servers/hivedatas</span><br><span class="line"></span><br><span class="line">vim test_udf2</span><br><span class="line"></span><br><span class="line">java<span class="selector-class">.lang</span><span class="selector-class">.Math</span>,min,<span class="number">1</span>,<span class="number">2</span></span><br><span class="line">java<span class="selector-class">.lang</span><span class="selector-class">.Math</span>,max,<span class="number">2</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure>
-<p>加载数据</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (hive_explode)&gt; load <span class="built_in">data</span> <span class="built_in">local</span> inpath <span class="string">'/kkb/install/hivedatas/test_udf2'</span> overwrite <span class="keyword">into</span> table test_udf2;</span><br></pre></td></tr></table></figure>
-<p>执行查询</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (<span class="name">hive_explode</span>)&gt; select reflect(<span class="name">class_name</span>,method_name,col1,col2) from test_udf2<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h5 id="判断是否为数字"><a href="#判断是否为数字" class="headerlink" title="判断是否为数字"></a>判断是否为数字</h5><p>使用apache commons中的函数，commons下的jar已经包含在hadoop的classpath中，所以可以直接使用。</p>
+<pre><code>hive (hive_explode)&gt;  create table test_udf(col1 int,col2 int) row format delimited fields terminated by &#39;,&#39;;
+</code></pre><p>准备数据并加载数据</p>
+<pre><code>cd /kkb/install/hivedatas
+
+vim test_udf
+
+1,2
+4,3
+6,4
+7,5
+5,6
+</code></pre><p>加载数据</p>
+<pre><code>hive (hive_explode)&gt; load data local inpath &#39;/kkb/install/hivedatas/test_udf&#39; overwrite into table test_udf;
+</code></pre><p>使用java.lang.Math当中的Max求两列当中的最大值</p>
+<pre><code>hive (hive_explode)&gt; select reflect(&quot;java.lang.Math&quot;,&quot;max&quot;,col1,col2) from test_udf;
+</code></pre><h5 id="不同记录执行不同的java内置函数"><a href="#不同记录执行不同的java内置函数" class="headerlink" title="不同记录执行不同的java内置函数"></a>不同记录执行不同的java内置函数</h5><p>创建hive表</p>
+<pre><code>hive (hive_explode)&gt; create table test_udf2(class_name string,method_name string,col1 int , col2 int) row format delimited fields terminated by &#39;,&#39;;
+</code></pre><p>准备数据</p>
+<pre><code>cd /export/servers/hivedatas
+
+vim test_udf2
+
+java.lang.Math,min,1,2
+java.lang.Math,max,2,3
+
+</code></pre><p>加载数据</p>
+<pre><code>hive (hive_explode)&gt; load data local inpath &#39;/kkb/install/hivedatas/test_udf2&#39; overwrite into table test_udf2;
+</code></pre><p>执行查询</p>
+<pre><code>hive (hive_explode)&gt; select reflect(class_name,method_name,col1,col2) from test_udf2;
+</code></pre><h5 id="判断是否为数字"><a href="#判断是否为数字" class="headerlink" title="判断是否为数字"></a>判断是否为数字</h5><p>使用apache commons中的函数，commons下的jar已经包含在hadoop的classpath中，所以可以直接使用。</p>
 <p>使用方式如下：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (<span class="name">hive_explode</span>)&gt; select reflect(<span class="string">"org.apache.commons.lang.math.NumberUtils"</span>,<span class="string">"isNumber"</span>,<span class="string">"123"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h4 id="12、hive当中的分析函数—分组求topN"><a href="#12、hive当中的分析函数—分组求topN" class="headerlink" title="12、hive当中的分析函数—分组求topN"></a>12、hive当中的分析函数—分组求topN</h4><h5 id="1、分析函数的作用介绍"><a href="#1、分析函数的作用介绍" class="headerlink" title="1、分析函数的作用介绍"></a>1、分析函数的作用介绍</h5><p>对于一些比较复杂的数据求取过程，我们可能就要用到分析函数，分析函数主要用于分组求topN，或者求取百分比，或者进行数据的切片等等，我们都可以使用分析函数来解决</p>
+<pre><code>hive (hive_explode)&gt; select reflect(&quot;org.apache.commons.lang.math.NumberUtils&quot;,&quot;isNumber&quot;,&quot;123&quot;);
+</code></pre><h4 id="12、hive当中的分析函数—分组求topN"><a href="#12、hive当中的分析函数—分组求topN" class="headerlink" title="12、hive当中的分析函数—分组求topN"></a>12、hive当中的分析函数—分组求topN</h4><h5 id="1、分析函数的作用介绍"><a href="#1、分析函数的作用介绍" class="headerlink" title="1、分析函数的作用介绍"></a>1、分析函数的作用介绍</h5><p>对于一些比较复杂的数据求取过程，我们可能就要用到分析函数，分析函数主要用于分组求topN，或者求取百分比，或者进行数据的切片等等，我们都可以使用分析函数来解决</p>
 <h5 id="2、常用的分析函数介绍"><a href="#2、常用的分析函数介绍" class="headerlink" title="2、常用的分析函数介绍"></a>2、常用的分析函数介绍</h5><p>1、ROW_NUMBER()：</p>
 <p>从1开始，按照顺序，生成分组内记录的序列,比如，按照pv降序排列，生成分组内每天的pv名次,ROW_NUMBER()的应用场景非常多，再比如，获取分组内排序第一的记录;获取一个session中的第一条refer等。 </p>
 <p>2、RANK() ：</p>
@@ -427,56 +796,186 @@
 <p>6、NTILE(n) ：</p>
 <p>用于将分组数据按照顺序切分成n片，返回当前切片值，如果切片不均匀，默认增加第一个切片的分布。NTILE不支持ROWS BETWEEN，比如 NTILE(2) OVER(PARTITION BY cookieid ORDER BY createtime ROWS BETWEEN 3 PRECEDING AND CURRENT ROW)。</p>
 <h5 id="3、需求描述"><a href="#3、需求描述" class="headerlink" title="3、需求描述"></a>3、需求描述</h5><p>现有数据内容格式如下，分别对应三个字段，cookieid，createtime ，pv，求取每个cookie访问pv前三名的数据记录，其实就是分组求topN，求取每组当中的前三个值</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-10</span>,<span class="number">1</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-11</span>,<span class="number">5</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-12</span>,<span class="number">7</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-13</span>,<span class="number">3</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-14</span>,<span class="number">2</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-15</span>,<span class="number">4</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-16</span>,<span class="number">4</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-10</span>,<span class="number">2</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-11</span>,<span class="number">3</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-12</span>,<span class="number">5</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-13</span>,<span class="number">6</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-14</span>,<span class="number">3</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-15</span>,<span class="number">9</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-16</span>,<span class="number">7</span></span><br></pre></td></tr></table></figure>
-<h6 id="第一步：创建数据库表"><a href="#第一步：创建数据库表" class="headerlink" title="第一步：创建数据库表"></a>第一步：创建数据库表</h6><p>在hive当中创建数据库表</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">EXTERNAL</span> <span class="keyword">TABLE</span> cookie_pv (</span><br><span class="line">cookieid <span class="keyword">string</span>,</span><br><span class="line">createtime <span class="keyword">string</span>, </span><br><span class="line">pv <span class="built_in">INT</span></span><br><span class="line">) <span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> </span><br><span class="line"><span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">','</span> ;</span><br></pre></td></tr></table></figure>
-<h6 id="第二步：准备数据并加载"><a href="#第二步：准备数据并加载" class="headerlink" title="第二步：准备数据并加载"></a>第二步：准备数据并加载</h6><p>node03执行以下命令，创建数据，并加载到hive表当中去</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hivedatas</span><br><span class="line">vim cookiepv.txt</span><br><span class="line"></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-10</span>,<span class="number">1</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-11</span>,<span class="number">5</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-12</span>,<span class="number">7</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-13</span>,<span class="number">3</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-14</span>,<span class="number">2</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-15</span>,<span class="number">4</span></span><br><span class="line">cookie1,<span class="number">2015</span><span class="number">-04</span><span class="number">-16</span>,<span class="number">4</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-10</span>,<span class="number">2</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-11</span>,<span class="number">3</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-12</span>,<span class="number">5</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-13</span>,<span class="number">6</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-14</span>,<span class="number">3</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-15</span>,<span class="number">9</span></span><br><span class="line">cookie2,<span class="number">2015</span><span class="number">-04</span><span class="number">-16</span>,<span class="number">7</span></span><br></pre></td></tr></table></figure>
-<p>加载数据到hive表当中去</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span>  <span class="keyword">data</span>  <span class="keyword">local</span> inpath <span class="string">'/kkb/install/hivedatas/cookiepv.txt'</span>  overwrite <span class="keyword">into</span> <span class="keyword">table</span>  cookie_pv</span><br></pre></td></tr></table></figure>
-<h6 id="第三步：使用分析函数来求取每个cookie访问PV的前三条记录"><a href="#第三步：使用分析函数来求取每个cookie访问PV的前三条记录" class="headerlink" title="第三步：使用分析函数来求取每个cookie访问PV的前三条记录"></a>第三步：使用分析函数来求取每个cookie访问PV的前三条记录</h6><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> (</span><br><span class="line">	<span class="keyword">SELECT</span> </span><br><span class="line">  cookieid,</span><br><span class="line">  createtime,</span><br><span class="line">  pv,</span><br><span class="line">  <span class="keyword">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> cookieid <span class="keyword">ORDER</span> <span class="keyword">BY</span> pv <span class="keyword">desc</span>) <span class="keyword">AS</span> rn1,</span><br><span class="line">  <span class="keyword">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> cookieid <span class="keyword">ORDER</span> <span class="keyword">BY</span> pv <span class="keyword">desc</span>) <span class="keyword">AS</span> rn2,</span><br><span class="line">  ROW_NUMBER() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> cookieid <span class="keyword">ORDER</span> <span class="keyword">BY</span> pv <span class="keyword">DESC</span>) <span class="keyword">AS</span> rn3 </span><br><span class="line">  <span class="keyword">FROM</span> cookie_pv) temp </span><br><span class="line"><span class="keyword">WHERE</span> temp.rn1 &lt;=  <span class="number">3</span> ;</span><br></pre></td></tr></table></figure>
+<pre><code>cookie1,2015-04-10,1
+cookie1,2015-04-11,5
+cookie1,2015-04-12,7
+cookie1,2015-04-13,3
+cookie1,2015-04-14,2
+cookie1,2015-04-15,4
+cookie1,2015-04-16,4
+cookie2,2015-04-10,2
+cookie2,2015-04-11,3
+cookie2,2015-04-12,5
+cookie2,2015-04-13,6
+cookie2,2015-04-14,3
+cookie2,2015-04-15,9
+cookie2,2015-04-16,7
+</code></pre><h6 id="第一步：创建数据库表"><a href="#第一步：创建数据库表" class="headerlink" title="第一步：创建数据库表"></a>第一步：创建数据库表</h6><p>在hive当中创建数据库表</p>
+<pre><code>CREATE EXTERNAL TABLE cookie_pv (
+cookieid string,
+createtime string, 
+pv INT
+) ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY &#39;,&#39; ;
+</code></pre><h6 id="第二步：准备数据并加载"><a href="#第二步：准备数据并加载" class="headerlink" title="第二步：准备数据并加载"></a>第二步：准备数据并加载</h6><p>node03执行以下命令，创建数据，并加载到hive表当中去</p>
+<pre><code>cd /kkb/install/hivedatas
+vim cookiepv.txt
+
+cookie1,2015-04-10,1
+cookie1,2015-04-11,5
+cookie1,2015-04-12,7
+cookie1,2015-04-13,3
+cookie1,2015-04-14,2
+cookie1,2015-04-15,4
+cookie1,2015-04-16,4
+cookie2,2015-04-10,2
+cookie2,2015-04-11,3
+cookie2,2015-04-12,5
+cookie2,2015-04-13,6
+cookie2,2015-04-14,3
+cookie2,2015-04-15,9
+cookie2,2015-04-16,7
+</code></pre><p>加载数据到hive表当中去</p>
+<pre><code>load  data  local inpath &#39;/kkb/install/hivedatas/cookiepv.txt&#39;  overwrite into table  cookie_pv 
+</code></pre><h6 id="第三步：使用分析函数来求取每个cookie访问PV的前三条记录"><a href="#第三步：使用分析函数来求取每个cookie访问PV的前三条记录" class="headerlink" title="第三步：使用分析函数来求取每个cookie访问PV的前三条记录"></a>第三步：使用分析函数来求取每个cookie访问PV的前三条记录</h6><pre><code class="sql">SELECT * FROM (
+    SELECT 
+  cookieid,
+  createtime,
+  pv,
+  RANK() OVER(PARTITION BY cookieid ORDER BY pv desc) AS rn1,
+  DENSE_RANK() OVER(PARTITION BY cookieid ORDER BY pv desc) AS rn2,
+  ROW_NUMBER() OVER(PARTITION BY cookieid ORDER BY pv DESC) AS rn3 
+  FROM cookie_pv) temp 
+WHERE temp.rn1 &lt;=  3 ;
+</code></pre>
 <h4 id="13、hive自定义函数"><a href="#13、hive自定义函数" class="headerlink" title="13、hive自定义函数"></a>13、hive自定义函数</h4><h5 id="1、自定义函数的基本介绍"><a href="#1、自定义函数的基本介绍" class="headerlink" title="1、自定义函数的基本介绍"></a>1、自定义函数的基本介绍</h5><p>1）Hive 自带了一些函数，比如：max/min等，但是数量有限，自己可以通过自定义UDF来方便的扩展。</p>
 <p>2）当Hive提供的内置函数无法满足你的业务处理需要时，此时就可以考虑使用用户自定义函数（UDF：user-defined function）。</p>
 <p>3）根据用户自定义函数类别分为以下三种：</p>
-<pre><code>（1）UDF（User-Defined-Function）
+<pre><code>    （1）UDF（User-Defined-Function）
 
-        一进一出
+            一进一出
 
-（2）UDAF（User-Defined Aggregation Function）
+    （2）UDAF（User-Defined Aggregation Function）
 
-        聚集函数，多进一出
+            聚集函数，多进一出
 
-        类似于：count/max/min
+            类似于：count/max/min
 
-（3）UDTF（User-Defined Table-Generating Functions）
+    （3）UDTF（User-Defined Table-Generating Functions）
 
-        一进多出
+            一进多出
 
-        如lateral view explode()
+            如lateral view explode()
 </code></pre><p>4）官方文档地址</p>
 <p><a href="https://cwiki.apache.org/confluence/display/Hive/HivePlugins" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/HivePlugins</a></p>
 <p>5）编程步骤：</p>
-<pre><code>（1）继承org.apache.hadoop.hive.ql.UDF
+<pre><code>    （1）继承org.apache.hadoop.hive.ql.UDF
 
-（2）需要实现evaluate函数；evaluate函数支持重载；
+    （2）需要实现evaluate函数；evaluate函数支持重载；
 </code></pre><p>6）注意事项</p>
-<pre><code>（1）UDF必须要有返回类型，可以返回null，但是返回类型不能为void；
+<pre><code>    （1）UDF必须要有返回类型，可以返回null，但是返回类型不能为void；
 
-（2）UDF中常用Text/LongWritable等类型，不推荐使用java类型；
-</code></pre><h5 id="2、自定义函数开发"><a href="#2、自定义函数开发" class="headerlink" title="2、自定义函数开发"></a>2、自定义函数开发</h5><h6 id="第一步：创建maven-java-工程，并导入jar包"><a href="#第一步：创建maven-java-工程，并导入jar包" class="headerlink" title="第一步：创建maven java 工程，并导入jar包"></a>第一步：创建maven java 工程，并导入jar包</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>cloudera<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hive<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hive-exec<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-shade-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                 <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                 <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                     <span class="tag">&lt;<span class="name">goal</span>&gt;</span>shade<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                 <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                 <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                     <span class="tag">&lt;<span class="name">filters</span>&gt;</span></span><br><span class="line">                         <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">                             <span class="tag">&lt;<span class="name">artifact</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">artifact</span>&gt;</span></span><br><span class="line">                             <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                                 <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.SF<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                 <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.DSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                 <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*/RSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                             <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">                         <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">                     <span class="tag">&lt;/<span class="name">filters</span>&gt;</span></span><br><span class="line">                 <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h6 id="第二步：开发java类继承UDF，并重载evaluate-方法"><a href="#第二步：开发java类继承UDF，并重载evaluate-方法" class="headerlink" title="第二步：开发java类继承UDF，并重载evaluate 方法"></a>第二步：开发java类继承UDF，并重载evaluate 方法</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyUDF</span> <span class="keyword">extends</span> <span class="title">UDF</span> </span>&#123;</span><br><span class="line">     public <span class="type">Text</span> evaluate(<span class="keyword">final</span> <span class="type">Text</span> s) &#123;</span><br><span class="line">         <span class="keyword">if</span> (<span class="literal">null</span> == s) &#123;</span><br><span class="line">             <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">//**返回大写字母         return new Text(s.toString().toUpperCase());</span></span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h6 id="第三步：将我们的项目打包，并上传到hive的lib目录下"><a href="#第三步：将我们的项目打包，并上传到hive的lib目录下" class="headerlink" title="第三步：将我们的项目打包，并上传到hive的lib目录下"></a>第三步：将我们的项目打包，并上传到hive的lib目录下</h6><p>使用maven的package进行打包，将我们打包好的jar包上传到node03服务器的/kkb/install/hive-1.1.0-cdh5.14.2/lib 这个路径下</p>
+    （2）UDF中常用Text/LongWritable等类型，不推荐使用java类型；
+</code></pre><h5 id="2、自定义函数开发"><a href="#2、自定义函数开发" class="headerlink" title="2、自定义函数开发"></a>2、自定义函数开发</h5><h6 id="第一步：创建maven-java-工程，并导入jar包"><a href="#第一步：创建maven-java-工程，并导入jar包" class="headerlink" title="第一步：创建maven java 工程，并导入jar包"></a>第一步：创建maven java 工程，并导入jar包</h6><pre><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;cloudera&lt;/id&gt;
+ &lt;url&gt;https://repository.cloudera.com/artifactory/cloudera-repos/&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+        &lt;artifactId&gt;hadoop-common&lt;/artifactId&gt;
+        &lt;version&gt;2.6.0-cdh5.14.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.hive&lt;/groupId&gt;
+        &lt;artifactId&gt;hive-exec&lt;/artifactId&gt;
+        &lt;version&gt;1.1.0-cdh5.14.2&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+&lt;build&gt;
+&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.0&lt;/version&gt;
+        &lt;configuration&gt;
+            &lt;source&gt;1.8&lt;/source&gt;
+            &lt;target&gt;1.8&lt;/target&gt;
+            &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+     &lt;plugin&gt;
+         &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+         &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+         &lt;version&gt;2.2&lt;/version&gt;
+         &lt;executions&gt;
+             &lt;execution&gt;
+                 &lt;phase&gt;package&lt;/phase&gt;
+                 &lt;goals&gt;
+                     &lt;goal&gt;shade&lt;/goal&gt;
+                 &lt;/goals&gt;
+                 &lt;configuration&gt;
+                     &lt;filters&gt;
+                         &lt;filter&gt;
+                             &lt;artifact&gt;*:*&lt;/artifact&gt;
+                             &lt;excludes&gt;
+                                 &lt;exclude&gt;META-INF/*.SF&lt;/exclude&gt;
+                                 &lt;exclude&gt;META-INF/*.DSA&lt;/exclude&gt;
+                                 &lt;exclude&gt;META-INF/*/RSA&lt;/exclude&gt;
+                             &lt;/excludes&gt;
+                         &lt;/filter&gt;
+                     &lt;/filters&gt;
+                 &lt;/configuration&gt;
+             &lt;/execution&gt;
+         &lt;/executions&gt;
+     &lt;/plugin&gt;
+&lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre><h6 id="第二步：开发java类继承UDF，并重载evaluate-方法"><a href="#第二步：开发java类继承UDF，并重载evaluate-方法" class="headerlink" title="第二步：开发java类继承UDF，并重载evaluate 方法"></a>第二步：开发java类继承UDF，并重载evaluate 方法</h6><pre><code>public class MyUDF extends UDF {
+     public Text evaluate(final Text s) {
+         if (null == s) {
+             return null;
+         }
+         //**返回大写字母         return new Text(s.toString().toUpperCase());
+     }
+ }
+</code></pre><h6 id="第三步：将我们的项目打包，并上传到hive的lib目录下"><a href="#第三步：将我们的项目打包，并上传到hive的lib目录下" class="headerlink" title="第三步：将我们的项目打包，并上传到hive的lib目录下"></a>第三步：将我们的项目打包，并上传到hive的lib目录下</h6><p>使用maven的package进行打包，将我们打包好的jar包上传到node03服务器的/kkb/install/hive-1.1.0-cdh5.14.2/lib 这个路径下</p>
 <h6 id="第四步：添加我们的jar包"><a href="#第四步：添加我们的jar包" class="headerlink" title="第四步：添加我们的jar包"></a>第四步：添加我们的jar包</h6><p>重命名我们的jar包名称</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hive-<span class="number">1.1</span>.<span class="number">0</span>-cdh5.<span class="number">14.2</span>/<span class="class"><span class="keyword">lib</span></span></span><br><span class="line">mv original-day_hive_udf-<span class="number">1.0</span>-SNAPSHOT.jar udf.jar</span><br></pre></td></tr></table></figure>
-<p>hive的客户端添加我们的jar包</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>: <span class="symbol">jdbc:</span><span class="symbol">hive2:</span>/<span class="regexp">/node03:10000&gt; add jar /kkb</span><span class="regexp">/install/hive</span>-<span class="number">1.1</span>.<span class="number">0</span>-cdh5.<span class="number">14.2</span>/<span class="class"><span class="keyword">lib</span>/<span class="title">udf</span>.<span class="title">jar</span>;</span></span><br></pre></td></tr></table></figure>
-<h6 id="第五步：设置函数与我们的自定义函数关联"><a href="#第五步：设置函数与我们的自定义函数关联" class="headerlink" title="第五步：设置函数与我们的自定义函数关联"></a>第五步：设置函数与我们的自定义函数关联</h6><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">0</span>: <span class="attribute">jdbc</span>:<span class="attribute">hive2</span>:<span class="comment">//node03:10000&gt; create temporary function tolowercase as 'com.kkb.udf.MyUDF';</span></span><br></pre></td></tr></table></figure>
-<h6 id="第六步：使用自定义函数"><a href="#第六步：使用自定义函数" class="headerlink" title="第六步：使用自定义函数"></a>第六步：使用自定义函数</h6><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">0</span>: <span class="attribute">jdbc</span>:<span class="attribute">hive2</span>:<span class="comment">//node03:10000&gt;select tolowercase('abc');</span></span><br></pre></td></tr></table></figure>
-<p>hive当中如何创建永久函数</p>
+<pre><code>cd /kkb/install/hive-1.1.0-cdh5.14.2/lib
+mv original-day_hive_udf-1.0-SNAPSHOT.jar udf.jar
+</code></pre><p>hive的客户端添加我们的jar包</p>
+<pre><code>0: jdbc:hive2://node03:10000&gt; add jar /kkb/install/hive-1.1.0-cdh5.14.2/lib/udf.jar;
+</code></pre><h6 id="第五步：设置函数与我们的自定义函数关联"><a href="#第五步：设置函数与我们的自定义函数关联" class="headerlink" title="第五步：设置函数与我们的自定义函数关联"></a>第五步：设置函数与我们的自定义函数关联</h6><pre><code>0: jdbc:hive2://node03:10000&gt; create temporary function tolowercase as &#39;com.kkb.udf.MyUDF&#39;;
+</code></pre><h6 id="第六步：使用自定义函数"><a href="#第六步：使用自定义函数" class="headerlink" title="第六步：使用自定义函数"></a>第六步：使用自定义函数</h6><pre><code>0: jdbc:hive2://node03:10000&gt;select tolowercase(&#39;abc&#39;);
+</code></pre><p>hive当中如何创建永久函数</p>
 <p>在hive当中添加临时函数，需要我们每次进入hive客户端的时候都需要添加以下，退出hive客户端临时函数就会失效，那么我们也可以创建永久函数来让其不会失效</p>
 <p>创建永久函数</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>、指定数据库，将我们的函数创建到指定的数据库下面</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;use myhive;</span></span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、使用add jar添加我们的jar包到hive当中来</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;add jar /kkb/install/hive-1.1.0-cdh5.14.2/lib/udf.jar;</span></span><br><span class="line"></span><br><span class="line"><span class="number">3</span>、查看我们添加的所有的jar包</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;list  jars;</span></span><br><span class="line"></span><br><span class="line"><span class="number">4</span>、创建永久函数，与我们的函数进行关联</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;create  function myuppercase as 'com.kkb.udf.MyUDF';</span></span><br><span class="line"></span><br><span class="line"><span class="number">5</span>、查看我们的永久函数</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;show functions like 'my*';</span></span><br><span class="line"></span><br><span class="line"><span class="number">6</span>、使用永久函数</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;select myhive.myuppercase('helloworld');</span></span><br><span class="line"></span><br><span class="line"><span class="number">7</span>、删除永久函数</span><br><span class="line"><span class="number">0</span>: <span class="string">jdbc:</span><span class="string">hive2:</span><span class="comment">//node03:10000&gt;drop function myhive.myuppercase;</span></span><br><span class="line"></span><br><span class="line"><span class="number">8</span>、查看函数</span><br><span class="line"> show functions like <span class="string">'my*'</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="3-hive表的数据压缩"><a href="#3-hive表的数据压缩" class="headerlink" title="3. hive表的数据压缩"></a>3. hive表的数据压缩</h3><h4 id="1、数据的压缩说明"><a href="#1、数据的压缩说明" class="headerlink" title="1、数据的压缩说明"></a>1、数据的压缩说明</h4><ul>
+<pre><code>1、指定数据库，将我们的函数创建到指定的数据库下面
+0: jdbc:hive2://node03:10000&gt;use myhive;
+
+2、使用add jar添加我们的jar包到hive当中来
+0: jdbc:hive2://node03:10000&gt;add jar /kkb/install/hive-1.1.0-cdh5.14.2/lib/udf.jar;
+
+3、查看我们添加的所有的jar包
+0: jdbc:hive2://node03:10000&gt;list  jars;
+
+4、创建永久函数，与我们的函数进行关联
+0: jdbc:hive2://node03:10000&gt;create  function myuppercase as &#39;com.kkb.udf.MyUDF&#39;;
+
+5、查看我们的永久函数
+0: jdbc:hive2://node03:10000&gt;show functions like &#39;my*&#39;;
+
+6、使用永久函数
+0: jdbc:hive2://node03:10000&gt;select myhive.myuppercase(&#39;helloworld&#39;);
+
+7、删除永久函数
+0: jdbc:hive2://node03:10000&gt;drop function myhive.myuppercase;
+
+8、查看函数
+ show functions like &#39;my*&#39;;
+</code></pre><h3 id="3-hive表的数据压缩"><a href="#3-hive表的数据压缩" class="headerlink" title="3. hive表的数据压缩"></a>3. hive表的数据压缩</h3><h4 id="1、数据的压缩说明"><a href="#1、数据的压缩说明" class="headerlink" title="1、数据的压缩说明"></a>1、数据的压缩说明</h4><ul>
 <li><p>压缩模式评价</p>
 <ul>
 <li>可使用以下三种标准对压缩方式进行评价<ul>
@@ -564,7 +1063,7 @@
 </tr>
 </tbody>
 </table>
-<pre><code>压缩性能的比较
+<pre><code> 压缩性能的比较
 </code></pre><table>
 <thead>
 <tr>
@@ -652,11 +1151,34 @@
 </table>
 <h4 id="3、开启Map输出阶段压缩"><a href="#3、开启Map输出阶段压缩" class="headerlink" title="3、开启Map输出阶段压缩"></a>3、开启Map输出阶段压缩</h4><p>开启map输出阶段压缩可以减少job中map和Reduce task间数据传输量。具体配置如下：</p>
 <p><strong>案例实操：</strong></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>）开启hive中间传输数据压缩功能</span><br><span class="line">hive (<span class="keyword">default</span>)&gt;<span class="built_in">set</span> hive.exec.compress.intermediate=<span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>）开启mapreduce中<span class="built_in">map</span>输出压缩功能</span><br><span class="line">hive (<span class="keyword">default</span>)&gt;<span class="built_in">set</span> mapreduce.<span class="built_in">map</span>.output.compress=<span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>）设置mapreduce中<span class="built_in">map</span>输出数据的压缩方式</span><br><span class="line">hive (<span class="keyword">default</span>)&gt;<span class="built_in">set</span> mapreduce.<span class="built_in">map</span>.output.compress.codec= org.apache.hadoop.io.compress.SnappyCodec;</span><br><span class="line"></span><br><span class="line"><span class="number">4</span>）执行查询语句</span><br><span class="line">   <span class="function">select <span class="title">count</span><span class="params">(<span class="number">1</span>)</span> from score</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="4、-开启Reduce输出阶段压缩"><a href="#4、-开启Reduce输出阶段压缩" class="headerlink" title="4、 开启Reduce输出阶段压缩"></a>4、 开启Reduce输出阶段压缩</h4><p>当Hive将输出写入到表中时，输出内容同样可以进行压缩。属性hive.exec.compress.output控制着这个功能。用户可能需要保持默认设置文件中的默认值false，这样默认的输出就是非压缩的纯文本文件了。用户可以通过在查询语句或执行脚本中设置这个值为true，来开启输出结果压缩功能。</p>
-<p><strong>案例实操：</strong></p>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>）开启hive最终输出数据压缩功能</span><br><span class="line">hive (<span class="keyword">default</span>)&gt;<span class="built_in">set</span> hive.<span class="built_in">exec</span>.compress.output=<span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>）开启mapreduce最终输出数据压缩</span><br><span class="line">hive (<span class="keyword">default</span>)&gt;<span class="built_in">set</span> mapreduce.output.fileoutputformat.compress=<span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>）设置mapreduce最终数据输出压缩方式</span><br><span class="line">hive (<span class="keyword">default</span>)&gt; <span class="built_in">set</span> mapreduce.output.fileoutputformat.compress.codec = org.apache.hadoop.io.compress.SnappyCodec;</span><br><span class="line"></span><br><span class="line"><span class="number">4</span>）设置mapreduce最终数据输出压缩为块压缩</span><br><span class="line">hive (<span class="keyword">default</span>)&gt;<span class="built_in">set</span> mapreduce.output.fileoutputformat.compress.<span class="built_in">type</span>=BLOCK;</span><br><span class="line"></span><br><span class="line"><span class="number">5</span>）测试一下输出结果是否是压缩文件</span><br><span class="line">insert overwrite <span class="built_in">local</span> directory <span class="string">'/kkb/install/hivedatas/snappy'</span> <span class="built_in">select</span> * <span class="keyword">from</span> <span class="built_in">score</span> distribute by s_id <span class="built_in">sort</span> by s_id desc;</span><br></pre></td></tr></table></figure>
+<pre><code>1）开启hive中间传输数据压缩功能
+hive (default)&gt;set hive.exec.compress.intermediate=true;
 
+2）开启mapreduce中map输出压缩功能
+hive (default)&gt;set mapreduce.map.output.compress=true;
+
+3）设置mapreduce中map输出数据的压缩方式
+hive (default)&gt;set mapreduce.map.output.compress.codec= org.apache.hadoop.io.compress.SnappyCodec;
+
+4）执行查询语句
+   select count(1) from score;
+</code></pre><h4 id="4、-开启Reduce输出阶段压缩"><a href="#4、-开启Reduce输出阶段压缩" class="headerlink" title="4、 开启Reduce输出阶段压缩"></a>4、 开启Reduce输出阶段压缩</h4><p>当Hive将输出写入到表中时，输出内容同样可以进行压缩。属性hive.exec.compress.output控制着这个功能。用户可能需要保持默认设置文件中的默认值false，这样默认的输出就是非压缩的纯文本文件了。用户可以通过在查询语句或执行脚本中设置这个值为true，来开启输出结果压缩功能。</p>
+<p><strong>案例实操：</strong></p>
+<pre><code>1）开启hive最终输出数据压缩功能
+hive (default)&gt;set hive.exec.compress.output=true;
+
+2）开启mapreduce最终输出数据压缩
+hive (default)&gt;set mapreduce.output.fileoutputformat.compress=true;
+
+3）设置mapreduce最终数据输出压缩方式
+hive (default)&gt; set mapreduce.output.fileoutputformat.compress.codec = org.apache.hadoop.io.compress.SnappyCodec;
+
+4）设置mapreduce最终数据输出压缩为块压缩
+hive (default)&gt;set mapreduce.output.fileoutputformat.compress.type=BLOCK;
+
+5）测试一下输出结果是否是压缩文件
+insert overwrite local directory &#39;/kkb/install/hivedatas/snappy&#39; select * from score distribute by s_id sort by s_id desc;
+</code></pre>
         
         <br />
         <div id="comment-container">

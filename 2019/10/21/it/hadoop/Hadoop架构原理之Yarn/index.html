@@ -319,22 +319,30 @@
 <li><p>每个ResourceRequest可看做一个可序列化Java对象，包含的字段信息如下：</p>
 </li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">- resource-name：资源名称，现阶段指的是资源所在的host和rack，后期可能还会支持虚拟机或者更复杂的网络结构</span></span><br><span class="line"><span class="comment">- priority：资源的优先级</span></span><br><span class="line"><span class="comment">- resource-requirement：资源的具体需求，现阶段指内存和cpu需求的数量</span></span><br><span class="line"><span class="comment">- number-of-containers：满足需求的Container的集合</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">resource-name,</span> <span class="attr">priority</span>, <span class="attr">resource-requirement</span>, <span class="attr">number-of-containers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;!--
+- resource-name：资源名称，现阶段指的是资源所在的host和rack，后期可能还会支持虚拟机或者更复杂的网络结构
+- priority：资源的优先级
+- resource-requirement：资源的具体需求，现阶段指内存和cpu需求的数量
+- number-of-containers：满足需求的Container的集合
+--&gt;
+&lt;resource-name, priority, resource-requirement, number-of-containers&gt;
+</code></pre>
 <h3 id="2-6-JobHistoryServer"><a href="#2-6-JobHistoryServer" class="headerlink" title="2.6 JobHistoryServer"></a>2.6 JobHistoryServer</h3><ul>
 <li><p>作业历史服务</p>
 <ul>
 <li><p>记录在yarn中调度的作业历史运行情况情况 ,</p>
 </li>
 <li><p>通过命令启动</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">mr-jobhistory-daemon.sh start historyserver
+</code></pre>
 </li>
 <li><p>在集群中的数据节点机器上单独使用命令启动直接启动即可,</p>
 </li>
 <li><p>启动成功后会出现JobHistoryServer进程(使用jps命令查看，下面会有介绍) ,</p>
 </li>
 <li><p>并且可以从19888端口进行查看日志详细信息</p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">node01:</span><span class="number">19888</span></span><br></pre></td></tr></table></figure>
-<p>点击链接，查看job日志</p>
+<pre><code>node01:19888
+</code></pre><p>点击链接，查看job日志</p>
 <p><img src="assets/Image201910202320.png" alt=""></p>
 </li>
 </ul>
@@ -463,7 +471,8 @@
 <li><p>小作业判断依据：①小于10个map任务；②只有一个reduce任务；③MR输入大小小于一个HDFS块大小</p>
 </li>
 <li><p>如何开启uber?设置属性 mapreduce.job.ubertask.enable 值为true</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configuration.set(<span class="string">"mapreduce.job.ubertask.enable"</span>, <span class="string">"true"</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="java">configuration.set(&quot;mapreduce.job.ubertask.enable&quot;, &quot;true&quot;);
+</code></pre>
 </li>
 <li><p>在运行任何task之前，appMaster调用setupJob()方法，创建OutputCommitter，创建作业的最终输出目录（一般为HDFS上的目录）及任务输出的临时目录（如map任务的中间结果输出目录）</p>
 </li>
@@ -532,35 +541,78 @@
 <p><strong>申请资源-&gt;启动appMaster-&gt;申请运行任务的container-&gt;分发Task-&gt;运行Task-&gt;Task结束-&gt;回收container</strong></p>
 </li>
 </ol>
-<h2 id="4-如何使用YARN"><a href="#4-如何使用YARN" class="headerlink" title="4. 如何使用YARN"></a>4. 如何使用YARN</h2><h3 id="4-1-配置文件"><a href="#4-1-配置文件" class="headerlink" title="4.1 配置文件"></a>4.1 配置文件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- $HADOOP_HOME/etc/hadoop/mapred-site.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- $HADOOP_HOME/etc/hadoop/yarn-site.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-如何使用YARN"><a href="#4-如何使用YARN" class="headerlink" title="4. 如何使用YARN"></a>4. 如何使用YARN</h2><h3 id="4-1-配置文件"><a href="#4-1-配置文件" class="headerlink" title="4.1 配置文件"></a>4.1 配置文件</h3><pre><code class="xml">&lt;!-- $HADOOP_HOME/etc/hadoop/mapred-site.xml --&gt;
+&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+        &lt;value&gt;yarn&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
+<pre><code class="xml">&lt;!-- $HADOOP_HOME/etc/hadoop/yarn-site.xml --&gt;
+&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
 <h3 id="4-2-YARN启动停止"><a href="#4-2-YARN启动停止" class="headerlink" title="4.2 YARN启动停止"></a>4.2 YARN启动停止</h3><ul>
 <li>启动 ResourceManager 和 NodeManager （以下分别简称RM、NM）</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">主节点运行命令</span></span><br><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/start-yarn.sh</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#主节点运行命令
+$HADOOP_HOME/sbin/start-yarn.sh
+</code></pre>
 <ul>
 <li>停止 RM 和 NM </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">主节点运行命令</span></span><br><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/stop-yarn.sh</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#主节点运行命令
+$HADOOP_HOME/sbin/stop-yarn.sh
+</code></pre>
 <ul>
 <li>若RM没有启动起来，可以单独启动</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">若RM没有启动，在主节点运行命令</span></span><br><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/yarn-daemon.sh start resouremanager</span></span><br><span class="line"><span class="meta">#</span><span class="bash">相反，可单独关闭</span></span><br><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/yarn-daemon.sh stop resouremanager</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#若RM没有启动，在主节点运行命令
+$HADOOP_HOME/sbin/yarn-daemon.sh start resouremanager
+#相反，可单独关闭
+$HADOOP_HOME/sbin/yarn-daemon.sh stop resouremanager
+
+</code></pre>
 <ul>
 <li>若NM没有启动起来，可以单独启动</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">若NM没有启动，在相应节点运行命令</span></span><br><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/yarn-daemon.sh start nodemanager</span></span><br><span class="line"><span class="meta">#</span><span class="bash">相反，可单独关闭</span></span><br><span class="line"><span class="meta">$</span><span class="bash">HADOOP_HOME/sbin/yarn-daemon.sh stop nodemanager</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#若NM没有启动，在相应节点运行命令
+$HADOOP_HOME/sbin/yarn-daemon.sh start nodemanager
+#相反，可单独关闭
+$HADOOP_HOME/sbin/yarn-daemon.sh stop nodemanager
+
+</code></pre>
 <h3 id="4-3-YARN常用命令"><a href="#4-3-YARN常用命令" class="headerlink" title="4.3 YARN常用命令"></a>4.3 YARN常用命令</h3><p><strong>4.3.1 YARN命令列表</strong></p>
 <p><img src="assets/Image201907162219.png" alt=""></p>
 <p><strong>4.3.2 yarn application命令</strong></p>
 <p><img src="assets/Image201907162224.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">1.查看正在运行的任务</span></span><br><span class="line">yarn application -list</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">2.杀掉正在运行任务</span></span><br><span class="line">yarn application -kill 任务id</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">3.查看节点列表</span></span><br><span class="line">yarn node -list</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#1.查看正在运行的任务
+yarn application -list
+
+</code></pre>
+<pre><code class="shell">#2.杀掉正在运行任务
+yarn application -kill 任务id
+
+</code></pre>
+<pre><code class="shell">#3.查看节点列表
+yarn node -list
+
+</code></pre>
 <p><img src="assets/Image201907162252.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">4.查看节点状况；所有端口号与上图中端口号要一致（随机分配）</span></span><br><span class="line">yarn node -status node-03:45568</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#4.查看节点状况；所有端口号与上图中端口号要一致（随机分配）
+yarn node -status node-03:45568
+
+</code></pre>
 <p><img src="assets/Image201907171511.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">5.查看yarn依赖jar的环境变量</span></span><br><span class="line">yarn classpath</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#5.查看yarn依赖jar的环境变量
+yarn classpath
+
+</code></pre>
 <h2 id="5-YARN调度器"><a href="#5-YARN调度器" class="headerlink" title="5. YARN调度器"></a>5. YARN调度器</h2><ul>
 <li><p>试想一下，你现在所在的公司有<strong>一个</strong>hadoop的集群。但是A项目组经常做一些定时的BI报表，B项目组则经常使用一些软件做一些临时需求。那么他们肯定会遇到同时提交任务的场景，这个时候到底如何分配资源满足这两个任务呢？是先执行A的任务，再执行B的任务，还是同时跑两个？</p>
 </li>
@@ -592,25 +644,76 @@
 <p><img src="assets/Image201909241637.png" alt=""></p>
 <ul>
 <li><p>若要使用capacity scheduler，需要修改yarn-site.xml文件；node01上</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.scheduler.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.scheduler.class&lt;/name&gt;
+    &lt;value&gt;org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler&lt;/value&gt;
+&lt;/property&gt;
+
+</code></pre>
 </li>
 <li><p>并分发到各节点</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop]$ pwd</span><br><span class="line">/kkb/install/hadoop-2.6.0-cdh5.14.2/etc/hadoop</span><br><span class="line">[hadoop@node01 hadoop]$ scp yarn-site.xml node02:$PWD</span><br><span class="line">[hadoop@node01 hadoop]$ scp yarn-site.xml node03:$PWD</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 hadoop]$ pwd
+/kkb/install/hadoop-2.6.0-cdh5.14.2/etc/hadoop
+[hadoop@node01 hadoop]$ scp yarn-site.xml node02:$PWD
+[hadoop@node01 hadoop]$ scp yarn-site.xml node03:$PWD
+
+</code></pre>
 </li>
 <li><p>重启yarn</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop]$ stop-yarn.sh</span><br><span class="line">[hadoop@node01 hadoop]$ start-yarn.sh</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 hadoop]$ stop-yarn.sh
+[hadoop@node01 hadoop]$ start-yarn.sh
+
+</code></pre>
 </li>
 <li><p>而对于Capacity调度器，有一个专门的队列用来运行小任务，但是为小任务专门设置一个队列会预先占用一定的集群资源，这就导致大任务的执行时间会落后于使用FIFO调度器时的时间</p>
 </li>
 <li><p>如何配置容量调度器</p>
 <ul>
 <li><p>队列层级结构如下</p>
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root </span><br><span class="line">├── <span class="keyword">prod</span> </span><br><span class="line">└── dev </span><br><span class="line">	├── spark </span><br><span class="line">	└── hdp</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>root 
+├── prod 
+└── dev 
+    ├── spark 
+    └── hdp
+
+</code></pre></li>
 <li><p>主节点上，将$HADOOP_HOME/etc/hadoop/中的对应capacity-scheduler.xml配置文件备份到其它目录</p>
 </li>
 <li><p>目录$HADOOP_HOME/etc/hadoop/中建立一个新的capacity-scheduler.xml；内容如下</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.queues<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>prod,dev<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.dev.queues<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdp,spark<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.prod.capacity<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>40<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.dev.capacity<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>60<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.dev.maximum-capacity<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>75<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.dev.hdp.capacity<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>50<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.capacity.root.dev.spark.capacity<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>50<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+
+&lt;configuration&gt; 
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.queues&lt;/name&gt;  
+    &lt;value&gt;prod,dev&lt;/value&gt; 
+  &lt;/property&gt;  
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.dev.queues&lt;/name&gt;  
+    &lt;value&gt;hdp,spark&lt;/value&gt; 
+  &lt;/property&gt;  
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.prod.capacity&lt;/name&gt;  
+    &lt;value&gt;40&lt;/value&gt; 
+  &lt;/property&gt;  
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.dev.capacity&lt;/name&gt;  
+    &lt;value&gt;60&lt;/value&gt; 
+  &lt;/property&gt;  
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.dev.maximum-capacity&lt;/name&gt;  
+    &lt;value&gt;75&lt;/value&gt; 
+  &lt;/property&gt;  
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.dev.hdp.capacity&lt;/name&gt;  
+    &lt;value&gt;50&lt;/value&gt; 
+  &lt;/property&gt;  
+  &lt;property&gt; 
+    &lt;name&gt;yarn.scheduler.capacity.root.dev.spark.capacity&lt;/name&gt;  
+    &lt;value&gt;50&lt;/value&gt; 
+  &lt;/property&gt; 
+&lt;/configuration&gt;
+
+</code></pre>
 </li>
 <li><p>将此xml文件，远程拷贝到相同目录下</p>
 </li>
@@ -629,11 +732,15 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop]$ yarn rmadmin -refreshQueues</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 hadoop]$ yarn rmadmin -refreshQueues
+
+</code></pre>
 <ul>
 <li>程序打包，提交集群运行</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 target]$ hadoop jar com.kaikeba.hadoop-1.0-SNAPSHOT.jar com.kaikeba.hadoop.wordcount.WordCountMain /README.txt /w24</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 target]$ hadoop jar com.kaikeba.hadoop-1.0-SNAPSHOT.jar com.kaikeba.hadoop.wordcount.WordCountMain /README.txt /w24
+
+</code></pre>
 <p><img src="assets/capacity scheduler.gif" alt=""></p>
 <h3 id="5-4-Fair-Scheduler"><a href="#5-4-Fair-Scheduler" class="headerlink" title="5.4 Fair Scheduler"></a>5.4 Fair Scheduler</h3><p><img src="assets/Image201907171437 (38" alt="">.png)</p>
 <ul>
@@ -645,7 +752,12 @@
 <ul>
 <li>若要用Fair Scheduler的话，需要配置yarn-site.xml，将属性”yarn.resourcemanager.scheduler.class”的值修改成”org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler”，如下</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.scheduler.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.scheduler.class&lt;/name&gt;
+    &lt;value&gt;org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler&lt;/value&gt;
+&lt;/property&gt;
+
+</code></pre>
 <p><img src="assets/Image201907171501.png" alt=""></p>
 <ul>
 <li><p>注意：同样，集群中所有yarn-site.xml文件要同步更新</p>

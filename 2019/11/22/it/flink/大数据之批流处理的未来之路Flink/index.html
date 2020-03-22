@@ -147,8 +147,9 @@
 </span>
     </div>
     <div class="post-content ">
-        <h1 id="大数据批流处理的未来之路"><a href="#大数据批流处理的未来之路" class="headerlink" title="大数据批流处理的未来之路"></a>大数据批流处理的未来之路</h1><h2 id="1-Flink介绍"><a href="#1-Flink介绍" class="headerlink" title="1 Flink介绍"></a>1 Flink介绍</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">早起柏林工业大学联合发起的一个关于数据库的研究项目，叫做：stratorsphere。直到<span class="number">2014</span>年<span class="number">4</span>月份捐献给apache基金会，称为apache基金会的孵化项目， 在孵化期间项目stratosphere改名为Flink 随后到<span class="number">2014</span>年<span class="number">12</span>月，该项目成为了apache基金会的顶级项目。</span><br><span class="line">目前新的flink版本已经到了<span class="number">1.9</span></span><br></pre></td></tr></table></figure>
-<ul>
+        <h1 id="大数据批流处理的未来之路"><a href="#大数据批流处理的未来之路" class="headerlink" title="大数据批流处理的未来之路"></a>大数据批流处理的未来之路</h1><h2 id="1-Flink介绍"><a href="#1-Flink介绍" class="headerlink" title="1 Flink介绍"></a>1 Flink介绍</h2><pre><code>早起柏林工业大学联合发起的一个关于数据库的研究项目，叫做：stratorsphere。直到2014年4月份捐献给apache基金会，称为apache基金会的孵化项目， 在孵化期间项目stratosphere改名为Flink 随后到2014年12月，该项目成为了apache基金会的顶级项目。
+目前新的flink版本已经到了1.9
+</code></pre><ul>
 <li>Apache Flink 是一个分布式大数据处理引擎，可对有限数据流和无限数据流进行有状态的计算。 </li>
 <li>官网地址:<a href="http://flink.apache.org" target="_blank" rel="noopener">http://flink.apache.org</a> </li>
 </ul>
@@ -195,24 +196,152 @@
 <ul>
 <li>创建maven工程依赖</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.flink<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>flink-scala_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.flink<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>flink-clients_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+    &lt;artifactId&gt;flink-scala_2.12&lt;/artifactId&gt;
+    &lt;version&gt;1.8.1&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+    &lt;artifactId&gt;flink-clients_2.12&lt;/artifactId&gt;
+    &lt;version&gt;1.8.1&lt;/version&gt;
+  &lt;/dependency&gt;
+</code></pre>
 <ul>
 <li>Scala代码</li>
 </ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> flink</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.scala._</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通过Scala语言开发Flink 批处理程序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ScalaWorkCount</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取Flink批处理执行环境</span></span><br><span class="line">    <span class="keyword">var</span> env:<span class="type">ExecutionEnvironment</span> = <span class="type">ExecutionEnvironment</span>.getExecutionEnvironment;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化原数据</span></span><br><span class="line">    <span class="keyword">var</span> data:<span class="type">DataSet</span>[<span class="type">String</span>] = env.fromCollection(<span class="type">List</span>(<span class="string">"hadoop mapreduce"</span>,<span class="string">"hadoop spark"</span>,<span class="string">"spark core"</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数据处理，切分每一行数据获取所有单词</span></span><br><span class="line">    <span class="keyword">var</span> words : <span class="type">DataSet</span>[<span class="type">String</span>] = data.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 把每个单词记为1，封装成元组</span></span><br><span class="line">    <span class="keyword">var</span> wordAndOne:<span class="type">DataSet</span>[(<span class="type">String</span>,<span class="type">Int</span>)] = words.map((_,<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按照单词进行分组</span></span><br><span class="line">    <span class="keyword">var</span> groupByWord:<span class="type">GroupedDataSet</span>[(<span class="type">String</span>,<span class="type">Int</span>)] = wordAndOne.groupBy(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对相同的单词进行分组</span></span><br><span class="line">    <span class="keyword">var</span> aggregateDataSet: <span class="type">AggregateDataSet</span>[(<span class="type">String</span>,<span class="type">Int</span>)] = groupByWord.sum(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印</span></span><br><span class="line">    aggregateDataSet.print()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="scala">    package flink
+
+    import org.apache.flink.api.scala._
+
+    /**
+     * 通过Scala语言开发Flink 批处理程序
+     */
+    object ScalaWorkCount {
+
+      def main(args: Array[String]): Unit = {
+
+        // 获取Flink批处理执行环境
+        var env:ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment;
+
+        // 初始化原数据
+        var data:DataSet[String] = env.fromCollection(List(&quot;hadoop mapreduce&quot;,&quot;hadoop spark&quot;,&quot;spark core&quot;))
+
+        // 数据处理，切分每一行数据获取所有单词
+        var words : DataSet[String] = data.flatMap(_.split(&quot; &quot;))
+
+        // 把每个单词记为1，封装成元组
+        var wordAndOne:DataSet[(String,Int)] = words.map((_,1))
+
+        // 按照单词进行分组
+        var groupByWord:GroupedDataSet[(String,Int)] = wordAndOne.groupBy(0)
+
+        // 对相同的单词进行分组
+        var aggregateDataSet: AggregateDataSet[(String,Int)] = groupByWord.sum(1)
+
+        // 打印
+        aggregateDataSet.print()
+      }
+    }
+
+</code></pre>
 <ul>
 <li>Java代码</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> flink;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.common.functions.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.java.DataSet;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.java.ExecutionEnvironment;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.java.operators.DataSource;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.java.tuple.Tuple2;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> dingchuangshi</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScalaWorkCountJava</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取Flink批处理执行环境</span></span><br><span class="line">        ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始化原数据</span></span><br><span class="line">        DataSource&lt;String&gt; data = env.fromElements(<span class="string">"hadoop mapreduce"</span>, <span class="string">"hadoop spark"</span>, <span class="string">"spark core"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 数据处理</span></span><br><span class="line">        DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; words = data</span><br><span class="line">                .flatMap((FlatMapFunction&lt;String, Tuple2&lt;String,Integer&gt;&gt;)(s,out)-&gt;&#123;</span><br><span class="line">                    <span class="keyword">for</span> (String word: s.split(<span class="string">" "</span>)) &#123;</span><br><span class="line">                        out.collect(<span class="keyword">new</span> Tuple2&lt;String,Integer&gt;(word,<span class="number">1</span>));</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .groupBy(<span class="number">0</span>)</span><br><span class="line">                .sum(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sink</span></span><br><span class="line">        words.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-2-流式处理开发"><a href="#3-2-流式处理开发" class="headerlink" title="3.2 流式处理开发"></a>3.2 流式处理开发</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.flink<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>flink-streaming-scala_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">    package flink;
+
+    import org.apache.flink.api.common.functions.FlatMapFunction;
+    import org.apache.flink.api.java.DataSet;
+    import org.apache.flink.api.java.ExecutionEnvironment;
+    import org.apache.flink.api.java.operators.DataSource;
+    import org.apache.flink.api.java.tuple.Tuple2;
+
+    /**
+     * @author dingchuangshi
+     */
+    public class ScalaWorkCountJava {
+        public static void main(String[] args) throws Exception {
+
+            // 获取Flink批处理执行环境
+            ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+
+            // 初始化原数据
+            DataSource&lt;String&gt; data = env.fromElements(&quot;hadoop mapreduce&quot;, &quot;hadoop spark&quot;, &quot;spark core&quot;);
+
+            // 数据处理
+            DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; words = data
+                    .flatMap((FlatMapFunction&lt;String, Tuple2&lt;String,Integer&gt;&gt;)(s,out)-&gt;{
+                        for (String word: s.split(&quot; &quot;)) {
+                            out.collect(new Tuple2&lt;String,Integer&gt;(word,1));
+                        }
+                    })
+                    .groupBy(0)
+                    .sum(1);
+
+            // sink
+            words.print();
+        }
+    }
+
+</code></pre>
+<h3 id="3-2-流式处理开发"><a href="#3-2-流式处理开发" class="headerlink" title="3.2 流式处理开发"></a>3.2 流式处理开发</h3><pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+  &lt;artifactId&gt;flink-streaming-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;1.8.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 <ul>
 <li>Scala代码</li>
 </ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">package</span> flink</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.scala._</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.windowing.time.<span class="type">Time</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.windowing.windows.<span class="type">TimeWindow</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 基于scala语言开发Flink的流式处理程序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ScalaStreamWordCount</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">       <span class="comment">//1. 获取flink的流式处理环境</span></span><br><span class="line">      <span class="keyword">val</span> env: <span class="type">StreamExecutionEnvironment</span> = <span class="type">StreamExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line"></span><br><span class="line">      <span class="comment">//2. 构建source数据源</span></span><br><span class="line">      <span class="keyword">val</span> socketTextStream: <span class="type">DataStream</span>[<span class="type">String</span>] = env.socketTextStream(<span class="string">"192.168.18.238"</span>,<span class="number">9999</span>)</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3. 数据处理</span></span><br><span class="line">      <span class="comment">//3.1 切分每一行，获取所有的单词</span></span><br><span class="line">      <span class="keyword">val</span> words: <span class="type">DataStream</span>[<span class="type">String</span>] = socketTextStream.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3.2 把每个单词计为1 封装成元组(单词，1)</span></span><br><span class="line">      <span class="keyword">val</span> wordAndOne: <span class="type">DataStream</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = words.map((_,<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3.3 按照单词进行分组</span></span><br><span class="line">      <span class="keyword">val</span> groupByWord: <span class="type">KeyedStream</span>[(<span class="type">String</span>, <span class="type">Int</span>), <span class="type">String</span>] = wordAndOne.keyBy(_._1)</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3.4 设置时间窗口</span></span><br><span class="line">      <span class="keyword">val</span> timeWindow: <span class="type">WindowedStream</span>[(<span class="type">String</span>, <span class="type">Int</span>), <span class="type">String</span>, <span class="type">TimeWindow</span>] = groupByWord.timeWindow(<span class="type">Time</span>.seconds(<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3.5 相同单词出现的1累加</span></span><br><span class="line">      <span class="keyword">val</span> result: <span class="type">DataStream</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = timeWindow.reduce((v1,v2)=&gt; (v1._1,v1._2+v2._2))</span><br><span class="line"></span><br><span class="line">      <span class="comment">//4. 构建Sink</span></span><br><span class="line">      result.print()</span><br><span class="line"></span><br><span class="line">      <span class="comment">//5. 启动流式应用程序</span></span><br><span class="line">      env.execute(<span class="string">"ScalaStreamWordCount"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="scala">  package flink
+
+
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow
+
+/**
+  * 基于scala语言开发Flink的流式处理程序
+ */
+object ScalaStreamWordCount {
+
+  def main(args: Array[String]): Unit = {
+
+       //1. 获取flink的流式处理环境
+      val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
+
+      //2. 构建source数据源
+      val socketTextStream: DataStream[String] = env.socketTextStream(&quot;192.168.18.238&quot;,9999)
+
+      //3. 数据处理
+      //3.1 切分每一行，获取所有的单词
+      val words: DataStream[String] = socketTextStream.flatMap(_.split(&quot; &quot;))
+
+      //3.2 把每个单词计为1 封装成元组(单词，1)
+      val wordAndOne: DataStream[(String, Int)] = words.map((_,1))
+
+      //3.3 按照单词进行分组
+      val groupByWord: KeyedStream[(String, Int), String] = wordAndOne.keyBy(_._1)
+
+      //3.4 设置时间窗口
+      val timeWindow: WindowedStream[(String, Int), String, TimeWindow] = groupByWord.timeWindow(Time.seconds(5))
+
+      //3.5 相同单词出现的1累加
+      val result: DataStream[(String, Int)] = timeWindow.reduce((v1,v2)=&gt; (v1._1,v1._2+v2._2))
+
+      //4. 构建Sink
+      result.print()
+
+      //5. 启动流式应用程序
+      env.execute(&quot;ScalaStreamWordCount&quot;)
+  }
+}
+</code></pre>
 <ul>
 <li>模拟一个socket服务器</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lk 9999</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">nc -lk 9999
+</code></pre>
 <h2 id="4-Flink的Table-amp-SQL-API"><a href="#4-Flink的Table-amp-SQL-API" class="headerlink" title="4 Flink的Table &amp; SQL API"></a>4 Flink的Table &amp; SQL API</h2><p><img src="assets/image-20191122170247587.png" alt="image-20191122170247587"></p>
 <ul>
 <li><p>Table Api是一种关系型Api，类SQL的API。 用户可以像操作表一样的操作数据，非常直观和方便。</p>
@@ -223,11 +352,122 @@
 <li>流处理上的查询会一直运行并生成结果流</li>
 <li>Table &amp; SQL API 做到了批与流上的查询具有相同的语法，因此不用修改代码就能同时实现批和流。</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.flink<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>flink-table-planner_2.11<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+  &lt;artifactId&gt;flink-table-planner_2.11&lt;/artifactId&gt; 
+  &lt;version&gt;1.8.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 </li>
 </ul>
-<h3 id="4-1-批处理开发"><a href="#4-1-批处理开发" class="headerlink" title="4.1 批处理开发"></a>4.1 批处理开发</h3>  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> flink</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.scala._</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.core.fs.<span class="type">FileSystem</span>.<span class="type">WriteMode</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.api.&#123;<span class="type">Table</span>, <span class="type">Types</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.api.scala.<span class="type">BatchTableEnvironment</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.sinks.<span class="type">CsvTableSink</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.sources.<span class="type">CsvTableSource</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 基于table &amp; sql api开发 Flink的批处理程序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ScalaTableSQLBatchWordCount</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//1. 获取flink的table批处理环境</span></span><br><span class="line">      <span class="keyword">val</span> env: <span class="type">ExecutionEnvironment</span> = <span class="type">ExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line"></span><br><span class="line">      <span class="keyword">val</span> tEnv: <span class="type">BatchTableEnvironment</span> = <span class="type">BatchTableEnvironment</span>.create(env)</span><br><span class="line"></span><br><span class="line">      <span class="comment">//2.构建Source数据源</span></span><br><span class="line">      <span class="keyword">val</span> tableSource: <span class="type">CsvTableSource</span> = <span class="type">CsvTableSource</span>.builder()</span><br><span class="line">        .path(<span class="string">"./data/person.txt"</span>)</span><br><span class="line">        .fieldDelimiter(<span class="string">" "</span>)</span><br><span class="line">        .field(<span class="string">"id"</span>, <span class="type">Types</span>.<span class="type">INT</span>)</span><br><span class="line">        .field(<span class="string">"name"</span>, <span class="type">Types</span>.<span class="type">STRING</span>)</span><br><span class="line">        .field(<span class="string">"age"</span>, <span class="type">Types</span>.<span class="type">INT</span>)</span><br><span class="line">        .ignoreParseErrors().lineDelimiter(<span class="string">"\r\n"</span>)</span><br><span class="line">        .build()</span><br><span class="line"></span><br><span class="line">      <span class="comment">//将tableSource注册成表 tEnv.registerTableSource("person",tableSource)</span></span><br><span class="line">      <span class="comment">//3. 查询</span></span><br><span class="line">      <span class="comment">//3.1 查询年龄大于30岁的人</span></span><br><span class="line">      <span class="keyword">val</span> result1: <span class="type">Table</span> = tEnv.scan(<span class="string">"person"</span>).filter(<span class="string">"age &gt; 30"</span>)</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3.2 统计不同的年龄用户数</span></span><br><span class="line">      <span class="keyword">val</span> result2: <span class="type">Table</span> = tEnv.sqlQuery(<span class="string">"select age,count(*) from person group by age "</span>)</span><br><span class="line"></span><br><span class="line">      <span class="comment">//4. 构建sink //打印表的元数据schema信息</span></span><br><span class="line">      result1.printSchema()</span><br><span class="line"></span><br><span class="line">      <span class="comment">//保存结果数据到文件中 val tableSink1 = new</span></span><br><span class="line">      <span class="keyword">var</span> tableSink1 = <span class="keyword">new</span> <span class="type">CsvTableSink</span>(<span class="string">"./out/result1.txt"</span>, <span class="string">"\t"</span>, <span class="number">1</span>, <span class="type">WriteMode</span>.<span class="type">OVERWRITE</span>)</span><br><span class="line">      result1.writeToSink(tableSink1)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">val</span> tableSink2 = <span class="keyword">new</span> <span class="type">CsvTableSink</span>(<span class="string">"./out/result2.txt"</span>, <span class="string">"\t"</span>, <span class="number">1</span>, <span class="type">WriteMode</span>.<span class="type">OVERWRITE</span>)</span><br><span class="line">      result2.writeToSink(tableSink2)</span><br><span class="line"></span><br><span class="line">      <span class="comment">//开启计算</span></span><br><span class="line">      env.execute()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="4-2-流处理开发"><a href="#4-2-流处理开发" class="headerlink" title="4.2 流处理开发"></a>4.2 流处理开发</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> flink</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.core.fs.<span class="type">FileSystem</span>.<span class="type">WriteMode</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.scala.&#123;<span class="type">DataStream</span>, <span class="type">StreamExecutionEnvironment</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.api.<span class="type">Table</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.api.scala.<span class="type">StreamTableEnvironment</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.table.sinks.<span class="type">CsvTableSink</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.api.scala._</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 基于table &amp; sql api开发 Flink的流式处理程序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ScalaTableSQLStreamWordCount</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span>(<span class="params">id:<span class="type">Int</span>,name:<span class="type">String</span>,age:<span class="type">Int</span></span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">  <span class="title">def</span> <span class="title">main</span>(<span class="params">args: <span class="type">Array</span>[<span class="type">String</span>]</span>)</span>: <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1. 获取flink的table流式处理的环境</span></span><br><span class="line">    <span class="keyword">val</span> env: <span class="type">StreamExecutionEnvironment</span> = <span class="type">StreamExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> streamSQLEnv: <span class="type">StreamTableEnvironment</span> = <span class="type">StreamTableEnvironment</span>.create(env)</span><br><span class="line">    <span class="comment">//2. 构建Source数据源</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">      * 101,zhangsan,18</span></span><br><span class="line"><span class="comment">      * 102,lisi,20</span></span><br><span class="line"><span class="comment">      * 103,wangwu,25</span></span><br><span class="line"><span class="comment">      * 104,zhaoliu,15</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="keyword">val</span> socketDataStream: <span class="type">DataStream</span>[<span class="type">String</span>] = env.socketTextStream(<span class="string">"node01"</span>,<span class="number">9999</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> userDataStream: <span class="type">DataStream</span>[<span class="type">User</span>] = socketDataStream.map(x=&gt;x.split(<span class="string">","</span>)).map(y=&gt;<span class="type">User</span>(y(<span class="number">0</span>).toInt,y(<span class="number">1</span>),y(<span class="number">2</span>).toInt ))</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 将流注册成一张表</span></span><br><span class="line">    streamSQLEnv.registerDataStream(<span class="string">"userTable"</span>,userDataStream)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//4. 使用table &amp;&amp; sql api来查询数据</span></span><br><span class="line"></span><br><span class="line">     <span class="comment">// 使用table 的api查询年龄大于20岁的人</span></span><br><span class="line">    <span class="keyword">val</span> result1: <span class="type">Table</span> = streamSQLEnv.scan(<span class="string">"userTable"</span>).filter(<span class="string">"age &gt;20"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用sql 的api查询</span></span><br><span class="line">    <span class="keyword">val</span> result2: <span class="type">Table</span> = streamSQLEnv.sqlQuery(<span class="string">" select * from userTable "</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//5. 构建Sink</span></span><br><span class="line">    <span class="keyword">val</span> tableSink1 = <span class="keyword">new</span> <span class="type">CsvTableSink</span>(<span class="string">"./out/tableSink1.txt"</span>,<span class="string">"\t"</span>,<span class="number">1</span>,<span class="type">WriteMode</span>.<span class="type">OVERWRITE</span>)</span><br><span class="line">    result1.writeToSink(tableSink1)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> tableSink2 = <span class="keyword">new</span> <span class="type">CsvTableSink</span>(<span class="string">"./out/tableSink2.txt"</span>,<span class="string">"\t"</span>,<span class="number">1</span>,<span class="type">WriteMode</span>.<span class="type">OVERWRITE</span>)</span><br><span class="line">    result2.writeToSink(tableSink2) <span class="comment">//开启执行流式计算</span></span><br><span class="line"></span><br><span class="line">    env.execute() &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-1-批处理开发"><a href="#4-1-批处理开发" class="headerlink" title="4.1 批处理开发"></a>4.1 批处理开发</h3><pre><code class="scala">  package flink
+
+  import org.apache.flink.api.scala._
+  import org.apache.flink.core.fs.FileSystem.WriteMode
+  import org.apache.flink.table.api.{Table, Types}
+  import org.apache.flink.table.api.scala.BatchTableEnvironment
+  import org.apache.flink.table.sinks.CsvTableSink
+  import org.apache.flink.table.sources.CsvTableSource
+
+  /**
+   * 基于table &amp; sql api开发 Flink的批处理程序
+   */
+  object ScalaTableSQLBatchWordCount {
+
+    def main(args: Array[String]): Unit = {
+
+        //1. 获取flink的table批处理环境
+        val env: ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment
+
+        val tEnv: BatchTableEnvironment = BatchTableEnvironment.create(env)
+
+        //2.构建Source数据源
+        val tableSource: CsvTableSource = CsvTableSource.builder()
+          .path(&quot;./data/person.txt&quot;)
+          .fieldDelimiter(&quot; &quot;)
+          .field(&quot;id&quot;, Types.INT)
+          .field(&quot;name&quot;, Types.STRING)
+          .field(&quot;age&quot;, Types.INT)
+          .ignoreParseErrors().lineDelimiter(&quot;\r\n&quot;)
+          .build()
+
+        //将tableSource注册成表 tEnv.registerTableSource(&quot;person&quot;,tableSource)
+        //3. 查询
+        //3.1 查询年龄大于30岁的人
+        val result1: Table = tEnv.scan(&quot;person&quot;).filter(&quot;age &gt; 30&quot;)
+
+        //3.2 统计不同的年龄用户数
+        val result2: Table = tEnv.sqlQuery(&quot;select age,count(*) from person group by age &quot;)
+
+        //4. 构建sink //打印表的元数据schema信息
+        result1.printSchema()
+
+        //保存结果数据到文件中 val tableSink1 = new
+        var tableSink1 = new CsvTableSink(&quot;./out/result1.txt&quot;, &quot;\t&quot;, 1, WriteMode.OVERWRITE)
+        result1.writeToSink(tableSink1)
+
+        val tableSink2 = new CsvTableSink(&quot;./out/result2.txt&quot;, &quot;\t&quot;, 1, WriteMode.OVERWRITE)
+        result2.writeToSink(tableSink2)
+
+        //开启计算
+        env.execute()
+    }
+  }
+</code></pre>
+<h3 id="4-2-流处理开发"><a href="#4-2-流处理开发" class="headerlink" title="4.2 流处理开发"></a>4.2 流处理开发</h3><pre><code class="scala">package flink
+
+import org.apache.flink.core.fs.FileSystem.WriteMode
+import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
+import org.apache.flink.table.api.Table
+import org.apache.flink.table.api.scala.StreamTableEnvironment
+import org.apache.flink.table.sinks.CsvTableSink
+import org.apache.flink.api.scala._
+
+/**
+ * 基于table &amp; sql api开发 Flink的流式处理程序
+ */
+object ScalaTableSQLStreamWordCount {
+
+  case class User(id:Int,name:String,age:Int)
+
+  def main(args: Array[String]): Unit = {
+
+    //1. 获取flink的table流式处理的环境
+    val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
+
+    val streamSQLEnv: StreamTableEnvironment = StreamTableEnvironment.create(env)
+    //2. 构建Source数据源
+    /**
+      * 101,zhangsan,18
+      * 102,lisi,20
+      * 103,wangwu,25
+      * 104,zhaoliu,15
+      */
+    val socketDataStream: DataStream[String] = env.socketTextStream(&quot;node01&quot;,9999)
+
+    val userDataStream: DataStream[User] = socketDataStream.map(x=&gt;x.split(&quot;,&quot;)).map(y=&gt;User(y(0).toInt,y(1),y(2).toInt ))
+
+    //3. 将流注册成一张表
+    streamSQLEnv.registerDataStream(&quot;userTable&quot;,userDataStream)
+
+    //4. 使用table &amp;&amp; sql api来查询数据
+
+     // 使用table 的api查询年龄大于20岁的人
+    val result1: Table = streamSQLEnv.scan(&quot;userTable&quot;).filter(&quot;age &gt;20&quot;)
+
+    //使用sql 的api查询
+    val result2: Table = streamSQLEnv.sqlQuery(&quot; select * from userTable &quot;)
+
+    //5. 构建Sink
+    val tableSink1 = new CsvTableSink(&quot;./out/tableSink1.txt&quot;,&quot;\t&quot;,1,WriteMode.OVERWRITE)
+    result1.writeToSink(tableSink1)
+
+    val tableSink2 = new CsvTableSink(&quot;./out/tableSink2.txt&quot;,&quot;\t&quot;,1,WriteMode.OVERWRITE)
+    result2.writeToSink(tableSink2) //开启执行流式计算
+
+    env.execute() }
+}
+</code></pre>
 <h3 id="4-3-批流一体处理逻辑"><a href="#4-3-批流一体处理逻辑" class="headerlink" title="4.3 批流一体处理逻辑"></a>4.3 批流一体处理逻辑</h3><h4 id="4-3-1-初始化环境"><a href="#4-3-1-初始化环境" class="headerlink" title="4.3.1 初始化环境"></a>4.3.1 初始化环境</h4><p><img src="assets/image-20191122192954640.png" alt="image-20191122192954640"></p>
 <h4 id="4-3-2-获取一个table"><a href="#4-3-2-获取一个table" class="headerlink" title="4.3.2 获取一个table"></a>4.3.2 获取一个table</h4><p><img src="assets/image-20191122193054844.png" alt="image-20191122193054844"></p>
 <h4 id="4-2-3-输出一个table"><a href="#4-2-3-输出一个table" class="headerlink" title="4.2.3 输出一个table"></a>4.2.3 输出一个table</h4><p><img src="assets/image-20191122193124451.png" alt="image-20191122193124451"></p>

@@ -197,23 +197,33 @@
 <h3 id="4-Azkaban架构的三种运行模式"><a href="#4-Azkaban架构的三种运行模式" class="headerlink" title="4. Azkaban架构的三种运行模式"></a>4. Azkaban架构的三种运行模式</h3><ul>
 <li>1、solo server mode(单机模式）</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">H2</span><br><span class="line">web<span class="built_in"> server </span>和 executor server运行在一个进程里</span><br><span class="line">最简单的模式，数据库内置的H2数据库，管理服务器和执行服务器都在一个进程中运行，任务量不大项目可以采用此模式。</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>H2
+web server 和 executor server运行在一个进程里
+最简单的模式，数据库内置的H2数据库，管理服务器和执行服务器都在一个进程中运行，任务量不大项目可以采用此模式。
+
+</code></pre><ul>
 <li>2、two server mode</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">web<span class="built_in"> server </span>和 executor server运行在不同的进程</span><br><span class="line">数据库为mysql，管理服务器和执行服务器在不同进程，这种模式下，管理服务器和执行服务器互不影响。</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>web server 和 executor server运行在不同的进程
+数据库为mysql，管理服务器和执行服务器在不同进程，这种模式下，管理服务器和执行服务器互不影响。
+
+</code></pre><ul>
 <li>3、multiple executor mode</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">web<span class="built_in"> server </span>和 executor server运行在不同的进程，executor server有多个</span><br><span class="line">该模式下，执行服务器和管理服务器在不同主机上，且执行服务器可以有多个。</span><br></pre></td></tr></table></figure>
-<h3 id="5-Azkaban安装部署"><a href="#5-Azkaban安装部署" class="headerlink" title="5. Azkaban安装部署"></a>5. Azkaban安装部署</h3><p><a href="https://kfly.top/2019/11/26/hadoop/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">点击查看</a></p>
+<pre><code>web server 和 executor server运行在不同的进程，executor server有多个
+该模式下，执行服务器和管理服务器在不同主机上，且执行服务器可以有多个。
+
+</code></pre><h3 id="5-Azkaban安装部署"><a href="#5-Azkaban安装部署" class="headerlink" title="5. Azkaban安装部署"></a>5. Azkaban安装部署</h3><p><a href="https://kfly.top/2019/11/26/hadoop/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">点击查看</a></p>
 <h3 id="6-Azkaban实战"><a href="#6-Azkaban实战" class="headerlink" title="6. Azkaban实战"></a>6. Azkaban实战</h3><h4 id="6-1-command类型单一job"><a href="#6-1-command类型单一job" class="headerlink" title="6.1 command类型单一job"></a>6.1 command类型单一job</h4><ul>
 <li>1、==创建job描述文件  以.job后缀结尾==<ul>
 <li>创建 command.job 文件</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">command.job</span></span><br><span class="line">type=command</span><br><span class="line">command=echo 'hello azkaban......'</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#command.job
+type=command
+command=echo &#39;hello azkaban......&#39;
+</code></pre>
 <ul>
 <li>2、将job资源文件打包成zip文件</li>
 <li><p>例如</p>
@@ -240,11 +250,18 @@
 <ul>
 <li>第一个job：start1.job</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">start1.job</span></span><br><span class="line">type=command</span><br><span class="line">command= echo 'start1...start1...'</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#start1.job
+type=command
+command= echo &#39;start1...start1...&#39;
+</code></pre>
 <ul>
 <li>第二个job：start2.job    它依赖start1.job</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">start2.job</span></span><br><span class="line">type=command</span><br><span class="line">dependencies=start1</span><br><span class="line">command= echo 'start2...start2...'</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#start2.job
+type=command
+dependencies=start1
+command= echo &#39;start2...start2...&#39;
+</code></pre>
 </li>
 <li><p>2、将job资源文件打包成zip文件</p>
 <ul>
@@ -262,13 +279,33 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">例如： </span><br><span class="line"><span class="meta">#</span><span class="bash">start1.job</span></span><br><span class="line">type=command</span><br><span class="line">command= echo "start1 job"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">start2.job</span></span><br><span class="line">type=command</span><br><span class="line">command= echo "start2 job"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">stop.job</span></span><br><span class="line">type=command</span><br><span class="line">denpendencies=start1,start2</span><br><span class="line">command=echo "stop job"</span><br><span class="line"></span><br><span class="line">注意：有多个依赖的job，用逗号隔开</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">例如： 
+#start1.job
+type=command
+command= echo &quot;start1 job&quot;
+
+#start2.job
+type=command
+command= echo &quot;start2 job&quot;
+
+#stop.job
+type=command
+denpendencies=start1,start2
+command=echo &quot;stop job&quot;
+
+注意：有多个依赖的job，用逗号隔开
+</code></pre>
 <h4 id="6-3-HDFS操作任务"><a href="#6-3-HDFS操作任务" class="headerlink" title="6.3 HDFS操作任务"></a>6.3 HDFS操作任务</h4><ul>
 <li><p>1、创建job描述文件</p>
 <ul>
 <li>vim fs.job</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">fs.job</span></span><br><span class="line">type=command</span><br><span class="line">command=echo "start execute"</span><br><span class="line">command.1=/kfly/install/hadoop-2.6.0-cdh5.14.2/bin/hdfs dfs -mkdir /azkaban</span><br><span class="line">command.2=/kfly/install/hadoop-2.6.0-cdh5.14.2/bin/hdfs dfs -put /home/hadoop/source.txt /azkaban</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#fs.job
+type=command
+command=echo &quot;start execute&quot;
+command.1=/kfly/install/hadoop-2.6.0-cdh5.14.2/bin/hdfs dfs -mkdir /azkaban
+command.2=/kfly/install/hadoop-2.6.0-cdh5.14.2/bin/hdfs dfs -put /home/hadoop/source.txt /azkaban
+</code></pre>
 </li>
 <li><p>2、将job资源文件打包成zip文件</p>
 <ul>
@@ -288,7 +325,10 @@
 <li>示例中直接使用hadoop自带的example jar</li>
 <li>hdfs dfs -mkdir -p  /wordcount/in</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">mr.job</span></span><br><span class="line">type=command</span><br><span class="line">command=/kfly/install/hadoop-2.6.0/bin/hadoop  jar hadoop-mapreduce-examples-2.6.0-cdh5.14.2.jar wordcount /wordcount/in /wordcount/out</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#mr.job
+type=command
+command=/kfly/install/hadoop-2.6.0/bin/hadoop  jar hadoop-mapreduce-examples-2.6.0-cdh5.14.2.jar wordcount /wordcount/in /wordcount/out
+</code></pre>
 </li>
 <li><p>2、将job资源文件打包成zip文件</p>
 <ul>
@@ -304,13 +344,24 @@
 <ul>
 <li>Hive脚本： test.sql</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="keyword">default</span>;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> test_azkaban(<span class="keyword">id</span> <span class="built_in">int</span>,<span class="keyword">name</span> <span class="keyword">string</span>,address <span class="keyword">string</span>) <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">','</span>;</span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/home/hadoop/azkaban/test.txt'</span> <span class="keyword">into</span> <span class="keyword">table</span> test_azkaban;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> countaddress <span class="keyword">as</span> <span class="keyword">select</span> address,<span class="keyword">count</span>(*) <span class="keyword">as</span> <span class="keyword">num</span> <span class="keyword">from</span> test_azkaban <span class="keyword">group</span> <span class="keyword">by</span> address ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">local</span> <span class="keyword">directory</span> <span class="string">'/home/hadoop/azkaban/out'</span> <span class="keyword">select</span> * <span class="keyword">from</span> countaddress;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">use default;
+create table if not exists test_azkaban(id int,name string,address string) row format delimited fields terminated by &#39;,&#39;;
+load data local inpath &#39;/home/hadoop/azkaban/test.txt&#39; into table test_azkaban;
+create table if not exists countaddress as select address,count(*) as num from test_azkaban group by address ;
+
+insert overwrite local directory &#39;/home/hadoop/azkaban/out&#39; select * from countaddress; 
+</code></pre>
 <ul>
 <li><p>准备数据</p>
 <ul>
 <li>vim /home/hadoop/azkaban/test.txt</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1,zhangsan,shanghai</span><br><span class="line">2,lisi,beijing</span><br><span class="line">3,xiaoming,shanghai</span><br><span class="line">4,xiaozhang,shanghai</span><br><span class="line">5,xiaogang,beijing</span><br></pre></td></tr></table></figure>
+<pre><code class="properties">1,zhangsan,shanghai
+2,lisi,beijing
+3,xiaoming,shanghai
+4,xiaozhang,shanghai
+5,xiaogang,beijing
+</code></pre>
 </li>
 </ul>
 </li>
@@ -318,8 +369,13 @@
 <ul>
 <li>hive.job</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> hive.job</span></span><br><span class="line">type=command</span><br><span class="line">command=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive -f 'test.sql'</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># hive.job
+type=command
+command=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive -f &#39;test.sql&#39;
+</code></pre>
 </li>
+</ul>
+<ul>
 <li><p>3、将job资源文件打包成zip文件</p>
 <ul>
 <li>hive.zip</li>
@@ -337,7 +393,11 @@
 <li><p>1、创建一个job的描述文件</p>
 <ul>
 <li><p>parameter.job</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">parameter.job</span></span><br><span class="line">type=command</span><br><span class="line">parameter=$&#123;param&#125;</span><br><span class="line">command= echo $&#123;parameter&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#parameter.job
+type=command
+parameter=${param}
+command= echo ${parameter}
+</code></pre>
 </li>
 <li><p>其中</p>
 <ul>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        大数据开发之HBase（四）微博案例 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-hbase微博实战案例"><span class="toc-text">1. hbase微博实战案例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-需求分析"><span class="toc-text">1.1 需求分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-代码实现"><span class="toc-text">1.2 代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-准备工作"><span class="toc-text">1.2.1 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-代码设计总览："><span class="toc-text">1.2.2 代码设计总览：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3-创建命名空间以及表名的定义"><span class="toc-text">1.2.3 创建命名空间以及表名的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4-创建微博内容表"><span class="toc-text">1.2.4 创建微博内容表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5-创建用户关系表"><span class="toc-text">1.2.5 创建用户关系表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-6-创建微博收件箱表"><span class="toc-text">1.2.6 创建微博收件箱表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-7-发布微博内容"><span class="toc-text">1.2.7 发布微博内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-8-添加关注用户"><span class="toc-text">1.2.8 添加关注用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-9-移除（取关）用户"><span class="toc-text">1.2.9 移除（取关）用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-10-获取关注的人的微博内容"><span class="toc-text">1.2.10 获取关注的人的微博内容</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        大数据开发之HBase（四）微博案例
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-11-19 10:29:52</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#项目练习" title="项目练习">项目练习</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="1-hbase微博实战案例"><a href="#1-hbase微博实战案例" class="headerlink" title="1. hbase微博实战案例"></a>1. hbase微博实战案例</h1><h2 id="1-1-需求分析"><a href="#1-1-需求分析" class="headerlink" title="1.1 需求分析"></a>1.1 需求分析</h2><blockquote>
+<ol>
+<li><p>hbase属于OLAP数据库，表设计与OLTP数据库不同，支持百万列。列的动态变化。</p>
+</li>
+<li><p>设计规范</p>
+<p>| <strong>项目</strong>     | <strong>说明</strong>                                                     | <strong>示例</strong>                                                     |<br>| ———— | ———————————————————— | ———————————————————— |<br>| <strong>命名空间</strong> | 采用英文单词、阿拉伯数字的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字。不建议用连接符（下划线）拼接多个单词，简单语义的可采用单个单词，复杂语义的可采用多个单词的首字母拼接。长度尽量限制在4~8字符之间。命名空间一般可与项目名称、组织机构名称等保持一致。 | 根据项目名称构建命名空间：DLQX（电力气象首字母拼接形式），简短明了。不建议过长的命名空间名称，譬如不推荐采用以下形式：USER_INFO_MANAGE等。 |<br>| <strong>表名称</strong>   | 采用英文单词、阿拉伯数字、连接符（_）的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字，可用连接符拼接多个单词。长度尽量限制在8~16字符之间。尽量采用具有明确意义的英文单词，而不建议采用汉字的拼音字母或者拼音首字母组合。 | 符合规范的表名称：USER_INFO_MANAGE、WEATHER_DATA、T_ELECTRIC_GATHER等。 |<br>| <strong>列族名称</strong> | 采用英文单词、阿拉伯数字的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字。长度尽量限制在1~6字符之间，过长的列族名称将占用更多的存储空间。 | 符合规范的列族名称：D1、D2、DATA等。不推荐的列族名称：USER_INFO、D_1等。 |<br>| <strong>列名称</strong>   | 采用英文单词、阿拉伯数字、连接符（_）的组合形式，其中，单词必须大写，并且首字符必须为英文字符，不能是数字，可用连接符拼接多个单词。长度尽量限制在1~16字符之间。尽量采用具有明确意义的英文单词，而不建议采用汉字的拼音字母或者拼音首字母组合。 | 符合规范的列名称：USER_ID、DATA_1、REMARK等。不推荐的列名称：UserID、1_DA |</p>
+</li>
+</ol>
+</blockquote>
+<p>1) 微博内容的浏览，数据库表设计</p>
+<ul>
+<li>rowKey: uid + timestamp</li>
+</ul>
+<p><img src="assets/image-20191119172809987.png" alt="image-20191119172809987"></p>
+<p>2) 用户社交体现：关注用户，取关用户</p>
+<ul>
+<li><p>rowKey： uid</p>
+</li>
+<li><p>ColumnFamily： 关注（attends）、粉丝（fans）两个列族</p>
+</li>
+<li><p>列族下列名称和cell值直接使用uid，当新增关注或者粉丝时直接动态增加列即可</p>
+</li>
+</ul>
+<p><img src="assets/image-20191119172951520.png" alt="image-20191119172951520"></p>
+<p>3) 拉取关注的人的微博内容</p>
+<ul>
+<li>发送微博直接推送给粉丝，需要表微博收件箱</li>
+<li>rowKey 和列都用uid，动态增加列接收发送的微博</li>
+<li>cell值使用微博id，设置微博版本ß</li>
+</ul>
+<p><img src="assets/image-20191119174811329.png" alt="image-20191119174811329"></p>
+<h2 id="1-2-代码实现"><a href="#1-2-代码实现" class="headerlink" title="1.2 代码实现"></a>1.2 代码实现</h2><h3 id="1-2-1-准备工作"><a href="#1-2-1-准备工作" class="headerlink" title="1.2.1 准备工作"></a>1.2.1 准备工作</h3><ul>
+<li><p>第一步：创建maven工程并导入jar包</p>
+<p>直接使用在版本确界当中创建的工程以及导入的jar包即可</p>
+</li>
+<li><p>第二步：拷贝三个配置文件到maven工程的下</p>
+<p>将node01服务器的三个配置文件，分别是</p>
+<p>core-site.xml、hdfs-site.xml、hbase-site.xml三个配置文件，拷贝到maven工程的resources资源目录下</p>
+</li>
+</ul>
+<h3 id="1-2-2-代码设计总览："><a href="#1-2-2-代码设计总览：" class="headerlink" title="1.2.2 代码设计总览："></a>1.2.2 代码设计总览：</h3><p>1) 创建命名空间以及表名的定义</p>
+<p>2) 创建微博内容表</p>
+<p>3) 创建用户关系表</p>
+<p>4) 创建用户微博内容接收邮件表</p>
+<p>5) 发布微博内容</p>
+<p>6) 添加关注用户</p>
+<p>7) 移除（取关）用户</p>
+<p>8) 获取关注的人的微博内容</p>
+<h3 id="1-2-3-创建命名空间以及表名的定义"><a href="#1-2-3-创建命名空间以及表名的定义" class="headerlink" title="1.2.3 创建命名空间以及表名的定义"></a>1.2.3 创建命名空间以及表名的定义</h3><p><strong>代码实现：</strong></p>
+<pre><code class="java">//微博内容表的表名
+private static final byte[] TABLE_CONTENT = Bytes.toBytes(&quot;weibo:content&quot;);
+//用户关系表的表名
+private static final byte[] TABLE_RELATIONS = Bytes.toBytes(&quot;weibo:relations&quot;);
+//微博收件箱表的表名
+private static final byte[] TABLE_RECEIVE_CONTENT_EMAIL = Bytes.toBytes(&quot;weibo:receive_content_email&quot;);
+/**
+ * 初始化命名空间
+ */
+public void initNameSpace() throws IOException {
+    Connection connection = getConnection();
+    Admin admin = connection.getAdmin();
+    NamespaceDescriptor namespaceDescriptor = NamespaceDescriptor.create(&quot;weibo2&quot;).addConfiguration(&quot;creator&quot;,&quot;jim&quot;).build();
+    admin.createNamespace(namespaceDescriptor);
+    admin.close();
+    connection.close();
+}
+
+public Connection getConnection() throws IOException {
+    Configuration configuration = HBaseConfiguration.create();
+    configuration.set(&quot;hbase.zookeeper.quorum&quot;,&quot;node01:2181,node02:2181,node03:2181&quot;);
+    Connection connection = ConnectionFactory.createConnection();
+    return connection;
+}
+
+</code></pre>
+<h3 id="1-2-4-创建微博内容表"><a href="#1-2-4-创建微博内容表" class="headerlink" title="1.2.4 创建微博内容表"></a>1.2.4 创建微博内容表</h3><p><strong>表结构：</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>方法名</strong></th>
+<th>creatTableeContent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Table Name</td>
+<td>weibo:content</td>
+</tr>
+<tr>
+<td>RowKey</td>
+<td>用户ID_时间戳</td>
+</tr>
+<tr>
+<td>ColumnFamily</td>
+<td>info</td>
+</tr>
+<tr>
+<td>ColumnLabel</td>
+<td>标题,内容,图片</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>1个版本</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 创建微博内容存储表
+ *
+ * 方法名 creatTableeContent
+ Table Name    weibo:content
+ RowKey    用户ID_时间戳
+ ColumnFamily  info
+ ColumnLabel   标题,内容,图片
+ Version   1个版本
+
+ *
+ */
+public void creatTableeContent() throws IOException {
+    //获取连接
+    Connection connection = getConnection();
+    //获取管理员对象
+    Admin admin = connection.getAdmin();
+    //得到HTableDescriptor对象
+    HTableDescriptor hTableDescriptor = new HTableDescriptor(TableName.valueOf(&quot;weibo:content&quot;));
+    //添加列族info
+    HColumnDescriptor info = new HColumnDescriptor(&quot;info&quot;);
+    //设置版本确界
+    info.setMaxVersions(1);
+    info.setMinVersions(1);
+    info.setBlockCacheEnabled(true);
+    //设置数据压缩
+    //   info.setCompressionType(Compression.Algorithm.SNAPPY);
+    info.setBlocksize(2048*1024);
+    hTableDescriptor.addFamily(info);
+    //创建表
+    admin.createTable(hTableDescriptor);
+    admin.close();
+    connection.close();
+}
+
+</code></pre>
+<h3 id="1-2-5-创建用户关系表"><a href="#1-2-5-创建用户关系表" class="headerlink" title="1.2.5 创建用户关系表"></a>1.2.5 创建用户关系表</h3><p><strong>表结构：</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>方法名</strong></th>
+<th>createTableRelations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Table Name</td>
+<td>weibo:relations</td>
+</tr>
+<tr>
+<td>RowKey</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>ColumnFamily</td>
+<td>attends、fans</td>
+</tr>
+<tr>
+<td>ColumnLabel</td>
+<td>关注用户ID，粉丝用户ID</td>
+</tr>
+<tr>
+<td>ColumnValue</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>1个版本</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 创建用户关系表
+ * 方法名 createTableRelations
+ Table Name    weibo:relations
+ RowKey    用户ID
+ ColumnFamily  attends、fans
+ ColumnLabel   关注用户ID，粉丝用户ID
+ ColumnValue   用户ID
+ Version   1个版本
+
+ */
+public void createTableRelations() throws IOException {
+    //获取连接
+    Connection connection = getConnection();
+    //获取管理员对象
+    Admin admin = connection.getAdmin();
+    //得到表定义
+    HTableDescriptor hTableDescriptor = new HTableDescriptor(TableName.valueOf(TABLE_RELATIONS));
+    HColumnDescriptor attends = new HColumnDescriptor(&quot;attends&quot;);
+    HColumnDescriptor fans = new HColumnDescriptor(&quot;fans&quot;);
+
+    attends.setBlocksize(2048*1024);
+    attends.setBlockCacheEnabled(true);
+    attends.setMinVersions(1);
+    attends.setMaxVersions(1);
+
+    fans.setBlocksize(2048*1024);
+    fans.setBlockCacheEnabled(true);
+    fans.setMinVersions(1);
+    fans.setMaxVersions(1);
+
+    hTableDescriptor.addFamily(attends);
+    hTableDescriptor.addFamily(fans);
+    admin.createTable(hTableDescriptor);
+    admin.close();
+    connection.close();
+}
+
+</code></pre>
+<h3 id="1-2-6-创建微博收件箱表"><a href="#1-2-6-创建微博收件箱表" class="headerlink" title="1.2.6 创建微博收件箱表"></a>1.2.6 创建微博收件箱表</h3><p><strong>表结构：</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>方法名</strong></th>
+<th>createTableReceiveContentEmails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Table Name</td>
+<td>weibo:receive_content_email</td>
+</tr>
+<tr>
+<td>RowKey</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>ColumnFamily</td>
+<td>info</td>
+</tr>
+<tr>
+<td>ColumnLabel</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>ColumnValue</td>
+<td>取微博内容的RowKey</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 表结构：
+ 方法名   createTableReceiveContentEmails
+ Table Name    weibo:receive_content_email
+ RowKey    用户ID
+ ColumnFamily  info
+ ColumnLabel   用户ID
+ ColumnValue   取微博内容的RowKey
+ Version   1000
+
+ */
+
+public void createTableReceiveContentEmails() throws IOException {
+    //获取连接
+    Connection connection = getConnection();
+    //得到管理员对象
+    Admin admin = connection.getAdmin();
+    //获取HTableDescriptor
+    HTableDescriptor hTableDescriptor = new HTableDescriptor(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+    //定义列族名称
+    HColumnDescriptor info = new HColumnDescriptor(&quot;info&quot;);
+    info.setMaxVersions(1000);
+    info.setMinVersions(1000);
+    info.setBlockCacheEnabled(true);
+    info.setBlocksize(2048*1024);
+    hTableDescriptor.addFamily(info);
+    //创建表
+    admin.createTable(hTableDescriptor);
+    admin.close();
+    connection.close();
+}
+
+</code></pre>
+<h3 id="1-2-7-发布微博内容"><a href="#1-2-7-发布微博内容" class="headerlink" title="1.2.7 发布微博内容"></a>1.2.7 发布微博内容</h3><p>a、微博内容表中添加1条数据</p>
+<p>b、微博收件箱表对所有粉丝用户添加数据</p>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 发布微博内容
+ * @param uid
+ * @param content
+ */
+public void publishWeiBo(String uid ,String content) throws IOException {
+    Connection connection = getConnection();
+    Table table = connection.getTable(TableName.valueOf(TABLE_CONTENT));
+    String rowkey = uid + &quot;_&quot;+ System.currentTimeMillis();
+    Put put = new Put(rowkey.getBytes());
+    put.addColumn(&quot;info&quot;.getBytes(),&quot;content&quot;.getBytes(),System.currentTimeMillis(),content.getBytes());
+    table.put(put);
+    //微博用户关系表
+    Table table_relations = connection.getTable(TableName.valueOf(TABLE_RELATIONS));
+    Get get = new Get(uid.getBytes());
+    get.addFamily(&quot;fans&quot;.getBytes());
+    Result result = table_relations.get(get);
+    Cell[] cells = result.rawCells();
+    if(cells.length &lt;= 0){
+        return ;
+    }
+    List&lt;byte[]&gt;  allFans = new ArrayList&lt;byte[]&gt;();
+    //将所有的粉丝都获取到，然后将数据保存到粉丝表当中去
+    for (Cell cell : cells) {
+        byte[] bytes = CellUtil.cloneQualifier(cell);
+        allFans.add(bytes);
+    }
+    Table table_receive_content_email = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+    List&lt;Put&gt; putFansList = new ArrayList&lt;&gt;();
+    for (byte[] allFan : allFans) {
+        Put put1 = new Put(allFan);
+        put1.addColumn(&quot;info&quot;.getBytes(),Bytes.toBytes(uid),System.currentTimeMillis(),rowkey.getBytes());
+        putFansList.add(put1);
+    }
+    table_receive_content_email.put(putFansList);
+}
+
+</code></pre>
+<h3 id="1-2-8-添加关注用户"><a href="#1-2-8-添加关注用户" class="headerlink" title="1.2.8 添加关注用户"></a>1.2.8 添加关注用户</h3><p>a、在微博用户关系表中，对当前主动操作的用户添加新关注的好友</p>
+<p>b、在微博用户关系表中，对被关注的用户添加新的粉丝</p>
+<p>c、微博收件箱表中添加所关注的用户发布的微博</p>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 添加关注用户，一次可能添加多个关注用户
+ * A 关注一批用户 B,C ,D
+ * 第一步：A是B,C,D的关注者   在weibo:relations 当中attend列族当中以A作为rowkey，B,C,D作为列名，B,C,D作为列值，保存起来
+ * 第二步：B,C,D都会多一个粉丝A  在weibo:relations 当中fans列族当中分别以B,C,D作为rowkey，A作为列名，A作为列值，保存起来
+ * 第三步：A需要获取B,C,D 的微博内容存放到 receive_content_email 表当中去，以A作为rowkey，B,C,D作为列名，获取B,C,D发布的微博rowkey，放到对应的列值里面去
+ *
+ *
+ * @param uid
+ * @param attends
+ */
+public void addAttends(String uid ,String ...attends) throws IOException {
+    Connection connection = getConnection();
+    Table relation_table = connection.getTable(TableName.valueOf(TABLE_RELATIONS));
+    //用户关注人,attend列族当中添加数据
+    Put put = new Put(uid.getBytes());
+    for (String attend : attends) {
+        put.addColumn(&quot;attends&quot;.getBytes(),attend.getBytes(),attend.getBytes());
+    }
+    relation_table.put(put);
+    //粉丝fans添加粉丝，A 关注B，那么自然B就需要添加一个粉丝A
+    for (String attend : attends) {
+        Put put1 = new Put(attend.getBytes());
+        put1.addColumn(&quot;fans&quot;.getBytes(),uid.getBytes(),uid.getBytes());
+        relation_table.put(put1);
+    }
+
+    //获取uid的所有关注人的收件箱，放到收件箱列表weibo:receive_content_email里面去
+    //A 关注B，那么A需要获取B所有的微博内容
+    Table table_content = connection.getTable(TableName.valueOf(TABLE_CONTENT));
+    Scan scan = new Scan();
+    List&lt;byte[]&gt; rowkeyBytes = new ArrayList&lt;&gt;();
+    for (String attend : attends) {
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.EQUAL
+,new SubstringComparator(attend+&quot;_&quot;));
+        scan.setFilter(rowFilter);
+        ResultScanner scanner = table_content.getScanner(scan);
+        for (Result result : scanner) {
+            //获取到数据的rowkey
+            byte[] rowkey = result.getRow();
+            rowkeyBytes.add(rowkey);
+        }
+    }
+    if(rowkeyBytes.size() &gt; 0){
+        Table table_receive_content = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+        List&lt;Put&gt; recPuts = new ArrayList&lt;Put&gt;();
+        for (byte[] rowkeyByte : rowkeyBytes) {
+            Put put1 = new Put(uid.getBytes());
+            String rowKeyStr = Bytes.toString(rowkeyByte);
+            String attendUid = rowKeyStr.substring(0, rowKeyStr.indexOf(&quot;_&quot;));
+            long timestamp = Long.parseLong(rowKeyStr.substring(rowKeyStr.indexOf(&quot;_&quot;) + 1));
+
+            put1.addColumn(&quot;info&quot;.getBytes(),attendUid.getBytes(), timestamp,rowkeyByte);
+            recPuts.add(put1);
+        }
+        table_receive_content.put(recPuts);
+    }
+}
+
+</code></pre>
+<h3 id="1-2-9-移除（取关）用户"><a href="#1-2-9-移除（取关）用户" class="headerlink" title="1.2.9 移除（取关）用户"></a>1.2.9 移除（取关）用户</h3><p>a、在微博用户关系表中，对当前主动操作的用户移除取关的好友(attends)</p>
+<p>b、在微博用户关系表中，对被取关的用户移除粉丝</p>
+<p>c、微博收件箱中删除取关的用户发布的微博</p>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 取消关注 A取消关注 B,C,D这三个用户
+ * 其实逻辑与关注B,C,D相反即可
+ * 第一步：在weibo:relation关系表当中，在attends列族当中删除B,C,D这三个列
+ * 第二步：在weibo:relation关系表当中，在fans列族当中，以B,C,D为rowkey，查找fans列族当中A这个粉丝，给删除掉
+ * 第三步：A取消关注B,C,D,在收件箱中，删除取关的人的微博的rowkey
+ */
+public void attendCancel(String uid,String ...cancelAttends) throws IOException {
+    Connection connection = getConnection();
+    Table table_relations = connection.getTable(TableName.valueOf(TABLE_RELATIONS));
+
+    //移除A关注的B,C,D这三个用户
+    for (String cancelAttend : cancelAttends) {
+        Delete delete = new Delete(uid.getBytes());
+        delete.addColumn(&quot;attends&quot;.getBytes(),cancelAttend.getBytes());
+        table_relations.delete(delete);
+    }
+
+    //B,C,D这三个用户移除粉丝A
+    for (String cancelAttend : cancelAttends) {
+        Delete delete = new Delete(cancelAttend.getBytes());
+        delete.addColumn(&quot;fans&quot;.getBytes(),uid.getBytes());
+        table_relations.delete(delete);
+    }
+
+    //收件箱表当中  A移除掉B,C,D的信息
+    Table table_receive_connection = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+
+    for (String cancelAttend : cancelAttends) {
+        Delete delete = new Delete(uid.getBytes());
+        delete.addColumn(&quot;info&quot;.getBytes(),cancelAttend.getBytes());
+        table_receive_connection.delete(delete);
+
+    }
+    table_receive_connection.close();
+    table_relations.close();
+    connection.close();
+}
+
+</code></pre>
+<h3 id="1-2-10-获取关注的人的微博内容"><a href="#1-2-10-获取关注的人的微博内容" class="headerlink" title="1.2.10 获取关注的人的微博内容"></a>1.2.10 获取关注的人的微博内容</h3><p>a、从微博收件箱中获取所关注的用户的微博RowKey </p>
+<p>b、根据获取的RowKey，得到微博内容</p>
+<p><strong>代码实现：</strong></p>
+<pre><code class="java">/**
+ * 某个用户获取收件箱表内容
+ * 例如A用户刷新微博，拉取他所有关注人的微博内容
+ * A 从 weibo:receive_content_email  表当中获取所有关注人的rowkey
+ * 通过rowkey从weibo:content表当中获取微博内容
+ */
+public void getContent(String uid) throws IOException {
+    //从weibo:receive_content_email 表当中获取用户id为uid的人的所有的微博列表
+    Connection connection = getConnection();
+    //从 weibo:receive_content_email
+    Table table_receive_content_email = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+    //定义list集合里面存储我们的所有的Get对象，用于下一步的查询
+    List&lt;Get&gt;  rowkeysList = new ArrayList&lt;Get&gt;();
+    Get get = new Get(uid.getBytes());
+    //设置最大版本为5个
+    get.setMaxVersions(5);
+    Result result = table_receive_content_email.get(get);
+    Cell[] cells = result.rawCells();
+    for (Cell cell : cells) {
+        byte[] rowkeys = CellUtil.cloneValue(cell);
+        Get get1 = new Get(rowkeys);
+        rowkeysList.add(get1);
+    }
+    //从weibo:content表当中通过用户id进行查询微博内容
+    //table_content内容表
+    Table table_content = connection.getTable(TableName.valueOf(TABLE_CONTENT));
+    //所有查询出来的内容进行打印出来
+    Result[] results = table_content.get(rowkeysList);
+    for (Result result1 : results) {
+        byte[] value = result1.getValue(&quot;info&quot;.getBytes(), &quot;content&quot;.getBytes());
+        byte[] row = result1.getRow();
+        String rowkey = Bytes.toString(row);
+        String[] split = rowkey.split(&quot;_&quot;);
+        Content content = new Content();
+        content.setUid(split[0]);
+        content.setTimeStamp(Long.parseLong(split[1]));
+        content.setContent(Bytes.toString(value));
+        System.out.println(content.toString());
+    }
+}
+</code></pre>
+<p><a href="https://github.com/orchid-ding/hadoop-example/tree/master/src/main/java/hbase/weibo" target="_blank" rel="noopener">点击获取代码示例</a></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: '大数据开发之HBase（四）微博案例',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>

@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        数仓商城项目之-系统业务数仓 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#电商数仓（系统业务数据仓库）"><span class="toc-text">电商数仓（系统业务数据仓库）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-电商业务与数据结构简介"><span class="toc-text">1. 电商业务与数据结构简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-电商业务流程"><span class="toc-text">1.1 电商业务流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-电商常识（SKU、SPU）"><span class="toc-text">1.2  电商常识（SKU、SPU）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-电商表结构"><span class="toc-text">1.3 电商表结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-订单表（order-info）"><span class="toc-text">1.3.1 订单表（order_info）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-订单详情表（order-detail）"><span class="toc-text">1.3.2 订单详情表（order_detail）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-商品表"><span class="toc-text">1.3.3 商品表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-用户表"><span class="toc-text">1.3.4 用户表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-5-商品一级分类表"><span class="toc-text">1.3.5 商品一级分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-6-商品二级分类表"><span class="toc-text">1.3.6 商品二级分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-7-商品三级分类表"><span class="toc-text">1.3.7 商品三级分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-8-支付流水表"><span class="toc-text">1.3.8 支付流水表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-数仓理论"><span class="toc-text">2. 数仓理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-表的分类"><span class="toc-text">2.1 表的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-实体表"><span class="toc-text">2.1.1 实体表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-维度表"><span class="toc-text">2.1.2 维度表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-事务型事实表"><span class="toc-text">2.1.3 事务型事实表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-同步策略"><span class="toc-text">2.2 同步策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-实体表同步策略"><span class="toc-text">2.2.1 实体表同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-维度表同步策略"><span class="toc-text">2.2.2 维度表同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-事务型事实表同步策略"><span class="toc-text">2.2.3 事务型事实表同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-周期型事实表同步策略"><span class="toc-text">2.2.4 周期型事实表同步策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-范式理论"><span class="toc-text">2.3 范式理论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-范式概念"><span class="toc-text">2.3.1 范式概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-函数依赖"><span class="toc-text">2.3.2 函数依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-范式区分"><span class="toc-text">2.3.3 范式区分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-关系建模和纬度建模"><span class="toc-text">2.4 关系建模和纬度建模</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-雪花模型、星型模型和星座模型"><span class="toc-text">2.5 雪花模型、星型模型和星座模型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-数仓搭建"><span class="toc-text">3. 数仓搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-数据生成"><span class="toc-text">3.1 数据生成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-生成业务数据"><span class="toc-text">3.1.1 生成业务数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-业务数据导入数仓"><span class="toc-text">3.2 业务数据导入数仓</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-分析表的同步策略"><span class="toc-text">3.2.1 分析表的同步策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-Sqoop定时导入脚本"><span class="toc-text">3.2.2 Sqoop定时导入脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-建表"><span class="toc-text">3.3 建表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-创建订单表"><span class="toc-text">3.3.1 创建订单表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-创建订单详情表"><span class="toc-text">3.3.2 创建订单详情表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-3-创建商品表"><span class="toc-text">3.3.3 创建商品表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-4-创建用户表"><span class="toc-text">3.3.4 创建用户表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-5-创建分类表"><span class="toc-text">3.3.5 创建分类表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-6-支付流水表"><span class="toc-text">3.3.6 支付流水表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-数据导入脚本"><span class="toc-text">3.4 数据导入脚本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-DWD层"><span class="toc-text">4. DWD层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-创建表"><span class="toc-text">4.1 创建表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1-创建订单表"><span class="toc-text">4.1.1 创建订单表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-2-订单详情表"><span class="toc-text">4.1.2 订单详情表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-3-用户表"><span class="toc-text">4.1.3 用户表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-4-支付流水表"><span class="toc-text">4.1.4 支付流水表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-5-商品表"><span class="toc-text">4.1.5 商品表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-DWD层数据导入脚本"><span class="toc-text">4.2   DWD层数据导入脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-总结"><span class="toc-text">4.2.1 总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-DWS-用户行为宽表"><span class="toc-text">5 DWS 用户行为宽表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-GWV-成交总额"><span class="toc-text">6. GWV 成交总额</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-转化率之用户新鲜度及漏斗分析"><span class="toc-text">7. 转化率之用户新鲜度及漏斗分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-ADS层之新增用户占日活跃用户比率（用户新鲜度）"><span class="toc-text">7.1  ADS层之新增用户占日活跃用户比率（用户新鲜度）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-ADS层之用户行为漏斗分析"><span class="toc-text">7.2  ADS层之用户行为漏斗分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-品牌复购率"><span class="toc-text">8. 品牌复购率</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-复购率分析"><span class="toc-text">8.1 复购率分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-DWS层"><span class="toc-text">8.2 DWS层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-1-用户购买商品明细表（宽表）"><span class="toc-text">8.2.1 用户购买商品明细表（宽表）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-ADS层品牌复购率"><span class="toc-text">8.3 ADS层品牌复购率</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-数据可视化表"><span class="toc-text">9. 数据可视化表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-sqoop导出脚本"><span class="toc-text">10.sqoop导出脚本</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        数仓商城项目之-系统业务数仓
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-04 12:35:30</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#数仓项目" title="数仓项目">数仓项目</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="电商数仓（系统业务数据仓库）"><a href="#电商数仓（系统业务数据仓库）" class="headerlink" title="电商数仓（系统业务数据仓库）"></a>电商数仓（系统业务数据仓库）</h1><h2 id="1-电商业务与数据结构简介"><a href="#1-电商业务与数据结构简介" class="headerlink" title="1. 电商业务与数据结构简介"></a>1. 电商业务与数据结构简介</h2><h3 id="1-1-电商业务流程"><a href="#1-1-电商业务流程" class="headerlink" title="1.1 电商业务流程"></a>1.1 电商业务流程</h3><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204124410155.png" alt="image-20191204124410155"></p>
+<h3 id="1-2-电商常识（SKU、SPU）"><a href="#1-2-电商常识（SKU、SPU）" class="headerlink" title="1.2  电商常识（SKU、SPU）"></a>1.2  电商常识（SKU、SPU）</h3><ol>
+<li><p>SKU=Stock Keeping Unit（库存量基本单位）。现在已经被引申为产品统一编号的简称，每种产品均对应有唯一的SKU号。</p>
+</li>
+<li><p>SPU(Standard Product Unit)：是商品信息聚合的最小单位，是一组可复用、易检索的标准化信息集合。</p>
+</li>
+</ol>
+<h3 id="1-3-电商表结构"><a href="#1-3-电商表结构" class="headerlink" title="1.3 电商表结构"></a>1.3 电商表结构</h3><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204130052893.png" alt="image-20191204130052893"></p>
+<h4 id="1-3-1-订单表（order-info）"><a href="#1-3-1-订单表（order-info）" class="headerlink" title="1.3.1 订单表（order_info）"></a>1.3.1 订单表（order_info）</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> id</td>
+<td>订单编号   </td>
+</tr>
+<tr>
+<td> total_amount</td>
+<td>订单金额   </td>
+</tr>
+<tr>
+<td> order_status</td>
+<td>订单状态   </td>
+</tr>
+<tr>
+<td> user_id</td>
+<td>用户id     </td>
+</tr>
+<tr>
+<td> payment_way</td>
+<td>支付方式   </td>
+</tr>
+<tr>
+<td> out_trade_no</td>
+<td>支付流水号 </td>
+</tr>
+<tr>
+<td> create_time</td>
+<td>创建时间   </td>
+</tr>
+<tr>
+<td> operate_time</td>
+<td>操作时间   </td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-2-订单详情表（order-detail）"><a href="#1-3-2-订单详情表（order-detail）" class="headerlink" title="1.3.2 订单详情表（order_detail）"></a>1.3.2 订单详情表（order_detail）</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>订单编号</td>
+<td></td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>订单号</td>
+<td></td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>用户id</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_id</td>
+<td>商品id</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_name</td>
+<td>商品名称</td>
+<td></td>
+</tr>
+<tr>
+<td>order_price</td>
+<td>商品价格</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_num</td>
+<td>商品数量</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-3-商品表"><a href="#1-3-3-商品表" class="headerlink" title="1.3.3 商品表"></a>1.3.3 商品表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>skuId</td>
+<td></td>
+</tr>
+<tr>
+<td>spu_id</td>
+<td>spuid</td>
+<td></td>
+</tr>
+<tr>
+<td>price</td>
+<td>价格</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_name</td>
+<td>商品名称</td>
+<td></td>
+</tr>
+<tr>
+<td>sku_desc</td>
+<td>商品描述</td>
+<td></td>
+</tr>
+<tr>
+<td>weight</td>
+<td>重量</td>
+<td></td>
+</tr>
+<tr>
+<td>tm_id</td>
+<td>品牌id</td>
+<td></td>
+</tr>
+<tr>
+<td>category3_id</td>
+<td>品类id</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-4-用户表"><a href="#1-3-4-用户表" class="headerlink" title="1.3.4 用户表"></a>1.3.4 用户表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>用户id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>姓名</td>
+<td></td>
+</tr>
+<tr>
+<td>birthday</td>
+<td>生日</td>
+<td></td>
+</tr>
+<tr>
+<td>gender</td>
+<td>性别</td>
+<td></td>
+</tr>
+<tr>
+<td>email</td>
+<td>邮箱</td>
+<td></td>
+</tr>
+<tr>
+<td>user_level</td>
+<td>用户等级</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-5-商品一级分类表"><a href="#1-3-5-商品一级分类表" class="headerlink" title="1.3.5 商品一级分类表"></a>1.3.5 商品一级分类表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-6-商品二级分类表"><a href="#1-3-6-商品二级分类表" class="headerlink" title="1.3.6 商品二级分类表"></a>1.3.6 商品二级分类表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td></td>
+</tr>
+<tr>
+<td>category1_id</td>
+<td>一级品类id</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-7-商品三级分类表"><a href="#1-3-7-商品三级分类表" class="headerlink" title="1.3.7 商品三级分类表"></a>1.3.7 商品三级分类表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>id</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td></td>
+</tr>
+<tr>
+<td>Category2_id</td>
+<td>二级品类id</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-3-8-支付流水表"><a href="#1-3-8-支付流水表" class="headerlink" title="1.3.8 支付流水表"></a>1.3.8 支付流水表</h4><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>编号</td>
+</tr>
+<tr>
+<td>out_trade_no</td>
+<td>对外业务编号</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>订单编号</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>用户编号</td>
+</tr>
+<tr>
+<td>alipay_trade_no</td>
+<td>支付宝交易流水编号</td>
+</tr>
+<tr>
+<td>total_amount</td>
+<td>支付金额</td>
+</tr>
+<tr>
+<td>subject</td>
+<td>交易内容</td>
+</tr>
+<tr>
+<td>payment_type</td>
+<td>支付类型</td>
+</tr>
+<tr>
+<td>payment_time</td>
+<td>支付时间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-数仓理论"><a href="#2-数仓理论" class="headerlink" title="2. 数仓理论"></a>2. 数仓理论</h2><h3 id="2-1-表的分类"><a href="#2-1-表的分类" class="headerlink" title="2.1 表的分类"></a>2.1 表的分类</h3><h4 id="2-1-1-实体表"><a href="#2-1-1-实体表" class="headerlink" title="2.1.1 实体表"></a>2.1.1 实体表</h4><ul>
+<li><strong>实体表</strong>，一般是指一个现实存在的业务对象，比如用户，商品，商家，销售员等等。</li>
+</ul>
+<p>用户表：</p>
+<table>
+<thead>
+<tr>
+<th>用户id</th>
+<th>姓名</th>
+<th>生日</th>
+<th>性别</th>
+<th>邮箱</th>
+<th>用户等级</th>
+<th>创建时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>张三</td>
+<td>2011-11-11</td>
+<td>男</td>
+<td><a href="mailto:zs@163.com" target="_blank" rel="noopener">zs@163.com</a></td>
+<td>2</td>
+<td>2018-11-11</td>
+</tr>
+<tr>
+<td>2</td>
+<td>李四</td>
+<td>2011-11-11</td>
+<td>女</td>
+<td><a href="mailto:ls@163.com" target="_blank" rel="noopener">ls@163.com</a></td>
+<td>3</td>
+<td>2018-11-11</td>
+</tr>
+<tr>
+<td>3</td>
+<td>王五</td>
+<td>2011-11-11</td>
+<td>中性</td>
+<td><a href="mailto:ww@163.com" target="_blank" rel="noopener">ww@163.com</a></td>
+<td>1</td>
+<td>2018-11-11</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-1-2-维度表"><a href="#2-1-2-维度表" class="headerlink" title="2.1.2 维度表"></a>2.1.2 维度表</h4><ul>
+<li><strong>维度表</strong>，一般是指对应一些业务状态，编号的解释表。也可以称之为码表。</li>
+</ul>
+<p>比如地区表，订单状态，支付方式，审批状态，商品分类等等。</p>
+<p>订单状态表：</p>
+<table>
+<thead>
+<tr>
+<th>订单状态编号</th>
+<th>订单状态名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>未支付</td>
+</tr>
+<tr>
+<td>2</td>
+<td>支付</td>
+</tr>
+<tr>
+<td>3</td>
+<td>发货中</td>
+</tr>
+<tr>
+<td>4</td>
+<td>已发货</td>
+</tr>
+<tr>
+<td>5</td>
+<td>已完成</td>
+</tr>
+</tbody>
+</table>
+<p>   商品分类表：</p>
+<table>
+<thead>
+<tr>
+<th>商品分类编号</th>
+<th>分类名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>服装</td>
+</tr>
+<tr>
+<td>2</td>
+<td>保健</td>
+</tr>
+<tr>
+<td>3</td>
+<td>电器</td>
+</tr>
+<tr>
+<td>4</td>
+<td>图书</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-1-3-事务型事实表"><a href="#2-1-3-事务型事实表" class="headerlink" title="2.1.3 事务型事实表"></a>2.1.3 事务型事实表</h4><ul>
+<li><strong>事务型事实表</strong>，一般指随着业务发生不断产生的数据。特点是一旦发生不会再变化。</li>
+</ul>
+<p>一般比如，交易流水，操作日志，出库入库记录等等。</p>
+<p>交易流水表：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>对外业务编号</th>
+<th>订单编号</th>
+<th>用户编号</th>
+<th>支付宝交易流水编号</th>
+<th>支付金额</th>
+<th>交易内容</th>
+<th>支付类型</th>
+<th>支付时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>7577697945</td>
+<td>1</td>
+<td>111</td>
+<td>QEyF-63000323</td>
+<td>223.00</td>
+<td>海狗人参丸1</td>
+<td>alipay</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0170099522</td>
+<td>2</td>
+<td>222</td>
+<td>qdwV-25111279</td>
+<td>589.00</td>
+<td>海狗人参丸2</td>
+<td>wechatpay</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1840931679</td>
+<td>3</td>
+<td>666</td>
+<td>hSUS-65716585</td>
+<td>485.00</td>
+<td>海狗人参丸3</td>
+<td>unionpay</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>周期型事实表</strong>，一般指随着业务发生不断产生的数据。</li>
+</ul>
+<p>与事务型不同的是，数据会随着业务周期性的推进而变化。</p>
+<p> 比如订单，其中订单状态会周期性变化。再比如，请假、贷款申请，随着批复状态在周期性变化。</p>
+<p>订单表：</p>
+<table>
+<thead>
+<tr>
+<th>订单编号</th>
+<th>订单金额</th>
+<th>订单状态</th>
+<th>用户id</th>
+<th>支付方式</th>
+<th>支付流水号</th>
+<th>创建时间</th>
+<th>操作时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>223.00</td>
+<td>2</td>
+<td>111</td>
+<td>alipay</td>
+<td>QEyF-63000323</td>
+<td>2019-02-10 00:01:29</td>
+<td>2019-02-10 00:01:29</td>
+</tr>
+<tr>
+<td>2</td>
+<td>589.00</td>
+<td>2</td>
+<td>222</td>
+<td>wechatpay</td>
+<td>qdwV-25111279</td>
+<td>2019-02-10 00:05:02</td>
+<td>2019-02-10 00:05:02</td>
+</tr>
+<tr>
+<td>3</td>
+<td>485.00</td>
+<td>1</td>
+<td>666</td>
+<td>unionpay</td>
+<td>hSUS-65716585</td>
+<td>2019-02-10 00:50:02</td>
+<td>2019-02-10 00:50:02</td>
+</tr>
+<tr>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-同步策略"><a href="#2-2-同步策略" class="headerlink" title="2.2 同步策略"></a>2.2 同步策略</h3><p>数据同步策略的类型包括：全量表、增量表、新增及变化表、拉链表</p>
+<ul>
+<li>全量表：存储完整的数据。</li>
+</ul>
+<ul>
+<li>增量表：存储新增加的数据。</li>
+</ul>
+<ul>
+<li>新增及变化表：存储新增加的数据和变化的数据。</li>
+</ul>
+<ul>
+<li>拉链表：对新增及变化表做定期合并。</li>
+</ul>
+<h4 id="2-2-1-实体表同步策略"><a href="#2-2-1-实体表同步策略" class="headerlink" title="2.2.1 实体表同步策略"></a>2.2.1 实体表同步策略</h4><ul>
+<li><p>实体表：比如用户，商品，商家，销售员等</p>
+</li>
+<li><p>实体表数据量比较小：通常可以做每日全量，就是每天存一份完整数据。即每日全量。</p>
+</li>
+</ul>
+<h4 id="2-2-2-维度表同步策略"><a href="#2-2-2-维度表同步策略" class="headerlink" title="2.2.2 维度表同步策略"></a>2.2.2 维度表同步策略</h4><ul>
+<li><p>维度表：比如订单状态，审批状态，商品分类</p>
+</li>
+<li><p>维度表数据量比较小：通常可以做每日全量，就是每天存一份完整数据。即每日全量。</p>
+</li>
+<li><p>说明：</p>
+<ul>
+<li>针对可能会有变化的状态数据可以存储每日全量。</li>
+<li>没变化的客观世界的维度（比如性别，地区，民族，政治成分，鞋子尺码）可以只存一份固定值。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-3-事务型事实表同步策略"><a href="#2-2-3-事务型事实表同步策略" class="headerlink" title="2.2.3 事务型事实表同步策略"></a>2.2.3 事务型事实表同步策略</h4><ul>
+<li><p>事务型事实表：比如，交易流水，操作日志，出库入库记录等。</p>
+</li>
+<li><p>因为数据不会变化，而且数据量巨大，所以每天只同步新增数据即可，所以可以做成每日增量表，即每日创建一个分区存储。</p>
+</li>
+</ul>
+<h4 id="2-2-4-周期型事实表同步策略"><a href="#2-2-4-周期型事实表同步策略" class="headerlink" title="2.2.4 周期型事实表同步策略"></a>2.2.4 周期型事实表同步策略</h4><ul>
+<li><p>周期型事实表：比如，订单、请假、贷款申请等</p>
+</li>
+<li><p>这类表从数据量的角度，存每日全量的话，数据量太大，冗余也太大。如果用每日增量的话无法反应数据变化。</p>
+</li>
+<li><p>每日新增及变化量，包括了当日的新增和修改。一般来说这个表，足够计算大部分当日数据的。但是这种依然无法解决能够得到某一个历史时间点（时间切片）的切片数据。 </p>
+</li>
+<li><p>所以要用利用每日新增和变化表，制作一张拉链表，以方便的取到某个时间切片的快照数据。所以我们需要得到每日新增及变化量。</p>
+</li>
+</ul>
+<ul>
+<li>拉链表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>name姓名</th>
+<th>start新名字创建时间</th>
+<th>end名字更改时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>1990/1/1</td>
+<td>2018/12/31</td>
+</tr>
+<tr>
+<td>张小三</td>
+<td>2019/1/1</td>
+<td>2019/4/30</td>
+</tr>
+<tr>
+<td>张大三</td>
+<td>2019/5/1</td>
+<td>9999-99-99</td>
+</tr>
+<tr>
+<td>。。。</td>
+<td>。。。</td>
+<td>。。。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-3-范式理论"><a href="#2-3-范式理论" class="headerlink" title="2.3 范式理论"></a>2.3 范式理论</h3><h4 id="2-3-1-范式概念"><a href="#2-3-1-范式概念" class="headerlink" title="2.3.1 范式概念"></a>2.3.1 范式概念</h4><ul>
+<li>​    关系型数据库设计时，遵照一定的规范要求，目的在于降低数据的冗余性，目前业界范式有：第一范式(1NF)、第二范式(2NF)、第三范式(3NF)、巴斯-科德范式(BCNF)、第四范式(4NF)、第五范式(5NF)。</li>
+</ul>
+<p>范式可以理解为设计一张数据表的表结构，符合的标准级别。</p>
+<ul>
+<li><p>使用范式的根本目的是：</p>
+<ul>
+<li>减少数据冗余，尽量让每个数据只出现一次。</li>
+<li>保证数据一致性</li>
+</ul>
+</li>
+<li><p>缺点是获取数据时，需要通过拼接出最后的数据。</p>
+</li>
+</ul>
+<h4 id="2-3-2-函数依赖"><a href="#2-3-2-函数依赖" class="headerlink" title="2.3.2 函数依赖"></a>2.3.2 函数依赖</h4><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204143818657.png" alt="image-20191204143818657"></p>
+<h4 id="2-3-3-范式区分"><a href="#2-3-3-范式区分" class="headerlink" title="2.3.3 范式区分"></a>2.3.3 范式区分</h4><ul>
+<li>1NF：属性不可分割</li>
+<li>2NF：只含有部分依赖</li>
+<li>3NF：不包含传递依赖</li>
+</ul>
+<h3 id="2-4-关系建模和纬度建模"><a href="#2-4-关系建模和纬度建模" class="headerlink" title="2.4 关系建模和纬度建模"></a>2.4 关系建模和纬度建模</h3><ul>
+<li>关系模型：主要用于OLTP系统，为了保证数据的一致性以及避免冗余，所以大部分业务系统的表都是遵循第三范式的。  </li>
+<li>维度模型主要应用于OLAP系统中，因为关系模型虽然冗余少，但是在大规模数据，跨表分析统计查询过程中，会造成多表关联，这会大大降低执行效率。</li>
+</ul>
+<h4 id="2-5-雪花模型、星型模型和星座模型"><a href="#2-5-雪花模型、星型模型和星座模型" class="headerlink" title="2.5 雪花模型、星型模型和星座模型"></a>2.5 雪花模型、星型模型和星座模型</h4><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204145843067.png" alt="image-20191204145843067"></p>
+<p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204145910488.png" alt="image-20191204145910488"></p>
+<h2 id="3-数仓搭建"><a href="#3-数仓搭建" class="headerlink" title="3. 数仓搭建"></a>3. 数仓搭建</h2><h3 id="3-1-数据生成"><a href="#3-1-数据生成" class="headerlink" title="3.1 数据生成"></a>3.1 数据生成</h3><h4 id="3-1-1-生成业务数据"><a href="#3-1-1-生成业务数据" class="headerlink" title="3.1.1 生成业务数据"></a>3.1.1 生成业务数据</h4><p>1）生成业务数据函数说明</p>
+<pre><code> ```sql
+</code></pre><p> init_data ( do_date_string VARCHAR(20) , order_incr_num INT, user_incr_num INT , sku_num INT , if_truncate BOOLEAN )：</p>
+<p>– 参数一：do_date_string生成数据日期<br>–     参数二：order_incr_num订单id个数<br>–     参数三：user_incr_num用户id个数<br>–     参数四：sku_num商品sku个数<br>–     参数五：if_truncate是否删除数据</p>
+<p>– 需求：生成日期2019年2月10日数据、订单1000个、用户200个、商品sku300个、删除原始数据。<br>CALL init_data(‘2019-02-10’,1000,200,300,TRUE);</p>
+<pre><code> ```
+</code></pre><h3 id="3-2-业务数据导入数仓"><a href="#3-2-业务数据导入数仓" class="headerlink" title="3.2 业务数据导入数仓"></a>3.2 业务数据导入数仓</h3><h4 id="3-2-1-分析表的同步策略"><a href="#3-2-1-分析表的同步策略" class="headerlink" title="3.2.1 分析表的同步策略"></a>3.2.1 分析表的同步策略</h4><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204160350046.png" alt="image-20191204160350046"></p>
+<h4 id="3-2-2-Sqoop定时导入脚本"><a href="#3-2-2-Sqoop定时导入脚本" class="headerlink" title="3.2.2 Sqoop定时导入脚本"></a>3.2.2 Sqoop定时导入脚本</h4><pre><code class="sh">#!/bin/bash
+
+db_date=$2
+echo $db_date
+db_name=gmall
+
+import_data() {
+/kfly/install/sqoop-1.4.6-cdh5.14.2/bin/sqoop import \
+--connect jdbc:mysql://node02:3306/$db_name?useSSL=false \
+--username root \
+--password 123456 \
+--target-dir /origin_data/$db_name/db/$1/$db_date \
+--delete-target-dir \
+--num-mappers 1 \
+--fields-terminated-by &quot;\t&quot; \
+--query &quot;$2&quot;&#39; and $CONDITIONS;&#39;
+}
+
+import_sku_info(){
+  import_data &quot;sku_info&quot; &quot;select 
+id, spu_id, price, sku_name, sku_desc, weight, tm_id,
+category3_id, create_time
+  from sku_info where 1=1&quot;
+}
+
+import_user_info(){
+  import_data &quot;user_info&quot; &quot;select 
+id, name, birthday, gender, email, user_level, 
+create_time 
+from user_info where 1=1&quot;
+}
+
+import_base_category1(){
+  import_data &quot;base_category1&quot; &quot;select 
+id, name from base_category1 where 1=1&quot;
+}
+
+import_base_category2(){
+  import_data &quot;base_category2&quot; &quot;select 
+id, name, category1_id from base_category2 where 1=1&quot;
+}
+
+import_base_category3(){
+  import_data &quot;base_category3&quot; &quot;select id, name, category2_id from base_category3 where 1=1&quot;
+}
+
+import_order_detail(){
+  import_data   &quot;order_detail&quot;   &quot;select 
+    od.id, 
+    order_id, 
+    user_id, 
+    sku_id, 
+    sku_name, 
+    order_price, 
+    sku_num, 
+    o.create_time  
+  from order_info o, order_detail od
+  where o.id=od.order_id
+  and DATE_FORMAT(create_time,&#39;%Y-%m-%d&#39;)=&#39;$db_date&#39;&quot;
+}
+
+import_payment_info(){
+  import_data &quot;payment_info&quot;   &quot;select 
+    id,  
+    out_trade_no, 
+    order_id, 
+    user_id, 
+    alipay_trade_no, 
+    total_amount,  
+    subject, 
+    payment_type, 
+    payment_time 
+  from payment_info 
+  where DATE_FORMAT(payment_time,&#39;%Y-%m-%d&#39;)=&#39;$db_date&#39;&quot;
+}
+
+import_order_info(){
+  import_data   &quot;order_info&quot;   &quot;select 
+    id, 
+    total_amount, 
+    order_status, 
+    user_id, 
+    payment_way, 
+    out_trade_no, 
+    create_time, 
+    operate_time  
+  from order_info 
+  where (DATE_FORMAT(create_time,&#39;%Y-%m-%d&#39;)=&#39;$db_date&#39; or DATE_FORMAT(operate_time,&#39;%Y-%m-%d&#39;)=&#39;$db_date&#39;)&quot;
+}
+
+case $1 in
+  &quot;base_category1&quot;)
+     import_base_category1
+;;
+  &quot;base_category2&quot;)
+     import_base_category2
+;;
+  &quot;base_category3&quot;)
+     import_base_category3
+;;
+  &quot;order_info&quot;)
+     import_order_info
+;;
+  &quot;order_detail&quot;)
+     import_order_detail
+;;
+  &quot;sku_info&quot;)
+     import_sku_info
+;;
+  &quot;user_info&quot;)
+     import_user_info
+;;
+  &quot;payment_info&quot;)
+     import_payment_info
+;;
+   &quot;all&quot;)
+   import_base_category1
+   import_base_category2
+   import_base_category3
+   import_order_info
+   import_order_detail
+   import_sku_info
+   import_user_info
+   import_payment_info
+;;
+esac
+</code></pre>
+<h3 id="3-3-建表"><a href="#3-3-建表" class="headerlink" title="3.3 建表"></a>3.3 建表</h3><h4 id="3-3-1-创建订单表"><a href="#3-3-1-创建订单表" class="headerlink" title="3.3.1 创建订单表"></a>3.3.1 创建订单表</h4><pre><code class="sql">drop table if exists gmall.ods_order_info;
+create external table gmall.ods_order_info (
+ `id` string COMMENT &#39;订单编号&#39;,
+ `total_amount` decimal(10,2) COMMENT &#39;订单金额&#39;,
+ `order_status` string COMMENT &#39;订单状态&#39;,
+ `user_id` string COMMENT &#39;用户id&#39;,
+ `payment_way` string COMMENT &#39;支付方式&#39;,
+ `out_trade_no` string COMMENT &#39;支付流水号&#39;,
+ `create_time` string COMMENT &#39;创建时间&#39;,
+ `operate_time` string COMMENT &#39;操作时间&#39;
+) COMMENT &#39;订单表&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_order_info/&#39;
+;
+</code></pre>
+<h4 id="3-3-2-创建订单详情表"><a href="#3-3-2-创建订单详情表" class="headerlink" title="3.3.2 创建订单详情表"></a>3.3.2 创建订单详情表</h4><pre><code class="sql">drop table if exists gmall.ods_order_detail;
+create external table gmall.ods_order_detail( 
+ `id` string COMMENT &#39;订单编号&#39;,
+ `order_id` string  COMMENT &#39;订单号&#39;, 
+ `user_id` string COMMENT &#39;用户id&#39;,
+ `sku_id` string COMMENT &#39;商品id&#39;,
+ `sku_name` string COMMENT &#39;商品名称&#39;,
+ `order_price` string COMMENT &#39;商品价格&#39;,
+ `sku_num` string COMMENT &#39;商品数量&#39;,
+ `create_time` string COMMENT &#39;创建时间&#39;
+) COMMENT &#39;订单明细表&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39; 
+location &#39;/warehouse/gmall/ods/ods_order_detail/&#39;
+;
+</code></pre>
+<h4 id="3-3-3-创建商品表"><a href="#3-3-3-创建商品表" class="headerlink" title="3.3.3 创建商品表"></a>3.3.3 创建商品表</h4><pre><code class="sql">drop table if exists gmall.ods_sku_info;
+create external table gmall.ods_sku_info( 
+ `id` string COMMENT &#39;skuId&#39;,
+ `spu_id` string COMMENT &#39;spuid&#39;, 
+ `price` decimal(10,2) COMMENT &#39;价格&#39;,
+ `sku_name` string COMMENT &#39;商品名称&#39;,
+ `sku_desc` string COMMENT &#39;商品描述&#39;,
+ `weight` string COMMENT &#39;重量&#39;,
+ `tm_id` string COMMENT &#39;品牌id&#39;,
+ `category3_id` string COMMENT &#39;品类id&#39;,
+ `create_time` string COMMENT &#39;创建时间&#39;
+) COMMENT &#39;商品表&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_sku_info/&#39;
+;
+
+</code></pre>
+<h4 id="3-3-4-创建用户表"><a href="#3-3-4-创建用户表" class="headerlink" title="3.3.4 创建用户表"></a>3.3.4 创建用户表</h4><pre><code>drop table if exists gmall.ods_user_info;
+create external table gmall.ods_user_info( 
+ `id` string COMMENT &#39;用户id&#39;,
+ `name` string COMMENT &#39;姓名&#39;,
+ `birthday` string COMMENT &#39;生日&#39;,
+ `gender` string COMMENT &#39;性别&#39;,
+ `email` string COMMENT &#39;邮箱&#39;,
+ `user_level` string COMMENT &#39;用户等级&#39;,
+ `create_time` string COMMENT &#39;创建时间&#39;
+) COMMENT &#39;用户信息&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_user_info/&#39;
+
+</code></pre><h4 id="3-3-5-创建分类表"><a href="#3-3-5-创建分类表" class="headerlink" title="3.3.5 创建分类表"></a>3.3.5 创建分类表</h4><pre><code class="sql">drop table if exists gmall.ods_user_info;
+create external table gmall.ods_user_info( 
+ `id` string COMMENT &#39;用户id&#39;,
+ `name` string COMMENT &#39;姓名&#39;,
+ `birthday` string COMMENT &#39;生日&#39;,
+ `gender` string COMMENT &#39;性别&#39;,
+ `email` string COMMENT &#39;邮箱&#39;,
+ `user_level` string COMMENT &#39;用户等级&#39;,
+ `create_time` string COMMENT &#39;创建时间&#39;
+) COMMENT &#39;用户信息&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_user_info/&#39;;
+
+drop table if exists gmall.ods_base_category2;
+create external table gmall.ods_base_category2( 
+ `id` string COMMENT &#39; id&#39;,
+ `name` string COMMENT &#39;名称&#39;,
+ category1_id string COMMENT &#39;一级品类id&#39;
+) COMMENT &#39;商品二级分类&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_base_category2/&#39;
+;
+
+drop table if exists gmall.ods_base_category3;
+create external table gmall.ods_base_category3(
+ `id` string COMMENT &#39; id&#39;,
+ `name`  string COMMENT &#39;名称&#39;,
+ category2_id string COMMENT &#39;二级品类id&#39;
+) COMMENT &#39;商品三级分类&#39;
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_base_category3/&#39;
+;
+
+</code></pre>
+<h4 id="3-3-6-支付流水表"><a href="#3-3-6-支付流水表" class="headerlink" title="3.3.6 支付流水表"></a>3.3.6 支付流水表</h4><pre><code class="sql">drop table if exists gmall.ods_payment_info;
+create external table gmall.ods_payment_info(
+ `id` bigint COMMENT &#39;编号&#39;,
+ `out_trade_no` string COMMENT &#39;对外业务编号&#39;,
+ `order_id` string COMMENT &#39;订单编号&#39;,
+ `user_id` string COMMENT &#39;用户编号&#39;,
+ `alipay_trade_no` string COMMENT &#39;支付宝交易流水编号&#39;,
+ `total_amount` decimal(16,2) COMMENT &#39;支付金额&#39;,
+ `subject` string COMMENT &#39;交易内容&#39;,
+ `payment_type` string COMMENT &#39;支付类型&#39;,
+ `payment_time` string COMMENT &#39;支付时间&#39;
+)COMMENT &#39;支付流水表&#39; 
+PARTITIONED BY (`dt` string)
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ods/ods_payment_info/&#39;
+;
+
+</code></pre>
+<h3 id="3-4-数据导入脚本"><a href="#3-4-数据导入脚本" class="headerlink" title="3.4 数据导入脚本"></a>3.4 数据导入脚本</h3><pre><code class="sh">#!/bin/bash
+
+   APP=gmall
+   hive=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else 
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi
+
+sql=&quot; 
+load data inpath &#39;/origin_data/$APP/db/order_info/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_order_info partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/order_detail/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_order_detail partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/sku_info/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_sku_info partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/user_info/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_user_info partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/payment_info/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_payment_info partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/base_category1/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_base_category1 partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/base_category2/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_base_category2 partition(dt=&#39;$do_date&#39;);
+
+load data inpath &#39;/origin_data/$APP/db/base_category3/$do_date&#39; OVERWRITE into table &quot;$APP&quot;.ods_base_category3 partition(dt=&#39;$do_date&#39;); 
+&quot;
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h2 id="4-DWD层"><a href="#4-DWD层" class="headerlink" title="4. DWD层"></a>4. DWD层</h2><ul>
+<li>对ODS层数据进行判空过滤。对商品分类表进行维度退化（降维）。</li>
+</ul>
+<h3 id="4-1-创建表"><a href="#4-1-创建表" class="headerlink" title="4.1 创建表"></a>4.1 创建表</h3><h4 id="4-1-1-创建订单表"><a href="#4-1-1-创建订单表" class="headerlink" title="4.1.1 创建订单表"></a>4.1.1 创建订单表</h4><pre><code class="sql">drop table if exists gmall.dwd_order_info;
+create external table gmall.dwd_order_info (
+ `id` string COMMENT &#39;&#39;,
+ `total_amount` decimal(10,2) COMMENT &#39;&#39;,
+ `order_status` string COMMENT &#39; 1 2 3 4 5&#39;,
+ `user_id` string COMMENT &#39;id&#39;,
+ `payment_way` string COMMENT &#39;&#39;,
+ `out_trade_no` string COMMENT &#39;&#39;,
+ `create_time` string COMMENT &#39;&#39;,
+ `operate_time` string COMMENT &#39;&#39;
+) 
+PARTITIONED BY (`dt` string)
+stored as parquet 
+location &#39;/warehouse/gmall/dwd/dwd_order_info/&#39; 
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;) 
+;
+</code></pre>
+<h4 id="4-1-2-订单详情表"><a href="#4-1-2-订单详情表" class="headerlink" title="4.1.2 订单详情表"></a>4.1.2 订单详情表</h4><pre><code class="sql">drop table if exists gmall.dwd_order_detail;
+create external table gmall.dwd_order_detail( 
+ `id` string COMMENT &#39;&#39;,
+ `order_id` decimal(10,2) COMMENT &#39;&#39;, 
+ `user_id` string COMMENT &#39;id&#39;,
+ `sku_id` string COMMENT &#39;id&#39;,
+ `sku_name` string COMMENT &#39;&#39;,
+ `order_price` string COMMENT &#39;&#39;,
+ `sku_num` string COMMENT &#39;&#39;,
+ `create_time` string COMMENT &#39;&#39;
+)
+PARTITIONED BY (`dt` string) 
+stored as parquet
+location &#39;/warehouse/gmall/dwd/dwd_order_detail/&#39;
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;)
+;
+</code></pre>
+<h4 id="4-1-3-用户表"><a href="#4-1-3-用户表" class="headerlink" title="4.1.3 用户表"></a>4.1.3 用户表</h4><pre><code class="sql">drop table if exists gmall.dwd_user_info;
+create external table gmall.dwd_user_info( 
+ `id` string COMMENT &#39;id&#39;,
+ `name` string COMMENT &#39;&#39;, 
+ `birthday` string COMMENT &#39;&#39;,
+ `gender` string COMMENT &#39;&#39;,
+ `email` string COMMENT &#39;&#39;,
+ `user_level` string COMMENT &#39;&#39;,
+ `create_time` string COMMENT &#39;&#39;
+) 
+PARTITIONED BY (`dt` string)
+stored as parquet
+location &#39;/warehouse/gmall/dwd/dwd_user_info/&#39;
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;)
+;
+</code></pre>
+<h4 id="4-1-4-支付流水表"><a href="#4-1-4-支付流水表" class="headerlink" title="4.1.4 支付流水表"></a>4.1.4 支付流水表</h4><pre><code class="sql">drop table if exists gmall.dwd_payment_info;
+create external table gmall.dwd_payment_info(
+ `id` bigint COMMENT &#39;&#39;,
+ `out_trade_no` string COMMENT &#39;&#39;,
+ `order_id` string COMMENT &#39;&#39;,
+ `user_id` string COMMENT &#39;&#39;,
+ `alipay_trade_no` string COMMENT &#39;&#39;,
+ `total_amount` decimal(16,2) COMMENT &#39;&#39;,
+ `subject` string COMMENT &#39;&#39;,
+ `payment_type` string COMMENT &#39;&#39;,
+ `payment_time` string COMMENT &#39;&#39;
+)  
+PARTITIONED BY (`dt` string)
+stored as parquet
+location &#39;/warehouse/gmall/dwd/dwd_payment_info/&#39;
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;)
+;
+</code></pre>
+<h4 id="4-1-5-商品表"><a href="#4-1-5-商品表" class="headerlink" title="4.1.5 商品表"></a>4.1.5 商品表</h4><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204164800632.png" alt="image-20191204164800632"></p>
+<pre><code class="sql">drop table if exists gmall.dwd_sku_info;
+create external table gmall.dwd_sku_info(
+ `id` string COMMENT &#39;skuId&#39;,
+ `spu_id` string COMMENT &#39;spuid&#39;,
+ `price` decimal(10,2) COMMENT &#39;&#39;,
+ `sku_name` string COMMENT &#39;&#39;,
+ `sku_desc` string COMMENT &#39;&#39;,
+ `weight` string COMMENT &#39;&#39;,
+ `tm_id` string COMMENT &#39;id&#39;,
+ `category3_id` string COMMENT &#39;1id&#39;,
+ `category2_id` string COMMENT &#39;2id&#39;,
+ `category1_id` string COMMENT &#39;3id&#39;,
+ `category3_name` string COMMENT &#39;3&#39;,
+ `category2_name` string COMMENT &#39;2&#39;,
+ `category1_name` string COMMENT &#39;1&#39;,
+ `create_time` string COMMENT &#39;&#39;
+) 
+PARTITIONED BY (`dt` string)
+stored as parquet
+location &#39;/warehouse/gmall/dwd/dwd_sku_info/&#39;
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;)
+;
+</code></pre>
+<h3 id="4-2-DWD层数据导入脚本"><a href="#4-2-DWD层数据导入脚本" class="headerlink" title="4.2   DWD层数据导入脚本"></a>4.2   DWD层数据导入脚本</h3><pre><code class="sh">#!/bin/bash
+
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else 
+    do_date=`date -d &quot;-1 day&quot; +%F`  
+fi 
+
+sql=&quot;
+
+set hive.exec.dynamic.partition.mode=nonstrict;
+
+insert overwrite table &quot;$APP&quot;.dwd_order_info partition(dt)
+select * from &quot;$APP&quot;.ods_order_info 
+where dt=&#39;$do_date&#39; and id is not null;
+
+insert overwrite table &quot;$APP&quot;.dwd_order_detail partition(dt)
+select * from &quot;$APP&quot;.ods_order_detail 
+where dt=&#39;$do_date&#39;   and id is not null;
+
+insert overwrite table &quot;$APP&quot;.dwd_user_info partition(dt)
+select * from &quot;$APP&quot;.ods_user_info
+where dt=&#39;$do_date&#39; and id is not null;
+
+insert overwrite table &quot;$APP&quot;.dwd_payment_info partition(dt)
+select * from &quot;$APP&quot;.ods_payment_info
+where dt=&#39;$do_date&#39; and id is not null;
+
+insert overwrite table &quot;$APP&quot;.dwd_sku_info partition(dt)
+select  
+    sku.id,
+    sku.spu_id,
+    sku.price,
+    sku.sku_name,
+    sku.sku_desc,
+    sku.weight,
+    sku.tm_id,
+    sku.category3_id,
+    c2.id category2_id,
+    c1.id category1_id,
+    c3.name category3_name,
+    c2.name category2_name,
+    c1.name category1_name,
+    sku.create_time,
+    sku.dt
+from
+    &quot;$APP&quot;.ods_sku_info sku
+join &quot;$APP&quot;.ods_base_category3 c3 on sku.category3_id=c3.id 
+    join &quot;$APP&quot;.ods_base_category2 c2 on c3.category2_id=c2.id 
+    join &quot;$APP&quot;.ods_base_category1 c1 on c2.category1_id=c1.id 
+where sku.dt=&#39;$do_date&#39;  and c2.dt=&#39;$do_date&#39;
+and c3.dt=&#39;$do_date&#39; and c1.dt=&#39;$do_date&#39;
+and sku.id is not null;
+&quot;
+
+$hive -e &quot;$sql&quot;
+</code></pre>
+<h4 id="4-2-1-总结"><a href="#4-2-1-总结" class="headerlink" title="4.2.1 总结"></a>4.2.1 总结</h4><ul>
+<li><p>维度退化要付出什么代价？ </p>
+<ul>
+<li>如果被退化的维度，还有其他业务表使用，退化后处理起来就麻烦些。</li>
+</ul>
+</li>
+<li><p>想想在实际业务中还有那些维度表可以退化</p>
+<ul>
+<li>城市的三级分类（省、市、县）等</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-DWS-用户行为宽表"><a href="#5-DWS-用户行为宽表" class="headerlink" title="5 DWS 用户行为宽表"></a>5 DWS 用户行为宽表</h2><ul>
+<li>为什么要建宽表<ul>
+<li>需求目标，把每个用户单日的行为聚合起来组成一张多列宽表，以便之后关联用户维度信息后进行，不同角度的统计分析。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204165240937.png" alt="image-20191204165240937"></p>
+<pre><code class="sql">drop table if exists gmall.dws_user_action;
+create external table gmall.dws_user_action 
+(   
+    user_id          string      comment &#39;用户 id&#39;,
+    order_count     bigint      comment &#39;下单次数 &#39;,
+    order_amount    decimal(16,2)  comment &#39;下单金额 &#39;,
+    payment_count   bigint      comment &#39;支付次数&#39;,
+    payment_amount  decimal(16,2) comment &#39;支付金额 &#39;,
+    comment_count   bigint      comment &#39;评论次数&#39;
+) COMMENT &#39;每日用户行为宽表&#39;
+PARTITIONED BY (`dt` string)
+stored as parquet
+location &#39;/warehouse/gmall/dws/dws_user_action/&#39;
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;);
+
+</code></pre>
+<pre><code class="sql">with  
+tmp_order as
+(
+    select 
+        user_id, 
+count(*)  order_count,
+        sum(oi.total_amount) order_amount
+    from gmall.dwd_order_info oi
+    where date_format(oi.create_time,&#39;yyyy-MM-dd&#39;)=&#39;2019-02-10&#39;
+    group by user_id
+) ,
+tmp_payment as
+(
+    select
+        user_id, 
+        sum(pi.total_amount) payment_amount, 
+        count(*) payment_count 
+    from gmall.dwd_payment_info pi 
+    where date_format(pi.payment_time,&#39;yyyy-MM-dd&#39;)=&#39;2019-02-10&#39;
+    group by user_id
+),
+tmp_comment as
+(
+    select
+        user_id,
+        count(*) comment_count
+    from gmall.dwd_comment_log c
+    where date_format(c.dt,&#39;yyyy-MM-dd&#39;)=&#39;2019-02-10&#39;
+    group by user_id 
+) 
+
+insert overwrite table gmall.dws_user_action partition(dt=&#39;2019-02-10&#39;) 
+select
+    user_actions.user_id,
+    sum(user_actions.order_count),
+    sum(user_actions.order_amount),
+    sum(user_actions.payment_count),
+    sum(user_actions.payment_amount),
+    sum(user_actions.comment_count)
+from 
+(
+    select
+        user_id,
+        order_count,
+        order_amount,
+        0 payment_count,
+        0 payment_amount,
+        0 comment_count
+    from tmp_order
+
+    union all
+    select
+        user_id,
+        0 order_count,
+        0 order_amount,
+        payment_count,
+        payment_amount,
+        0 comment_count
+    from tmp_payment  
+
+    union all
+    select
+        user_id,
+        0 order_count,
+        0 order_amount,
+        0 payment_count,
+        0 payment_amount,
+        comment_count
+    from tmp_comment
+ ) user_actions
+group by user_id;
+</code></pre>
+<pre><code class="sh">#!/bin/bash
+
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else 
+    do_date=`date -d &quot;-1 day&quot; +%F`  
+fi 
+
+sql=&quot;
+
+with  
+tmp_order as
+(
+    select 
+        user_id, 
+        sum(oi.total_amount) order_amount, 
+        count(*)  order_count
+    from &quot;$APP&quot;.dwd_order_info  oi
+    where date_format(oi.create_time,&#39;yyyy-MM-dd&#39;)=&#39;$do_date&#39;
+    group by user_id
+)  ,
+tmp_payment as
+(
+    select 
+        user_id, 
+        sum(pi.total_amount) payment_amount, 
+        count(*) payment_count 
+    from &quot;$APP&quot;.dwd_payment_info pi 
+    where date_format(pi.payment_time,&#39;yyyy-MM-dd&#39;)=&#39;$do_date&#39;
+    group by user_id
+),
+tmp_comment as
+(  
+    select  
+        user_id, 
+        count(*) comment_count
+    from &quot;$APP&quot;.dwd_comment_log c
+    where date_format(c.dt,&#39;yyyy-MM-dd&#39;)=&#39;$do_date&#39;
+    group by user_id 
+)
+
+Insert overwrite table &quot;$APP&quot;.dws_user_action partition(dt=&#39;$do_date&#39;)
+select 
+    user_actions.user_id, 
+    sum(user_actions.order_count), 
+    sum(user_actions.order_amount),
+    sum(user_actions.payment_count), 
+    sum(user_actions.payment_amount),
+    sum(user_actions.comment_count) 
+from
+(
+    select
+        user_id,
+        order_count,
+        order_amount,
+        0 payment_count,
+        0 payment_amount,
+        0 comment_count
+    from tmp_order
+
+    union all
+    select
+        user_id,
+        0 order_count,
+        0 order_amount,
+        payment_count,
+        payment_amount,
+        0 comment_count
+    from tmp_payment
+
+    union all
+    select
+        user_id,
+        0 order_count,
+        0 order_amount,
+        0 payment_count,
+        0 payment_amount,
+        comment_count 
+    from tmp_comment
+ ) user_actions
+group by user_id;
+&quot;
+
+$hive -e &quot;$sql&quot;
+
+</code></pre>
+<h2 id="6-GWV-成交总额"><a href="#6-GWV-成交总额" class="headerlink" title="6. GWV 成交总额"></a>6. GWV 成交总额</h2><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204170348604.png" alt="image-20191204170348604"></p>
+<pre><code class="sql">drop table if exists gmall.ads_gmv_sum_day;
+create external table gmall.ads_gmv_sum_day(
+ `dt` string COMMENT &#39;统计日期&#39;,
+ `gmv_count` bigint COMMENT &#39;当日gmv订单个数&#39;,
+ `gmv_amount` decimal(16,2) COMMENT &#39;当日gmv订单总金额&#39;,
+ `gmv_payment` decimal(16,2) COMMENT &#39;当日支付金额&#39;
+) COMMENT &#39;GMV&#39;
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_gmv_sum_day/&#39;
+;
+</code></pre>
+<pre><code class="sql">insert into table gmall.ads_gmv_sum_day
+select 
+&#39;2019-02-10&#39; dt,
+    sum(order_count) gmv_count,
+    sum(order_amount) gmv_amount,
+    sum(payment_amount) payment_amount 
+from gmall.dws_user_action
+where dt =&#39;2019-02-10&#39;
+group by dt
+;
+
+</code></pre>
+<pre><code class="sh">#!/bin/bash
+
+# 定义变量方便修改
+APP=gmall
+hive=/kfly/install/hive-1.1.0-cdh5.14.2/bin/hive
+
+# 如果是输入的日期按照取输入日期；如果没输入日期取当前时间的前一天
+if [ -n &quot;$1&quot; ] ;then
+    do_date=$1
+else 
+    do_date=`date -d &quot;-1 day&quot; +%F`
+fi 
+
+sql=&quot;
+insert into table &quot;$APP&quot;.ads_gmv_sum_day 
+select 
+    &#39;$do_date&#39; dt,
+    sum(order_count)  gmv_count,
+    sum(order_amount) gmv_amount,
+    sum(payment_amount) payment_amount 
+from &quot;$APP&quot;.dws_user_action 
+where dt =&#39;$do_date&#39;
+group by dt;
+&quot;
+
+$hive -e &quot;$sql&quot;
+
+</code></pre>
+<h2 id="7-转化率之用户新鲜度及漏斗分析"><a href="#7-转化率之用户新鲜度及漏斗分析" class="headerlink" title="7. 转化率之用户新鲜度及漏斗分析"></a>7. 转化率之用户新鲜度及漏斗分析</h2><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204170729077.png" alt="image-20191204170729077"></p>
+<h3 id="7-1-ADS层之新增用户占日活跃用户比率（用户新鲜度）"><a href="#7-1-ADS层之新增用户占日活跃用户比率（用户新鲜度）" class="headerlink" title="7.1  ADS层之新增用户占日活跃用户比率（用户新鲜度）"></a>7.1  ADS层之新增用户占日活跃用户比率（用户新鲜度）</h3><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204171248249.png" alt="image-20191204171248249"></p>
+<pre><code class="sql">drop table if exists gmall.ads_user_convert_day;
+create external table gmall.ads_user_convert_day( 
+    `dt` string COMMENT &#39;统计日期&#39;,
+    `uv_m_count`  bigint COMMENT &#39;当日活跃设备&#39;,
+    `new_m_count`  bigint COMMENT &#39;当日新增设备&#39;,
+    `new_m_ratio`   decimal(10,2) COMMENT &#39;当日新增占日活的比率&#39;
+) COMMENT &#39;转化率&#39;
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_user_convert_day/&#39;
+;
+
+
+insert into table gmall.ads_user_convert_day
+select
+    &#39;2019-02-10&#39;,
+    sum(uc.dc) sum_dc,
+    sum(uc.nmc) sum_nmc,
+    cast(sum( uc.nmc)/sum( uc.dc)*100 as decimal(10,2))  new_m_ratio
+from 
+(
+    select
+        day_count dc,
+        0 nmc
+    from gmall.ads_uv_count
+where dt=&#39;2019-02-10&#39;
+
+    union all
+    select
+        0 dc,
+        new_mid_count nmc
+    from gmall.ads_new_mid_count
+    where create_date=&#39;2019-02-10&#39;
+)uc;
+
+</code></pre>
+<h3 id="7-2-ADS层之用户行为漏斗分析"><a href="#7-2-ADS层之用户行为漏斗分析" class="headerlink" title="7.2  ADS层之用户行为漏斗分析"></a>7.2  ADS层之用户行为漏斗分析</h3><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204171353833.png" alt="image-20191204171353833"></p>
+<p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204171418617.png" alt="image-20191204171418617"></p>
+<pre><code class="sql">drop table if exists gmall.ads_user_action_convert_day;
+create external  table gmall.ads_user_action_convert_day(
+    `dt` string COMMENT &#39;统计日期&#39;,
+    `total_visitor_m_count`  bigint COMMENT &#39;总访问人数&#39;,
+    `order_u_count` bigint     COMMENT &#39;下单人数&#39;,
+    `visitor2order_convert_ratio`  decimal(10,2) COMMENT &#39;访问到下单转化率&#39;,
+    `payment_u_count` bigint     COMMENT &#39;支付人数&#39;,
+    `order2payment_convert_ratio` decimal(10,2) COMMENT &#39;下单到支付的转化率&#39;
+ ) COMMENT &#39;用户行为漏斗分析&#39;
+row format delimited  fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_user_action_convert_day/&#39;
+;
+
+
+insert into table gmall.ads_user_action_convert_day
+select 
+    &#39;2019-02-10&#39;,
+    uv.day_count,
+    ua.order_count,
+    cast(ua.order_count/uv.day_count as  decimal(10,2)) visitor2order_convert_ratio,
+    ua.payment_count,
+    cast(ua.payment_count/ua.order_count as  decimal(10,2)) order2payment_convert_ratio
+from  
+(
+select 
+    dt,
+        sum(if(order_count&gt;0,1,0)) order_count,
+        sum(if(payment_count&gt;0,1,0)) payment_count
+    from gmall.dws_user_action
+where dt=&#39;2019-02-10&#39;
+group by dt
+)ua join gmall.ads_uv_count  uv on uv.dt=ua.dt
+;
+
+</code></pre>
+<h2 id="8-品牌复购率"><a href="#8-品牌复购率" class="headerlink" title="8. 品牌复购率"></a>8. 品牌复购率</h2><h3 id="8-1-复购率分析"><a href="#8-1-复购率分析" class="headerlink" title="8.1 复购率分析"></a>8.1 复购率分析</h3><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204171732545.png" alt="image-20191204171732545"></p>
+<h3 id="8-2-DWS层"><a href="#8-2-DWS层" class="headerlink" title="8.2 DWS层"></a>8.2 DWS层</h3><h4 id="8-2-1-用户购买商品明细表（宽表）"><a href="#8-2-1-用户购买商品明细表（宽表）" class="headerlink" title="8.2.1 用户购买商品明细表（宽表）"></a>8.2.1 用户购买商品明细表（宽表）</h4><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204171651319.png" alt="image-20191204171651319"></p>
+<pre><code class="sql">drop table if exists gmall.dws_sale_detail_daycount;
+create external table gmall.dws_sale_detail_daycount
+(   
+    user_id   string  comment &#39;用户 id&#39;,
+    sku_id    string comment &#39;商品 Id&#39;,
+    user_gender  string comment &#39;用户性别&#39;,
+    user_age string  comment &#39;用户年龄&#39;,
+    user_level string comment &#39;用户等级&#39;,
+    order_price decimal(10,2) comment &#39;商品价格&#39;,
+    sku_name string   comment &#39;商品名称&#39;,
+    sku_tm_id string   comment &#39;品牌id&#39;,
+    sku_category3_id string comment &#39;商品三级品类id&#39;,
+    sku_category2_id string comment &#39;商品二级品类id&#39;,
+    sku_category1_id string comment &#39;商品一级品类id&#39;,
+    sku_category3_name string comment &#39;商品三级品类名称&#39;,
+    sku_category2_name string comment &#39;商品二级品类名称&#39;,
+    sku_category1_name string comment &#39;商品一级品类名称&#39;,
+    spu_id  string comment &#39;商品 spu&#39;,
+    sku_num  int comment &#39;购买个数&#39;,
+    order_count string comment &#39;当日下单单数&#39;,
+    order_amount string comment &#39;当日下单金额&#39;
+) COMMENT &#39;用户购买商品明细表&#39;
+PARTITIONED BY (`dt` string)
+stored as parquet
+location &#39;/warehouse/gmall/dws/dws_user_sale_detail_daycount/&#39;
+tblproperties (&quot;parquet.compression&quot;=&quot;snappy&quot;);
+
+
+with
+tmp_detail as
+(
+    select
+        user_id,
+        sku_id, 
+        sum(sku_num) sku_num,   
+        count(*) order_count, 
+        sum(od.order_price*sku_num) order_amount
+    from gmall.dwd_order_detail od
+    where od.dt=&#39;2019-02-10&#39;
+    group by user_id, sku_id
+)  
+insert overwrite table gmall.dws_sale_detail_daycount partition(dt=&#39;2019-02-10&#39;)
+select 
+    tmp_detail.user_id,
+    tmp_detail.sku_id,
+    u.gender,
+    months_between(&#39;2019-02-10&#39;, u.birthday)/12  age, 
+    u.user_level,
+    price,
+    sku_name,
+    tm_id,
+    category3_id,
+    category2_id,
+    category1_id,
+    category3_name,
+    category2_name,
+    category1_name,
+    spu_id,
+    tmp_detail.sku_num,
+    tmp_detail.order_count,
+    tmp_detail.order_amount 
+from tmp_detail 
+left join gmall.dwd_user_info u on tmp_detail.user_id =u.id and u.dt=&#39;2019-02-10&#39;
+left join gmall.dwd_sku_info s on tmp_detail.sku_id =s.id and s.dt=&#39;2019-02-10&#39;
+;
+</code></pre>
+<h3 id="8-3-ADS层品牌复购率"><a href="#8-3-ADS层品牌复购率" class="headerlink" title="8.3 ADS层品牌复购率"></a>8.3 ADS层品牌复购率</h3><p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204172657826.png" alt="image-20191204172657826"></p>
+<pre><code class="sql">drop table if exists gmall.ads_sale_tm_category1_stat_mn;
+create external table gmall.ads_sale_tm_category1_stat_mn
+(   
+    tm_id string comment &#39;品牌id&#39;,
+    category1_id string comment &#39;1级品类id &#39;,
+    category1_name string comment &#39;1级品类名称 &#39;,
+    buycount   bigint comment  &#39;购买人数&#39;,
+    buy_twice_last bigint  comment &#39;两次以上购买人数&#39;,
+    buy_twice_last_ratio decimal(10,2)  comment  &#39;单次复购率&#39;,
+    buy_3times_last   bigint comment   &#39;三次以上购买人数&#39;,
+    buy_3times_last_ratio decimal(10,2)  comment  &#39;多次复购率&#39;,
+    stat_mn string comment &#39;统计月份&#39;,
+    stat_date string comment &#39;统计日期&#39; 
+)   COMMENT &#39;复购率统计&#39;
+row format delimited fields terminated by &#39;\t&#39;
+location &#39;/warehouse/gmall/ads/ads_sale_tm_category1_stat_mn/&#39;
+;
+
+
+insert into table gmall.ads_sale_tm_category1_stat_mn
+select   
+    mn.sku_tm_id,
+    mn.sku_category1_id,
+    mn.sku_category1_name,
+    sum(if(mn.order_count&gt;=1,1,0)) buycount,
+    sum(if(mn.order_count&gt;=2,1,0)) buyTwiceLast,
+    sum(if(mn.order_count&gt;=2,1,0))/sum( if(mn.order_count&gt;=1,1,0)) buyTwiceLastRatio,
+    sum(if(mn.order_count&gt;=3,1,0))  buy3timeLast  ,
+    sum(if(mn.order_count&gt;=3,1,0))/sum( if(mn.order_count&gt;=1,1,0)) buy3timeLastRatio ,
+    date_format(&#39;2019-02-10&#39; ,&#39;yyyy-MM&#39;) stat_mn,
+    &#39;2019-02-10&#39; stat_date
+from 
+(
+select 
+        user_id, 
+sd.sku_tm_id,
+        sd.sku_category1_id,
+        sd.sku_category1_name,
+        sum(order_count) order_count
+    from gmall.dws_sale_detail_daycount sd 
+    where date_format(dt,&#39;yyyy-MM&#39;)=date_format(&#39;2019-02-10&#39; ,&#39;yyyy-MM&#39;)
+    group by user_id, sd.sku_tm_id, sd.sku_category1_id, sd.sku_category1_name
+) mn
+group by mn.sku_tm_id, mn.sku_category1_id, mn.sku_category1_name
+
+</code></pre>
+<h2 id="9-数据可视化表"><a href="#9-数据可视化表" class="headerlink" title="9. 数据可视化表"></a>9. 数据可视化表</h2><pre><code class="sql">-- 2. 每日活跃统计
+DROP TABLE IF EXISTS `ads_uv_count`;
+CREATE TABLE `ads_uv_count`  (
+  `dt` varchar(255) DEFAULT NULL COMMENT &#39;统计日期&#39;,
+  `day_count` bigint(200) DEFAULT NULL COMMENT &#39;当日用户数量&#39;,
+  `wk_count` bigint(200) DEFAULT NULL COMMENT &#39;当周用户数量&#39;,
+  `mn_count` bigint(200) DEFAULT NULL COMMENT &#39;当月用户数量&#39;,
+  `is_weekend` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT &#39;Y,N是否是周末,用于得到本周最终结果&#39;,
+  `is_monthend` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT &#39;Y,N是否是月末,用于得到本月最终结果&#39;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = &#39;每日活跃用户数量&#39; ROW_FORMAT = Dynamic;
+
+-- 2. 留存率统计
+DROP TABLE IF EXISTS `ads_user_retention_day_rate`;
+CREATE TABLE `ads_user_retention_day_rate`  (
+  `stat_date` varchar(255)  DEFAULT NULL COMMENT &#39;统计日期&#39;,
+  `create_date` varchar(255) DEFAULT NULL COMMENT &#39;设备新增日期&#39;,
+  `retention_day` bigint(200) DEFAULT NULL COMMENT &#39;截止当前日期留存天数&#39;,
+  `retention_count` bigint(200) DEFAULT NULL COMMENT &#39;留存数量&#39;,
+  `new_mid_count` bigint(200) DEFAULT NULL COMMENT &#39;当日设备新增数量&#39;,
+  `retention_ratio` decimal(10, 2) DEFAULT NULL COMMENT &#39;留存率&#39;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = &#39;每日用户留存情况&#39; ROW_FORMAT = Dynamic;
+
+
+-- 3. 漏斗分析
+DROP TABLE IF EXISTS `ads_user_action_convert_day`;
+CREATE TABLE `ads_user_action_convert_day`  (
+  `dt` varchar(200) DEFAULT NULL COMMENT &#39;统计日期&#39;,
+  `total_visitor_m_count` bigint(20) DEFAULT NULL COMMENT &#39;总访问人数&#39;,
+  `order_u_count` bigint(20) DEFAULT NULL COMMENT &#39;下单人数&#39;,
+  `visitor2order_convert_ratio` decimal(10, 2) DEFAULT NULL COMMENT &#39;购物车到下单转化率&#39;,
+  `payment_u_count` bigint(20) DEFAULT NULL COMMENT &#39;支付人数&#39;,
+  `order2payment_convert_ratio` decimal(10, 2) DEFAULT NULL COMMENT &#39;下单到支付的转化率&#39;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = &#39;每日用户行为转化率统计&#39; ROW_FORMAT = Dynamic;
+
+
+-- 4. gmv统计
+DROP TABLE IF EXISTS ads_gmv_sum_day;
+CREATE TABLE ads_gmv_sum_day(
+  `dt` varchar(200) DEFAULT NULL COMMENT &#39;统计日期&#39;,
+  `gmv_count` bigint(20) DEFAULT NULL COMMENT &#39;当日gmv订单个数&#39;,
+  `gmv_amount` decimal(16, 2) DEFAULT NULL COMMENT &#39;当日gmv订单总金额&#39;,
+  `gmv_payment` decimal(16, 2) DEFAULT NULL COMMENT &#39;当日支付金额&#39;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = &#39;每日活跃用户数量&#39; ROW_FORMAT = Dynamic;
+
+-- 5. 全国商品销售
+DROP TABLE IF EXISTS `ads_gmv_sum_province`;
+CREATE TABLE `ads_gmv_sum_province`  (
+  `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `gmv` bigint(255) DEFAULT NULL,
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+</code></pre>
+<h2 id="10-sqoop导出脚本"><a href="#10-sqoop导出脚本" class="headerlink" title="10.sqoop导出脚本"></a>10.sqoop导出脚本</h2><pre><code class="sh">#!/bin/bash
+
+db_name=gmall
+export_data(){
+/kkb/install/sqoop-1.4.6-cdh5.14.2/bin/sqoop export \
+--connect &quot;jdbc:mysql://node03:3306/${db_name}?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&quot; \
+--username root \
+--password 123456 \
+--table $1 \
+--m 1 \
+--export-dir /warehouse/$db_name/ads/$1 \
+--input-fields-terminated-by &quot;\t&quot; \
+--update-mode allowinsert \
+--update-key  &quot;gmv_count,gmv_amount,gmv_payment&quot; \
+--input-null-string  &#39;\\N&#39; \
+--input-null-non-string  &#39;\\N&#39; 
+}
+
+case $1 in 
+  &quot;ads_uv_count&quot;)
+   export_data &quot;ads_uv_count&quot;
+;;
+ &quot;ads_user_action_convert_day&quot;)
+   export_data &quot;ads_user_action_convert_day&quot;
+;;
+ &quot;ads_gmv_sum_day&quot;)
+   export_data &quot;ads_gmv_sum_day&quot;
+;;
+ &quot;all&quot;)
+   export_data &quot;ads_uv_count&quot; 
+   export_data &quot;ads_user_action_convert_day&quot;
+   export_data &quot;ads_gmv_sum_day&quot;
+;;
+esac
+
+</code></pre>
+<ul>
+<li><p>–update-mode：</p>
+<ul>
+<li>updateonly  只更新，无法插入新数据</li>
+<li>allowinsert  允许新增 </li>
+</ul>
+</li>
+<li><p>–update-key：允许更新的情况下，指定哪些字段匹配视为同一条数据，进行更新而不增加。多个字段用逗号分隔。</p>
+</li>
+<li><p>–input-null-string和–input-null-non-string：</p>
+</li>
+</ul>
+<p>分别表示，将字符串列和非字符串列的空串和“null”转换成’\N’。</p>
+<p>Hive中的在底层是以“”来存储，而中的在底层就是，–input-null-string–input-null-non-string–null-string–null-non-string</p>
+<p><img src="https://kfly.top/picture/kfly-top/数仓商城项目之-系统业务数仓/assets//image-20191204174225224.png" alt="image-20191204174225224"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: '数仓商城项目之-系统业务数仓',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>

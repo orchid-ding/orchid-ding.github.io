@@ -240,18 +240,193 @@
 </li>
 </ul>
 <h4 id="2-4-MR参考代码"><a href="#2-4-MR参考代码" class="headerlink" title="2.4 MR参考代码"></a>2.4 MR参考代码</h4><p><strong>2.4.1 Mapper代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba.hadoop.wordcount;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IntWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.LongWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 类Mapper&lt;LongWritable, Text, Text, IntWritable&gt;的四个泛型分别表示</span></span><br><span class="line"><span class="comment"> * map方法的输入的键的类型kin、值的类型vin；输出的键的类型kout、输出的值的类型vout</span></span><br><span class="line"><span class="comment"> * kin指的是当前所读行行首相对于split分片开头的字节偏移量,所以是long类型，对应序列化类型LongWritable</span></span><br><span class="line"><span class="comment"> * vin指的是当前所读行，类型是String，对应序列化类型Text</span></span><br><span class="line"><span class="comment"> * kout根据需求，输出键指的是单词，类型是String，对应序列化类型是Text</span></span><br><span class="line"><span class="comment"> * vout根据需求，输出值指的是单词的个数，1，类型是int，对应序列化类型是IntWritable</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCountMap</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>, <span class="title">Text</span>, <span class="title">Text</span>, <span class="title">IntWritable</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理分片split中的每一行的数据；针对每行数据，会调用一次map方法</span></span><br><span class="line"><span class="comment">     * 在一次map方法调用时，从一行数据中，获得一个个单词word，再将每个单词word变成键值对形式(word, 1)输出出去</span></span><br><span class="line"><span class="comment">     * 输出的值最终写到本地磁盘中</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key 当前所读行行首相对于split分片开头的字节偏移量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value  当前所读行</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable key, Text value, Context context)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">//当前行的示例数据(单词间空格分割)：Dear Bear River</span></span><br><span class="line">        <span class="comment">//取得当前行的数据</span></span><br><span class="line">        String line = value.toString();</span><br><span class="line">        <span class="comment">//按照\t进行分割，得到当前行所有单词</span></span><br><span class="line">        String[] words = line.split(<span class="string">"\t"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (String word : words) &#123;</span><br><span class="line">            <span class="comment">//将每个单词word变成键值对形式(word, 1)输出出去</span></span><br><span class="line">            <span class="comment">//同样，输出前，要将kout, vout包装成对应的可序列化类型，如String对应Text，int对应IntWritable</span></span><br><span class="line">            context.write(<span class="keyword">new</span> Text(word), <span class="keyword">new</span> IntWritable(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.kaikeba.hadoop.wordcount;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+import java.io.IOException;
+
+/**
+ * 类Mapper&lt;LongWritable, Text, Text, IntWritable&gt;的四个泛型分别表示
+ * map方法的输入的键的类型kin、值的类型vin；输出的键的类型kout、输出的值的类型vout
+ * kin指的是当前所读行行首相对于split分片开头的字节偏移量,所以是long类型，对应序列化类型LongWritable
+ * vin指的是当前所读行，类型是String，对应序列化类型Text
+ * kout根据需求，输出键指的是单词，类型是String，对应序列化类型是Text
+ * vout根据需求，输出值指的是单词的个数，1，类型是int，对应序列化类型是IntWritable
+ *
+ */
+public class WordCountMap extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {
+
+    /**
+     * 处理分片split中的每一行的数据；针对每行数据，会调用一次map方法
+     * 在一次map方法调用时，从一行数据中，获得一个个单词word，再将每个单词word变成键值对形式(word, 1)输出出去
+     * 输出的值最终写到本地磁盘中
+     * @param key 当前所读行行首相对于split分片开头的字节偏移量
+     * @param value  当前所读行
+     * @param context
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void map(LongWritable key, Text value, Context context)
+            throws IOException, InterruptedException {
+        //当前行的示例数据(单词间空格分割)：Dear Bear River
+        //取得当前行的数据
+        String line = value.toString();
+        //按照\t进行分割，得到当前行所有单词
+        String[] words = line.split(&quot;\t&quot;);
+
+        for (String word : words) {
+            //将每个单词word变成键值对形式(word, 1)输出出去
+            //同样，输出前，要将kout, vout包装成对应的可序列化类型，如String对应Text，int对应IntWritable
+            context.write(new Text(word), new IntWritable(1));
+        }
+    }
+}
+
+</code></pre>
 <p><strong>2.4.2 Reducer代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba.hadoop.wordcount;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IntWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Reducer&lt;Text, IntWritable, Text, IntWritable&gt;的四个泛型分别表示</span></span><br><span class="line"><span class="comment"> * reduce方法的输入的键的类型kin、输入值的类型vin；输出的键的类型kout、输出的值的类型vout</span></span><br><span class="line"><span class="comment"> * 注意：因为map的输出作为reduce的输入，所以此处的kin、vin类型分别与map的输出的键类型、值类型相同</span></span><br><span class="line"><span class="comment"> * kout根据需求，输出键指的是单词，类型是String，对应序列化类型是Text</span></span><br><span class="line"><span class="comment"> * vout根据需求，输出值指的是每个单词的总个数，类型是int，对应序列化类型是IntWritable</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCountReduce</span> <span class="keyword">extends</span> <span class="title">Reducer</span>&lt;<span class="title">Text</span>, <span class="title">IntWritable</span>, <span class="title">Text</span>, <span class="title">IntWritable</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * key相同的一组kv对，会调用一次reduce方法</span></span><br><span class="line"><span class="comment">     * 如reduce task汇聚了众多的键值对，有key是hello的键值对，也有key是spark的键值对，如下</span></span><br><span class="line"><span class="comment">     * (hello, 1)</span></span><br><span class="line"><span class="comment">     * (hello, 1)</span></span><br><span class="line"><span class="comment">     * (hello, 1)</span></span><br><span class="line"><span class="comment">     * (hello, 1)</span></span><br><span class="line"><span class="comment">     * ...</span></span><br><span class="line"><span class="comment">     * (spark, 1)</span></span><br><span class="line"><span class="comment">     * (spark, 1)</span></span><br><span class="line"><span class="comment">     * (spark, 1)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 其中，key是hello的键值对被分成一组；merge成[hello, Iterable(1,1,1,1)]，调用一次reduce方法</span></span><br><span class="line"><span class="comment">     * 同样，key是spark的键值对被分成一组；merge成[spark, Iterable(1,1,1)]，再调用一次reduce方法</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key 当前组的key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> values 当前组中，所有value组成的可迭代集和</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context reduce上下文环境对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(Text key, Iterable&lt;IntWritable&gt; values,</span></span></span><br><span class="line"><span class="function"><span class="params">                          Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">//定义变量，用于累计当前单词出现的次数</span></span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (IntWritable count : values) &#123;</span><br><span class="line">            <span class="comment">//从count中获得值，累加到sum中</span></span><br><span class="line">            sum += count.get();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将单词、单词次数，分别作为键值对，输出</span></span><br><span class="line">        context.write(key, <span class="keyword">new</span> IntWritable(sum));<span class="comment">// 输出最终结果</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.kaikeba.hadoop.wordcount;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+import java.io.IOException;
+
+/**
+ *
+ * Reducer&lt;Text, IntWritable, Text, IntWritable&gt;的四个泛型分别表示
+ * reduce方法的输入的键的类型kin、输入值的类型vin；输出的键的类型kout、输出的值的类型vout
+ * 注意：因为map的输出作为reduce的输入，所以此处的kin、vin类型分别与map的输出的键类型、值类型相同
+ * kout根据需求，输出键指的是单词，类型是String，对应序列化类型是Text
+ * vout根据需求，输出值指的是每个单词的总个数，类型是int，对应序列化类型是IntWritable
+ *
+ */
+public class WordCountReduce extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
+    /**
+     *
+     * key相同的一组kv对，会调用一次reduce方法
+     * 如reduce task汇聚了众多的键值对，有key是hello的键值对，也有key是spark的键值对，如下
+     * (hello, 1)
+     * (hello, 1)
+     * (hello, 1)
+     * (hello, 1)
+     * ...
+     * (spark, 1)
+     * (spark, 1)
+     * (spark, 1)
+     *
+     * 其中，key是hello的键值对被分成一组；merge成[hello, Iterable(1,1,1,1)]，调用一次reduce方法
+     * 同样，key是spark的键值对被分成一组；merge成[spark, Iterable(1,1,1)]，再调用一次reduce方法
+     *
+     * @param key 当前组的key
+     * @param values 当前组中，所有value组成的可迭代集和
+     * @param context reduce上下文环境对象
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void reduce(Text key, Iterable&lt;IntWritable&gt; values,
+                          Context context) throws IOException, InterruptedException {
+        //定义变量，用于累计当前单词出现的次数
+        int sum = 0;
+
+        for (IntWritable count : values) {
+            //从count中获得值，累加到sum中
+            sum += count.get();
+        }
+
+        //将单词、单词次数，分别作为键值对，输出
+        context.write(key, new IntWritable(sum));// 输出最终结果
+    };
+}
+</code></pre>
 <p><strong>2.4.3 Main程序入口</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba.hadoop.wordcount;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IntWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * MapReduce程序入口</span></span><br><span class="line"><span class="comment"> * 注意：</span></span><br><span class="line"><span class="comment"> *  导包时，不要导错了；</span></span><br><span class="line"><span class="comment"> *  另外，map\reduce相关的类，使用mapreduce包下的，是新API，如org.apache.hadoop.mapreduce.Job;；</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCountMain</span> </span>&#123;</span><br><span class="line">    <span class="comment">//若在IDEA中本地执行MR程序，需要将mapred-site.xml中的mapreduce.framework.name值修改成local</span></span><br><span class="line">    <span class="comment">//参数 c:/test/README.txt c:/test/wc</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException,</span></span><br><span class="line"><span class="function">            ClassNotFoundException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断一下，输入参数是否是两个，分别表示输入路径、输出路径</span></span><br><span class="line">       <span class="keyword">if</span> (args.length != <span class="number">2</span> || args == <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"please input Path!"</span>);</span><br><span class="line">            System.exit(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line">        <span class="comment">//configuration.set("mapreduce.framework.name","local");</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//告诉程序，要运行的jar包在哪</span></span><br><span class="line">        <span class="comment">//configuration.set("mapreduce.job.jar","/home/hadoop/IdeaProjects/Hadoop/target/com.kaikeba.hadoop-1.0-SNAPSHOT.jar");</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//调用getInstance方法，生成job实例</span></span><br><span class="line">        Job job = Job.getInstance(configuration, WordCountMain.class.getSimpleName());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置job的jar包，如果参数指定的类包含在一个jar包中，则此jar包作为job的jar包； 参数class跟主类在一个工程即可；一般设置成主类</span></span><br><span class="line"><span class="comment">//        job.setJarByClass(WordCountMain.class);</span></span><br><span class="line">        job.setJarByClass(WordCountMain.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//通过job设置输入/输出格式</span></span><br><span class="line">        <span class="comment">//MR的默认输入格式是TextInputFormat，输出格式是TextOutputFormat；所以下两行可以注释掉</span></span><br><span class="line"><span class="comment">//        job.setInputFormatClass(TextInputFormat.class);</span></span><br><span class="line"><span class="comment">//        job.setOutputFormatClass(TextOutputFormat.class);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置输入/输出路径</span></span><br><span class="line">        FileInputFormat.setInputPaths(job, <span class="keyword">new</span> Path(args[<span class="number">0</span>]));</span><br><span class="line">        FileOutputFormat.setOutputPath(job, <span class="keyword">new</span> Path(args[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置处理Map阶段的自定义的类</span></span><br><span class="line">        job.setMapperClass(WordCountMap.class);</span><br><span class="line">        <span class="comment">//设置map combine类，减少网路传出量</span></span><br><span class="line">        job.setCombinerClass(WordCountReduce.class);</span><br><span class="line">        <span class="comment">//设置处理Reduce阶段的自定义的类</span></span><br><span class="line">        job.setReducerClass(WordCountReduce.class);</span><br><span class="line">        <span class="comment">//注意：如果map、reduce的输出的kv对类型一致，直接设置reduce的输出的kv对就行；如果不一样，需要分别设置map, reduce的输出的kv类型</span></span><br><span class="line">        <span class="comment">//注意：此处设置的map输出的key/value类型，一定要与自定义map类输出的kv对类型一致；否则程序运行报错</span></span><br><span class="line"><span class="comment">//        job.setMapOutputKeyClass(Text.class);</span></span><br><span class="line"><span class="comment">//        job.setMapOutputValueClass(IntWritable.class);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置reduce task最终输出key/value的类型</span></span><br><span class="line">        <span class="comment">//注意：此处设置的reduce输出的key/value类型，一定要与自定义reduce类输出的kv对类型一致；否则程序运行报错</span></span><br><span class="line">        job.setOutputKeyClass(Text.class);</span><br><span class="line">        job.setOutputValueClass(IntWritable.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 提交作业</span></span><br><span class="line">        job.waitForCompletion(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.kaikeba.hadoop.wordcount;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import java.io.IOException;
+
+/**
+ *
+ * MapReduce程序入口
+ * 注意：
+ *  导包时，不要导错了；
+ *  另外，map\reduce相关的类，使用mapreduce包下的，是新API，如org.apache.hadoop.mapreduce.Job;；
+ */
+public class WordCountMain {
+    //若在IDEA中本地执行MR程序，需要将mapred-site.xml中的mapreduce.framework.name值修改成local
+    //参数 c:/test/README.txt c:/test/wc
+    public static void main(String[] args) throws IOException,
+            ClassNotFoundException, InterruptedException {
+
+        //判断一下，输入参数是否是两个，分别表示输入路径、输出路径
+       if (args.length != 2 || args == null) {
+            System.out.println(&quot;please input Path!&quot;);
+            System.exit(0);
+        }
+
+        Configuration configuration = new Configuration();
+        //configuration.set(&quot;mapreduce.framework.name&quot;,&quot;local&quot;);
+
+
+        //告诉程序，要运行的jar包在哪
+        //configuration.set(&quot;mapreduce.job.jar&quot;,&quot;/home/hadoop/IdeaProjects/Hadoop/target/com.kaikeba.hadoop-1.0-SNAPSHOT.jar&quot;);
+
+        //调用getInstance方法，生成job实例
+        Job job = Job.getInstance(configuration, WordCountMain.class.getSimpleName());
+
+        //设置job的jar包，如果参数指定的类包含在一个jar包中，则此jar包作为job的jar包； 参数class跟主类在一个工程即可；一般设置成主类
+//        job.setJarByClass(WordCountMain.class);
+        job.setJarByClass(WordCountMain.class);
+
+        //通过job设置输入/输出格式
+        //MR的默认输入格式是TextInputFormat，输出格式是TextOutputFormat；所以下两行可以注释掉
+//        job.setInputFormatClass(TextInputFormat.class);
+//        job.setOutputFormatClass(TextOutputFormat.class);
+
+        //设置输入/输出路径
+        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        //设置处理Map阶段的自定义的类
+        job.setMapperClass(WordCountMap.class);
+        //设置map combine类，减少网路传出量
+        job.setCombinerClass(WordCountReduce.class);
+        //设置处理Reduce阶段的自定义的类
+        job.setReducerClass(WordCountReduce.class);
+        //注意：如果map、reduce的输出的kv对类型一致，直接设置reduce的输出的kv对就行；如果不一样，需要分别设置map, reduce的输出的kv类型
+        //注意：此处设置的map输出的key/value类型，一定要与自定义map类输出的kv对类型一致；否则程序运行报错
+//        job.setMapOutputKeyClass(Text.class);
+//        job.setMapOutputValueClass(IntWritable.class);
+
+        //设置reduce task最终输出key/value的类型
+        //注意：此处设置的reduce输出的key/value类型，一定要与自定义reduce类输出的kv对类型一致；否则程序运行报错
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+
+        // 提交作业
+        job.waitForCompletion(true);
+
+    }
+}
+</code></pre>
 <blockquote>
 <p>程序运行有两种方式，分别是windows本地运行、集群运行，依次演示</p>
 </blockquote>
 <h4 id="2-5-集群运行"><a href="#2-5-集群运行" class="headerlink" title="2.5 集群运行"></a>2.5 集群运行</h4><ul>
 <li>用maven插件打jar包；①点击Maven，②双击package打包</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 ~]$ hadoop jar com.kaikeba.hadoop-1.0-SNAPSHOT.jar com.kaikeba.hadoop.wordcount.WordCountMain /README.txt /wordcount01</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 ~]$ hadoop jar com.kaikeba.hadoop-1.0-SNAPSHOT.jar com.kaikeba.hadoop.wordcount.WordCountMain /README.txt /wordcount01
+</code></pre>
 <blockquote>
 <p>说明：</p>
 <p>com.kaikeba.hadoop-1.0-SNAPSHOT.jar是jar包名</p>
@@ -262,7 +437,8 @@
 <ul>
 <li>确认结果</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 ~]$ hadoop fs -ls /wordcount01</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">[hadoop@node01 ~]$ hadoop fs -ls /wordcount01
+</code></pre>
 <p><img src="assets/Image201908221620.png" alt=""></p>
 <h4 id="2-6-总结"><a href="#2-6-总结" class="headerlink" title="2.6 总结"></a>2.6 总结</h4><ul>
 <li>MR分为两个阶段：map阶段、reduce阶段</li>
@@ -297,7 +473,18 @@
 <ul>
 <li><p>分区用到了分区器，默认分区器是HashPartitioner</p>
 <p>源码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashPartitioner</span>&lt;<span class="title">K2</span>, <span class="title">V2</span>&gt; <span class="keyword">implements</span> <span class="title">Partitioner</span>&lt;<span class="title">K2</span>, <span class="title">V2</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(JobConf job)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Use &#123;<span class="doctag">@link</span> Object#hashCode()&#125; to partition. */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPartition</span><span class="params">(K2 key, V2 value,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> numReduceTasks)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (key.hashCode() &amp; Integer.MAX_VALUE) % numReduceTasks;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public class HashPartitioner&lt;K2, V2&gt; implements Partitioner&lt;K2, V2&gt; {
+
+  public void configure(JobConf job) {}
+
+  /** Use {@link Object#hashCode()} to partition. */
+  public int getPartition(K2 key, V2 value,
+                          int numReduceTasks) {
+    return (key.hashCode() &amp; Integer.MAX_VALUE) % numReduceTasks;
+  }
+
+}
+</code></pre>
 </li>
 </ul>
 <h4 id="4-3-map端"><a href="#4-3-map端" class="headerlink" title="4.3 map端"></a>4.3 map端</h4><ul>

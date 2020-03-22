@@ -161,10 +161,14 @@
 <li><p>Java语言的数据类型</p>
 <ul>
 <li><p>内置数据类型：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 在被创建时，在栈上给其划分一块内存，将数值直接存储在栈上。</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">byte</span> <span class="keyword">short</span> <span class="keyword">float</span> <span class="keyword">double</span> <span class="keyword">char</span> <span class="keyword">boolean</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">// 1. 在被创建时，在栈上给其划分一块内存，将数值直接存储在栈上。
+int byte short float double char boolean
+</code></pre>
 </li>
 <li><p>引用数据类型</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2. 在被创建时，首先要在栈上给其引用（句柄）分配一块内存，而对象的具体信息都存储在堆内存上，然后由栈上面的引用指向堆中对象的地址。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">interface</span> <span class="title">array</span> <span class="title">enum</span> @<span class="title">interface</span></span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">// 2. 在被创建时，首先要在栈上给其引用（句柄）分配一块内存，而对象的具体信息都存储在堆内存上，然后由栈上面的引用指向堆中对象的地址。
+class interface array enum @interface
+</code></pre>
 </li>
 </ul>
 </li>
@@ -173,7 +177,22 @@
 <li><p>String的不可变性、虚拟机的常量池、String.intern() 的底层原理</p>
 <ul>
 <li><p>String.intern(): </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// String.intern();</span></span><br><span class="line"><span class="comment">// return 一个字符串，内容与此字符串相同，但一定取自具有唯一字符串的池。</span></span><br><span class="line">String a = <span class="string">"a"</span>;</span><br><span class="line">String b = <span class="string">"b"</span>;</span><br><span class="line">String ab = <span class="string">"ab"</span>;</span><br><span class="line">String ab0 = <span class="string">"a"</span> + <span class="string">"b"</span>;</span><br><span class="line">String ab1 = a + b;</span><br><span class="line">String ab2 = <span class="keyword">new</span> String(<span class="string">"ab"</span>);</span><br><span class="line">String ab3 = <span class="keyword">new</span> String(<span class="string">"a"</span>) + <span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line"><span class="comment">// 以下结果为。true</span></span><br><span class="line">System.out.println(ab == ab0);</span><br><span class="line">System.out.println(ab == ab1.intern());</span><br><span class="line">System.out.println(ab == ab2.intern());</span><br><span class="line">System.out.println(ab == ab3.intern());</span><br><span class="line">System.out.println(ab2.intern() == ab3.intern());</span><br></pre></td></tr></table></figure>
+<pre><code class="java">// String.intern();
+// return 一个字符串，内容与此字符串相同，但一定取自具有唯一字符串的池。
+String a = &quot;a&quot;;
+String b = &quot;b&quot;;
+String ab = &quot;ab&quot;;
+String ab0 = &quot;a&quot; + &quot;b&quot;;
+String ab1 = a + b;
+String ab2 = new String(&quot;ab&quot;);
+String ab3 = new String(&quot;a&quot;) + new String(&quot;b&quot;);
+// 以下结果为。true
+System.out.println(ab == ab0);
+System.out.println(ab == ab1.intern());
+System.out.println(ab == ab2.intern());
+System.out.println(ab == ab3.intern());
+System.out.println(ab2.intern() == ab3.intern());
+</code></pre>
 </li>
 </ul>
 </li>
@@ -230,34 +249,32 @@
 </ul>
 <h1 id="2-Java进阶篇"><a href="#2-Java进阶篇" class="headerlink" title="2. Java进阶篇"></a>2. Java进阶篇</h1><h2 id="2-1-JVM"><a href="#2-1-JVM" class="headerlink" title="2.1 JVM"></a>2.1 JVM</h2><ul>
 <li><p>JVM内存结构</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> 文件格式、运行时数据区：堆、栈、方法区、直接内存、运行时常量池</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
+<pre><code>class 文件格式、运行时数据区：堆、栈、方法区、直接内存、运行时常量池
+</code></pre></li>
 <li><p>堆和栈区别</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Java </span>中的对象一定在堆上分配吗？</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>Java 中的对象一定在堆上分配吗？ 
+</code></pre></li>
 <li><p>Java 内存模型</p>
-<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">计算机内存模型、缓存一致性、MESI 协议、可见性、原子性、顺序性、happens-before、内存屏障、<span class="keyword">synchronized</span>、<span class="keyword">volatile</span>、<span class="keyword">final</span>、锁</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>计算机内存模型、缓存一致性、MESI 协议、可见性、原子性、顺序性、happens-before、内存屏障、synchronized、volatile、final、锁
+</code></pre></li>
 <li><p>垃圾回收</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GC 算法：标记清除、引用计数、复制、标记压缩、分代回收、增量式回收、GC 参数、对象存活的判定、垃圾收集器（CMS、G1、ZGC、<span class="built_in">Epsilon</span>）</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>GC 算法：标记清除、引用计数、复制、标记压缩、分代回收、增量式回收、GC 参数、对象存活的判定、垃圾收集器（CMS、G1、ZGC、Epsilon）
+</code></pre></li>
 <li><p>JVM 参数及调优</p>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-Xmx</span>、<span class="selector-tag">-Xmn</span>、<span class="selector-tag">-Xms</span>、<span class="selector-tag">Xss</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:SurvivorRatio</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:PermSize</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:MaxPermSize</span>、<span class="selector-tag">-XX</span><span class="selector-pseudo">:MaxTenuringThreshold</span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>-Xmx、-Xmn、-Xms、Xss、-XX:SurvivorRatio、-XX:PermSize、-XX:MaxPermSize、-XX:MaxTenuringThreshold
+</code></pre></li>
 <li><p>Java 对象模型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oop-klass、对象头</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>oop-klass、对象头
+</code></pre></li>
 <li><p>HotSpot</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">即时编译器、编译优化</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>即时编译器、编译优化
+</code></pre></li>
 <li><p>虚拟机性能监控与故障处理工具</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">jps、jstack、jmap、jstat、jconsole、 </span><span class="keyword">jinfo、 </span><span class="keyword">jhat、javap、btrace、TProfiler、Arthas</span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>jps、jstack、jmap、jstat、jconsole、 jinfo、 jhat、javap、btrace、TProfiler、Arthas
+</code></pre></li>
 <li><p>类加载机制</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classLoader、类加载过程、双亲委派（破坏双亲委派）、模块化（<span class="keyword">jboss </span>modules、osgi、<span class="keyword">jigsaw）</span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>classLoader、类加载过程、双亲委派（破坏双亲委派）、模块化（jboss modules、osgi、jigsaw）
+</code></pre></li>
 </ul>
 <h2 id="2-2-NIO"><a href="#2-2-NIO" class="headerlink" title="2.2 NIO"></a>2.2 NIO</h2><ul>
 <li>用户空间以及内核空间</li>
@@ -302,7 +319,12 @@
 </ul>
 <h1 id="5-Netty"><a href="#5-Netty" class="headerlink" title="5. Netty"></a>5. Netty</h1><ul>
 <li><p>Netty 三层网络架构：Reactor 通信调度层、职责链 PipeLine、业务逻辑处理层</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. Reactor通信调度层: 该层的主要职责就是监听网络的连接和读写操作，负责将网络层的数据读取到内存缓冲区中，然后触发各种网络事件，例如连接创建、连接激活、读事件、写事件等，将这些事件触发到Pipeline中，再由Pipeline充当的职责链来进行后续的处理</span><br><span class="line">2. 职责链Pipeline层。负责事件在职责链中有序的向前（后）传播，同时负责动态的编排职责链。Pipeline可以选择监听和处理自己关心的事件</span><br><span class="line">3. 业务逻辑处理层，一般可分为两类：</span><br><span class="line">		a. 纯粹的业务逻辑处理，例如日志、订单处理。</span><br><span class="line">		b. 应用层协议管理，例如HTTP(S)协议、FTP协议等。</span><br></pre></td></tr></table></figure>
+<pre><code class="html">1. Reactor通信调度层: 该层的主要职责就是监听网络的连接和读写操作，负责将网络层的数据读取到内存缓冲区中，然后触发各种网络事件，例如连接创建、连接激活、读事件、写事件等，将这些事件触发到Pipeline中，再由Pipeline充当的职责链来进行后续的处理
+2. 职责链Pipeline层。负责事件在职责链中有序的向前（后）传播，同时负责动态的编排职责链。Pipeline可以选择监听和处理自己关心的事件
+3. 业务逻辑处理层，一般可分为两类：
+        a. 纯粹的业务逻辑处理，例如日志、订单处理。
+        b. 应用层协议管理，例如HTTP(S)协议、FTP协议等。
+</code></pre>
 </li>
 </ul>
 <ul>
@@ -456,17 +478,82 @@
 <p>Kafka 或者类似 Kafka 各个公司自己造的消息’轮子’已经是大数据领域消息中间件的事实标准。目前 Kafka 已经更新到了 2.x 版本，支持了类似 KafkaSQL 等功能，Kafka 不满足单纯的消息中间件，也正朝着平台化的方向演进。</p>
 </blockquote>
 <h4 id="11-1-如何提升生产者的吞吐量？"><a href="#11-1-如何提升生产者的吞吐量？" class="headerlink" title="11.1 如何提升生产者的吞吐量？"></a>11.1 如何提升生产者的吞吐量？</h4><p>1）buffer.memory：设置发送消息的缓冲区，默认值是33554432，就是32MB<br>如果发送消息出去的速度小于写入消息进去的速度，就会导致缓冲区写满，此时生产消息就会阻塞住，所以说这里就应该多做一些压测，尽可能保证说这块缓冲区不会被写满导致生产行为被阻塞住</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  Long startTime=System.currentTime();</span><br><span class="line">  producer.send(record, <span class="keyword">new</span> Callback() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompletion</span><span class="params">(RecordMetadata metadata, Exception exception)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(exception == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="comment">// 消息发送成功</span></span><br><span class="line">			System.out.println(<span class="string">"消息发送成功"</span>);  </span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 消息发送失败，需要重新发送</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">   Long endTime=System.currentTime();</span><br><span class="line">   If(endTime - startTime &gt; <span class="number">100</span>)&#123;<span class="comment">//说明内存被压满了</span></span><br><span class="line">    说明有问题</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">      Long startTime=System.currentTime();
+      producer.send(record, new Callback() {
+      @Override
+        public void onCompletion(RecordMetadata metadata, Exception exception) {
+            if(exception == null) {
+                // 消息发送成功
+                System.out.println(&quot;消息发送成功&quot;);  
+            } else {
+                // 消息发送失败，需要重新发送
+            }
+        }
+    });
+    Long endTime=System.currentTime();
+    If(endTime - startTime &gt; 100){//说明内存被压满了
+     说明有问题
+     }        
+</code></pre>
 <p>2）compression.type，默认是none，不压缩，但是也可以使用lz4压缩，效率还是不错的，压缩之后可以减小数据量，提升吞吐量，但是会加大producer端的cpu开销。<br>3）batch.size，设置meigebatch的大小，如果batch太小，会导致频繁网络请求，吞吐量下降；如果batch太大，会导致一条消息需要等待很久才能被发送出去，而且会让内存缓冲区有很大压力，过多数据缓冲在内存里<br>默认值是：16384，就是16kb，也就是一个batch满了16kb就发送出去，一般在实际生产环境，这个batch的值可以增大一些来提升吞吐量，可以自己压测一下。<br>4）linger.ms，这个值默认是0，意思就是消息必须立即被发送，但是这是不对的，一般设置一个100毫秒之类的，这样的话就是说，这个消息被发送出去后进入一个batch，如果100毫秒内，这个batch满了16kb，自然就会发送出去。但是如果100毫秒内，batch没满，那么也必须把消息发送出去了，不能让消息的发送延迟时间太长，也避免给内存造成过大的一个压力。</p>
 <h4 id="11-2-如何保证Kafka内部数据不丢失？"><a href="#11-2-如何保证Kafka内部数据不丢失？" class="headerlink" title="11.2 如何保证Kafka内部数据不丢失？"></a>11.2 如何保证Kafka内部数据不丢失？</h4><p>如果要回答这个问题的话，要从三个角度去回答：Producer，consumer，broker。</p>
 <p>==<strong>producer</strong>==</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">acks参数：</span><br><span class="line">acks = 0</span><br><span class="line">	生产者发送消息之后 不需要等待服务端的任何响应，它不管消息有没有发送成功，如果发送过程中遇到了异常，导致broker端没有收到消息，消息也就丢失了。实际上它只是把消息发送到了socketBuffer(缓存)中，而socketBuffer什么时候被提交到broker端并不关心，它不担保broker端是否收到了消息，但是这样的配置对retry是不起作用的，因为producer端都不知道是否发生了错误，而且对于offset的获取永远都是-1，因为broker端可能还没有开始写数据。这样不保险的操作为什么还有这样的配置？kafka对于收集海量数据，如果在收集某一项日志时是允许数据量有一定丢失的话，是可以用这种配置来收集日志。</span><br><span class="line">acks = 1(默认值)</span><br><span class="line">	生产者发送消息之后，只要分区的leader副本成功写入消息，那么它就会收到来自服务端的成功响应。其实就是消息只发给了leader leader收到消息后会返回ack到producer端。如果消息无法写入leader时(选举、宕机等情况时)，生产都会收到一个错误的响应，为了避免消息丢失，生产者可以选择重发消息，如果消息成功写入，在被其它副本同步数据时leader　　崩溃,那么此条数据还是会丢失，因为新选举的leader是没有收到这条消息，ack设置为1是消息可靠性和吞吐量折中的方案。</span><br><span class="line">acks = all (或-1)</span><br><span class="line">	生产者在发送消息之后，需要等待ISR中所有的副本都成功写入消息之后才能够收到来自服务端的成功响应，在配置环境相同的情况下此种配置可以达到最强的可靠性。即：在发送消息时，需要leader 向fllow 同步完数据之后，也就是ISR队列中所有的broker全部保存完这条消息后，才会向ack发送消息，表示发送成功。</span><br><span class="line"></span><br><span class="line">retry参数：</span><br><span class="line">在kafka中错误分为2种，一种是可恢复的，另一种是不可恢复的。</span><br><span class="line">　　可恢复性的错误：</span><br><span class="line">　　　　　　如遇到在leader的选举、网络的抖动等这些异常时，如果我们在这个时候配置的retries大于0的，也就是可以进行重试操作，那么等到leader选举完成后、网络稳定后，这些异常就会消息，错误也就可以恢复，数据再次重发时就会正常发送到broker端。需要注意retries(重试)之间的时间间隔，以确保在重试时可恢复性错误都已恢复。</span><br><span class="line">　　不可恢复性的错误：</span><br><span class="line">　　　　　　如：超过了发送消息的最大值(max.request.size)时，这种错误是不可恢复的，如果不做处理，那么数据就会丢失，因此我们需要注意在发生异常时把这些消息写入到DB、缓存本地文件中等等，把这些不成功的数据记录下来，等错误修复后，再把这些数据发送到broker端。</span><br><span class="line">　　　　　　　　　　</span><br><span class="line">配置方案</span><br><span class="line">1.高可用型</span><br><span class="line">　　配置：acks = all，retries &gt; 0 retry.backoff.ms=100(毫秒) (并根据实际情况设置retry可能恢复的间隔时间)</span><br><span class="line">　　优点：这样保证了producer端每发送一条消息都要成功，如果不成功并将消息缓存起来，等异常恢复后再次发送。</span><br><span class="line">　　缺点：这样保证了高可用，但是这会导致集群的吞吐量不是很高，因为数据发送到broker之后，leader要将数据同步到fllower上，如果网络带宽、不稳定等情况时，ack响应时间会更长</span><br><span class="line">　　</span><br><span class="line">2.折中型</span><br><span class="line">　　配置：acks = 1  retries &gt; 0 retries 时间间隔设置 (并根据实际情况设置retries可能恢复的间隔时间)</span><br><span class="line">　　优点：保证了消息的可靠性和吞吐量，是个折中的方案</span><br><span class="line">　　缺点：性能处于2者中间</span><br><span class="line">　　</span><br><span class="line">3.高吞吐型 </span><br><span class="line">　　配置：acks = 0</span><br><span class="line">　　优点：可以相对容忍一些数据的丢失，吞吐量大，可以接收大量请求</span><br><span class="line">　　缺点：不知道发送的消息是 否成功</span><br></pre></td></tr></table></figure>
+<pre><code class="html">acks参数：
+acks = 0
+    生产者发送消息之后 不需要等待服务端的任何响应，它不管消息有没有发送成功，如果发送过程中遇到了异常，导致broker端没有收到消息，消息也就丢失了。实际上它只是把消息发送到了socketBuffer(缓存)中，而socketBuffer什么时候被提交到broker端并不关心，它不担保broker端是否收到了消息，但是这样的配置对retry是不起作用的，因为producer端都不知道是否发生了错误，而且对于offset的获取永远都是-1，因为broker端可能还没有开始写数据。这样不保险的操作为什么还有这样的配置？kafka对于收集海量数据，如果在收集某一项日志时是允许数据量有一定丢失的话，是可以用这种配置来收集日志。
+acks = 1(默认值)
+    生产者发送消息之后，只要分区的leader副本成功写入消息，那么它就会收到来自服务端的成功响应。其实就是消息只发给了leader leader收到消息后会返回ack到producer端。如果消息无法写入leader时(选举、宕机等情况时)，生产都会收到一个错误的响应，为了避免消息丢失，生产者可以选择重发消息，如果消息成功写入，在被其它副本同步数据时leader　　崩溃,那么此条数据还是会丢失，因为新选举的leader是没有收到这条消息，ack设置为1是消息可靠性和吞吐量折中的方案。
+acks = all (或-1)
+    生产者在发送消息之后，需要等待ISR中所有的副本都成功写入消息之后才能够收到来自服务端的成功响应，在配置环境相同的情况下此种配置可以达到最强的可靠性。即：在发送消息时，需要leader 向fllow 同步完数据之后，也就是ISR队列中所有的broker全部保存完这条消息后，才会向ack发送消息，表示发送成功。
+
+retry参数：
+在kafka中错误分为2种，一种是可恢复的，另一种是不可恢复的。
+　　可恢复性的错误：
+　　　　　　如遇到在leader的选举、网络的抖动等这些异常时，如果我们在这个时候配置的retries大于0的，也就是可以进行重试操作，那么等到leader选举完成后、网络稳定后，这些异常就会消息，错误也就可以恢复，数据再次重发时就会正常发送到broker端。需要注意retries(重试)之间的时间间隔，以确保在重试时可恢复性错误都已恢复。
+　　不可恢复性的错误：
+　　　　　　如：超过了发送消息的最大值(max.request.size)时，这种错误是不可恢复的，如果不做处理，那么数据就会丢失，因此我们需要注意在发生异常时把这些消息写入到DB、缓存本地文件中等等，把这些不成功的数据记录下来，等错误修复后，再把这些数据发送到broker端。
+　　　　　　　　　　
+配置方案
+1.高可用型
+　　配置：acks = all，retries &gt; 0 retry.backoff.ms=100(毫秒) (并根据实际情况设置retry可能恢复的间隔时间)
+　　优点：这样保证了producer端每发送一条消息都要成功，如果不成功并将消息缓存起来，等异常恢复后再次发送。
+　　缺点：这样保证了高可用，但是这会导致集群的吞吐量不是很高，因为数据发送到broker之后，leader要将数据同步到fllower上，如果网络带宽、不稳定等情况时，ack响应时间会更长
+　　
+2.折中型
+　　配置：acks = 1  retries &gt; 0 retries 时间间隔设置 (并根据实际情况设置retries可能恢复的间隔时间)
+　　优点：保证了消息的可靠性和吞吐量，是个折中的方案
+　　缺点：性能处于2者中间
+　　
+3.高吞吐型 
+　　配置：acks = 0
+　　优点：可以相对容忍一些数据的丢失，吞吐量大，可以接收大量请求
+　　缺点：不知道发送的消息是 否成功
+</code></pre>
 <p>==<strong>Consumer</strong>==</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">group.id:</span><br><span class="line">	consumer group分组的一个id，消费者隶属的消费组名称。在kafka中只允许消息只能被某个组里面的一个consumer端消费，如果为空，则会报异常。对于一个新的consumer加入到消费时，肯定会隶属于哪个组，只有这样才能消费数据</span><br><span class="line">auto.offset.reset = earliest(最早) /latest(最晚)</span><br><span class="line">	从何处开始进行消费　　当一个新加入的consumer要进行消费数据，如果这个consumer是做数据分析工作的，是需要以前的历史数据那就需要从最早的位置消费数据，如果仅仅是查看消费情况，那可以从最晚位置开始消费数据</span><br><span class="line">enable.auto.commit = true/false(默认true)　</span><br><span class="line">	是否开启自动提交消费位移的功能,默认开启.　　当设置为true时，意味着由kafka的consumer端自己间隔一定的时间会自动提交offset，如果设置成了fasle，也就是由客户端(自己写代码)来提交，那就还得控制提交的时间间隔auto.commit.interval.msauto.commit.interval.ms</span><br><span class="line">	当enable.auto.commit设置为true时才生效，表示开启自动提交消费位移功能时自动提交消费位移的时间间隔。</span><br></pre></td></tr></table></figure>
+<pre><code class="html">group.id:
+    consumer group分组的一个id，消费者隶属的消费组名称。在kafka中只允许消息只能被某个组里面的一个consumer端消费，如果为空，则会报异常。对于一个新的consumer加入到消费时，肯定会隶属于哪个组，只有这样才能消费数据
+auto.offset.reset = earliest(最早) /latest(最晚)
+    从何处开始进行消费　　当一个新加入的consumer要进行消费数据，如果这个consumer是做数据分析工作的，是需要以前的历史数据那就需要从最早的位置消费数据，如果仅仅是查看消费情况，那可以从最晚位置开始消费数据
+enable.auto.commit = true/false(默认true)　
+    是否开启自动提交消费位移的功能,默认开启.　　当设置为true时，意味着由kafka的consumer端自己间隔一定的时间会自动提交offset，如果设置成了fasle，也就是由客户端(自己写代码)来提交，那就还得控制提交的时间间隔auto.commit.interval.msauto.commit.interval.ms
+    当enable.auto.commit设置为true时才生效，表示开启自动提交消费位移功能时自动提交消费位移的时间间隔。
+</code></pre>
 <p>配置方案</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在consumer消费阶段，对offset的处理，关系到是否丢失数据，是否重复消费数据，因此，我们把处理好offset就可以做到exactly-once &amp;&amp; at-least-once(只消费一次)数据。当enable.auto.commit=true时　　　　表示由kafka的consumer端自动提交offset,当你在pull(拉取)30条数据，在处理到第20条时自动提交了offset,但是在处理21条的时候出现了异常，当你再次pull数据时，由于之前是自动提交的offset，所以是从30条之后开始拉取数据，这也就意味着21-30条的数据发生了丢失。</span><br><span class="line"></span><br><span class="line">当enable.auto.commit=false时，由于上面的情况可知自动提交offset时，如果处理数据失败就会发生数据丢失的情况。那我们设置成手动提交。当设置成false时，由于是手动提交的，可以处理一条提交一条，也可以处理一批，提交一批，由于consumer在消费数据时是按一个batch来的，当pull了30条数据时，如果我们处理一条，提交一个offset，这样会严重影响消费的能力，那就需要我们来按一批来处理，或者设置一个累加器，处理一条加1，如果在处理数据时发生了异常，那就把当前处理失败的offset进行提交(放在finally代码块中)注意一定要确保offset的正确性，当下次再次消费的时候就可以从提交的offset处进行再次消费。</span><br></pre></td></tr></table></figure>
+<pre><code class="html">在consumer消费阶段，对offset的处理，关系到是否丢失数据，是否重复消费数据，因此，我们把处理好offset就可以做到exactly-once &amp;&amp; at-least-once(只消费一次)数据。当enable.auto.commit=true时　　　　表示由kafka的consumer端自动提交offset,当你在pull(拉取)30条数据，在处理到第20条时自动提交了offset,但是在处理21条的时候出现了异常，当你再次pull数据时，由于之前是自动提交的offset，所以是从30条之后开始拉取数据，这也就意味着21-30条的数据发生了丢失。
+
+当enable.auto.commit=false时，由于上面的情况可知自动提交offset时，如果处理数据失败就会发生数据丢失的情况。那我们设置成手动提交。当设置成false时，由于是手动提交的，可以处理一条提交一条，也可以处理一批，提交一批，由于consumer在消费数据时是按一个batch来的，当pull了30条数据时，如果我们处理一条，提交一个offset，这样会严重影响消费的能力，那就需要我们来按一批来处理，或者设置一个累加器，处理一条加1，如果在处理数据时发生了异常，那就把当前处理失败的offset进行提交(放在finally代码块中)注意一定要确保offset的正确性，当下次再次消费的时候就可以从提交的offset处进行再次消费。
+
+</code></pre>
 <p>==<strong>Broker</strong>==</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.replication-factor &gt;=2</span><br><span class="line">在创建topic时会通过replication-factor来创建副本的个数，它提高了kafka的高可用性，同时，它允许n-1台broker挂掉，设置好合理的副本因子对kafka整体性能是非常有帮助的，通常是3个，极限是5个，如果多了也会影响开销。</span><br><span class="line"></span><br><span class="line">2.min.insync.replicas = 2</span><br><span class="line">分区ISR队列集合中最少有多少个副本，默认值是1</span><br><span class="line"></span><br><span class="line">3.unclean.leander.election.enable = false 　　　　</span><br><span class="line">是否允许从ISR队列中选举leader副本，默认值是false,如果设置成true,则可能会造成数据丢失。</span><br></pre></td></tr></table></figure>
+<pre><code class="html">1.replication-factor &gt;=2
+在创建topic时会通过replication-factor来创建副本的个数，它提高了kafka的高可用性，同时，它允许n-1台broker挂掉，设置好合理的副本因子对kafka整体性能是非常有帮助的，通常是3个，极限是5个，如果多了也会影响开销。
+
+2.min.insync.replicas = 2
+分区ISR队列集合中最少有多少个副本，默认值是1
+
+3.unclean.leander.election.enable = false 　　　　
+是否允许从ISR队列中选举leader副本，默认值是false,如果设置成true,则可能会造成数据丢失。
+</code></pre>
 <h4 id="11-3-积压了百万消息如何处理？"><a href="#11-3-积压了百万消息如何处理？" class="headerlink" title="11.3 积压了百万消息如何处理？"></a>11.3 积压了百万消息如何处理？</h4><p>据我了解，在使用消息队列遇到的问题中，消息积压这个问题，应该是最常遇到的问题了，并且，这个问题还不太好解决。我们都知道，消息积压的直接原因，一定是系统中的某个部分出现了性能问题，来不及处理上游发送的消息，才会导致消息积压。所以，我们先来分析下，在使用消息队列时，如何来优化代码的性能，避免出现消息积压。然后再来看看，如果你的线上系统出现了消息积压，该如何进行紧急处理，最大程度地避免消息积压对业务的影响。</p>
 <ol>
 <li><p>最大程度避免消息积压</p>

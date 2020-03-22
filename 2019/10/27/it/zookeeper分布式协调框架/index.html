@@ -186,12 +186,20 @@
 <li>集群命令（<strong>每个节点运行此命令</strong>）</li>
 </ul>
 <p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/Image201906101409.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动ZooKeeper集群；在ZooKeeper集群中的每个节点执行此命令</span></span><br><span class="line"><span class="meta">$</span><span class="bash">&#123;ZK_HOME&#125;/bin/zkServer.sh start</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 停止ZooKeeper集群（每个节点执行以下命令）</span></span><br><span class="line"><span class="meta">$</span><span class="bash">&#123;ZK_HOME&#125;/bin/zkServer.sh stop</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看集群状态（每个节点执行此命令）</span></span><br><span class="line"><span class="meta">$</span><span class="bash">&#123;ZK_HOME&#125;/bin/zkServer.sh status</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 启动ZooKeeper集群；在ZooKeeper集群中的每个节点执行此命令
+${ZK_HOME}/bin/zkServer.sh start
+# 停止ZooKeeper集群（每个节点执行以下命令）
+${ZK_HOME}/bin/zkServer.sh stop
+# 查看集群状态（每个节点执行此命令）
+${ZK_HOME}/bin/zkServer.sh status
+</code></pre>
 <ul>
 <li>客户端连接zkServer服务器</li>
 </ul>
 <p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/Image201906101413.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 使用ZooKeeper自带的脚本，连接ZooKeeper的服务器</span></span><br><span class="line">zkCli.sh -server node01:2181,node02:2181,node03:2181</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 使用ZooKeeper自带的脚本，连接ZooKeeper的服务器
+zkCli.sh -server node01:2181,node02:2181,node03:2181
+</code></pre>
 <blockquote>
 <p>-server选项后指定参数node01:2181,node02:2181,node03:2181</p>
 <p>客户端随机的连接三个服务器中的一个</p>
@@ -214,12 +222,23 @@
 <ul>
 <li>常用命令</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查看ZooKeeper根目录/下的文件列表</span></span><br><span class="line">ls /</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#查看ZooKeeper根目录/下的文件列表
+ls /
+</code></pre>
 <p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/Image201910231148.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">创建节点，并指定数据</span></span><br><span class="line">create /kkb	kkb</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">获得某节点的数据</span></span><br><span class="line">get /kkb</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#创建节点，并指定数据
+create /kkb    kkb
+</code></pre>
+<pre><code class="shell">#获得某节点的数据
+get /kkb
+</code></pre>
 <p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/Image201910231151.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">修改节点的数据</span></span><br><span class="line">set /kkb kkb01</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">删除节点</span></span><br><span class="line">delete /kkb</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#修改节点的数据
+set /kkb kkb01
+
+#删除节点
+delete /kkb
+</code></pre>
 <h3 id="3-2-Java-API编程"><a href="#3-2-Java-API编程" class="headerlink" title="3.2 Java API编程"></a>3.2 Java API编程</h3><blockquote>
 <p>IDE可以是eclipse，或IDEA；此处以IDEA演示</p>
 <p>编程分两类：原生API编程；curator编程</p>
@@ -233,7 +252,88 @@
 </ul>
 </li>
 </ul>
-<h4 id="3-2-1-常用api接口"><a href="#3-2-1-常用api接口" class="headerlink" title="3.2.1 常用api接口"></a>3.2.1 常用api接口</h4> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ZK_ADDRESS = <span class="string">"node01:2181,node02:2181,node03:2181"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ZK_PATH = <span class="string">"/zk_test"</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化，建立连接</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//重试连接策略，失败重试次数；每次休眠5000毫秒</span></span><br><span class="line">        <span class="comment">//RetryPolicy policy = new ExponentialBackoffRetry(3000, 3);</span></span><br><span class="line">        RetryNTimes retryPolicy = <span class="keyword">new</span> RetryNTimes(<span class="number">10</span>, <span class="number">5000</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1.设置客户端参数，参数1：指定连接的服务器集端口列表；参数2：重试策略</span></span><br><span class="line">        client = CuratorFrameworkFactory.newClient(ZK_ADDRESS, retryPolicy);</span><br><span class="line">        <span class="comment">//启动客户端，连接到zk集群</span></span><br><span class="line">        client.start();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"zk client start successfully!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建永久节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createPersistentZNode</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        String zNodeData = <span class="string">"火辣的"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">///a/b/c</span></span><br><span class="line">        client.create().</span><br><span class="line">                creatingParentsIfNeeded().</span><br><span class="line">                withMode(CreateMode.PERSISTENT).</span><br><span class="line">                forPath(<span class="string">"/kfly/top/orchid"</span>, zNodeData.getBytes());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询节点列表</span></span><br><span class="line">client.getChildren().forPath(<span class="string">"/"</span>)</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 删除节点</span></span><br><span class="line">client.delete().forPath(ZK_PATH);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询节点数据</span></span><br><span class="line">client.getData().forPath(ZK_PATH)</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 修改节点数据</span></span><br><span class="line">client.setData().forPath(ZK_PATH, data2.getBytes())</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 监听ZNode， 一次监听，多次生效（zk client命令行，一次监听，生效一次）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">watchZNode</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//设置节点的cache</span></span><br><span class="line">        TreeCache treeCache = <span class="keyword">new</span> TreeCache(client, <span class="string">"/zk_test"</span>);</span><br><span class="line">        <span class="comment">//设置监听器和处理过程</span></span><br><span class="line">        treeCache.getListenable().addListener(<span class="keyword">new</span> TreeCacheListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">childEvent</span><span class="params">(CuratorFramework client, TreeCacheEvent event)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                ChildData data = event.getData();</span><br><span class="line">                <span class="keyword">if</span>(data !=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">switch</span> (event.getType()) &#123;</span><br><span class="line">                        <span class="keyword">case</span> NODE_ADDED: <span class="comment">// 新增</span></span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> NODE_REMOVED: <span class="comment">// 删除</span></span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> NODE_UPDATED: <span class="comment">// 修改</span></span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">default</span>:</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//开始监听</span></span><br><span class="line">        treeCache.start();</span><br><span class="line">        Thread.sleep(<span class="number">60000</span>);</span><br><span class="line">        <span class="comment">//关闭cache</span></span><br><span class="line">        treeCache.close();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-1-常用api接口"><a href="#3-2-1-常用api接口" class="headerlink" title="3.2.1 常用api接口"></a>3.2.1 常用api接口</h4><pre><code class="java">
+        /**
+     * 连接参数
+     */
+    private static final String ZK_ADDRESS = &quot;node01:2181,node02:2181,node03:2181&quot;;
+    private static final String ZK_PATH = &quot;/zk_test&quot;;
+    /**
+     * 初始化，建立连接
+     */
+    public static void init() {
+        //重试连接策略，失败重试次数；每次休眠5000毫秒
+        //RetryPolicy policy = new ExponentialBackoffRetry(3000, 3);
+        RetryNTimes retryPolicy = new RetryNTimes(10, 5000);
+
+        // 1.设置客户端参数，参数1：指定连接的服务器集端口列表；参数2：重试策略
+        client = CuratorFrameworkFactory.newClient(ZK_ADDRESS, retryPolicy);
+        //启动客户端，连接到zk集群
+        client.start();
+
+        System.out.println(&quot;zk client start successfully!&quot;);
+    }
+
+        /**
+     * 创建永久节点
+     * @throws Exception
+     */
+    public static void createPersistentZNode() throws Exception {
+        String zNodeData = &quot;火辣的&quot;;
+
+        ///a/b/c
+        client.create().
+                creatingParentsIfNeeded().
+                withMode(CreateMode.PERSISTENT).
+                forPath(&quot;/kfly/top/orchid&quot;, zNodeData.getBytes());
+    }
+
+// 查询节点列表
+client.getChildren().forPath(&quot;/&quot;)
+
+// 删除节点
+client.delete().forPath(ZK_PATH);
+
+// 查询节点数据
+client.getData().forPath(ZK_PATH)
+
+// 修改节点数据
+client.setData().forPath(ZK_PATH, data2.getBytes())
+
+
+    /**
+     * 监听ZNode， 一次监听，多次生效（zk client命令行，一次监听，生效一次）
+     */
+    public static void watchZNode() throws Exception {
+        //设置节点的cache
+        TreeCache treeCache = new TreeCache(client, &quot;/zk_test&quot;);
+        //设置监听器和处理过程
+        treeCache.getListenable().addListener(new TreeCacheListener() {
+            @Override
+            public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+                ChildData data = event.getData();
+                if(data !=null){
+                    switch (event.getType()) {
+                        case NODE_ADDED: // 新增
+                            break;
+                        case NODE_REMOVED: // 删除
+                            break;
+                        case NODE_UPDATED: // 修改
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        });
+        //开始监听
+        treeCache.start();
+        Thread.sleep(60000);
+        //关闭cache
+        treeCache.close();
+    }
+
+</code></pre>
 <h2 id="4-基本概念和操作（25分钟）"><a href="#4-基本概念和操作（25分钟）" class="headerlink" title="4.基本概念和操作（25分钟）"></a>4.基本概念和操作（25分钟）</h2><blockquote>
 <p>分布式通信有几种方式</p>
 <p>1、直接通过网络连接的方式进行通信；</p>
@@ -286,12 +386,27 @@
 <ul>
 <li>类比，文件夹</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建节点/zk_test，并设置数据my_data</span></span><br><span class="line">create /zk_test my_data</span><br><span class="line"><span class="meta">#</span><span class="bash"> 持久节点，只有显示的调用命令，才能删除永久节点</span></span><br><span class="line">delete /zk_test</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 创建节点/zk_test，并设置数据my_data
+create /zk_test my_data
+# 持久节点，只有显示的调用命令，才能删除永久节点
+delete /zk_test
+</code></pre>
 <p><strong>4.2.3 临时节点</strong></p>
 <ul>
 <li>临时节点的生命周期跟客户端<strong>会话</strong>session绑定，一旦会话失效，临时节点被删除。</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> client1上创建临时节点</span></span><br><span class="line">create -e /tmp tmpdata</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> client2上查看client1创建的临时节点</span></span><br><span class="line">ls /</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> client1断开连接</span></span><br><span class="line">close</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> client2上观察现象，发现临时节点被自动删除</span></span><br><span class="line">ls /</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># client1上创建临时节点
+create -e /tmp tmpdata
+
+# client2上查看client1创建的临时节点
+ls /
+
+# client1断开连接
+close
+
+# client2上观察现象，发现临时节点被自动删除
+ls /
+</code></pre>
 <p><strong>4.2.4 有序节点</strong></p>
 <ul>
 <li><p>ZNode也可以设置为<strong>有序节点</strong></p>
@@ -305,7 +420,23 @@
 <li><p>命令行使用-s选项：create -s /kkb kkb</p>
 </li>
 <li><p>Curator编程，可添加一个特殊的属性：CreateMode.EPHEMERAL</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建临时节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createEphemeralZNode</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">// 创建临时节点</span></span><br><span class="line">    String zNodeData2 = <span class="string">"kfly"</span>;</span><br><span class="line">    client.create().</span><br><span class="line">            creatingParentsIfNeeded().</span><br><span class="line">      			<span class="comment">// 创建临时节点 EPHEMERAL</span></span><br><span class="line">            withMode(CreateMode.EPHEMERAL).</span><br><span class="line">          </span><br><span class="line">      forPath(<span class="string">"/top/ding"</span>, zNodeData2.getBytes());</span><br><span class="line">    TimeUnit.SECONDS.sleep(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">
+    /**
+     * 创建临时节点
+     * @throws Exception
+     */
+    public static void createEphemeralZNode() throws Exception {
+        // 创建临时节点
+        String zNodeData2 = &quot;kfly&quot;;
+        client.create().
+                creatingParentsIfNeeded().
+                      // 创建临时节点 EPHEMERAL
+                withMode(CreateMode.EPHEMERAL).
+
+          forPath(&quot;/top/ding&quot;, zNodeData2.getBytes());
+        TimeUnit.SECONDS.sleep(10);
+    }
+</code></pre>
 </li>
 </ul>
 </li>
@@ -316,7 +447,11 @@
 <li>这个整数是一个由父节点维护的自增数字。</li>
 <li>提供了创建唯一名字的ZNode的方式</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建持久、有序节点</span></span><br><span class="line">create -s /test01 test01-data</span><br><span class="line"><span class="meta">#</span><span class="bash"> Created /test010000000009</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 创建持久、有序节点
+create -s /test01 test01-data
+# Created /test010000000009
+
+</code></pre>
 </li>
 </ul>
 <h3 id="4-3-会话（Session"><a href="#4-3-会话（Session" class="headerlink" title="4.3 会话（Session)"></a>4.3 会话（Session)</h3><p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/ZooKeeper2.png" alt=""></p>
@@ -419,7 +554,20 @@
 <ul>
 <li><strong>示例1</strong></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">ls path [watch]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">node01 上执行</span></span><br><span class="line">ls /zk_test watch</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">node02 上执行</span></span><br><span class="line">create /zk_test/dir01 dir01-data</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">观察node-01上变化</span></span><br><span class="line">[zk: node-01:2181,node-02:2181,node-03:2181(CONNECTED) 87] </span><br><span class="line">WATCHER::</span><br><span class="line"></span><br><span class="line">WatchedEvent state:SyncConnected type:NodeChildrenChanged path:/zk_test</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#ls path [watch]
+#node01 上执行
+ls /zk_test watch
+
+#node02 上执行
+create /zk_test/dir01 dir01-data
+
+#观察node-01上变化
+[zk: node-01:2181,node-02:2181,node-03:2181(CONNECTED) 87] 
+WATCHER::
+
+WatchedEvent state:SyncConnected type:NodeChildrenChanged path:/zk_test
+
+</code></pre>
 <p>图示：</p>
 <ul>
 <li><p>client1上执行步骤1</p>
@@ -434,7 +582,15 @@
 <ul>
 <li><strong>示例2</strong></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">监控节点数据的变化；</span></span><br><span class="line"><span class="meta">#</span><span class="bash">node02上</span></span><br><span class="line">get /zk_test watch</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">node03上</span></span><br><span class="line">set /zk_test "junk01"</span><br><span class="line"><span class="meta">#</span><span class="bash">观察node2上cli的输出，检测到变化</span></span><br></pre></td></tr></table></figure>
+<pre><code class="shell">#监控节点数据的变化；
+#node02上
+get /zk_test watch
+
+#node03上
+set /zk_test &quot;junk01&quot;
+#观察node2上cli的输出，检测到变化
+
+</code></pre>
 <ul>
 <li><p><strong>示例3</strong>：节点上下线监控</p>
 <ul>
@@ -454,13 +610,26 @@
 </li>
 <li><p><strong>实现：</strong></p>
 <p>client1操作</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建临时节点</span></span><br><span class="line">create -e /zk_tmp tmp-data</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 创建临时节点
+create -e /zk_tmp tmp-data
+
+</code></pre>
 <p>client2操作</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在/zk_tmp注册监听器</span></span><br><span class="line">ls /zk_tmp watch</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 在/zk_tmp注册监听器
+ls /zk_tmp watch
+
+</code></pre>
 <p>client1操作</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 模拟节点下线</span></span><br><span class="line">close</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 模拟节点下线
+close
+
+</code></pre>
 <p>观察client2</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WATCHER::</span><br><span class="line"></span><br><span class="line">WatchedEvent state:SyncConnected type:NodeDeleted path:/zk_tmp</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">WATCHER::
+
+WatchedEvent state:SyncConnected type:NodeDeleted path:/zk_tmp
+
+</code></pre>
 </li>
 <li><p><strong>图示：</strong></p>
 <p>client1：</p>
@@ -527,16 +696,36 @@
 </blockquote>
 <h3 id="7-4-如何设置ACL"><a href="#7-4-如何设置ACL" class="headerlink" title="7.4 如何设置ACL"></a>7.4 如何设置ACL</h3><ol>
 <li><p>五种权限简称</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE -&gt; 增 -&gt; c</span><br><span class="line">READ -&gt; 查 -&gt; r</span><br><span class="line">WRITE -&gt; 改 -&gt; w</span><br><span class="line">DELETE -&gt; 删 -&gt; d</span><br><span class="line">ADMIN -&gt; 管理 -&gt; a</span><br><span class="line">这5种权限简写为**crwda**</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">CREATE -&gt; 增 -&gt; c
+READ -&gt; 查 -&gt; r
+WRITE -&gt; 改 -&gt; w
+DELETE -&gt; 删 -&gt; d
+ADMIN -&gt; 管理 -&gt; a
+这5种权限简写为**crwda**
+</code></pre>
 </li>
 <li><p>鉴权模式</p>
 </li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- world：默认方式，相当于全世界都能访问</span><br><span class="line">- auth：代表已经认证通过的用户(cli中可以通过addauth digest user:pwd 来添加当前上下文中的授权用户)</span><br><span class="line">- digest：即用户名:密码这种方式认证，这也是业务系统中最常用的</span><br><span class="line">- ip：使用Ip地址认证</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">- world：默认方式，相当于全世界都能访问
+- auth：代表已经认证通过的用户(cli中可以通过addauth digest user:pwd 来添加当前上下文中的授权用户)
+- digest：即用户名:密码这种方式认证，这也是业务系统中最常用的
+- ip：使用Ip地址认证
+</code></pre>
 <ol start="3">
 <li>演示auth方式</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1）增加一个认证用户</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> addauth digest 用户名:密码明文</span></span><br><span class="line">addauth digest kkb:kkb</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2）设置权限</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> setAcl /path auth:用户名:密码明文:权限</span></span><br><span class="line">setAcl /zk_test auth:kkb:kkb:rw</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3）查看ACL设置</span></span><br><span class="line">getAcl /zk_test</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># 1）增加一个认证用户
+# addauth digest 用户名:密码明文
+addauth digest kkb:kkb
+
+# 2）设置权限
+# setAcl /path auth:用户名:密码明文:权限
+setAcl /zk_test auth:kkb:kkb:rw
+
+# 3）查看ACL设置
+getAcl /zk_test
+</code></pre>
 <h2 id="8-HDFS-HA方案"><a href="#8-HDFS-HA方案" class="headerlink" title="8. HDFS HA方案"></a>8. HDFS HA方案</h2><h3 id="8-1-ZooKeeper监听器"><a href="#8-1-ZooKeeper监听器" class="headerlink" title="8.1 ZooKeeper监听器"></a>8.1 ZooKeeper监听器</h3><ul>
 <li><p>关于ZooKeeper监听器有三个重要的逻辑：</p>
 <ul>
@@ -933,7 +1122,8 @@
 </ol>
 <p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/Image201906140856.png" alt=""></p>
 <h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p><img src="https://kfly.top/picture/kfly-top/zookeeper分布式协调框架/assets/Image201906121639.png" alt=""></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create -s -e /locker/node_ ndata</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">create -s -e /locker/node_ ndata
+</code></pre>
 
         
         <br />

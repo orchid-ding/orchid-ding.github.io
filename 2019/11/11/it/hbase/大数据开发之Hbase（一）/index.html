@@ -134,10 +134,10 @@
         
         <span class="attr">标签：/
         
-        <a class="tag" href="/tags/#hadoop" title="hadoop">hadoop</a>
+        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
         <span>/</span>
         
-        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
+        <a class="tag" href="/tags/#hadoop" title="hadoop">hadoop</a>
         <span>/</span>
         
         
@@ -273,166 +273,248 @@
 <h2 id="5-HBase-shell-命令基本操作"><a href="#5-HBase-shell-命令基本操作" class="headerlink" title="5. HBase shell 命令基本操作"></a>5. HBase shell 命令基本操作</h2><h3 id="5-1-进入HBase客户端命令操作界面"><a href="#5-1-进入HBase客户端命令操作界面" class="headerlink" title="5.1 进入HBase客户端命令操作界面"></a>5.1 进入HBase客户端命令操作界面</h3><ul>
 <li>node01执行以下命令，进入HBase的shell客户端</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /kfly/install/hbase-1.2.0-cdh5.14.2/</span><br><span class="line">bin/HBase shell</span><br></pre></td></tr></table></figure>
-<h3 id="5-2-help-帮助命令"><a href="#5-2-help-帮助命令" class="headerlink" title="5.2 help 帮助命令"></a>5.2 help 帮助命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):001:0&gt; help</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">cd /kfly/install/hbase-1.2.0-cdh5.14.2/
+bin/HBase shell
+
+</code></pre>
+<h3 id="5-2-help-帮助命令"><a href="#5-2-help-帮助命令" class="headerlink" title="5.2 help 帮助命令"></a>5.2 help 帮助命令</h3><pre><code class="shell">HBase(main):001:0&gt; help
+
+</code></pre>
 <h3 id="5-3-list-查看有哪些表"><a href="#5-3-list-查看有哪些表" class="headerlink" title="5.3 list 查看有哪些表"></a>5.3 list 查看有哪些表</h3><ul>
 <li>查看当前数据库中有哪些表</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):002:0&gt; list</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">HBase(main):002:0&gt; list
+
+</code></pre>
 <h3 id="5-4-create-创建表"><a href="#5-4-create-创建表" class="headerlink" title="5.4 create 创建表"></a>5.4 create 创建表</h3><ul>
 <li>创建user表，包含info、data两个列族</li>
 <li>使用create命令</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">010</span>:<span class="number">0</span>&gt; create <span class="string">'user'</span>, <span class="string">'info'</span>, <span class="string">'data'</span></span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">010</span>:<span class="number">0</span>&gt; create <span class="string">'user'</span>, &#123;NAME =&gt; <span class="string">'info'</span>, VERSIONS =&gt; <span class="string">'3'</span>&#125;，&#123;NAME =&gt; <span class="string">'data'</span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="5-5-put-插入数据操作"><a href="#5-5-put-插入数据操作" class="headerlink" title="5.5 put 插入数据操作"></a>5.5 put 插入数据操作</h3><ul>
+<pre><code>HBase(main):010:0&gt; create &#39;user&#39;, &#39;info&#39;, &#39;data&#39;
+
+或者
+
+HBase(main):010:0&gt; create &#39;user&#39;, {NAME =&gt; &#39;info&#39;, VERSIONS =&gt; &#39;3&#39;}，{NAME =&gt; &#39;data&#39;}
+
+</code></pre><h3 id="5-5-put-插入数据操作"><a href="#5-5-put-插入数据操作" class="headerlink" title="5.5 put 插入数据操作"></a>5.5 put 插入数据操作</h3><ul>
 <li>向表中插入数据</li>
 <li>使用put命令</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">向user表中插入信息，row key为rk0001，列族info中添加名为name的列，值为zhangsan</span><br><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">011</span>:<span class="number">0</span>&gt; put <span class="string">'user'</span>, <span class="string">'rk0001'</span>, <span class="string">'info:name'</span>, <span class="string">'zhangsan'</span></span><br><span class="line"></span><br><span class="line">向user表中插入信息，row key为rk0001，列族info中添加名为gender的列，值为female</span><br><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">012</span>:<span class="number">0</span>&gt; put <span class="string">'user'</span>, <span class="string">'rk0001'</span>, <span class="string">'info:gender'</span>, <span class="string">'female'</span></span><br><span class="line"></span><br><span class="line">向user表中插入信息，row key为rk0001，列族info中添加名为age的列，值为<span class="number">20</span></span><br><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">013</span>:<span class="number">0</span>&gt; put <span class="string">'user'</span>, <span class="string">'rk0001'</span>, <span class="string">'info:age'</span>, <span class="number">20</span></span><br><span class="line"></span><br><span class="line">向user表中插入信息，row key为rk0001，列族data中添加名为pic的列，值为picture</span><br><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">014</span>:<span class="number">0</span>&gt; put <span class="string">'user'</span>, <span class="string">'rk0001'</span>, <span class="string">'data:pic'</span>, <span class="string">'picture'</span></span><br></pre></td></tr></table></figure>
-<h3 id="5-6-查询数据操作"><a href="#5-6-查询数据操作" class="headerlink" title="5.6 查询数据操作"></a>5.6 查询数据操作</h3><h4 id="5-6-1-通过rowkey进行查询"><a href="#5-6-1-通过rowkey进行查询" class="headerlink" title="5.6.1 通过rowkey进行查询"></a>5.6.1 通过rowkey进行查询</h4><ul>
+<pre><code>向user表中插入信息，row key为rk0001，列族info中添加名为name的列，值为zhangsan
+HBase(main):011:0&gt; put &#39;user&#39;, &#39;rk0001&#39;, &#39;info:name&#39;, &#39;zhangsan&#39;
+
+向user表中插入信息，row key为rk0001，列族info中添加名为gender的列，值为female
+HBase(main):012:0&gt; put &#39;user&#39;, &#39;rk0001&#39;, &#39;info:gender&#39;, &#39;female&#39;
+
+向user表中插入信息，row key为rk0001，列族info中添加名为age的列，值为20
+HBase(main):013:0&gt; put &#39;user&#39;, &#39;rk0001&#39;, &#39;info:age&#39;, 20
+
+向user表中插入信息，row key为rk0001，列族data中添加名为pic的列，值为picture
+HBase(main):014:0&gt; put &#39;user&#39;, &#39;rk0001&#39;, &#39;data:pic&#39;, &#39;picture&#39;
+
+</code></pre><h3 id="5-6-查询数据操作"><a href="#5-6-查询数据操作" class="headerlink" title="5.6 查询数据操作"></a>5.6 查询数据操作</h3><h4 id="5-6-1-通过rowkey进行查询"><a href="#5-6-1-通过rowkey进行查询" class="headerlink" title="5.6.1 通过rowkey进行查询"></a>5.6.1 通过rowkey进行查询</h4><ul>
 <li>获取user表中row key为rk0001的所有信息（即所有cell的数据）</li>
 <li>使用get命令</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">015</span>:<span class="number">0</span>&gt; get <span class="string">'user'</span>, <span class="string">'rk0001'</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-6-2-查看rowkey下某个列族的信息"><a href="#5-6-2-查看rowkey下某个列族的信息" class="headerlink" title="5.6.2 查看rowkey下某个列族的信息"></a>5.6.2 查看rowkey下某个列族的信息</h4><ul>
+<pre><code>HBase(main):015:0&gt; get &#39;user&#39;, &#39;rk0001&#39;
+
+</code></pre><h4 id="5-6-2-查看rowkey下某个列族的信息"><a href="#5-6-2-查看rowkey下某个列族的信息" class="headerlink" title="5.6.2 查看rowkey下某个列族的信息"></a>5.6.2 查看rowkey下某个列族的信息</h4><ul>
 <li>获取user表中row key为rk0001，info列族的所有信息</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">016</span>:<span class="number">0</span>&gt; get <span class="string">'user'</span>, <span class="string">'rk0001'</span>, <span class="string">'info'</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-6-3-查看rowkey指定列族指定字段的值"><a href="#5-6-3-查看rowkey指定列族指定字段的值" class="headerlink" title="5.6.3 查看rowkey指定列族指定字段的值"></a>5.6.3 查看rowkey指定列族指定字段的值</h4><ul>
+<pre><code>HBase(main):016:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, &#39;info&#39;
+
+</code></pre><h4 id="5-6-3-查看rowkey指定列族指定字段的值"><a href="#5-6-3-查看rowkey指定列族指定字段的值" class="headerlink" title="5.6.3 查看rowkey指定列族指定字段的值"></a>5.6.3 查看rowkey指定列族指定字段的值</h4><ul>
 <li>获取user表中row key为rk0001，info列族的name、age列的信息</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):017:0&gt; get 'user', 'rk0001', 'info:name', 'info:age'</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">HBase(main):017:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, &#39;info:name&#39;, &#39;info:age&#39;
+
+</code></pre>
 <p><img src="assets/Image201911080715.png" alt=""></p>
 <h4 id="5-6-4-查看rowkey指定多个列族的信息"><a href="#5-6-4-查看rowkey指定多个列族的信息" class="headerlink" title="5.6.4 查看rowkey指定多个列族的信息"></a>5.6.4 查看rowkey指定多个列族的信息</h4><ul>
 <li>获取user表中row key为rk0001，info、data列族的信息</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):018:0&gt; get 'user', 'rk0001', 'info', 'data'</span><br><span class="line"></span><br><span class="line">或者你也可以这样写</span><br><span class="line">HBase(main):019:0&gt; get 'user', 'rk0001', &#123;COLUMN =&gt; ['info', 'data']&#125;</span><br><span class="line"></span><br><span class="line">或者你也可以这样写，也行</span><br><span class="line">HBase(main):020:0&gt; get 'user', 'rk0001', &#123;COLUMN =&gt; ['info:name', 'data:pic']&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">HBase(main):018:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, &#39;info&#39;, &#39;data&#39;
+
+或者你也可以这样写
+HBase(main):019:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, {COLUMN =&gt; [&#39;info&#39;, &#39;data&#39;]}
+
+或者你也可以这样写，也行
+HBase(main):020:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, {COLUMN =&gt; [&#39;info:name&#39;, &#39;data:pic&#39;]}
+
+</code></pre>
 <h4 id="5-6-5-指定rowkey与列值过滤器查询"><a href="#5-6-5-指定rowkey与列值过滤器查询" class="headerlink" title="5.6.5 指定rowkey与列值过滤器查询"></a>5.6.5 指定rowkey与列值过滤器查询</h4><ul>
 <li>获取user表中row key为rk0001，cell的值为zhangsan的信息</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):030:0&gt; get 'user', 'rk0001', &#123;FILTER =&gt; "ValueFilter(=, 'binary:zhangsan')"&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">HBase(main):030:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, {FILTER =&gt; &quot;ValueFilter(=, &#39;binary:zhangsan&#39;)&quot;}
+
+</code></pre>
 <h4 id="5-6-6-指定rowkey与列值模糊查询"><a href="#5-6-6-指定rowkey与列值模糊查询" class="headerlink" title="5.6.6 指定rowkey与列值模糊查询"></a>5.6.6 指定rowkey与列值模糊查询</h4><ul>
 <li>获取user表中row key为rk0001，列标示符中含有a的信息</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):031:0&gt; get 'user', 'rk0001', &#123;FILTER =&gt; "(QualifierFilter(=,'substring:a'))"&#125;</span><br><span class="line"></span><br><span class="line">继续插入一批数据</span><br><span class="line"></span><br><span class="line">HBase(main):032:0&gt; put 'user', 'rk0002', 'info:name', 'fanbingbing'</span><br><span class="line">HBase(main):033:0&gt; put 'user', 'rk0002', 'info:gender', 'female'</span><br><span class="line">HBase(main):034:0&gt; put 'user', 'rk0002', 'info:nationality', '中国'</span><br><span class="line">HBase(main):035:0&gt; get 'user', 'rk0002', &#123;FILTER =&gt; "ValueFilter(=, 'binary:中国')"&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">HBase(main):031:0&gt; get &#39;user&#39;, &#39;rk0001&#39;, {FILTER =&gt; &quot;(QualifierFilter(=,&#39;substring:a&#39;))&quot;}
+
+继续插入一批数据
+
+HBase(main):032:0&gt; put &#39;user&#39;, &#39;rk0002&#39;, &#39;info:name&#39;, &#39;fanbingbing&#39;
+HBase(main):033:0&gt; put &#39;user&#39;, &#39;rk0002&#39;, &#39;info:gender&#39;, &#39;female&#39;
+HBase(main):034:0&gt; put &#39;user&#39;, &#39;rk0002&#39;, &#39;info:nationality&#39;, &#39;中国&#39;
+HBase(main):035:0&gt; get &#39;user&#39;, &#39;rk0002&#39;, {FILTER =&gt; &quot;ValueFilter(=, &#39;binary:中国&#39;)&quot;}
+
+</code></pre>
 <h4 id="5-6-7-查询所有行的数据"><a href="#5-6-7-查询所有行的数据" class="headerlink" title="5.6.7 查询所有行的数据"></a>5.6.7 查询所有行的数据</h4><ul>
 <li>查询user表中的所有信息</li>
 <li>使用scan命令</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">032</span>:<span class="number">0</span>&gt;  scan <span class="string">'user'</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-6-8-列族查询"><a href="#5-6-8-列族查询" class="headerlink" title="5.6.8 列族查询"></a>5.6.8 列族查询</h4><ul>
+<pre><code>HBase(main):032:0&gt;  scan &#39;user&#39;
+
+</code></pre><h4 id="5-6-8-列族查询"><a href="#5-6-8-列族查询" class="headerlink" title="5.6.8 列族查询"></a>5.6.8 列族查询</h4><ul>
 <li>查询user表中列族为info的信息</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> <span class="string">'info'</span>&#125;</span><br><span class="line"></span><br><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> <span class="string">'info'</span>, <span class="function"><span class="params">RAW</span> =&gt;</span> <span class="literal">true</span>, <span class="function"><span class="params">VERSIONS</span> =&gt;</span> <span class="number">5</span>&#125;</span><br><span class="line"></span><br><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> <span class="string">'info'</span>, <span class="function"><span class="params">RAW</span> =&gt;</span> <span class="literal">true</span>, <span class="function"><span class="params">VERSIONS</span> =&gt;</span> <span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="5-6-9-多列族查询"><a href="#5-6-9-多列族查询" class="headerlink" title="5.6.9 多列族查询"></a>5.6.9 多列族查询</h4><ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; &#39;info&#39;}
+
+scan &#39;user&#39;, {COLUMNS =&gt; &#39;info&#39;, RAW =&gt; true, VERSIONS =&gt; 5}
+
+scan &#39;user&#39;, {COLUMNS =&gt; &#39;info&#39;, RAW =&gt; true, VERSIONS =&gt; 3}
+
+</code></pre><h4 id="5-6-9-多列族查询"><a href="#5-6-9-多列族查询" class="headerlink" title="5.6.9 多列族查询"></a>5.6.9 多列族查询</h4><ul>
 <li>查询user表中列族为info和data的信息</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> [<span class="string">'info'</span>, <span class="string">'data'</span>]&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="5-6-10-指定列族与某个列名查询"><a href="#5-6-10-指定列族与某个列名查询" class="headerlink" title="5.6.10 指定列族与某个列名查询"></a>5.6.10 指定列族与某个列名查询</h4><ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; [&#39;info&#39;, &#39;data&#39;]}
+
+</code></pre><h4 id="5-6-10-指定列族与某个列名查询"><a href="#5-6-10-指定列族与某个列名查询" class="headerlink" title="5.6.10 指定列族与某个列名查询"></a>5.6.10 指定列族与某个列名查询</h4><ul>
 <li>查询user表中列族为info、列标示符为name的信息</li>
 </ul>
-<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="symbol">'user'</span>, &#123;<span class="type">COLUMNS</span> =&gt; <span class="symbol">'info</span>:name'&#125;</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; &#39;info:name&#39;}
+
+</code></pre><ul>
 <li>查询info:name列、data:pic列的数据</li>
 </ul>
-<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="symbol">'user'</span>, &#123;<span class="type">COLUMNS</span> =&gt; [<span class="symbol">'info</span>:name', <span class="symbol">'data</span>:pic']&#125;</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; [&#39;info:name&#39;, &#39;data:pic&#39;]}
+
+</code></pre><ul>
 <li>查询user表中列族为info、列标示符为name的信息,并且版本最新的5个</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> <span class="string">'info:name'</span>, <span class="function"><span class="params">VERSIONS</span> =&gt;</span> <span class="number">5</span>&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="5-6-11-指定多个列族与按照数据值模糊查询"><a href="#5-6-11-指定多个列族与按照数据值模糊查询" class="headerlink" title="5.6.11 指定多个列族与按照数据值模糊查询"></a>5.6.11 指定多个列族与按照数据值模糊查询</h4><ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; &#39;info:name&#39;, VERSIONS =&gt; 5}
+
+</code></pre><h4 id="5-6-11-指定多个列族与按照数据值模糊查询"><a href="#5-6-11-指定多个列族与按照数据值模糊查询" class="headerlink" title="5.6.11 指定多个列族与按照数据值模糊查询"></a>5.6.11 指定多个列族与按照数据值模糊查询</h4><ul>
 <li>查询user表中列族为info和data且列标示符中含有a字符的信息</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> [<span class="string">'info'</span>, <span class="string">'data'</span>], <span class="function"><span class="params">FILTER</span> =&gt;</span> <span class="string">"(QualifierFilter(=,'substring:a'))"</span>&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="5-6-12-指定rowkey的范围查询"><a href="#5-6-12-指定rowkey的范围查询" class="headerlink" title="5.6.12 指定rowkey的范围查询"></a>5.6.12 指定rowkey的范围查询</h4><ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; [&#39;info&#39;, &#39;data&#39;], FILTER =&gt; &quot;(QualifierFilter(=,&#39;substring:a&#39;))&quot;}
+
+</code></pre><h4 id="5-6-12-指定rowkey的范围查询"><a href="#5-6-12-指定rowkey的范围查询" class="headerlink" title="5.6.12 指定rowkey的范围查询"></a>5.6.12 指定rowkey的范围查询</h4><ul>
 <li>查询user表中列族为info，rk范围是[rk0001, rk0003)的数据</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">COLUMNS</span> =&gt;</span> <span class="string">'info'</span>, <span class="function"><span class="params">STARTROW</span> =&gt;</span> <span class="string">'rk0001'</span>, <span class="function"><span class="params">ENDROW</span> =&gt;</span> <span class="string">'rk0003'</span>&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="5-6-13-指定rowkey模糊查询"><a href="#5-6-13-指定rowkey模糊查询" class="headerlink" title="5.6.13 指定rowkey模糊查询"></a>5.6.13 指定rowkey模糊查询</h4><ul>
+<pre><code>scan &#39;user&#39;, {COLUMNS =&gt; &#39;info&#39;, STARTROW =&gt; &#39;rk0001&#39;, ENDROW =&gt; &#39;rk0003&#39;}
+
+</code></pre><h4 id="5-6-13-指定rowkey模糊查询"><a href="#5-6-13-指定rowkey模糊查询" class="headerlink" title="5.6.13 指定rowkey模糊查询"></a>5.6.13 指定rowkey模糊查询</h4><ul>
 <li>查询user表中row key以rk字符开头的数据</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>,&#123;<span class="function"><span class="params">FILTER</span>=&gt;</span><span class="string">"PrefixFilter('rk')"</span>&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="5-6-14-指定数据版本的范围查询"><a href="#5-6-14-指定数据版本的范围查询" class="headerlink" title="5.6.14 指定数据版本的范围查询"></a>5.6.14 指定数据版本的范围查询</h4><ul>
+<pre><code>scan &#39;user&#39;,{FILTER=&gt;&quot;PrefixFilter(&#39;rk&#39;)&quot;}
+
+</code></pre><h4 id="5-6-14-指定数据版本的范围查询"><a href="#5-6-14-指定数据版本的范围查询" class="headerlink" title="5.6.14 指定数据版本的范围查询"></a>5.6.14 指定数据版本的范围查询</h4><ul>
 <li>查询user表中指定范围的数据（前闭后开）</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">'user'</span>, &#123;<span class="function"><span class="params">TIMERANGE</span> =&gt;</span> [<span class="number">1392368783980</span>, <span class="number">1392380169184</span>]&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="5-7-更新数据操作"><a href="#5-7-更新数据操作" class="headerlink" title="5.7 更新数据操作"></a>5.7 更新数据操作</h3><h4 id="5-7-1-更新数据值"><a href="#5-7-1-更新数据值" class="headerlink" title="5.7.1 更新数据值"></a>5.7.1 更新数据值</h4><ul>
+<pre><code>scan &#39;user&#39;, {TIMERANGE =&gt; [1392368783980, 1392380169184]}
+
+</code></pre><h3 id="5-7-更新数据操作"><a href="#5-7-更新数据操作" class="headerlink" title="5.7 更新数据操作"></a>5.7 更新数据操作</h3><h4 id="5-7-1-更新数据值"><a href="#5-7-1-更新数据值" class="headerlink" title="5.7.1 更新数据值"></a>5.7.1 更新数据值</h4><ul>
 <li>更新操作同插入操作一模一样，只不过有数据就更新，没数据就添加</li>
 <li>使用put命令</li>
 </ul>
 <h4 id="5-7-2-更新版本号"><a href="#5-7-2-更新版本号" class="headerlink" title="5.7.2 更新版本号"></a>5.7.2 更新版本号</h4><ul>
 <li>将user表的f1列族版本数改为5</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase(main):<span class="number">050</span>:<span class="number">0</span>&gt; alter <span class="string">'user'</span>, <span class="function"><span class="params">NAME</span> =&gt;</span> <span class="string">'info'</span>, <span class="function"><span class="params">VERSIONS</span> =&gt;</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<h3 id="5-8-删除数据以及删除表操作"><a href="#5-8-删除数据以及删除表操作" class="headerlink" title="5.8 删除数据以及删除表操作"></a>5.8 删除数据以及删除表操作</h3><h4 id="5-8-1-指定rowkey以及列名进行删除"><a href="#5-8-1-指定rowkey以及列名进行删除" class="headerlink" title="5.8.1 指定rowkey以及列名进行删除"></a>5.8.1 指定rowkey以及列名进行删除</h4><ul>
+<pre><code>HBase(main):050:0&gt; alter &#39;user&#39;, NAME =&gt; &#39;info&#39;, VERSIONS =&gt; 5
+
+</code></pre><h3 id="5-8-删除数据以及删除表操作"><a href="#5-8-删除数据以及删除表操作" class="headerlink" title="5.8 删除数据以及删除表操作"></a>5.8 删除数据以及删除表操作</h3><h4 id="5-8-1-指定rowkey以及列名进行删除"><a href="#5-8-1-指定rowkey以及列名进行删除" class="headerlink" title="5.8.1 指定rowkey以及列名进行删除"></a>5.8.1 指定rowkey以及列名进行删除</h4><ul>
 <li>删除user表row key为rk0001，列标示符为info:name的数据</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">045</span>:<span class="number">0</span>&gt; delete <span class="string">'user'</span>, <span class="string">'rk0001'</span>, <span class="string">'info:name'</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-8-2-指定rowkey，列名以及版本号进行删除"><a href="#5-8-2-指定rowkey，列名以及版本号进行删除" class="headerlink" title="5.8.2 指定rowkey，列名以及版本号进行删除"></a>5.8.2 指定rowkey，列名以及版本号进行删除</h4><ul>
+<pre><code>HBase(main):045:0&gt; delete &#39;user&#39;, &#39;rk0001&#39;, &#39;info:name&#39;
+
+</code></pre><h4 id="5-8-2-指定rowkey，列名以及版本号进行删除"><a href="#5-8-2-指定rowkey，列名以及版本号进行删除" class="headerlink" title="5.8.2 指定rowkey，列名以及版本号进行删除"></a>5.8.2 指定rowkey，列名以及版本号进行删除</h4><ul>
 <li>删除user表row key为rk0001，列标示符为info:name，timestamp为1392383705316的数据</li>
 </ul>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete 'user', 'rk<span class="number">0001</span>', 'info:name', <span class="number">1392383705316</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-8-3-删除一个列族"><a href="#5-8-3-删除一个列族" class="headerlink" title="5.8.3 删除一个列族"></a>5.8.3 删除一个列族</h4><ul>
+<pre><code>delete &#39;user&#39;, &#39;rk0001&#39;, &#39;info:name&#39;, 1392383705316
+
+</code></pre><h4 id="5-8-3-删除一个列族"><a href="#5-8-3-删除一个列族" class="headerlink" title="5.8.3 删除一个列族"></a>5.8.3 删除一个列族</h4><ul>
 <li>删除一个列族：</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alter <span class="string">'user'</span>, <span class="function"><span class="params">NAME</span> =&gt;</span> <span class="string">'info'</span>, <span class="function"><span class="params">METHOD</span> =&gt;</span> <span class="string">'delete'</span> </span><br><span class="line"></span><br><span class="line">或 alter <span class="string">'user'</span>, <span class="string">'delete'</span> =&gt; <span class="string">'info'</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-8-4-清空表数据"><a href="#5-8-4-清空表数据" class="headerlink" title="5.8.4 清空表数据"></a>5.8.4 清空表数据</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">017</span>:<span class="number">0</span>&gt; truncate <span class="string">'user'</span></span><br></pre></td></tr></table></figure>
-<h4 id="5-8-5-删除表"><a href="#5-8-5-删除表" class="headerlink" title="5.8.5 删除表"></a>5.8.5 删除表</h4><ul>
+<pre><code>alter &#39;user&#39;, NAME =&gt; &#39;info&#39;, METHOD =&gt; &#39;delete&#39; 
+
+或 alter &#39;user&#39;, &#39;delete&#39; =&gt; &#39;info&#39;
+
+</code></pre><h4 id="5-8-4-清空表数据"><a href="#5-8-4-清空表数据" class="headerlink" title="5.8.4 清空表数据"></a>5.8.4 清空表数据</h4><pre><code>HBase(main):017:0&gt; truncate &#39;user&#39;
+
+</code></pre><h4 id="5-8-5-删除表"><a href="#5-8-5-删除表" class="headerlink" title="5.8.5 删除表"></a>5.8.5 删除表</h4><ul>
 <li>首先需要先让该表为disable状态，使用命令：</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">049</span>:<span class="number">0</span>&gt; disable <span class="string">'user'</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>HBase(main):049:0&gt; disable &#39;user&#39;
+
+</code></pre><ul>
 <li>然后使用drop命令删除这个表</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">050</span>:<span class="number">0</span>&gt; drop <span class="string">'user'</span></span><br></pre></td></tr></table></figure>
-<blockquote>
+<pre><code> HBase(main):050:0&gt; drop &#39;user&#39;
+
+</code></pre><blockquote>
 <p>(注意：如果直接drop表，会报错：Drop the named table. Table must first be disabled)</p>
 </blockquote>
-<h3 id="5-9-统计一张表有多少行数据"><a href="#5-9-统计一张表有多少行数据" class="headerlink" title="5.9 统计一张表有多少行数据"></a>5.9 统计一张表有多少行数据</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">053</span>:<span class="number">0</span>&gt; count <span class="string">'user'</span></span><br></pre></td></tr></table></figure>
-<h2 id="6-HBase的高级shell管理命令"><a href="#6-HBase的高级shell管理命令" class="headerlink" title="6. HBase的高级shell管理命令"></a>6. HBase的高级shell管理命令</h2><h3 id="6-1-status"><a href="#6-1-status" class="headerlink" title="6.1 status"></a>6.1 status</h3><ul>
+<h3 id="5-9-统计一张表有多少行数据"><a href="#5-9-统计一张表有多少行数据" class="headerlink" title="5.9 统计一张表有多少行数据"></a>5.9 统计一张表有多少行数据</h3><pre><code>HBase(main):053:0&gt; count &#39;user&#39;
+
+</code></pre><h2 id="6-HBase的高级shell管理命令"><a href="#6-HBase的高级shell管理命令" class="headerlink" title="6. HBase的高级shell管理命令"></a>6. HBase的高级shell管理命令</h2><h3 id="6-1-status"><a href="#6-1-status" class="headerlink" title="6.1 status"></a>6.1 status</h3><ul>
 <li>例如：显示服务器状态</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">058</span>:<span class="number">0</span>&gt; status <span class="string">'node01'</span></span><br></pre></td></tr></table></figure>
-<h3 id="6-2-whoami"><a href="#6-2-whoami" class="headerlink" title="6.2 whoami"></a>6.2 whoami</h3><ul>
+<pre><code>HBase(main):058:0&gt; status &#39;node01&#39;
+
+</code></pre><h3 id="6-2-whoami"><a href="#6-2-whoami" class="headerlink" title="6.2 whoami"></a>6.2 whoami</h3><ul>
 <li>显示HBase当前用户，例如：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> whoami</span></span><br></pre></td></tr></table></figure>
-<h3 id="6-3-list"><a href="#6-3-list" class="headerlink" title="6.3 list"></a>6.3 list</h3><ul>
+<pre><code>HBase&gt; whoami
+
+</code></pre><h3 id="6-3-list"><a href="#6-3-list" class="headerlink" title="6.3 list"></a>6.3 list</h3><ul>
 <li>显示当前所有的表</li>
 </ul>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase &gt;  <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
-<h3 id="6-4-count"><a href="#6-4-count" class="headerlink" title="6.4 count"></a>6.4 count</h3><ul>
+<pre><code>HBase &gt;  list
+
+</code></pre><h3 id="6-4-count"><a href="#6-4-count" class="headerlink" title="6.4 count"></a>6.4 count</h3><ul>
 <li>统计指定表的记录数，例如：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> count <span class="string">'user'</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="6-5-describe"><a href="#6-5-describe" class="headerlink" title="6.5 describe"></a>6.5 describe</h3><ul>
+<pre><code>HBase&gt; count &#39;user&#39; 
+
+</code></pre><h3 id="6-5-describe"><a href="#6-5-describe" class="headerlink" title="6.5 describe"></a>6.5 describe</h3><ul>
 <li>展示表结构信息</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> describe <span class="string">'user'</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="6-6-exists"><a href="#6-6-exists" class="headerlink" title="6.6 exists"></a>6.6 exists</h3><ul>
+<pre><code>HBase&gt; describe &#39;user&#39;
+
+</code></pre><h3 id="6-6-exists"><a href="#6-6-exists" class="headerlink" title="6.6 exists"></a>6.6 exists</h3><ul>
 <li>检查表是否存在，适用于表量特别多的情况</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> exists <span class="string">'user'</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="6-7-is-enabled、is-disabled"><a href="#6-7-is-enabled、is-disabled" class="headerlink" title="6.7 is_enabled、is_disabled"></a>6.7 is_enabled、is_disabled</h3><ul>
+<pre><code>HBase&gt; exists &#39;user&#39;
+
+</code></pre><h3 id="6-7-is-enabled、is-disabled"><a href="#6-7-is-enabled、is-disabled" class="headerlink" title="6.7 is_enabled、is_disabled"></a>6.7 is_enabled、is_disabled</h3><ul>
 <li>检查表是否启用或禁用</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> is_enabled <span class="string">'user'</span></span></span><br><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> is_disabled <span class="string">'user'</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="6-8-alter"><a href="#6-8-alter" class="headerlink" title="6.8 alter"></a>6.8 alter</h3><ul>
+<pre><code>HBase&gt; is_enabled &#39;user&#39;
+HBase&gt; is_disabled &#39;user&#39;
+
+</code></pre><h3 id="6-8-alter"><a href="#6-8-alter" class="headerlink" title="6.8 alter"></a>6.8 alter</h3><ul>
 <li><p>该命令可以改变表和列族的模式，例如：</p>
 </li>
 <li><p><strong>为当前表增加列族：</strong></p>
 </li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HBase&gt; alter <span class="string">'user'</span>, <span class="function"><span class="params">NAME</span> =&gt;</span> <span class="string">'CF2'</span>, <span class="function"><span class="params">VERSIONS</span> =&gt;</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>HBase&gt; alter &#39;user&#39;, NAME =&gt; &#39;CF2&#39;, VERSIONS =&gt; 2
+
+</code></pre><ul>
 <li><strong>为当前表删除列族：</strong></li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">HBase</span><span class="params">(main)</span></span>:<span class="number">002</span>:<span class="number">0</span>&gt;  alter <span class="string">'user'</span>, <span class="string">'delete'</span> =&gt; <span class="string">'CF2'</span></span><br></pre></td></tr></table></figure>
-<h3 id="6-9-disable-enable"><a href="#6-9-disable-enable" class="headerlink" title="6.9 disable/enable"></a>6.9 disable/enable</h3><ul>
+<pre><code>HBase(main):002:0&gt;  alter &#39;user&#39;, &#39;delete&#39; =&gt; &#39;CF2&#39;
+
+</code></pre><h3 id="6-9-disable-enable"><a href="#6-9-disable-enable" class="headerlink" title="6.9 disable/enable"></a>6.9 disable/enable</h3><ul>
 <li>禁用一张表/启用一张表</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> <span class="built_in">disable</span> <span class="string">'user'</span></span></span><br><span class="line"><span class="meta">HBase&gt;</span><span class="bash"> <span class="built_in">enable</span> <span class="string">'user'</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="6-10-drop"><a href="#6-10-drop" class="headerlink" title="6.10 drop"></a>6.10 drop</h3><ul>
+<pre><code>HBase&gt; disable &#39;user&#39;
+HBase&gt; enable &#39;user&#39;
+
+</code></pre><h3 id="6-10-drop"><a href="#6-10-drop" class="headerlink" title="6.10 drop"></a>6.10 drop</h3><ul>
 <li>删除一张表，记得在删除表之前必须先禁用</li>
 </ul>
 <h3 id="6-11-truncate"><a href="#6-11-truncate" class="headerlink" title="6.11 truncate"></a>6.11 truncate</h3><ul>
@@ -445,22 +527,309 @@
 <li>讲如下内容作为maven工程中pom.xml的repositories的内容</li>
 <li>自动导包（需要从cloudera仓库下载，耗时较长，<strong>耐心等待</strong>）</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">id</span>&gt;</span>cloudera<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0-mr1-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.HBase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.HBase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hbase-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.testng<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testng<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.14.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-shade-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                           <span class="tag">&lt;<span class="name">goal</span>&gt;</span>shade<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                           <span class="tag">&lt;<span class="name">filters</span>&gt;</span></span><br><span class="line">                               <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">                                   <span class="tag">&lt;<span class="name">artifact</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">artifact</span>&gt;</span></span><br><span class="line">                                   <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                                       <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.SF<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                       <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.DSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                       <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*/RSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                                   <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">                               <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">                           <span class="tag">&lt;/<span class="name">filters</span>&gt;</span></span><br><span class="line">                       <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                   <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">               <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="xml">    &lt;repositories&gt;
+        &lt;repository&gt;
+            &lt;id&gt;cloudera&lt;/id&gt;
+            &lt;url&gt;https://repository.cloudera.com/artifactory/cloudera-repos/&lt;/url&gt;
+        &lt;/repository&gt;
+    &lt;/repositories&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+            &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+            &lt;version&gt;2.6.0-mr1-cdh5.14.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.HBase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;
+            &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.HBase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-server&lt;/artifactId&gt;
+            &lt;version&gt;1.2.0-cdh5.14.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.testng&lt;/groupId&gt;
+            &lt;artifactId&gt;testng&lt;/artifactId&gt;
+            &lt;version&gt;6.14.3&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.0&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;source&gt;1.8&lt;/source&gt;
+                    &lt;target&gt;1.8&lt;/target&gt;
+                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+                &lt;version&gt;2.2&lt;/version&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;phase&gt;package&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;shade&lt;/goal&gt;
+                        &lt;/goals&gt;
+                        &lt;configuration&gt;
+                            &lt;filters&gt;
+                                &lt;filter&gt;
+                                    &lt;artifact&gt;*:*&lt;/artifact&gt;
+                                    &lt;excludes&gt;
+                                        &lt;exclude&gt;META-INF/*.SF&lt;/exclude&gt;
+                                        &lt;exclude&gt;META-INF/*.DSA&lt;/exclude&gt;
+                                        &lt;exclude&gt;META-INF/*/RSA&lt;/exclude&gt;
+                                    &lt;/excludes&gt;
+                                &lt;/filter&gt;
+                            &lt;/filters&gt;
+                        &lt;/configuration&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+
+</code></pre>
 <h3 id="7-2-创建myuser表"><a href="#7-2-创建myuser表" class="headerlink" title="7.2 创建myuser表"></a>7.2 创建myuser表</h3><ul>
 <li>创建myuser表，此表有两个列族f1和f2</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//操作数据库  第一步：获取连接  第二步：获取客户端对象   第三步：操作数据库  第四步：关闭</span></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 创建一张表  myuser  两个列族  f1   f2</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createTable</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">       <span class="comment">//连接HBase集群不需要指定HBase主节点的ip地址和端口号</span></span><br><span class="line">       configuration.set(<span class="string">"HBase.zookeeper.quorum"</span>,<span class="string">"node01:2181,node02:2181,node03:2181"</span>);</span><br><span class="line">       <span class="comment">//创建连接对象</span></span><br><span class="line">       Connection connection = ConnectionFactory.createConnection(configuration);</span><br><span class="line">       <span class="comment">//获取连接对象，创建一张表</span></span><br><span class="line">       <span class="comment">//获取管理员对象，来对手数据库进行DDL的操作</span></span><br><span class="line">       Admin admin = connection.getAdmin();</span><br><span class="line">       <span class="comment">//指定我们的表名</span></span><br><span class="line">       TableName myuser = TableName.valueOf(<span class="string">"myuser"</span>);</span><br><span class="line">       HTableDescriptor hTableDescriptor = <span class="keyword">new</span> HTableDescriptor(myuser);</span><br><span class="line">       <span class="comment">//指定两个列族</span></span><br><span class="line">       HColumnDescriptor f1 = <span class="keyword">new</span> HColumnDescriptor(<span class="string">"f1"</span>);</span><br><span class="line">       HColumnDescriptor f2 = <span class="keyword">new</span> HColumnDescriptor(<span class="string">"f2"</span>);</span><br><span class="line">       hTableDescriptor.addFamily(f1);</span><br><span class="line">       hTableDescriptor.addFamily(f2);</span><br><span class="line">       admin.createTable(hTableDescriptor);</span><br><span class="line">       admin.close();</span><br><span class="line">       connection.close();</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="7-3-向表中添加数据"><a href="#7-3-向表中添加数据" class="headerlink" title="7.3 向表中添加数据"></a>7.3 向表中添加数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Connection connection ;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String TABLE_NAME = <span class="string">"myuser"</span>;</span><br><span class="line">  <span class="keyword">private</span> Table table ;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@BeforeTest</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initTable</span> <span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">      configuration.set(<span class="string">"HBase.zookeeper.quorum"</span>,<span class="string">"node01:2181,node02:2181"</span>);</span><br><span class="line">      connection= ConnectionFactory.createConnection(configuration);</span><br><span class="line">      table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@AfterTest</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      table.close();</span><br><span class="line">      connection.close();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   *  向myuser表当中添加数据</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addData</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      <span class="comment">//获取表</span></span><br><span class="line">      Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">      Put put = <span class="keyword">new</span> Put(<span class="string">"0001"</span>.getBytes());<span class="comment">//创建put对象，并指定rowkey值</span></span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),<span class="string">"zhangsan"</span>.getBytes());</span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(), Bytes.toBytes(<span class="number">18</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(), Bytes.toBytes(<span class="number">25</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"address"</span>.getBytes(), Bytes.toBytes(<span class="string">"地球人"</span>));</span><br><span class="line">      table.put(put);</span><br><span class="line">      table.close();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    //操作数据库  第一步：获取连接  第二步：获取客户端对象   第三步：操作数据库  第四步：关闭
+    /**
+     * 创建一张表  myuser  两个列族  f1   f2
+     */
+    @Test
+    public void createTable() throws IOException {
+        Configuration configuration = HBaseConfiguration.create();
+        //连接HBase集群不需要指定HBase主节点的ip地址和端口号
+        configuration.set(&quot;HBase.zookeeper.quorum&quot;,&quot;node01:2181,node02:2181,node03:2181&quot;);
+        //创建连接对象
+        Connection connection = ConnectionFactory.createConnection(configuration);
+        //获取连接对象，创建一张表
+        //获取管理员对象，来对手数据库进行DDL的操作
+        Admin admin = connection.getAdmin();
+        //指定我们的表名
+        TableName myuser = TableName.valueOf(&quot;myuser&quot;);
+        HTableDescriptor hTableDescriptor = new HTableDescriptor(myuser);
+        //指定两个列族
+        HColumnDescriptor f1 = new HColumnDescriptor(&quot;f1&quot;);
+        HColumnDescriptor f2 = new HColumnDescriptor(&quot;f2&quot;);
+        hTableDescriptor.addFamily(f1);
+        hTableDescriptor.addFamily(f2);
+        admin.createTable(hTableDescriptor);
+        admin.close();
+        connection.close();
+
+    }
+
+</code></pre>
+<h3 id="7-3-向表中添加数据"><a href="#7-3-向表中添加数据" class="headerlink" title="7.3 向表中添加数据"></a>7.3 向表中添加数据</h3><pre><code class="java">     private Connection connection ;
+    private final String TABLE_NAME = &quot;myuser&quot;;
+    private Table table ;
+
+    @BeforeTest
+    public void initTable () throws IOException {
+        Configuration configuration = HBaseConfiguration.create();
+        configuration.set(&quot;HBase.zookeeper.quorum&quot;,&quot;node01:2181,node02:2181&quot;);
+        connection= ConnectionFactory.createConnection(configuration);
+        table = connection.getTable(TableName.valueOf(TABLE_NAME));
+    }
+
+    @AfterTest
+    public void close() throws IOException {
+        table.close();
+        connection.close();
+    }
+
+
+    /**
+     *  向myuser表当中添加数据
+     */
+    @Test
+    public void addData() throws IOException {
+        //获取表
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        Put put = new Put(&quot;0001&quot;.getBytes());//创建put对象，并指定rowkey值
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),&quot;zhangsan&quot;.getBytes());
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(), Bytes.toBytes(18));
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(), Bytes.toBytes(25));
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;address&quot;.getBytes(), Bytes.toBytes(&quot;地球人&quot;));
+        table.put(put);
+        table.close();
+    } 
+
+</code></pre>
 <h3 id="7-4-查询数据"><a href="#7-4-查询数据" class="headerlink" title="7.4 查询数据"></a>7.4 查询数据</h3><ul>
 <li>初始化一批数据到HBase表当中，用于查询</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertBatchData</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//获取连接</span></span><br><span class="line">      Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">      configuration.set(<span class="string">"HBase.zookeeper.quorum"</span>, <span class="string">"node01:2181,node02:2181"</span>);</span><br><span class="line">      Connection connection = ConnectionFactory.createConnection(configuration);</span><br><span class="line">      <span class="comment">//获取表</span></span><br><span class="line">      Table myuser = connection.getTable(TableName.valueOf(<span class="string">"myuser"</span>));</span><br><span class="line">      <span class="comment">//创建put对象，并指定rowkey</span></span><br><span class="line">      Put put = <span class="keyword">new</span> Put(<span class="string">"0002"</span>.getBytes());</span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(),Bytes.toBytes(<span class="number">1</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),Bytes.toBytes(<span class="string">"曹操"</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(),Bytes.toBytes(<span class="number">30</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"sex"</span>.getBytes(),Bytes.toBytes(<span class="string">"1"</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"address"</span>.getBytes(),Bytes.toBytes(<span class="string">"沛国谯县"</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes(),Bytes.toBytes(<span class="string">"16888888888"</span>));</span><br><span class="line">      put.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"say"</span>.getBytes(),Bytes.toBytes(<span class="string">"helloworld"</span>));</span><br><span class="line"></span><br><span class="line">      Put put2 = <span class="keyword">new</span> Put(<span class="string">"0003"</span>.getBytes());</span><br><span class="line">      put2.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(),Bytes.toBytes(<span class="number">2</span>));</span><br><span class="line">      put2.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),Bytes.toBytes(<span class="string">"刘备"</span>));</span><br><span class="line">      put2.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(),Bytes.toBytes(<span class="number">32</span>));</span><br><span class="line">      put2.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"sex"</span>.getBytes(),Bytes.toBytes(<span class="string">"1"</span>));</span><br><span class="line">      put2.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"address"</span>.getBytes(),Bytes.toBytes(<span class="string">"幽州涿郡涿县"</span>));</span><br><span class="line">      put2.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes(),Bytes.toBytes(<span class="string">"17888888888"</span>));</span><br><span class="line">      put2.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"say"</span>.getBytes(),Bytes.toBytes(<span class="string">"talk is cheap , show me the code"</span>));</span><br><span class="line"></span><br><span class="line">      Put put3 = <span class="keyword">new</span> Put(<span class="string">"0004"</span>.getBytes());</span><br><span class="line">      put3.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(),Bytes.toBytes(<span class="number">3</span>));</span><br><span class="line">      put3.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),Bytes.toBytes(<span class="string">"孙权"</span>));</span><br><span class="line">      put3.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(),Bytes.toBytes(<span class="number">35</span>));</span><br><span class="line">      put3.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"sex"</span>.getBytes(),Bytes.toBytes(<span class="string">"1"</span>));</span><br><span class="line">      put3.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"address"</span>.getBytes(),Bytes.toBytes(<span class="string">"下邳"</span>));</span><br><span class="line">      put3.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes(),Bytes.toBytes(<span class="string">"12888888888"</span>));</span><br><span class="line">      put3.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"say"</span>.getBytes(),Bytes.toBytes(<span class="string">"what are you 弄啥嘞！"</span>));</span><br><span class="line"></span><br><span class="line">      Put put4 = <span class="keyword">new</span> Put(<span class="string">"0005"</span>.getBytes());</span><br><span class="line">      put4.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(),Bytes.toBytes(<span class="number">4</span>));</span><br><span class="line">      put4.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),Bytes.toBytes(<span class="string">"诸葛亮"</span>));</span><br><span class="line">      put4.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(),Bytes.toBytes(<span class="number">28</span>));</span><br><span class="line">      put4.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"sex"</span>.getBytes(),Bytes.toBytes(<span class="string">"1"</span>));</span><br><span class="line">      put4.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"address"</span>.getBytes(),Bytes.toBytes(<span class="string">"四川隆中"</span>));</span><br><span class="line">      put4.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes(),Bytes.toBytes(<span class="string">"14888888888"</span>));</span><br><span class="line">      put4.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"say"</span>.getBytes(),Bytes.toBytes(<span class="string">"出师表你背了嘛"</span>));</span><br><span class="line"></span><br><span class="line">      Put put5 = <span class="keyword">new</span> Put(<span class="string">"0006"</span>.getBytes());</span><br><span class="line">      put5.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(),Bytes.toBytes(<span class="number">5</span>));</span><br><span class="line">      put5.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),Bytes.toBytes(<span class="string">"司马懿"</span>));</span><br><span class="line">      put5.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(),Bytes.toBytes(<span class="number">27</span>));</span><br><span class="line">      put5.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"sex"</span>.getBytes(),Bytes.toBytes(<span class="string">"1"</span>));</span><br><span class="line">      put5.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"address"</span>.getBytes(),Bytes.toBytes(<span class="string">"哪里人有待考究"</span>));</span><br><span class="line">      put5.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes(),Bytes.toBytes(<span class="string">"15888888888"</span>));</span><br><span class="line">      put5.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"say"</span>.getBytes(),Bytes.toBytes(<span class="string">"跟诸葛亮死掐"</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      Put put6 = <span class="keyword">new</span> Put(<span class="string">"0007"</span>.getBytes());</span><br><span class="line">      put6.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"id"</span>.getBytes(),Bytes.toBytes(<span class="number">5</span>));</span><br><span class="line">      put6.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"name"</span>.getBytes(),Bytes.toBytes(<span class="string">"xiaobubu—吕布"</span>));</span><br><span class="line">      put6.addColumn(<span class="string">"f1"</span>.getBytes(),<span class="string">"age"</span>.getBytes(),Bytes.toBytes(<span class="number">28</span>));</span><br><span class="line">      put6.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"sex"</span>.getBytes(),Bytes.toBytes(<span class="string">"1"</span>));</span><br><span class="line">      put6.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"address"</span>.getBytes(),Bytes.toBytes(<span class="string">"内蒙人"</span>));</span><br><span class="line">      put6.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes(),Bytes.toBytes(<span class="string">"15788888888"</span>));</span><br><span class="line">      put6.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"say"</span>.getBytes(),Bytes.toBytes(<span class="string">"貂蝉去哪了"</span>));</span><br><span class="line"></span><br><span class="line">      List&lt;Put&gt; listPut = <span class="keyword">new</span> ArrayList&lt;Put&gt;();</span><br><span class="line">      listPut.add(put);</span><br><span class="line">      listPut.add(put2);</span><br><span class="line">      listPut.add(put3);</span><br><span class="line">      listPut.add(put4);</span><br><span class="line">      listPut.add(put5);</span><br><span class="line">      listPut.add(put6);</span><br><span class="line"></span><br><span class="line">      myuser.put(listPut);</span><br><span class="line">      myuser.close();</span><br><span class="line">      connection.close();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">     @Test
+    public void insertBatchData() throws IOException {
+
+        //获取连接
+        Configuration configuration = HBaseConfiguration.create();
+        configuration.set(&quot;HBase.zookeeper.quorum&quot;, &quot;node01:2181,node02:2181&quot;);
+        Connection connection = ConnectionFactory.createConnection(configuration);
+        //获取表
+        Table myuser = connection.getTable(TableName.valueOf(&quot;myuser&quot;));
+        //创建put对象，并指定rowkey
+        Put put = new Put(&quot;0002&quot;.getBytes());
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(),Bytes.toBytes(1));
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),Bytes.toBytes(&quot;曹操&quot;));
+        put.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(),Bytes.toBytes(30));
+        put.addColumn(&quot;f2&quot;.getBytes(),&quot;sex&quot;.getBytes(),Bytes.toBytes(&quot;1&quot;));
+        put.addColumn(&quot;f2&quot;.getBytes(),&quot;address&quot;.getBytes(),Bytes.toBytes(&quot;沛国谯县&quot;));
+        put.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes(),Bytes.toBytes(&quot;16888888888&quot;));
+        put.addColumn(&quot;f2&quot;.getBytes(),&quot;say&quot;.getBytes(),Bytes.toBytes(&quot;helloworld&quot;));
+
+        Put put2 = new Put(&quot;0003&quot;.getBytes());
+        put2.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(),Bytes.toBytes(2));
+        put2.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),Bytes.toBytes(&quot;刘备&quot;));
+        put2.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(),Bytes.toBytes(32));
+        put2.addColumn(&quot;f2&quot;.getBytes(),&quot;sex&quot;.getBytes(),Bytes.toBytes(&quot;1&quot;));
+        put2.addColumn(&quot;f2&quot;.getBytes(),&quot;address&quot;.getBytes(),Bytes.toBytes(&quot;幽州涿郡涿县&quot;));
+        put2.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes(),Bytes.toBytes(&quot;17888888888&quot;));
+        put2.addColumn(&quot;f2&quot;.getBytes(),&quot;say&quot;.getBytes(),Bytes.toBytes(&quot;talk is cheap , show me the code&quot;));
+
+        Put put3 = new Put(&quot;0004&quot;.getBytes());
+        put3.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(),Bytes.toBytes(3));
+        put3.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),Bytes.toBytes(&quot;孙权&quot;));
+        put3.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(),Bytes.toBytes(35));
+        put3.addColumn(&quot;f2&quot;.getBytes(),&quot;sex&quot;.getBytes(),Bytes.toBytes(&quot;1&quot;));
+        put3.addColumn(&quot;f2&quot;.getBytes(),&quot;address&quot;.getBytes(),Bytes.toBytes(&quot;下邳&quot;));
+        put3.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes(),Bytes.toBytes(&quot;12888888888&quot;));
+        put3.addColumn(&quot;f2&quot;.getBytes(),&quot;say&quot;.getBytes(),Bytes.toBytes(&quot;what are you 弄啥嘞！&quot;));
+
+        Put put4 = new Put(&quot;0005&quot;.getBytes());
+        put4.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(),Bytes.toBytes(4));
+        put4.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),Bytes.toBytes(&quot;诸葛亮&quot;));
+        put4.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(),Bytes.toBytes(28));
+        put4.addColumn(&quot;f2&quot;.getBytes(),&quot;sex&quot;.getBytes(),Bytes.toBytes(&quot;1&quot;));
+        put4.addColumn(&quot;f2&quot;.getBytes(),&quot;address&quot;.getBytes(),Bytes.toBytes(&quot;四川隆中&quot;));
+        put4.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes(),Bytes.toBytes(&quot;14888888888&quot;));
+        put4.addColumn(&quot;f2&quot;.getBytes(),&quot;say&quot;.getBytes(),Bytes.toBytes(&quot;出师表你背了嘛&quot;));
+
+        Put put5 = new Put(&quot;0006&quot;.getBytes());
+        put5.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(),Bytes.toBytes(5));
+        put5.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),Bytes.toBytes(&quot;司马懿&quot;));
+        put5.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(),Bytes.toBytes(27));
+        put5.addColumn(&quot;f2&quot;.getBytes(),&quot;sex&quot;.getBytes(),Bytes.toBytes(&quot;1&quot;));
+        put5.addColumn(&quot;f2&quot;.getBytes(),&quot;address&quot;.getBytes(),Bytes.toBytes(&quot;哪里人有待考究&quot;));
+        put5.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes(),Bytes.toBytes(&quot;15888888888&quot;));
+        put5.addColumn(&quot;f2&quot;.getBytes(),&quot;say&quot;.getBytes(),Bytes.toBytes(&quot;跟诸葛亮死掐&quot;));
+
+
+        Put put6 = new Put(&quot;0007&quot;.getBytes());
+        put6.addColumn(&quot;f1&quot;.getBytes(),&quot;id&quot;.getBytes(),Bytes.toBytes(5));
+        put6.addColumn(&quot;f1&quot;.getBytes(),&quot;name&quot;.getBytes(),Bytes.toBytes(&quot;xiaobubu—吕布&quot;));
+        put6.addColumn(&quot;f1&quot;.getBytes(),&quot;age&quot;.getBytes(),Bytes.toBytes(28));
+        put6.addColumn(&quot;f2&quot;.getBytes(),&quot;sex&quot;.getBytes(),Bytes.toBytes(&quot;1&quot;));
+        put6.addColumn(&quot;f2&quot;.getBytes(),&quot;address&quot;.getBytes(),Bytes.toBytes(&quot;内蒙人&quot;));
+        put6.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes(),Bytes.toBytes(&quot;15788888888&quot;));
+        put6.addColumn(&quot;f2&quot;.getBytes(),&quot;say&quot;.getBytes(),Bytes.toBytes(&quot;貂蝉去哪了&quot;));
+
+        List&lt;Put&gt; listPut = new ArrayList&lt;Put&gt;();
+        listPut.add(put);
+        listPut.add(put2);
+        listPut.add(put3);
+        listPut.add(put4);
+        listPut.add(put5);
+        listPut.add(put6);
+
+        myuser.put(listPut);
+        myuser.close();
+        connection.close();
+    }
+
+</code></pre>
 <h4 id="7-4-1-Get查询"><a href="#7-4-1-Get查询" class="headerlink" title="7.4.1 Get查询"></a>7.4.1 Get查询</h4><ul>
 <li>按照rowkey进行查询，获取所有列的所有值</li>
 <li>查询主键rowkey为0003的人</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 查询rowkey为0003的人</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getData</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">      <span class="comment">//通过get对象，指定rowkey</span></span><br><span class="line">      Get get = <span class="keyword">new</span> Get(Bytes.toBytes(<span class="string">"0003"</span>));</span><br><span class="line"></span><br><span class="line">      get.addFamily(<span class="string">"f1"</span>.getBytes());<span class="comment">//限制只查询f1列族下面所有列的值</span></span><br><span class="line">      <span class="comment">//查询f2  列族 phone  这个字段</span></span><br><span class="line">      get.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes());</span><br><span class="line">      <span class="comment">//通过get查询，返回一个result对象，所有的字段的数据都是封装在result里面了</span></span><br><span class="line">      Result result = table.get(get);</span><br><span class="line">      List&lt;Cell&gt; cells = result.listCells();  <span class="comment">//获取一条数据所有的cell，所有数据值都是在cell里面 的</span></span><br><span class="line">      <span class="keyword">for</span> (Cell cell : cells) &#123;</span><br><span class="line">          <span class="keyword">byte</span>[] family_name = CellUtil.cloneFamily(cell);<span class="comment">//获取列族名</span></span><br><span class="line">          <span class="keyword">byte</span>[] column_name = CellUtil.cloneQualifier(cell);<span class="comment">//获取列名</span></span><br><span class="line">          <span class="keyword">byte</span>[] rowkey = CellUtil.cloneRow(cell);<span class="comment">//获取rowkey</span></span><br><span class="line">          <span class="keyword">byte</span>[] cell_value = CellUtil.cloneValue(cell);<span class="comment">//获取cell值</span></span><br><span class="line">          <span class="comment">//需要判断字段的数据类型，使用对应的转换的方法，才能够获取到值</span></span><br><span class="line">          <span class="keyword">if</span>(<span class="string">"age"</span>.equals(Bytes.toString(column_name))  || <span class="string">"id"</span>.equals(Bytes.toString(column_name)))&#123;</span><br><span class="line">              System.out.println(Bytes.toString(family_name));</span><br><span class="line">              System.out.println(Bytes.toString(column_name));</span><br><span class="line">              System.out.println(Bytes.toString(rowkey));</span><br><span class="line">              System.out.println(Bytes.toInt(cell_value));</span><br><span class="line">          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">              System.out.println(Bytes.toString(family_name));</span><br><span class="line">              System.out.println(Bytes.toString(column_name));</span><br><span class="line">              System.out.println(Bytes.toString(rowkey));</span><br><span class="line">              System.out.println(Bytes.toString(cell_value));</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      table.close();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="7-4-2-Scan查询"><a href="#7-4-2-Scan查询" class="headerlink" title="7.4.2 Scan查询"></a>7.4.2 Scan查询</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 不知道rowkey的具体值，我想查询rowkey范围值是0003  到0006</span></span><br><span class="line"><span class="comment">    * select * from myuser  where age &gt; 30  and id &lt; 8  and name like 'zhangsan'</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">scanData</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       <span class="comment">//获取table</span></span><br><span class="line">       Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();<span class="comment">//没有指定startRow以及stopRow  全表扫描</span></span><br><span class="line">       <span class="comment">//只扫描f1列族</span></span><br><span class="line">       scan.addFamily(<span class="string">"f1"</span>.getBytes());</span><br><span class="line">       <span class="comment">//扫描 f2列族 phone  这个字段</span></span><br><span class="line">       scan.addColumn(<span class="string">"f2"</span>.getBytes(),<span class="string">"phone"</span>.getBytes());</span><br><span class="line">       scan.setStartRow(<span class="string">"0003"</span>.getBytes());</span><br><span class="line">       scan.setStopRow(<span class="string">"0007"</span>.getBytes());</span><br><span class="line">       <span class="comment">//通过getScanner查询获取到了表里面所有的数据，是多条数据</span></span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       <span class="comment">//遍历ResultScanner 得到每一条数据，每一条数据都是封装在result对象里面了</span></span><br><span class="line">       <span class="keyword">for</span> (Result result : scanner) &#123;</span><br><span class="line">           List&lt;Cell&gt; cells = result.listCells();</span><br><span class="line">           <span class="keyword">for</span> (Cell cell : cells) &#123;</span><br><span class="line">               <span class="keyword">byte</span>[] family_name = CellUtil.cloneFamily(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] qualifier_name = CellUtil.cloneQualifier(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] rowkey = CellUtil.cloneRow(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] value = CellUtil.cloneValue(cell);</span><br><span class="line">               <span class="comment">//判断id和age字段，这两个字段是整形值</span></span><br><span class="line">               <span class="keyword">if</span>(<span class="string">"age"</span>.equals(Bytes.toString(qualifier_name))  || <span class="string">"id"</span>.equals(Bytes.toString(qualifier_name)))&#123;</span><br><span class="line">                   System.out.println(<span class="string">"数据的rowkey为"</span> +  Bytes.toString(rowkey)   +<span class="string">"======数据的列族为"</span> +  Bytes.toString(family_name)+<span class="string">"======数据的列名为"</span> +  Bytes.toString(qualifier_name) + <span class="string">"==========数据的值为"</span> +Bytes.toInt(value));</span><br><span class="line">               &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                   System.out.println(<span class="string">"数据的rowkey为"</span> +  Bytes.toString(rowkey)   +<span class="string">"======数据的列族为"</span> +  Bytes.toString(family_name)+<span class="string">"======数据的列名为"</span> +  Bytes.toString(qualifier_name) + <span class="string">"==========数据的值为"</span> +Bytes.toString(value));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       table.close();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">     /**
+     * 查询rowkey为0003的人
+     */
+    @Test
+    public void getData() throws IOException {
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        //通过get对象，指定rowkey
+        Get get = new Get(Bytes.toBytes(&quot;0003&quot;));
+
+        get.addFamily(&quot;f1&quot;.getBytes());//限制只查询f1列族下面所有列的值
+        //查询f2  列族 phone  这个字段
+        get.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes());
+        //通过get查询，返回一个result对象，所有的字段的数据都是封装在result里面了
+        Result result = table.get(get);
+        List&lt;Cell&gt; cells = result.listCells();  //获取一条数据所有的cell，所有数据值都是在cell里面 的
+        for (Cell cell : cells) {
+            byte[] family_name = CellUtil.cloneFamily(cell);//获取列族名
+            byte[] column_name = CellUtil.cloneQualifier(cell);//获取列名
+            byte[] rowkey = CellUtil.cloneRow(cell);//获取rowkey
+            byte[] cell_value = CellUtil.cloneValue(cell);//获取cell值
+            //需要判断字段的数据类型，使用对应的转换的方法，才能够获取到值
+            if(&quot;age&quot;.equals(Bytes.toString(column_name))  || &quot;id&quot;.equals(Bytes.toString(column_name))){
+                System.out.println(Bytes.toString(family_name));
+                System.out.println(Bytes.toString(column_name));
+                System.out.println(Bytes.toString(rowkey));
+                System.out.println(Bytes.toInt(cell_value));
+            }else{
+                System.out.println(Bytes.toString(family_name));
+                System.out.println(Bytes.toString(column_name));
+                System.out.println(Bytes.toString(rowkey));
+                System.out.println(Bytes.toString(cell_value));
+            }
+        }
+        table.close();
+    }
+</code></pre>
+<h4 id="7-4-2-Scan查询"><a href="#7-4-2-Scan查询" class="headerlink" title="7.4.2 Scan查询"></a>7.4.2 Scan查询</h4><pre><code class="java">    /**
+     * 不知道rowkey的具体值，我想查询rowkey范围值是0003  到0006
+     * select * from myuser  where age &gt; 30  and id &lt; 8  and name like &#39;zhangsan&#39;
+     *
+     */
+    @Test
+    public void scanData() throws IOException {
+        //获取table
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        Scan scan = new Scan();//没有指定startRow以及stopRow  全表扫描
+        //只扫描f1列族
+        scan.addFamily(&quot;f1&quot;.getBytes());
+        //扫描 f2列族 phone  这个字段
+        scan.addColumn(&quot;f2&quot;.getBytes(),&quot;phone&quot;.getBytes());
+        scan.setStartRow(&quot;0003&quot;.getBytes());
+        scan.setStopRow(&quot;0007&quot;.getBytes());
+        //通过getScanner查询获取到了表里面所有的数据，是多条数据
+        ResultScanner scanner = table.getScanner(scan);
+        //遍历ResultScanner 得到每一条数据，每一条数据都是封装在result对象里面了
+        for (Result result : scanner) {
+            List&lt;Cell&gt; cells = result.listCells();
+            for (Cell cell : cells) {
+                byte[] family_name = CellUtil.cloneFamily(cell);
+                byte[] qualifier_name = CellUtil.cloneQualifier(cell);
+                byte[] rowkey = CellUtil.cloneRow(cell);
+                byte[] value = CellUtil.cloneValue(cell);
+                //判断id和age字段，这两个字段是整形值
+                if(&quot;age&quot;.equals(Bytes.toString(qualifier_name))  || &quot;id&quot;.equals(Bytes.toString(qualifier_name))){
+                    System.out.println(&quot;数据的rowkey为&quot; +  Bytes.toString(rowkey)   +&quot;======数据的列族为&quot; +  Bytes.toString(family_name)+&quot;======数据的列名为&quot; +  Bytes.toString(qualifier_name) + &quot;==========数据的值为&quot; +Bytes.toInt(value));
+                }else{
+                    System.out.println(&quot;数据的rowkey为&quot; +  Bytes.toString(rowkey)   +&quot;======数据的列族为&quot; +  Bytes.toString(family_name)+&quot;======数据的列名为&quot; +  Bytes.toString(qualifier_name) + &quot;==========数据的值为&quot; +Bytes.toString(value));
+                }
+            }
+        }
+        table.close();
+    }
+</code></pre>
 <h3 id="7-5-HBase过滤器查询"><a href="#7-5-HBase过滤器查询" class="headerlink" title="7.5 HBase过滤器查询"></a>7.5 HBase过滤器查询</h3><h4 id="7-5-1-过滤器"><a href="#7-5-1-过滤器" class="headerlink" title="7.5.1 过滤器"></a>7.5.1 过滤器</h4><ul>
 <li><p>过滤器的作用是在服务端判断数据是否满足条件，然后只将满足条件的数据返回给客户端</p>
 </li>
@@ -473,54 +842,259 @@
 <li><p>HBase过滤器的<strong>比较运算符</strong>：</p>
 </li>
 </ul>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LESS</span>  &lt;</span><br><span class="line">LESS_OR_EQUAL &lt;=</span><br><span class="line"><span class="keyword">EQUAL</span> =</span><br><span class="line">NOT_EQUAL &lt;&gt;</span><br><span class="line">GREATER_OR_EQUAL &gt;=</span><br><span class="line"><span class="keyword">GREATER</span> &gt;</span><br><span class="line">NO_OP 排除所有</span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>LESS  &lt;
+LESS_OR_EQUAL &lt;=
+EQUAL =
+NOT_EQUAL &lt;&gt;
+GREATER_OR_EQUAL &gt;=
+GREATER &gt;
+NO_OP 排除所有
+</code></pre><ul>
 <li>Hbase过滤器的<strong>比较器</strong>（指定比较机制）：</li>
 </ul>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BinaryComparator </span> 按字节索引顺序比较指定字节数组，采用<span class="keyword">Bytes.compareTo(byte[])</span></span><br><span class="line"><span class="keyword">BinaryPrefixComparator </span>跟前面相同，只是比较左端的数据是否相同</span><br><span class="line"><span class="symbol">NullComparator</span> 判断给定的是否为空</span><br><span class="line"><span class="keyword">BitComparator </span>按位比较</span><br><span class="line"><span class="symbol">RegexStringComparator</span> 提供一个正则的比较器，仅支持 EQUAL 和非EQUAL</span><br><span class="line"><span class="keyword">SubstringComparator </span>判断提供的子串是否出现在中。</span><br></pre></td></tr></table></figure>
-<h4 id="7-5-2-比较过滤器使用"><a href="#7-5-2-比较过滤器使用" class="headerlink" title="7.5.2 比较过滤器使用"></a>7.5.2 比较过滤器使用</h4><h5 id="1、rowKey过滤器RowFilter"><a href="#1、rowKey过滤器RowFilter" class="headerlink" title="1、rowKey过滤器RowFilter"></a>1、rowKey过滤器RowFilter</h5><ul>
+<pre><code>BinaryComparator  按字节索引顺序比较指定字节数组，采用Bytes.compareTo(byte[])
+BinaryPrefixComparator 跟前面相同，只是比较左端的数据是否相同
+NullComparator 判断给定的是否为空
+BitComparator 按位比较
+RegexStringComparator 提供一个正则的比较器，仅支持 EQUAL 和非EQUAL
+SubstringComparator 判断提供的子串是否出现在中。
+</code></pre><h4 id="7-5-2-比较过滤器使用"><a href="#7-5-2-比较过滤器使用" class="headerlink" title="7.5.2 比较过滤器使用"></a>7.5.2 比较过滤器使用</h4><h5 id="1、rowKey过滤器RowFilter"><a href="#1、rowKey过滤器RowFilter" class="headerlink" title="1、rowKey过滤器RowFilter"></a>1、rowKey过滤器RowFilter</h5><ul>
 <li>通过RowFilter过滤比rowKey  0003小的所有值出来</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查询所有的rowkey比0003小的所有的数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rowFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       <span class="comment">//获取我们比较对象</span></span><br><span class="line">       BinaryComparator binaryComparator = <span class="keyword">new</span> BinaryComparator(<span class="string">"0003"</span>.getBytes());</span><br><span class="line">       <span class="comment">/***</span></span><br><span class="line"><span class="comment">        * rowFilter需要加上两个参数</span></span><br><span class="line"><span class="comment">        * 第一个参数就是我们的比较规则</span></span><br><span class="line"><span class="comment">        * 第二个参数就是我们的比较对象</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">       RowFilter rowFilter = <span class="keyword">new</span> RowFilter(CompareFilter.CompareOp.GREATER, binaryComparator);</span><br><span class="line">       <span class="comment">//为我们的scan对象设置过滤器</span></span><br><span class="line">       scan.setFilter(rowFilter);</span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       <span class="keyword">for</span> (Result result : scanner) &#123;</span><br><span class="line">           List&lt;Cell&gt; cells = result.listCells();</span><br><span class="line">           <span class="keyword">for</span> (Cell cell : cells) &#123;</span><br><span class="line">               <span class="keyword">byte</span>[] family_name = CellUtil.cloneFamily(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] qualifier_name = CellUtil.cloneQualifier(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] rowkey = CellUtil.cloneRow(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] value = CellUtil.cloneValue(cell);</span><br><span class="line">               <span class="comment">//判断id和age字段，这两个字段是整形值</span></span><br><span class="line">               <span class="keyword">if</span>(<span class="string">"age"</span>.equals(Bytes.toString(qualifier_name))  || <span class="string">"id"</span>.equals(Bytes.toString(qualifier_name)))&#123;</span><br><span class="line">                   System.out.println(<span class="string">"数据的rowkey为"</span> +  Bytes.toString(rowkey)   +<span class="string">"======数据的列族为"</span> +  Bytes.toString(family_name)+<span class="string">"======数据的列名为"</span> +  Bytes.toString(qualifier_name) + <span class="string">"==========数据的值为"</span> +Bytes.toInt(value));</span><br><span class="line">               &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                   System.out.println(<span class="string">"数据的rowkey为"</span> +  Bytes.toString(rowkey)   +<span class="string">"======数据的列族为"</span> +  Bytes.toString(family_name)+<span class="string">"======数据的列名为"</span> +  Bytes.toString(qualifier_name) + <span class="string">"==========数据的值为"</span> +Bytes.toString(value));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * 查询所有的rowkey比0003小的所有的数据
+     */
+    @Test
+    public void rowFilter() throws IOException {
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        Scan scan = new Scan();
+        //获取我们比较对象
+        BinaryComparator binaryComparator = new BinaryComparator(&quot;0003&quot;.getBytes());
+        /***
+         * rowFilter需要加上两个参数
+         * 第一个参数就是我们的比较规则
+         * 第二个参数就是我们的比较对象
+         */
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.GREATER, binaryComparator);
+        //为我们的scan对象设置过滤器
+        scan.setFilter(rowFilter);
+        ResultScanner scanner = table.getScanner(scan);
+        for (Result result : scanner) {
+            List&lt;Cell&gt; cells = result.listCells();
+            for (Cell cell : cells) {
+                byte[] family_name = CellUtil.cloneFamily(cell);
+                byte[] qualifier_name = CellUtil.cloneQualifier(cell);
+                byte[] rowkey = CellUtil.cloneRow(cell);
+                byte[] value = CellUtil.cloneValue(cell);
+                //判断id和age字段，这两个字段是整形值
+                if(&quot;age&quot;.equals(Bytes.toString(qualifier_name))  || &quot;id&quot;.equals(Bytes.toString(qualifier_name))){
+                    System.out.println(&quot;数据的rowkey为&quot; +  Bytes.toString(rowkey)   +&quot;======数据的列族为&quot; +  Bytes.toString(family_name)+&quot;======数据的列名为&quot; +  Bytes.toString(qualifier_name) + &quot;==========数据的值为&quot; +Bytes.toInt(value));
+                }else{
+                    System.out.println(&quot;数据的rowkey为&quot; +  Bytes.toString(rowkey)   +&quot;======数据的列族为&quot; +  Bytes.toString(family_name)+&quot;======数据的列名为&quot; +  Bytes.toString(qualifier_name) + &quot;==========数据的值为&quot; +Bytes.toString(value));
+                }
+            }
+        }
+    }
+</code></pre>
 <h5 id="2、列族过滤器FamilyFilter"><a href="#2、列族过滤器FamilyFilter" class="headerlink" title="2、列族过滤器FamilyFilter"></a>2、列族过滤器FamilyFilter</h5><ul>
 <li>查询列族名包含f2的所有列族下面的数据</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 通过familyFilter来实现列族的过滤</span></span><br><span class="line"><span class="comment">    * 需要过滤，列族名包含f2</span></span><br><span class="line"><span class="comment">    * f1  f2   hello   world</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">familyFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Table table = connection.getTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       SubstringComparator substringComparator = <span class="keyword">new</span> SubstringComparator(<span class="string">"f2"</span>);</span><br><span class="line">       <span class="comment">//通过familyfilter来设置列族的过滤器</span></span><br><span class="line">       FamilyFilter familyFilter = <span class="keyword">new</span> FamilyFilter(CompareFilter.CompareOp.EQUAL, substringComparator);</span><br><span class="line">       scan.setFilter(familyFilter);</span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       <span class="keyword">for</span> (Result result : scanner) &#123;</span><br><span class="line">           List&lt;Cell&gt; cells = result.listCells();</span><br><span class="line">           <span class="keyword">for</span> (Cell cell : cells) &#123;</span><br><span class="line">               <span class="keyword">byte</span>[] family_name = CellUtil.cloneFamily(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] qualifier_name = CellUtil.cloneQualifier(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] rowkey = CellUtil.cloneRow(cell);</span><br><span class="line">               <span class="keyword">byte</span>[] value = CellUtil.cloneValue(cell);</span><br><span class="line">               <span class="comment">//判断id和age字段，这两个字段是整形值</span></span><br><span class="line">               <span class="keyword">if</span>(<span class="string">"age"</span>.equals(Bytes.toString(qualifier_name))  || <span class="string">"id"</span>.equals(Bytes.toString(qualifier_name)))&#123;</span><br><span class="line">                   System.out.println(<span class="string">"数据的rowkey为"</span> +  Bytes.toString(rowkey)   +<span class="string">"======数据的列族为"</span> +  Bytes.toString(family_name)+<span class="string">"======数据的列名为"</span> +  Bytes.toString(qualifier_name) + <span class="string">"==========数据的值为"</span> +Bytes.toInt(value));</span><br><span class="line">               &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                   System.out.println(<span class="string">"数据的rowkey为"</span> +  Bytes.toString(rowkey)   +<span class="string">"======数据的列族为"</span> +  Bytes.toString(family_name)+<span class="string">"======数据的列名为"</span> +  Bytes.toString(qualifier_name) + <span class="string">"==========数据的值为"</span> +Bytes.toString(value));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="JAVA">    /**
+     * 通过familyFilter来实现列族的过滤
+     * 需要过滤，列族名包含f2
+     * f1  f2   hello   world
+     */
+    @Test
+    public void familyFilter() throws IOException {
+        Table table = connection.getTable(TableName.valueOf(TABLE_NAME));
+        Scan scan = new Scan();
+        SubstringComparator substringComparator = new SubstringComparator(&quot;f2&quot;);
+        //通过familyfilter来设置列族的过滤器
+        FamilyFilter familyFilter = new FamilyFilter(CompareFilter.CompareOp.EQUAL, substringComparator);
+        scan.setFilter(familyFilter);
+        ResultScanner scanner = table.getScanner(scan);
+        for (Result result : scanner) {
+            List&lt;Cell&gt; cells = result.listCells();
+            for (Cell cell : cells) {
+                byte[] family_name = CellUtil.cloneFamily(cell);
+                byte[] qualifier_name = CellUtil.cloneQualifier(cell);
+                byte[] rowkey = CellUtil.cloneRow(cell);
+                byte[] value = CellUtil.cloneValue(cell);
+                //判断id和age字段，这两个字段是整形值
+                if(&quot;age&quot;.equals(Bytes.toString(qualifier_name))  || &quot;id&quot;.equals(Bytes.toString(qualifier_name))){
+                    System.out.println(&quot;数据的rowkey为&quot; +  Bytes.toString(rowkey)   +&quot;======数据的列族为&quot; +  Bytes.toString(family_name)+&quot;======数据的列名为&quot; +  Bytes.toString(qualifier_name) + &quot;==========数据的值为&quot; +Bytes.toInt(value));
+                }else{
+                    System.out.println(&quot;数据的rowkey为&quot; +  Bytes.toString(rowkey)   +&quot;======数据的列族为&quot; +  Bytes.toString(family_name)+&quot;======数据的列名为&quot; +  Bytes.toString(qualifier_name) + &quot;==========数据的值为&quot; +Bytes.toString(value));
+                }
+            }
+        }
+    }
+</code></pre>
 <h5 id="3、列过滤器QualifierFilter"><a href="#3、列过滤器QualifierFilter" class="headerlink" title="3、列过滤器QualifierFilter"></a>3、列过滤器QualifierFilter</h5><ul>
 <li>只查询name列的值</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 列名过滤器 只查询包含name列的值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">qualifierFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">        SubstringComparator substringComparator = <span class="keyword">new</span> SubstringComparator(<span class="string">"name"</span>);</span><br><span class="line">        <span class="comment">//定义列名过滤器，只查询列名包含name的列</span></span><br><span class="line">        QualifierFilter qualifierFilter = <span class="keyword">new</span> QualifierFilter(CompareFilter.CompareOp.EQUAL, substringComparator);</span><br><span class="line">        scan.setFilter(qualifierFilter);</span><br><span class="line">        ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">        printlReult(scanner);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/**
+     * 列名过滤器 只查询包含name列的值
+     */
+    @Test
+    public void  qualifierFilter() throws IOException {
+        Scan scan = new Scan();
+        SubstringComparator substringComparator = new SubstringComparator(&quot;name&quot;);
+        //定义列名过滤器，只查询列名包含name的列
+        QualifierFilter qualifierFilter = new QualifierFilter(CompareFilter.CompareOp.EQUAL, substringComparator);
+        scan.setFilter(qualifierFilter);
+        ResultScanner scanner = table.getScanner(scan);
+        printlReult(scanner);
+    }
+</code></pre>
 <h5 id="4、列值过滤器ValueFilter"><a href="#4、列值过滤器ValueFilter" class="headerlink" title="4、列值过滤器ValueFilter"></a>4、列值过滤器ValueFilter</h5><ul>
 <li>查询所有列当中包含8的数据</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查询哪些字段值  包含数字8</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contains8</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       SubstringComparator substringComparator = <span class="keyword">new</span> SubstringComparator(<span class="string">"8"</span>);</span><br><span class="line">       <span class="comment">//列值过滤器，过滤列值当中包含数字8的所有的列</span></span><br><span class="line">       ValueFilter valueFilter = <span class="keyword">new</span> ValueFilter(CompareFilter.CompareOp.EQUAL, substringComparator);</span><br><span class="line">       scan.setFilter(valueFilter);</span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       printlReult(scanner);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * 查询哪些字段值  包含数字8
+     */
+    @Test
+    public void contains8() throws IOException {
+        Scan scan = new Scan();
+        SubstringComparator substringComparator = new SubstringComparator(&quot;8&quot;);
+        //列值过滤器，过滤列值当中包含数字8的所有的列
+        ValueFilter valueFilter = new ValueFilter(CompareFilter.CompareOp.EQUAL, substringComparator);
+        scan.setFilter(valueFilter);
+        ResultScanner scanner = table.getScanner(scan);
+        printlReult(scanner);
+    }
+</code></pre>
 <h4 id="7-5-3-专用过滤器使用"><a href="#7-5-3-专用过滤器使用" class="headerlink" title="7.5.3 专用过滤器使用"></a>7.5.3 专用过滤器使用</h4><h5 id="1、单列值过滤器-SingleColumnValueFilter"><a href="#1、单列值过滤器-SingleColumnValueFilter" class="headerlink" title="1、单列值过滤器 SingleColumnValueFilter"></a>1、单列值过滤器 SingleColumnValueFilter</h5><ul>
 <li><p>SingleColumnValueFilter会返回满足条件的整列值的所有字段</p>
 </li>
 <li><p>查询名字为刘备的数据</p>
 </li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * select  *  from  myuser where name  = '刘备'</span></span><br><span class="line"><span class="comment">    * 会返回我们符合条件数据的所有的字段</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * SingleColumnValueExcludeFilter  列值排除过滤器</span></span><br><span class="line"><span class="comment">    *  select  *  from  myuser where name  ！= '刘备'</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">singleColumnValueFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       <span class="comment">//查询 f1  列族 name  列  值为刘备的数据</span></span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       <span class="comment">//单列值过滤器，过滤  f1 列族  name  列  值为刘备的数据</span></span><br><span class="line">       SingleColumnValueFilter singleColumnValueFilter = <span class="keyword">new</span> SingleColumnValueFilter(<span class="string">"f1"</span>.getBytes(), <span class="string">"name"</span>.getBytes(), CompareFilter.CompareOp.EQUAL, <span class="string">"刘备"</span>.getBytes());</span><br><span class="line">       scan.setFilter(singleColumnValueFilter);</span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       printlReult(scanner);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * select  *  from  myuser where name  = &#39;刘备&#39;
+     * 会返回我们符合条件数据的所有的字段
+     *
+     * SingleColumnValueExcludeFilter  列值排除过滤器
+     *  select  *  from  myuser where name  ！= &#39;刘备&#39;
+     */
+    @Test
+    public void singleColumnValueFilter() throws IOException {
+        //查询 f1  列族 name  列  值为刘备的数据
+        Scan scan = new Scan();
+        //单列值过滤器，过滤  f1 列族  name  列  值为刘备的数据
+        SingleColumnValueFilter singleColumnValueFilter = new SingleColumnValueFilter(&quot;f1&quot;.getBytes(), &quot;name&quot;.getBytes(), CompareFilter.CompareOp.EQUAL, &quot;刘备&quot;.getBytes());
+        scan.setFilter(singleColumnValueFilter);
+        ResultScanner scanner = table.getScanner(scan);
+        printlReult(scanner);
+    }
+</code></pre>
 <h5 id="2、列值排除过滤器SingleColumnValueExcludeFilter"><a href="#2、列值排除过滤器SingleColumnValueExcludeFilter" class="headerlink" title="2、列值排除过滤器SingleColumnValueExcludeFilter"></a>2、列值排除过滤器SingleColumnValueExcludeFilter</h5><ul>
 <li>与SingleColumnValueFilter相反，会排除掉指定的列，其他的列全部返回</li>
 </ul>
 <h5 id="3、rowkey前缀过滤器PrefixFilter"><a href="#3、rowkey前缀过滤器PrefixFilter" class="headerlink" title="3、rowkey前缀过滤器PrefixFilter"></a>3、rowkey前缀过滤器PrefixFilter</h5><ul>
 <li>查询以00开头的所有前缀的rowkey</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查询rowkey前缀以  00开头的所有的数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span>  <span class="title">prefixFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       <span class="comment">//过滤rowkey以  00开头的数据</span></span><br><span class="line">       PrefixFilter prefixFilter = <span class="keyword">new</span> PrefixFilter(<span class="string">"00"</span>.getBytes());</span><br><span class="line">       scan.setFilter(prefixFilter);</span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       printlReult(scanner);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * 查询rowkey前缀以  00开头的所有的数据
+     */
+    @Test
+    public  void  prefixFilter() throws IOException {
+        Scan scan = new Scan();
+        //过滤rowkey以  00开头的数据
+        PrefixFilter prefixFilter = new PrefixFilter(&quot;00&quot;.getBytes());
+        scan.setFilter(prefixFilter);
+        ResultScanner scanner = table.getScanner(scan);
+        printlReult(scanner);
+    }
+</code></pre>
 <h5 id="4、分页过滤器PageFilter（15分钟）"><a href="#4、分页过滤器PageFilter（15分钟）" class="headerlink" title="4、分页过滤器PageFilter（15分钟）"></a>4、分页过滤器PageFilter（15分钟）</h5><ul>
 <li>通过pageFilter实现分页过滤器</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * HBase当中的分页</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hbasePageFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> pageNum= <span class="number">3</span>;</span><br><span class="line">       <span class="keyword">int</span> pageSize = <span class="number">2</span>;</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       <span class="keyword">if</span>(pageNum == <span class="number">1</span> )&#123;</span><br><span class="line">           <span class="comment">//获取第一页的数据</span></span><br><span class="line">           scan.setMaxResultSize(pageSize);</span><br><span class="line">           scan.setStartRow(<span class="string">""</span>.getBytes());</span><br><span class="line">           <span class="comment">//使用分页过滤器来实现数据的分页</span></span><br><span class="line">           PageFilter filter = <span class="keyword">new</span> PageFilter(pageSize);</span><br><span class="line">           scan.setFilter(filter);</span><br><span class="line">           ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">           printlReult(scanner);</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           String  startRow = <span class="string">""</span>;</span><br><span class="line">           <span class="comment">//扫描数据的调试 扫描五条数据</span></span><br><span class="line">           <span class="keyword">int</span> scanDatas = (pageNum - <span class="number">1</span>) * pageSize + <span class="number">1</span>;</span><br><span class="line">           scan.setMaxResultSize(scanDatas);<span class="comment">//设置一步往前扫描多少条数据</span></span><br><span class="line">           PageFilter filter = <span class="keyword">new</span> PageFilter(scanDatas);</span><br><span class="line">           scan.setFilter(filter);</span><br><span class="line">           ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">           <span class="keyword">for</span> (Result result : scanner) &#123;</span><br><span class="line">               <span class="keyword">byte</span>[] row = result.getRow();<span class="comment">//获取rowkey</span></span><br><span class="line">               <span class="comment">//最后一次startRow的值就是0005</span></span><br><span class="line">               startRow= Bytes.toString(row);<span class="comment">//循环遍历我们多有获取到的数据的rowkey</span></span><br><span class="line">               <span class="comment">//最后一条数据的rowkey就是我们需要的起始的rowkey</span></span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">//获取第三页的数据</span></span><br><span class="line">           scan.setStartRow(startRow.getBytes());</span><br><span class="line">           scan.setMaxResultSize(pageSize);<span class="comment">//设置我们扫描多少条数据</span></span><br><span class="line">           PageFilter filter1 = <span class="keyword">new</span> PageFilter(pageSize);</span><br><span class="line">           scan.setFilter(filter1);</span><br><span class="line">           ResultScanner scanner1 = table.getScanner(scan);</span><br><span class="line">           printlReult(scanner1);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * HBase当中的分页
+     */
+    @Test
+    public void hbasePageFilter() throws IOException {
+        int pageNum= 3;
+        int pageSize = 2;
+        Scan scan = new Scan();
+        if(pageNum == 1 ){
+            //获取第一页的数据
+            scan.setMaxResultSize(pageSize);
+            scan.setStartRow(&quot;&quot;.getBytes());
+            //使用分页过滤器来实现数据的分页
+            PageFilter filter = new PageFilter(pageSize);
+            scan.setFilter(filter);
+            ResultScanner scanner = table.getScanner(scan);
+            printlReult(scanner);
+        }else{
+            String  startRow = &quot;&quot;;
+            //扫描数据的调试 扫描五条数据
+            int scanDatas = (pageNum - 1) * pageSize + 1;
+            scan.setMaxResultSize(scanDatas);//设置一步往前扫描多少条数据
+            PageFilter filter = new PageFilter(scanDatas);
+            scan.setFilter(filter);
+            ResultScanner scanner = table.getScanner(scan);
+            for (Result result : scanner) {
+                byte[] row = result.getRow();//获取rowkey
+                //最后一次startRow的值就是0005
+                startRow= Bytes.toString(row);//循环遍历我们多有获取到的数据的rowkey
+                //最后一条数据的rowkey就是我们需要的起始的rowkey
+            }
+            //获取第三页的数据
+            scan.setStartRow(startRow.getBytes());
+            scan.setMaxResultSize(pageSize);//设置我们扫描多少条数据
+            PageFilter filter1 = new PageFilter(pageSize);
+            scan.setFilter(filter1);
+            ResultScanner scanner1 = table.getScanner(scan);
+            printlReult(scanner1);
+        }
+    }
+</code></pre>
 <h4 id="3、多过滤器综合查询FilterList"><a href="#3、多过滤器综合查询FilterList" class="headerlink" title="3、多过滤器综合查询FilterList"></a>3、多过滤器综合查询FilterList</h4><ul>
 <li>需求：使用SingleColumnValueFilter查询f1列族，name为刘备的数据，并且同时满足rowkey的前缀以00开头的数据（PrefixFilter）</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查询  f1 列族  name  为刘备数据值</span></span><br><span class="line"><span class="comment">    * 并且rowkey 前缀以  00开头数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">filterList</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       SingleColumnValueFilter singleColumnValueFilter = <span class="keyword">new</span> SingleColumnValueFilter(<span class="string">"f1"</span>.getBytes(), <span class="string">"name"</span>.getBytes(), CompareFilter.CompareOp.EQUAL, <span class="string">"刘备"</span>.getBytes());</span><br><span class="line">       PrefixFilter prefixFilter = <span class="keyword">new</span> PrefixFilter(<span class="string">"00"</span>.getBytes());</span><br><span class="line">       FilterList filterList = <span class="keyword">new</span> FilterList();</span><br><span class="line">       filterList.addFilter(singleColumnValueFilter);</span><br><span class="line">       filterList.addFilter(prefixFilter);</span><br><span class="line">       scan.setFilter(filterList);</span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       printlReult(scanner);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * 查询  f1 列族  name  为刘备数据值
+     * 并且rowkey 前缀以  00开头数据
+     */
+    @Test
+    public  void filterList() throws IOException {
+        Scan scan = new Scan();
+        SingleColumnValueFilter singleColumnValueFilter = new SingleColumnValueFilter(&quot;f1&quot;.getBytes(), &quot;name&quot;.getBytes(), CompareFilter.CompareOp.EQUAL, &quot;刘备&quot;.getBytes());
+        PrefixFilter prefixFilter = new PrefixFilter(&quot;00&quot;.getBytes());
+        FilterList filterList = new FilterList();
+        filterList.addFilter(singleColumnValueFilter);
+        filterList.addFilter(prefixFilter);
+        scan.setFilter(filterList);
+        ResultScanner scanner = table.getScanner(scan);
+        printlReult(scanner);
+    }
+</code></pre>
 <h3 id="7-6-HBase的删除操作"><a href="#7-6-HBase的删除操作" class="headerlink" title="7.6 HBase的删除操作"></a>7.6 HBase的删除操作</h3><h4 id="1、根据rowkey删除数据"><a href="#1、根据rowkey删除数据" class="headerlink" title="1、根据rowkey删除数据"></a>1、根据rowkey删除数据</h4><ul>
 <li>删除rowkey为003的数据</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 删除数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span>  <span class="title">deleteData</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Delete delete = <span class="keyword">new</span> Delete(<span class="string">"0003"</span>.getBytes());</span><br><span class="line">       table.delete(delete);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="2、删除表操作"><a href="#2、删除表操作" class="headerlink" title="2、删除表操作"></a>2、删除表操作</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 删除表</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteTable</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      <span class="comment">//获取管理员对象，用于表的删除</span></span><br><span class="line">      Admin admin = connection.getAdmin();</span><br><span class="line">      <span class="comment">//删除一张表之前，需要先禁用表</span></span><br><span class="line">      admin.disableTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">      admin.deleteTable(TableName.valueOf(TABLE_NAME));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    /**
+     * 删除数据
+     */
+    @Test
+    public  void  deleteData() throws IOException {
+        Delete delete = new Delete(&quot;0003&quot;.getBytes());
+        table.delete(delete);
+    }
+</code></pre>
+<h4 id="2、删除表操作"><a href="#2、删除表操作" class="headerlink" title="2、删除表操作"></a>2、删除表操作</h4><pre><code class="java">     /**
+     * 删除表
+     */
+    @Test
+    public void deleteTable() throws IOException {
+        //获取管理员对象，用于表的删除
+        Admin admin = connection.getAdmin();
+        //删除一张表之前，需要先禁用表
+        admin.disableTable(TableName.valueOf(TABLE_NAME));
+        admin.deleteTable(TableName.valueOf(TABLE_NAME));
+    }
+</code></pre>
 <h1 id="五、拓展点、未来计划、行业趋势"><a href="#五、拓展点、未来计划、行业趋势" class="headerlink" title="五、拓展点、未来计划、行业趋势"></a>五、拓展点、未来计划、行业趋势</h1><h3 id="8-Hbase在实际场景中的应用"><a href="#8-Hbase在实际场景中的应用" class="headerlink" title="8. Hbase在实际场景中的应用"></a>8. Hbase在实际场景中的应用</h3><h5 id="8-1-交通方面"><a href="#8-1-交通方面" class="headerlink" title="8.1 交通方面"></a>8.1 交通方面</h5><ul>
 <li>船舶GPS信息，全长江的船舶GPS信息，每天有1千万左右的数据存储。</li>
 </ul>
