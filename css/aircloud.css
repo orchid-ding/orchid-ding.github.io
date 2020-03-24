@@ -623,6 +623,9 @@ br {
 .post-content > table tr td {
   border: 1px solid #e7e8e9;
 }
+.post-content > br{
+  display: none ! important;
+}
 
 /* start自定义table样式 */
 .post-content table {
