@@ -221,7 +221,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="3-spark集群架构"><a href="#3-spark集群架构" class="headerlink" title="3. spark集群架构"></a>3. spark集群架构</h3><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/spark.png" alt="spark"></p>
+<h3 id="3-spark集群架构"><a href="#3-spark集群架构" class="headerlink" title="3. spark集群架构"></a>3. spark集群架构</h3><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/spark.png" alt="spark"></p>
 <ul>
 <li><p><strong>==Driver==</strong></p>
 <ul>
@@ -367,7 +367,7 @@ spark任务在调度的时候会优先考虑存有数据的节点开启计算任
 </code></pre><ul>
 <li>流程分析</li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/rdd的五大属性.png" alt="rdd的五大属性"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/rdd的五大属性.png" alt="rdd的五大属性"></p>
 <h3 id="2-RDD的算子分类"><a href="#2-RDD的算子分类" class="headerlink" title="2. RDD的算子分类"></a>2. RDD的算子分类</h3><ul>
 <li>1、==transformation（转换）==<ul>
 <li>根据已经存在的rdd转换生成一个新的rdd,  它是延迟加载，它不会立即执行</li>
@@ -389,7 +389,7 @@ spark任务在调度的时候会优先考虑存有数据的节点开启计算任
 </ul>
 </li>
 </ul>
-<h3 id="4-RDD的依赖关系"><a href="#4-RDD的依赖关系" class="headerlink" title="4. RDD的依赖关系"></a>4. RDD的依赖关系</h3><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/rdd-dependencies.png" alt="rdd-dependencies"></p>
+<h3 id="4-RDD的依赖关系"><a href="#4-RDD的依赖关系" class="headerlink" title="4. RDD的依赖关系"></a>4. RDD的依赖关系</h3><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/rdd-dependencies.png" alt="rdd-dependencies"></p>
 <ul>
 <li><p>RDD和它依赖的父RDD的关系有两种不同的类型</p>
 </li>
@@ -442,11 +442,11 @@ spark任务在调度的时候会优先考虑存有数据的节点开启计算任
 </ul>
 </li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569036662039.png" alt="1569036662039"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569036662039.png" alt="1569036662039"></p>
 <ul>
 <li>通过查看源码发现==cache最终也是调用了persist方法==，默认的存储级别都是==仅在内存存储一份==，Spark的存储级别还有好多种，存储级别在==object StorageLevel==中定义的。</li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569036703460.png" alt="1569036703460"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569036703460.png" alt="1569036703460"></p>
 <ul>
 <li>使用演示</li>
 </ul>
@@ -478,7 +478,7 @@ cache方法和persist方法区别：
 <h4 id="6-4-什么时候设置缓存"><a href="#6-4-什么时候设置缓存" class="headerlink" title="6.4 什么时候设置缓存"></a>6.4 什么时候设置缓存</h4><ul>
 <li>==1、某个rdd的数据后期被使用了多次==</li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569037915592.png" alt="1569037915592"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569037915592.png" alt="1569037915592"></p>
 <pre><code>如上图所示的计算逻辑： 
 （1）当第一次使用rdd2做相应的算子操作得到rdd3的时候，就会从rdd1开始计算，先读取HDFS上的文件，然后对rdd1 做对应的算子操作得到rdd2,再由rdd2计算之后得到rdd3。同样为了计算得到rdd4，前面的逻辑会被重新计算。
 
@@ -486,7 +486,7 @@ cache方法和persist方法区别：
 
 总结：
 可以把多次使用到的rdd，也就是公共rdd进行持久化，避免后续需要，再次重新计算，提升效率。
-</code></pre><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569045749546.png" alt="1569045749546"></p>
+</code></pre><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569045749546.png" alt="1569045749546"></p>
 <ul>
 <li>2、为了获取得到一个rdd的结果数据，经过了大量的算子操作或者是计算逻辑比较复杂<ul>
 <li>总之某个rdd的数据来之不易</li>
@@ -572,7 +572,7 @@ val rdd2=rdd1.flatMap(_.split(&quot; &quot;))
 <li><p>下图是基于单词统计逻辑得到的DAG有向无环图</p>
 </li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569047954944.png" alt="1569047954944"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/1569047954944.png" alt="1569047954944"></p>
 <h3 id="9-DAG划分stage"><a href="#9-DAG划分stage" class="headerlink" title="9. DAG划分stage"></a>9. DAG划分stage</h3><h4 id="9-1-stage是什么"><a href="#9-1-stage是什么" class="headerlink" title="9.1 stage是什么"></a>9.1 stage是什么</h4><ul>
 <li>==一个Job会被拆分为多组Task，每组任务被称为一个stage==</li>
 <li>stage表示不同的调度阶段，一个spark job会对应产生很多个stage<ul>
@@ -610,12 +610,12 @@ stage中的每一个分区对应一个task，在同一个stage中就有很多可
 (2) 在往前推的过程中运行遇到了窄依赖就把该rdd加入到本stage中，如果遇到了宽依赖，就从宽依赖切开，那么最后一个stage也就结束了。
 
 (3) 重新创建一个新的stage，按照第二个步骤继续往前推，一直到最开始的rdd，整个划分stage也就结束了
-</code></pre><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/划分stage.png" alt="划分stage"></p>
+</code></pre><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/划分stage.png" alt="划分stage"></p>
 <h4 id="9-4-stage与stage之间的关系"><a href="#9-4-stage与stage之间的关系" class="headerlink" title="9.4 stage与stage之间的关系"></a>9.4 stage与stage之间的关系</h4><pre><code>    划分完stage之后，每一个stage中有很多可以并行运行的task，后期把每一个stage中的task封装在一个taskSet集合中，最后把一个一个的taskSet集合提交到worker节点上的executor进程中运行。
 
 rdd与rdd之间存在依赖关系，stage与stage之前也存在依赖关系，前面stage中的task先运行，运行完成了再运行后面stage中的task，也就是说后面stage中的task输入数据是前面stage中task的输出结果数据。
-</code></pre><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/stage.png" alt="stage"></p>
-<h1 id="三、Spark任务调度"><a href="#三、Spark任务调度" class="headerlink" title="三、Spark任务调度"></a>三、Spark任务调度</h1><h3 id="1-spark的任务调度"><a href="#1-spark的任务调度" class="headerlink" title="1. spark的任务调度"></a>1. spark的任务调度</h3><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/spark任务调度.png" alt="spark任务调度"></p>
+</code></pre><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/stage.png" alt="stage"></p>
+<h1 id="三、Spark任务调度"><a href="#三、Spark任务调度" class="headerlink" title="三、Spark任务调度"></a>三、Spark任务调度</h1><h3 id="1-spark的任务调度"><a href="#1-spark的任务调度" class="headerlink" title="1. spark的任务调度"></a>1. spark的任务调度</h3><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/spark任务调度.png" alt="spark任务调度"></p>
 <pre><code>(1) Driver端运行客户端的main方法，构建SparkContext对象，在SparkContext对象内部依次构建DAGScheduler和TaskScheduler
 
 (2) 按照rdd的一系列操作顺序，来生成DAG有向无环图
@@ -625,7 +625,7 @@ rdd与rdd之间存在依赖关系，stage与stage之前也存在依赖关系，�
 （4）TaskScheduler得到taskSet集合之后，依次遍历取出每一个task提交到worker节点上的executor进程中运行。
 
 （5）所有task运行完成，整个任务也就结束了
-</code></pre><h3 id="2-spark的运行架构"><a href="#2-spark的运行架构" class="headerlink" title="2. spark的运行架构"></a>2. spark的运行架构</h3><p><img src="/Users/dingchuangshi/Documents/hexo-kfly-blog/source/_posts/it/spark/https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/spark-7527224.png" alt="spark"></p>
+</code></pre><h3 id="2-spark的运行架构"><a href="#2-spark的运行架构" class="headerlink" title="2. spark的运行架构"></a>2. spark的运行架构</h3><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/spark-7527224.png" alt="spark"></p>
 <pre><code>(1) Driver端向资源管理器Master发送注册和申请计算资源的请求
 
 (2) Master通知对应的worker节点启动executor进程(计算资源)
@@ -641,7 +641,7 @@ rdd与rdd之间存在依赖关系，stage与stage之前也存在依赖关系，�
 (7) TaskScheduler得到taskSet集合之后，依次遍历取出每一个task提交到worker节点上的executor进程中运行
 
 (8) 所有task运行完成，Driver端向Master发送注销请求，Master通知Worker关闭executor进程，Worker上的计算资源得到释放，最后整个任务也就结束了。
-</code></pre><h3 id="3-基于wordcount程序剖析spark任务的提交、划分、调度流程"><a href="#3-基于wordcount程序剖析spark任务的提交、划分、调度流程" class="headerlink" title="3.  基于wordcount程序剖析spark任务的提交、划分、调度流程"></a>3.  基于wordcount程序剖析spark任务的提交、划分、调度流程</h3><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/job-scheduler-running.png" alt="job-scheduler-running"></p>
+</code></pre><h3 id="3-基于wordcount程序剖析spark任务的提交、划分、调度流程"><a href="#3-基于wordcount程序剖析spark任务的提交、划分、调度流程" class="headerlink" title="3.  基于wordcount程序剖析spark任务的提交、划分、调度流程"></a>3.  基于wordcount程序剖析spark任务的提交、划分、调度流程</h3><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/job-scheduler-running.png" alt="job-scheduler-running"></p>
 <h3 id="4-spark自定义分区"><a href="#4-spark自定义分区" class="headerlink" title="4. spark自定义分区"></a>4. spark自定义分区</h3><h4 id="4-1-自定义分区说明"><a href="#4-1-自定义分区说明" class="headerlink" title="4.1 自定义分区说明"></a>4.1 自定义分区说明</h4><ul>
 <li><p>在对RDD数据进行分区时，默认使用的是==HashPartitioner==</p>
 </li>
@@ -684,7 +684,7 @@ class MyPartitioner(num:Int) extends Partitioner{
 <li>​    Spark中分布式执行的代码需要==传递到各个Executor的Task上运行==。对于一些只读、固定的数据(比如从DB中读出的数据),每次都需要Driver广播到各个Task上，这样效率低下。</li>
 <li>​      广播变量允许==将变量只广播给各个Executor==。该Executor上的各个Task再从所在节点的BlockManager获取变量，而不是从Driver获取变量，以减少通信的成本，减少内存的占用，从而提升了效率。</li>
 </ul>
-<h5 id="5-1-1-广播变量原理"><a href="#5-1-1-广播变量原理" class="headerlink" title="5.1.1 广播变量原理"></a>5.1.1 广播变量原理</h5><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/广播变量.png" alt="广播变量"></p>
+<h5 id="5-1-1-广播变量原理"><a href="#5-1-1-广播变量原理" class="headerlink" title="5.1.1 广播变量原理"></a>5.1.1 广播变量原理</h5><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/广播变量.png" alt="广播变量"></p>
 <h5 id="5-1-2-广播变量使用"><a href="#5-1-2-广播变量使用" class="headerlink" title="5.1.2 广播变量使用"></a>5.1.2 广播变量使用</h5><pre><code>(1) 通过对一个类型T的对象调用 SparkContext.broadcast创建出一个Broadcast[T]对象。
     任何可序列化的类型都可以这么实现
 (2) 通过 value 属性访问该对象的值
@@ -748,7 +748,7 @@ val rdd2=rdd1.flatMap(_.split(&quot; &quot;)).filter(x=&gt;x.equals(broadCast.va
 <li>(4) 也可将依赖的变量独立放到一个小的class中，让这个class支持序列化，这样做可以减少网络传输量，提高效率。</li>
 <li>(5) 可以把对象的创建直接在该函数中构建这样避免需要序列化</li>
 </ul>
-<h3 id="7-application、job、stage、task之间的关系"><a href="#7-application、job、stage、task之间的关系" class="headerlink" title="7. application、job、stage、task之间的关系"></a>7. application、job、stage、task之间的关系</h3><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/application.png" alt="application"></p>
+<h3 id="7-application、job、stage、task之间的关系"><a href="#7-application、job、stage、task之间的关系" class="headerlink" title="7. application、job、stage、task之间的关系"></a>7. application、job、stage、task之间的关系</h3><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/application.png" alt="application"></p>
 <ul>
 <li>一个application就是一个应用程序，包含了客户端所有的代码和计算资源</li>
 <li>一个action操作对应一个DAG有向无环图，即一个action操作就是一个job </li>
@@ -781,14 +781,14 @@ val rdd2=rdd1.flatMap(_.split(&quot; &quot;)).filter(x=&gt;x.equals(broadCast.va
 </ul>
 </li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/yarn-cluster.png" alt="yarn-cluster" style="zoom:33%;"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/yarn-cluster.png" alt="yarn-cluster" style="zoom:33%;"></p>
 <ul>
 <li>yarn-client模式<ul>
 <li>spark程序的==Driver运行在Client上==，应用程序运行结果会在客户端显示，所有适合运行结果有输出的应用程序（如spark-shell）</li>
 </ul>
 </li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/yarn-client.png" alt="yarn-client" style="zoom: 33%;"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/yarn-client.png" alt="yarn-client" style="zoom: 33%;"></p>
 <pre><code>最大的区别就是Driver端的位置不一样。
 
 yarn-cluster: Driver端运行在yarn集群中，与ApplicationMaster进程在一起。
@@ -882,7 +882,7 @@ rdd.collect这个操作非常危险，很有可能出现driver端的内存不足
 </code></pre><h4 id="6-2-spark中的shuffle介绍"><a href="#6-2-spark中的shuffle介绍" class="headerlink" title="6.2 spark中的shuffle介绍"></a>6.2 spark中的shuffle介绍</h4><pre><code>      在DAG调度的过程中，Stage阶段的划分是根据是否有shuffle过程，也就是存在wide Dependency宽依赖的时候,需要进行shuffle,这时候会将作业job划分成多个Stage，每一个stage内部有很多可以并行运行的task。
 
       stage与stage之间的过程就是shuffle阶段，在Spark的中，负责shuffle过程的执行、计算和处理的组件主要就是ShuffleManager，也即shuffle管理器。ShuffleManager随着Spark的发展有两种实现的方式，分别为HashShuffleManager和SortShuffleManager，因此spark的Shuffle有Hash Shuffle和Sort Shuffle两种。
-</code></pre><p><img src="https://kfly.top/2019/10/20/it/hadoop/MapReduce%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/Image201906272145.png" alt="img"></p>
+</code></pre><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/Image201906272145.png" alt="img"></p>
 <h4 id="6-3-HashShuffle机制"><a href="#6-3-HashShuffle机制" class="headerlink" title="6.3 HashShuffle机制"></a>6.3 HashShuffle机制</h4><h5 id="6-3-1-HashShuffle概述"><a href="#6-3-1-HashShuffle概述" class="headerlink" title="6.3.1 HashShuffle概述"></a>6.3.1 HashShuffle概述</h5><pre><code>      在Spark 1.2以前，默认的shuffle计算引擎是HashShuffleManager。
       该ShuffleManager-HashShuffleManager有着一个非常严重的弊端，就是会产生大量的中间磁盘文件，进而由大量的磁盘IO操作影响了性能。因此在Spark 1.2以后的版本中，默认的ShuffleManager改成了SortShuffleManager。
       SortShuffleManager相较于HashShuffleManager来说，有了一定的改进。主要就在于每个Task在进行shuffle操作时，虽然也会产生较多的临时磁盘文件，但是最后会将所有的临时文件合并(merge)成一个磁盘文件，因此每个Task就只有一个磁盘文件。在下一个stage的shuffle read task拉取自己的数据时，只要根据索引读取每个磁盘文件中的部分数据即可。
@@ -899,7 +899,7 @@ rdd.collect这个操作非常危险，很有可能出现driver端的内存不足
 </ul>
 <h5 id="6-3-2-普通机制的Hash-shuffle"><a href="#6-3-2-普通机制的Hash-shuffle" class="headerlink" title="6.3.2 普通机制的Hash shuffle"></a>6.3.2 普通机制的Hash shuffle</h5></li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/未优化的HashShuffle机制.png" alt="未优化的HashShuffle机制"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/未优化的HashShuffle机制.png" alt="未优化的HashShuffle机制"></p>
 <ul>
 <li><p>==图解==</p>
 <pre><code> 这里我们先明确一个假设前提：每个Executor只有1个CPU core，也就是说，无论这个Executor上分配多少个task线程，同一时间都只能执行一个task线程。
@@ -933,7 +933,7 @@ shuffle read的拉取过程是一边拉取一边进行聚合的。每个shuffle 
 </code></pre><h5 id="6-3-3-合并机制的Hash-shuffle"><a href="#6-3-3-合并机制的Hash-shuffle" class="headerlink" title="6.3.3 合并机制的Hash shuffle"></a>6.3.3 合并机制的Hash shuffle</h5><pre><code>  合并机制就是复用buffer缓冲区，开启合并机制的配置是spark.shuffle.consolidateFiles。该参数默认值为false，将其设置为true即可开启优化机制。通常来说，如果我们使用HashShuffleManager，那么都建议开启这个选项。
 </code></pre></li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/优化后的Shuffle机制.png" alt="优化后的Shuffle机制"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/优化后的Shuffle机制.png" alt="优化后的Shuffle机制"></p>
 <ul>
 <li><p>==图解==</p>
 <pre><code>  这里有6个这里有6个shuffleMapTask，数据类别还是分成3种类型，因为Hash算法会根据你的 Key 进行分类，在同一个进程中，无论是有多少过Task，都会把同样的Key放在同一个Buffer里，然后把Buffer中的数据写入以Core数量为单位的本地文件中，(一个Core只有一种类型的Key的数据)，每1个Task所在的进程中，分别写入共同进程中的3份本地文件，这里有6个shuffleMapTasks，所以总共输出是 2个Cores x 3个分类文件 = 6个本地小文件。
@@ -956,7 +956,7 @@ shuffle read的拉取过程是一边拉取一边进行聚合的。每个shuffle 
 </ul>
 </li>
 </ul>
-<h5 id="6-4-1-Sort-shuffle的普通机制"><a href="#6-4-1-Sort-shuffle的普通机制" class="headerlink" title="6.4.1 Sort shuffle的普通机制"></a>6.4.1 Sort shuffle的普通机制</h5><p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/sortshuffle.png" alt="sortshuffle"></p>
+<h5 id="6-4-1-Sort-shuffle的普通机制"><a href="#6-4-1-Sort-shuffle的普通机制" class="headerlink" title="6.4.1 Sort shuffle的普通机制"></a>6.4.1 Sort shuffle的普通机制</h5><p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/sortshuffle.png" alt="sortshuffle"></p>
 <ul>
 <li><p>==图解==</p>
 <pre><code>  在该模式下，数据会先写入一个数据结构，聚合算子写入Map，一边通过Map局部聚合，一边写入内存。Join算子写入ArrayList直接写入内存中。然后需要判断是否达到阈值（5M），如果达到就会将内存数据结构的数据写入到磁盘，清空内存数据结构。
@@ -985,7 +985,7 @@ shuffle read的拉取过程是一边拉取一边进行聚合的。每个shuffle 
 </ul>
 </li>
 </ul>
-<p><img src="https://kfly.top/picture/kfly-top/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/bypasssortshuffle.png" alt="bypasssortshuffle"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/22/uPic/SparkCore:SQL%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/assets/bypasssortshuffle.png" alt="bypasssortshuffle"></p>
 <ul>
 <li><p>==好处==</p>
 <pre><code>  该机制与sortshuffle的普通机制相比，在shuffleMapTask不多的情况下，首先写的机制是不同，其次不会进行排序。这样就可以节约一部分性能开销。
@@ -1274,6 +1274,9 @@ sparkSession.sql(&quot;select  up2low(value) from t_udf&quot;).show()
         <span>/</span>
         
         <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
         <span>/</span>
         
     </p>
