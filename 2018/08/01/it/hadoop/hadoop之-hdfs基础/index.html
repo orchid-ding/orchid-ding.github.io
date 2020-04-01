@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        大数据概论-HDFS理论基础 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#大数据概论"><span class="toc-text">大数据概论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#大数据特性"><span class="toc-text">大数据特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#大数据的挑战"><span class="toc-text">大数据的挑战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式文件系统"><span class="toc-text">分布式文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hadoop简介"><span class="toc-text">Hadoop简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS"><span class="toc-text">HDFS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS特点"><span class="toc-text">HDFS特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS常用命令"><span class="toc-text">HDFS常用命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hdfs与getconf结合使用"><span class="toc-text">hdfs与getconf结合使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#hdfs与dfsadmin结合使用"><span class="toc-text">hdfs与dfsadmin结合使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#hdfs与fsck结合使用"><span class="toc-text">hdfs与fsck结合使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#其他命令"><span class="toc-text">其他命令</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS编程"><span class="toc-text">HDFS编程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS架构"><span class="toc-text">HDFS架构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NameNode"><span class="toc-text">NameNode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DataNode"><span class="toc-text">DataNode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#SeconddaryNameNode"><span class="toc-text">SeconddaryNameNode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#心跳机制"><span class="toc-text">心跳机制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#负载均衡"><span class="toc-text">负载均衡</span></a></li></ol></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        大数据概论-HDFS理论基础
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-08-01 21:16:24</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#hadoop" title="hadoop">hadoop</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="大数据概论"><a href="#大数据概论" class="headerlink" title="大数据概论"></a>大数据概论</h2><blockquote>
+<p>概念： 大数据（big data）是指无法在一定时间范围内用常规软件工具进行捕捉、管理和处理的数据集合，是需要新处理模式才能具有更强的决策力、洞察发现力和流程优化能力的海量、高增长率和多样化的信息资产</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>数据单位</th>
+<th>B</th>
+<th>KB</th>
+<th>MB</th>
+<th>GB</th>
+<th>PE</th>
+<th>PB</th>
+<th>EB</th>
+<th>ZB</th>
+<th>YB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基数</td>
+<td></td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>次方</td>
+<td>0</td>
+<td>10</td>
+<td>20</td>
+<td>30</td>
+<td>40</td>
+<td>50</td>
+<td>60</td>
+<td>21</td>
+<td>24</td>
+</tr>
+</tbody>
+</table>
+<h3 id="大数据特性"><a href="#大数据特性" class="headerlink" title="大数据特性"></a>大数据特性</h3><ol>
+<li>数据量大（Volume） </li>
+<li>类型繁多（Variety） </li>
+<li>价值密度低（Value） </li>
+<li>速度快时效高（Velocity）</li>
+</ol>
+<h3 id="大数据的挑战"><a href="#大数据的挑战" class="headerlink" title="大数据的挑战"></a>大数据的挑战</h3><ol>
+<li>存储： 每天几TB、GB的数据增量，并且还在持续的增长中。</li>
+<li>分析： 如何从巨大的数据中挖掘出隐藏的商业价值。</li>
+<li>管理： 如何快速构建并且保证系统的安全、简单可用。</li>
+</ol>
+<h2 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h2><h3 id="Hadoop简介"><a href="#Hadoop简介" class="headerlink" title="Hadoop简介"></a>Hadoop简介</h3><ol>
+<li><p>Hadoop架构</p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/Image201906191834.png" alt="Image201906191834" style="zoom:50%;"></p>
+</li>
+<li><p>Hadoop历史</p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/Image201906202055.png" alt="Image201906202055"></p>
+</li>
+</ol>
+<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><ul>
+<li>HDFS是Hadoop中的一个存储子模块</li>
+<li>HDFS (全称Hadoop Distributed File System)，即hadoop的分布式文件系统</li>
+<li>File System<strong>文件系统</strong>：操作系统中负责管理和存储文件信息的软件；具体地说，它负责为用户创建文件，存入、读出、修改、转储、删除文件等</li>
+<li>当数据集大小超出一台计算机的存储能力时，就有必要将它拆分成若干部分，然后分散到不同的计算机中存储。管理网络中跨多台计算机存储的文件系统称之为<strong>分布式文件系统</strong>（distributed filesystem）</li>
+</ul>
+<h4 id="HDFS特点"><a href="#HDFS特点" class="headerlink" title="HDFS特点"></a>HDFS特点</h4><p><strong>2.1.1 优点：</strong></p>
+<ul>
+<li>适合存储大文件，能用来存储管理PB级的数据；不适合存储小文件</li>
+<li>处理非结构化数据</li>
+<li>流式的访问数据，一次写入、多次读写</li>
+<li>运行于廉价的商用机器集群上，成本低</li>
+<li>高容错：故障时能继续运行且不让用户察觉到明显的中断</li>
+<li>可扩展</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/Image201907081216.png" style="zoom:50%;"></p>
+<p><strong>2.1.2 局限性</strong></p>
+<ul>
+<li>不适合处理低延迟数据访问<ul>
+<li>HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的</li>
+<li>对于低延时的访问需求，HBase是更好的选择</li>
+</ul>
+</li>
+<li>无法高效存储大量的小文件<ul>
+<li>小文件会给Hadoop的扩展性和性能带来严重问题</li>
+<li>利用SequenceFile、MapFile等方式归档小文件</li>
+</ul>
+</li>
+<li>不支持多用户写入及任意修改文件<ul>
+<li>文件有一个写入者，只能执行追加操作</li>
+<li>不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改</li>
+</ul>
+</li>
+</ul>
+<h4 id="HDFS常用命令"><a href="#HDFS常用命令" class="headerlink" title="HDFS常用命令"></a>HDFS常用命令</h4><pre><code class="shell"># HDFS两种命令风格，两种命令效果等同
+hadoop fs / hdfs dfs
+
+# 如何查看hdfs或hadoop子命令的**帮助信息**，如ls子命令
+hadoop fs -help ls
+
+# 查看hdfs文件系统中已经存在的文件。对比linux命令ls
+hdfs dfs -ls /
+
+# 在hdfs文件系统中创建文件
+hdfs dfs -touchz /edits.txt
+
+#将本地磁盘当前目录的edit1.xml内容追加到HDFS根目录 的edits.txt文件
+hadoop fs -appendToFile edit1.xml /edits.txt 
+
+# 查看HDFS文件内容
+hdfs dfs -cat /edits.txt
+
+#用法：hdfs dfs -put /本地路径 /hdfs路径
+hdfs dfs -put hadoop-2.7.3.tar.gz /
+
+#根put作用一样
+hdfs dfs -copyFromLocal hadoop-2.7.3.tar.gz /  
+
+#根put作用一样，只不过，源文件被拷贝成功后，会被删除
+hdfs dfs -moveFromLocal hadoop-2.7.3.tar.gz / 
+
+# 在hdfs文件系统中下载文件
+hdfs dfs -get /hdfs路径 /本地路径
+hdfs dfs -copyToLocal /hdfs路径 /本地路径  #根get作用一样
+
+# 在hdfs文件系统中**创建目录**
+hdfs dfs -mkdir /shell
+
+# 在hdfs文件系统中**删除**文件
+hdfs dfs -rm /edits.txt
+hdfs dfs -rm -r /shell
+# 递归删除目录
+hdfs dfs -rmr /shell
+
+# 在hdfs文件系统中**修改文件名称**（也可以用来**移动**文件到目录）
+hdfs dfs -mv /xcall.sh /call.sh
+hdfs dfs -mv /call.sh /shell
+
+# 在hdfs中拷贝文件到目录
+hdfs dfs -cp /xrsync.sh /shell
+
+# 列出本地文件的内容（默认是hdfs文件系统）
+hdfs dfs -ls file:///home/bruce/
+
+# linux find命令
+find . -name &#39;edit*&#39;
+
+# HDFS find命令
+hadoop fs -find / -name part-r-00000 # 在HDFS根目录中，查找part-r-00000文件
+</code></pre>
+<h3 id="hdfs与getconf结合使用"><a href="#hdfs与getconf结合使用" class="headerlink" title="hdfs与getconf结合使用"></a>hdfs与getconf结合使用</h3><pre><code class="shell"># 获取NameNode的节点名称（可能有多个）
+hdfs getconf -namenodes
+
+# 获取hdfs最小块信息
+hdfs getconf -confKey dfs.namenode.fs-limits.min-block-size
+
+# 查找hdfs的NameNode的RPC地址
+hdfs getconf -nnRpcAddresses
+</code></pre>
+<h5 id="hdfs与dfsadmin结合使用"><a href="#hdfs与dfsadmin结合使用" class="headerlink" title="hdfs与dfsadmin结合使用"></a>hdfs与dfsadmin结合使用</h5><pre><code class="shell"># 帮助信息
+hdfs dfsadmin -help safemode
+
+# 查看当前的模式
+hdfs dfsadmin -safemode get
+
+# 进入安全模式
+hdfs dfsadmin -safemode enter
+</code></pre>
+<h5 id="hdfs与fsck结合使用"><a href="#hdfs与fsck结合使用" class="headerlink" title="hdfs与fsck结合使用"></a>hdfs与fsck结合使用</h5><pre><code class="shell"># fsck指令**显示HDFS块信息**
+hdfs fsck /02-041-0029.mp4 -files -blocks -locations # 查看文件02-041-0029.mp4的块信息
+</code></pre>
+<h5 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h5><pre><code class="shell">#m检查压缩库本地安装情况
+hadoop checknative
+
+# 格式化名称节点（**慎用**，一般只在初次搭建集群，使用一次；格式化成功后，不要再使用）
+hadoop namenode -format
+
+# 执行自定义jar包
+hadoop jar kfly-example-1.0-SNAPSHOT.jar org.kfly.WordCount /world.txt /out
+</code></pre>
+<h4 id="HDFS编程"><a href="#HDFS编程" class="headerlink" title="HDFS编程"></a>HDFS编程</h4><ul>
+<li><p>1.向hdfs中,上传一个文本文件</p>
+<pre><code class="java"> // 获取文件输入流
+InputStream  inputStreamSourceFile = new BufferedInputStream(new FileInputStream(source));
+// HDFS 读写配置文件
+Configuration configuration = new Configuration();
+// 通过url 返回文件系统实例
+FileSystem fileSystem = FileSystem.get(URI.create(targetUrl),configuration);
+//调用Filesystem的create方法返回的是FSDataOutputStream对象
+//该对象不允许在文件中定位，因为HDFS只允许一个已打开的文件顺序写入或追加
+// 获取文件系用的输出流
+OutputStream outputStreamTarget = fileSystem.create(new Path(targetUrl));
+// 将文件输入流，写入输入流
+IOUtils.copyBytes(inputStreamSourceFile,outputStreamTarget,4069,true);
+System.out.println(&quot;上传成功&quot;);
+</code></pre>
+</li>
+<li><p>2.读取hdfs上的文件</p>
+</li>
+</ul>
+<pre><code class="java">// HDFS 读写文件配置
+Configuration configuration = new Configuration();
+// HDFS文件系统
+FileSystem fileSystem = FileSystem.get(URI.create(source),configuration);
+// 文件输入流，用于读取文件
+InputStream inputStream = fileSystem.open(new Path(source));
+BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+result = readBufferReader(bufferedReader).toString();
+</code></pre>
+<ul>
+<li>3.列出某一个文件夹下的所有文件</li>
+</ul>
+<pre><code class="java">// HDFS文件系统
+FileSystem fileSystem = FileSystem.get(URI.create(source),configuration);
+// 传参 -&gt; recursive：true 继续深入遍历
+RemoteIterator&lt;LocatedFileStatus&gt; iterator = fileSystem.listFiles(new Path(source),true);
+</code></pre>
+<ul>
+<li><p>4.列出多级目录名称和目录下的文件名称()</p>
+<pre><code class="java">        /**
+     * 递归目录和文件
+     * @param stringBuffer  文件目录名称集合
+     * @param fileSystem  hdfs 文件系统
+     * @param source path 路径
+     * @throws IOException
+     */
+private static void list(FileSystem fileSystem, Path source) {
+  FileStatus[] iterator = fileSystem.listStatus(source);
+  for (FileStatus status:iterator) {
+    stringBuffer.append(status.getPath() + &quot;\n&quot;);
+    if(status.isDirectory()){
+      list(stringBuffer,fileSystem,status.getPath());
+    }
+  }
+}
+</code></pre>
+</li>
+</ul>
+<h4 id="HDFS架构"><a href="#HDFS架构" class="headerlink" title="HDFS架构"></a>HDFS架构</h4><p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/1558073557041.png" alt=""></p>
+<ul>
+<li>大多数分布式框架都是主从架构</li>
+<li>HDFS也是主从架构Master|Slave或称为管理节点|工作节点</li>
+</ul>
+<h5 id="NameNode"><a href="#NameNode" class="headerlink" title="NameNode"></a>NameNode</h5><p>文件系统**</p>
+<ul>
+<li>file system文件系统：操作系统中负责管理和存储文件信息的软件；具体地说，它负责为用户创建文件，存入、读取、修改、转储、删除文件等</li>
+<li>读文件 =&gt;&gt;找到文件 =&gt;&gt; 在哪 + 叫啥？</li>
+<li>元数据<ul>
+<li>关于文件或目录的描述信息，如文件所在路径、文件名称、文件类型等等，这些信息称为文件的元数据metadata</li>
+</ul>
+</li>
+<li>命名空间<ul>
+<li>文件系统中，为了便于管理存储介质上的，给每个目录、目录中的文件、子目录都起了名字，这样形成的层级结构，称之为命名空间</li>
+<li>同一个目录中，不能有同名的文件或目录</li>
+<li>这样通过目录+文件名称的方式能够唯一的定位一个文件</li>
+</ul>
+</li>
+</ul>
+<p>HDFS-NameNode**</p>
+<ul>
+<li>HDFS本质上也是文件系统filesystem，所以它也有元数据metadata；</li>
+<li>元数据metadata保存在NameNode<strong>内存</strong>中</li>
+<li>NameNode作用<ul>
+<li>HDFS的主节点，负责管理文件系统的命名空间，将HDFS的元数据存储在NameNode节点的内存中</li>
+<li>负责响应客户端对文件的读写请求</li>
+</ul>
+</li>
+<li><p>HDFS元数据</p>
+<ul>
+<li><p>文件目录树、所有的文件（目录）名称、文件属性（生成时间、副本、权限）、每个文件的块列表、每个block块所在的datanode列表</p>
+</li>
+<li><p>每个文件、目录、block占用大概<strong>150Byte字节的元数据</strong>；所以HDFS适合存储大文件，不适合存储小文件</p>
+</li>
+<li><p>HDFS元数据信息以两种形式保存：①编辑日志<strong>edits log</strong>②命名空间镜像文件<strong>fsimage</strong></p>
+<ul>
+<li>edits log：HDFS编辑日志文件 ，保存客户端对HDFS的所有更改记录，如增、删、重命名文件（目录），这些操作会修改HDFS目录树；NameNode会在编辑日志edit日志中记录下来；</li>
+<li>fsimage：HDFS元数据镜像文件 ，即将namenode内存中的数据落入磁盘生成的文件；保存了文件系统目录树信息以及文件、块、datanode的映射关系，如下图</li>
+</ul>
+<pre><code class="shell"># 说明：
+# ①为hdfs-site.xml中属性dfs.namenode.edits.dir的值决定；用于namenode保存edits.log文件
+# ②为hdfs-site.xml中属性dfs.namenode.name.dir的值决定；用于namenode保存fsimage文件
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h5><ul>
+<li>DataNode数据节点的作用<ul>
+<li>存储block以及block元数据到datanode本地磁盘；此处的元数据包括数据块的长度、块数据的校验和、时间戳</li>
+</ul>
+</li>
+</ul>
+<h5 id="SeconddaryNameNode"><a href="#SeconddaryNameNode" class="headerlink" title="SeconddaryNameNode"></a>SeconddaryNameNode</h5><ul>
+<li><p>为什么引入SecondaryNameNode</p>
+<ul>
+<li><p>为什么元数据存储在NameNode在内存中？</p>
+</li>
+<li><p>这样做有什么问题？如何解决？</p>
+</li>
+<li><p>HDFS编辑日志文件 editlog：在NameNode节点中的编辑日志editlog中，记录下来客户端对HDFS的所有更改的记录，如增、删、重命名文件（目录）；</p>
+</li>
+<li><p>作用：一旦系统出故障，可以从editlog进行恢复；</p>
+</li>
+<li><p>但editlog日志大小会随着时间变在越来越大，导致系统重启根据日志恢复的时候会越来越长；</p>
+</li>
+<li><p>为了避免这种情况，引入<strong>检查点机制checkpoint</strong>，命名空间镜像fsimage就是HDFS元数据的持久性检查点，即将内存中的元数据落磁盘生成的文件；</p>
+</li>
+<li><p>此时，namenode如果重启，可以将磁盘中的fsimage文件读入内容，将元数据恢复到某一个检查点，然后再执行检查点之后记录的编辑日志，最后完全恢复元数据。</p>
+</li>
+<li><p>但是依然，随着时间的推移，editlog记录的日志会变多，那么当namenode重启，恢复元数据过程中，会花越来越长的时间执行editlog中的每一个日志；而在namenode元数据恢复期间，HDFS不可用。</p>
+</li>
+<li><p>为了解决此问题，引入secondarynamenode辅助namenode，用来合并fsimage及editlog</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/Image201906211525.png" style="zoom:67%;"></p>
+<ul>
+<li><p>SecondaryNameNode定期做checkpoint检查点操作</p>
+<ul>
+<li>创建检查点checkpoint的两大条件：<ul>
+<li>SecondaryNameNode每隔1小时创建一个检查点</li>
+<li>另外，Secondary NameNode每1分钟检查一次，从上一检查点开始，edits日志文件中是否已包括100万个事务，如果是，也会创建检查点</li>
+</ul>
+</li>
+<li>Secondary NameNode首先请求原NameNode进行edits的滚动，这样新的编辑操作就能够进入新的文件中</li>
+<li>Secondary NameNode通过HTTP GET方式读取原NameNode中的fsimage及edits</li>
+<li>Secondary NameNode读取fsimage到内存中，然后执行edits中的每个操作，并创建一个新的统一的fsimage文件</li>
+<li>Secondary NameNode通过HTTP PUT方式将新的fsimage发送到原NameNode</li>
+<li>原NameNode用新的fsimage替换旧的fsimage，同时系统会更新fsimage文件到记录检查点的时间。 </li>
+<li>这个过程结束后，NameNode就有了最新的fsimage文件和更小的edits文件</li>
+</ul>
+</li>
+<li><p>SecondaryNameNode一般部署在另外一台节点上</p>
+<ul>
+<li>因为它需要占用大量的CPU时间</li>
+<li>并需要与namenode一样多的内存，来执行合并操作</li>
+</ul>
+</li>
+<li><p>如何查看edits日志文件</p>
+<pre><code class="shell">hdfs oev -i edits_0000000000000000256-0000000000000000363 -o /home/hadoop/edit1.xml
+</code></pre>
+</li>
+<li><p>如何查看fsimage文件</p>
+<pre><code class="shell">hdfs oiv -p XML -i fsimage_0000000000000092691 -o fsimage.xml  
+</code></pre>
+</li>
+<li><p>checkpoint相关属性</p>
+<pre><code class="properties"># 3600秒(即1小时) 每隔1小时创建一个检查点
+#The number of seconds between two periodic checkpoints
+dfs.namenode.checkpoint.period = 3600
+
+# edits日志文件中是否已包括100万个事务，如果是，也会创建检查点
+# The Secondary NameNode or CheckpointNode will create a checkpoint of the namespace every &#39;dfs.namenode.checkpoint.txns&#39; transactions, regardless of whether &#39;dfs.namenode.checkpoint.period&#39; has expired.
+dfs.namenode.checkpoint.txns = 1000000 
+
+# 60(1分钟)  SecondaryNameNode每1分钟检查一次
+#  The SecondaryNameNode and CheckpointNode will poll the NameNode every &#39;dfs.namenode.checkpoint.check.period&#39; seconds to query the number of uncheckpointed transactions.
+dfs.namenode.checkpoint.check.period = 60
+</code></pre>
+</li>
+</ul>
+<h5 id="心跳机制"><a href="#心跳机制" class="headerlink" title="心跳机制"></a>心跳机制</h5><p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/Image201906211518.png" alt=""></p>
+<p><strong>工作原理：</strong></p>
+<ol>
+<li>NameNode启动的时候，会开一个ipc server在那里</li>
+<li>DataNode启动后向NameNode注册，每隔<strong>3秒钟</strong>向NameNode发送一个“<strong>心跳heartbeat</strong>”</li>
+<li>心跳返回结果带有NameNode给该DataNode的命令，如复制块数据到另一DataNode，或删除某个数据块</li>
+<li>如果超过<strong>10分钟</strong>NameNode没有收到某个DataNode 的心跳，则认为该DataNode节点不可用</li>
+<li>DataNode周期性（<strong>6小时</strong>）的向NameNode上报当前DataNode上的块状态报告BlockReport；块状态报告包含了一个该 Datanode上所有数据块的列表</li>
+</ol>
+<p><strong>心跳的作用：</strong></p>
+<ol>
+<li><p>通过周期心跳，NameNode可以向DataNode返回指令</p>
+</li>
+<li><p>可以判断DataNode是否在线</p>
+</li>
+<li><p>通过BlockReport，NameNode能够知道各DataNode的存储情况，如磁盘利用率、块列表；跟<strong>负载均衡</strong>有关</p>
+</li>
+<li><p><strong>hadoop集群刚开始启动时，99.9%的block没有达到最小副本数(dfs.namenode.replication.min默认值为1)，集群处于安全模式，涉及BlockReport；</strong></p>
+</li>
+</ol>
+<p><strong>心跳相关配置</strong></p>
+<ul>
+<li><a href="https://hadoop.apache.org/docs/r2.7.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">hdfs-default.xml</a></li>
+<li>心跳间隔</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.heartbeat.interval</td>
+<td>3</td>
+<td>Determines datanode heartbeat interval in seconds.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>block report</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>More Actions属性</th>
+<th>值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.blockreport.intervalMsec</td>
+<td>21600000 (6小时)</td>
+<td>Determines block reporting interval in milliseconds.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>查看hdfs-default.xml默认配置文件</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/26/uPic/hadoop%E4%B9%8B-hdfs%E5%9F%BA%E7%A1%80/img/Image201907311730.png" alt=""></p>
+<h5 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h5><ul>
+<li><p>什么原因会有可能造成不均衡？</p>
+<ul>
+<li>机器与机器之间磁盘利用率不平衡是HDFS集群非常容易出现的情况</li>
+<li>尤其是在DataNode节点出现故障或在现有的集群上增添新的DataNode的时候</li>
+</ul>
+</li>
+<li><p>为什么需要均衡？</p>
+<ul>
+<li>提升集群存储资源利用率</li>
+<li>从存储与计算两方面提高集群性能</li>
+</ul>
+</li>
+<li><p>如何手动负载均衡？</p>
+</li>
+</ul>
+<pre><code class="shell">$HADOOP_HOME/sbin/start-balancer.sh -t 5%    # 磁盘利用率最高的节点若比最少的节点，大于5%，触发均衡
+</code></pre>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: '大数据概论-HDFS理论基础',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>
