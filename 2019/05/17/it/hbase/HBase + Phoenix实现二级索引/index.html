@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        HBase + Phoenix实现二级索引 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase-Phoenix实现二级索引"><span class="toc-text">HBase + Phoenix实现二级索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求背景"><span class="toc-text">需求背景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Global-Indexing"><span class="toc-text">Global Indexing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Local-Indexing"><span class="toc-text">Local Indexing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#immutable-index"><span class="toc-text">immutable index</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mutable-index"><span class="toc-text">mutable index</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改hbase-site-xml"><span class="toc-text">修改hbase-site.xml</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Global-Indexing-1"><span class="toc-text">Global Indexing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Local-Indexing-1"><span class="toc-text">Local Indexing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#确保查询使用Index"><span class="toc-text">确保查询使用Index</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建-convered-index"><span class="toc-text">创建 convered index</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查询中提示使用index"><span class="toc-text">查询中提示使用index</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用本地索引"><span class="toc-text">使用本地索引</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引重建"><span class="toc-text">索引重建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除索引"><span class="toc-text">删除索引</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引性能调优"><span class="toc-text">索引性能调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-Phoenix"><span class="toc-text">Java Phoenix</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        HBase + Phoenix实现二级索引
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-05-17 18:44:51</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#phoenix" title="phoenix">phoenix</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#hbase二级索引" title="hbase二级索引">hbase二级索引</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="HBase-Phoenix实现二级索引"><a href="#HBase-Phoenix实现二级索引" class="headerlink" title="HBase + Phoenix实现二级索引"></a>HBase + Phoenix实现二级索引</h2><h3 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h3><ul>
+<li>对于HBase而言，如果想精确地定位到某行记录，唯一的办法是通过rowkey来查询。如果不通过rowkey来查找数据，就必须逐行地比较每一列的值，即全表扫瞄。</li>
+<li>对于较大的表，全表扫描的代价是不可接受的。但是，很多情况下，需要从多个角度查询数据。例如，在定位某个人的时候，可以通过姓名、身份证号、学籍号等不同的角度来查询，要想把这么多角度的数据都放到rowkey中几乎不可能（业务的灵活性不允许，对rowkey长度的要求也不允许）。所以需要secondary index（二级索引）来完成这件事。secondary index的原理很简单，但是如果自己维护的话则会麻烦一些。现在，Phoenix已经提供了对HBase secondary index的支持。</li>
+</ul>
+<h4 id="Global-Indexing"><a href="#Global-Indexing" class="headerlink" title="Global Indexing"></a>Global Indexing</h4><ul>
+<li>Global indexing，全局索引，适用于读多写少的业务场景。</li>
+<li>使用Global indexing在写数据的时候开销很大，因为所有对数据表的更新操作（DELETE, UPSERT VALUES and UPSERT SELECT），都会引起索引表的更新，而索引表是分布在不同的数据节点上的，跨节点的数据传输带来了较大的性能消耗。</li>
+<li>在读数据的时候Phoenix会选择索引表来降低查询消耗的时间。在默认情况下如果想查询的字段不是索引字段的话索引表不会被使用，也就是说不会带来查询速度的提升。</li>
+</ul>
+<h4 id="Local-Indexing"><a href="#Local-Indexing" class="headerlink" title="Local Indexing"></a>Local Indexing</h4><ul>
+<li>Local indexing，本地索引，适用于写操作频繁以及空间受限制的场景。</li>
+<li>与Global indexing一样，Phoenix会自动判定在进行查询的时候是否使用索引。使用Local indexing时，索引数据和数据表的数据存放在相同的服务器中，这样避免了在写操作的时候往不同服务器的索引表中写索引带来的额外开销。使用Local indexing的时候即使查询的字段不是索引字段索引表也会被使用，这会带来查询速度的提升，这点跟Global indexing不同。对于Local Indexing，一个数据表的所有索引数据都存储在一个单一的独立的可共享的表中</li>
+</ul>
+<h4 id="immutable-index"><a href="#immutable-index" class="headerlink" title="immutable index"></a>immutable index</h4><ul>
+<li>immutable index，不可变索引，适用于数据只增加不更新并且按照时间先后顺序存储（time-series data）的场景，如保存日志数据或者事件数据等。</li>
+<li>不可变索引的存储方式是write one，append only。当在Phoenix使用create table语句时指定IMMUTABLE_ROWS = true表示该表上创建的索引将被设置为不可变索引。Phoenix默认情况下如果在create table时不指定IMMUTABLE_ROW = true时，表示该表为mutable。不可变索引分为Global immutable index和Local immutable index两种。</li>
+</ul>
+<h4 id="mutable-index"><a href="#mutable-index" class="headerlink" title="mutable index"></a>mutable index</h4><ul>
+<li>mutable index，可变索引，适用于数据有增删改的场景。</li>
+<li>Phoenix默认情况创建的索引都是可变索引，除非在create table的时候显式地指定IMMUTABLE_ROWS = true。可变索引同样分为Global immutable index和Local immutable index两种。</li>
+</ul>
+<h4 id="修改hbase-site-xml"><a href="#修改hbase-site-xml" class="headerlink" title="修改hbase-site.xml"></a>修改hbase-site.xml</h4><pre><code class="xml">&lt;!-- 添加配置 --&gt;
+  &lt;property&gt;
+      &lt;name&gt;hbase.regionserver.wal.codec&lt;/name&gt;
+      &lt;value&gt;org.apache.hadoop.hbase.regionserver.wal.IndexedWALEditCodec&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+     &lt;name&gt;hbase.region.server.rpc.scheduler.factory.class&lt;/name&gt;
+     &lt;value&gt;org.apache.hadoop.hbase.ipc.PhoenixRpcSchedulerFactory&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+          &lt;name&gt;hbase.rpc.controllerfactory.class&lt;/name&gt;
+          &lt;value&gt;org.apache.hadoop.hbase.ipc.controller.ServerRpcControllerFactory&lt;/value&gt;
+  &lt;/property&gt;
+&lt;!--完成上述修改后重启hbase集群使配置生效。--&gt;
+</code></pre>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><pre><code class="sql">-- Phonix中创建表
+create  table user (
+  &quot;session_id&quot; varchar(100) not null primary key, 
+  &quot;f&quot;.&quot;cookie_id&quot; varchar(100), 
+  &quot;f&quot;.&quot;visit_time&quot; varchar(100), 
+  &quot;f&quot;.&quot;user_id&quot; varchar(100), 
+  &quot;f&quot;.&quot;age&quot; varchar(100), 
+  &quot;f&quot;.&quot;sex&quot; varchar(100), 
+  &quot;f&quot;.&quot;visit_url&quot; varchar(100), 
+  &quot;f&quot;.&quot;visit_os&quot; varchar(100), 
+  &quot;f&quot;.&quot;browser_name&quot; varchar(100),
+  &quot;f&quot;.&quot;visit_ip&quot; varchar(100), 
+  &quot;f&quot;.&quot;province&quot; varchar(100),
+  &quot;f&quot;.&quot;city&quot; varchar(100),
+  &quot;f&quot;.&quot;page_id&quot; varchar(100), 
+  &quot;f&quot;.&quot;goods_id&quot; varchar(100),
+  &quot;f&quot;.&quot;shop_id&quot; varchar(100)
+) column_encoded_bytes=0;
+
+-- 导入数据
+-- cd /kfly/install/apache-phoenix-4.14.0-cdh5.14.2-bin/
+-- bin/psql.py -t USER node01:2181 /kfly/install/phoenixsql/user.csv
+</code></pre>
+<h4 id="Global-Indexing-1"><a href="#Global-Indexing-1" class="headerlink" title="Global Indexing"></a>Global Indexing</h4><pre><code class="sql">-- user表f列镞的cookie_id建立全局索引 ，create local index 是创建本地索引
+create index USER_COOKIE_ID_INDEX on USER (&quot;f&quot;.&quot;cookie_id&quot;); 
+-- 正确使用索引查询，select cookie_id 和 where cookie_id = 都是索引字段
+select &quot;cookie_id&quot; from user where &quot;cookie_id&quot; = &#39;99738fd1-2084-44e9&#39;;
+-- 下面不会使用到索引，虽然cookie_id是索引字段，但是age不是。
+select &quot;cookie_id&quot;,&quot;age&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre>
+<h4 id="Local-Indexing-1"><a href="#Local-Indexing-1" class="headerlink" title="Local Indexing"></a>Local Indexing</h4><pre><code class="sql">create local index USER_USER_ID_INDEX on USER (&quot;f&quot;.&quot;user_id&quot;);
+</code></pre>
+<h4 id="确保查询使用Index"><a href="#确保查询使用Index" class="headerlink" title="确保查询使用Index"></a>确保查询使用Index</h4><h5 id="创建-convered-index"><a href="#创建-convered-index" class="headerlink" title="创建 convered index"></a>创建 convered index</h5><pre><code class="sql">-- 如果在某次查询中，查询项或者查询条件中包含除被索引列之外的列（主键MY_PK除外）。默认情况下，该查询会触发full table scan（全表扫描），但是使用covered index则可以避免全表扫描。 
+-- 创建包含某个字段的覆盖索引,创建方式如下：
+create index USER_COOKIE_ID_AGE_INDEX on USER (&quot;f&quot;.&quot;cookie_id&quot;) include(&quot;f&quot;.&quot;age&quot;);
+-- 查看当前所有表会发现多一张USER_COOKIE_ID_AGE_INDEX索引表，查询该表数据。
+select &quot;age&quot; from user where  &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+select &quot;age&quot;,&quot;sex&quot; from user where  &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre>
+<h5 id="查询中提示使用index"><a href="#查询中提示使用index" class="headerlink" title="查询中提示使用index"></a>查询中提示使用index</h5><pre><code class="sql">-- 在select和column_name之间加上/*+ Index(&lt;表名&gt; &lt;index名&gt;)*/，通过这种方式强制使用索引。
+select /*+ index(user,USER_COOKIE_ID_AGE_INDEX) */ &quot;age&quot; from user where &quot;cookie_id&quot;=&#39;99738fd1-2084-44e9&#39;;
+</code></pre>
+<h5 id="使用本地索引"><a href="#使用本地索引" class="headerlink" title="使用本地索引"></a>使用本地索引</h5><h4 id="索引重建"><a href="#索引重建" class="headerlink" title="索引重建"></a>索引重建</h4><pre><code class="sql">-- Phoenix的索引重建是把索引表清空后重新装配数据。
+alter index USER_COOKIE_ID_INDEX on user rebuild;
+</code></pre>
+<h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code class="sql">-- 删除某个表的某张索引：drop index 索引名称 on 表名
+drop index USER_COOKIE_ID_INDEX on user;
+
+-- 如果表中的一个索引列被删除，则索引也将被自动删除，如果删除的是
+-- 覆盖索引上的列，则此列将从覆盖索引中被自动删除。
+</code></pre>
+<h3 id="索引性能调优"><a href="#索引性能调优" class="headerlink" title="索引性能调优"></a>索引性能调优</h3><ul>
+<li>​    hbase-site.xml</li>
+</ul>
+<pre><code>1. index.builder.threads.max 
+创建索引时，使用的最大线程数。 
+默认值: 10。
+
+2. index.builder.threads.keepalivetime 
+创建索引的创建线程池中线程的存活时间，单位：秒。 
+默认值: 60
+
+3. index.writer.threads.max 
+写索引表数据的写线程池的最大线程数。 
+更新索引表可以用的最大线程数，也就是同时可以更新多少张索引表，数量最好和索引表的数量一致。 
+默认值: 10
+
+4. index.writer.threads.keepalivetime 
+索引写线程池中，线程的存活时间，单位：秒。
+默认值：60
+
+
+5. hbase.htable.threads.max 
+每一张索引表可用于写的线程数。 
+默认值: 2,147,483,647
+
+6. hbase.htable.threads.keepalivetime 
+索引表线程池中线程的存活时间，单位：秒。 
+默认值: 60
+
+7. index.tablefactory.cache.size 
+允许缓存的索引表的数量。 
+增加此值，可以在写索引表时不用每次都去重复的创建htable，这个值越大，内存消耗越多。 
+默认值: 10
+
+8. org.apache.phoenix.regionserver.index.handler.count 
+处理全局索引写请求时，可以使用的线程数。 
+默认值: 30
+</code></pre><h3 id="Java-Phoenix"><a href="#Java-Phoenix" class="headerlink" title="Java Phoenix"></a>Java Phoenix</h3><ul>
+<li>Spring datasource config / Druid</li>
+</ul>
+<pre><code class="yaml">  datasource.driver-class-name: org.apache.phoenix.jdbc.PhoenixDriver
+  datasource.url: jdbc:phoenix:node01:2181:/HBase
+  datasource.type: com.alibaba.druid.pool.DruidDataSource
+</code></pre>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: 'HBase + Phoenix实现二级索引',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>

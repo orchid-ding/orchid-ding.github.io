@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        azkaban工作流调度器 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Azkaban工作流调度器"><span class="toc-text">Azkaban工作流调度器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础架构"><span class="toc-text">基础架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行模式"><span class="toc-text">运行模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#command类型单一job"><span class="toc-text">command类型单一job</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多job工作流"><span class="toc-text">多job工作流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS操作任务"><span class="toc-text">HDFS操作任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MAPREDUCE任务"><span class="toc-text">MAPREDUCE任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HIVE脚本任务"><span class="toc-text">HIVE脚本任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#任务定时调度"><span class="toc-text">任务定时调度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webUI-传递参数"><span class="toc-text">webUI 传递参数</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        azkaban工作流调度器
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-04-26 22:47:06</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#-azkaban" title="-azkaban">-azkaban</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="Azkaban工作流调度器"><a href="#Azkaban工作流调度器" class="headerlink" title="Azkaban工作流调度器"></a>Azkaban工作流调度器</h2><ul>
+<li>一个完整的数据分析系统通常都是由大量任务单元组成；<ul>
+<li>shell脚本程序、java程序、mapreduce程序、hive脚本等</li>
+</ul>
+</li>
+<li><p>各任务单元之间存在时间先后及前后依赖关系</p>
+</li>
+<li><p>为了==很好地组织起这样的复杂执行计划，需要一个工作流调度系统来调度执行==</p>
+</li>
+<li><p>Azkaban是由Linkedin开源的一个==批量工作流任务调度器==。用于在一个工作流内以一个特定的顺序运行一组工作和流程。</p>
+</li>
+<li>Azkaban定义了一种==KV文件(properties)格式==来建立任务之间的依赖关系，并提供一个易于使用的web用户界面维护和跟踪你的工作流。<ul>
+<li><a href="https://azkaban.github.io/" target="_blank" rel="noopener">https://azkaban.github.io/</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/azkaban.github.png" alt="azkaban.github" style="zoom:50%;"></p>
+<ul>
+<li>功能特点<ul>
+<li>提供功能清晰、简单易用的web UI界面</li>
+<li>提供job配置文件快速建立任务和任务之间的关系</li>
+<li>提供模块化的可插拔机制，原生支持command、java、hive、hadoop</li>
+<li>基于java开发，代码结构清晰，易于二次开发</li>
+</ul>
+</li>
+</ul>
+<h3 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h3><p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/azkaban.png" alt="azkaban"></p>
+<ul>
+<li><p>Azkaban由三部分构成</p>
+<ul>
+<li><p>1、==Azkaban Web Server==</p>
+<ul>
+<li><p>提供了Web UI，是azkaban的主要管理者，包括 project 的管理，认证，调度，对工作流执行过程的监控等。</p>
+</li>
+<li><p>2、==Azkaban Executor Server==</p>
+<ul>
+<li>负责具体的工作流和任务的调度提交</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>==Mysql==</p>
+<ul>
+<li>用于保存项目、日志或者执行计划之类的信息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="运行模式"><a href="#运行模式" class="headerlink" title="运行模式"></a>运行模式</h3><ul>
+<li>1、solo server mode(单机模式）</li>
+</ul>
+<pre><code>H2
+web server 和 executor server运行在一个进程里
+最简单的模式，数据库内置的H2数据库，管理服务器和执行服务器都在一个进程中运行，任务量不大项目可以采用此模式。
+</code></pre><ul>
+<li>2、two server mode</li>
+</ul>
+<pre><code>web server 和 executor server运行在不同的进程
+数据库为mysql，管理服务器和执行服务器在不同进程，这种模式下，管理服务器和执行服务器互不影响。
+
+</code></pre><ul>
+<li>3、multiple executor mode</li>
+</ul>
+<pre><code>web server 和 executor server运行在不同的进程，executor server有多个
+该模式下，执行服务器和管理服务器在不同主机上，且执行服务器可以有多个。
+</code></pre><h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><h4 id="command类型单一job"><a href="#command类型单一job" class="headerlink" title="command类型单一job"></a>command类型单一job</h4><ul>
+<li>1、==创建job描述文件  以.job后缀结尾==<ul>
+<li>创建 command.job 文件</li>
+</ul>
+</li>
+</ul>
+<pre><code class="shell">#command.job
+type=command
+command=echo &#39;hello azkaban......&#39;
+</code></pre>
+<ul>
+<li>2、将job资源文件打包成zip文件</li>
+<li><p>例如</p>
+<ul>
+<li>command.zip</li>
+</ul>
+</li>
+<li><p>3、通过azkaban的web管理平台创建project并上传job压缩包</p>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/create_project.png" alt="create_project"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/upload_zip.png" alt="upload_zip"></p>
+<ul>
+<li>3、点击运行</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/execute-flow.png" alt="execute-flow"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/execute.png" alt="execute"></p>
+<ul>
+<li>4、运行完成</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/success.png" alt="success"></p>
+<h4 id="多job工作流"><a href="#多job工作流" class="headerlink" title="多job工作流"></a>多job工作流</h4><ul>
+<li><p>1、创建有依赖关系的多个job描述</p>
+<ul>
+<li>第一个job：start1.job</li>
+</ul>
+<pre><code class="shell">#start1.job
+type=command
+command= echo &#39;start1...start1...&#39;
+</code></pre>
+<ul>
+<li>第二个job：start2.job    它依赖start1.job</li>
+</ul>
+<pre><code class="shell">#start2.job
+type=command
+dependencies=start1
+command= echo &#39;start2...start2...&#39;
+</code></pre>
+</li>
+<li><p>2、将job资源文件打包成zip文件</p>
+<ul>
+<li>start12.zip</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/start12job.png" alt="start12job"></p>
+</li>
+<li><p>3、创建工程，上传zip包，最后启动工作流</p>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/execute-start12.png" alt="execute-start12"></p>
+<ul>
+<li>==补充==<ul>
+<li>如果一个job有多个依赖的job，可以使用逗号隔开</li>
+</ul>
+</li>
+</ul>
+<pre><code class="shell">例如： 
+#start1.job
+type=command
+command= echo &quot;start1 job&quot;
+
+#start2.job
+type=command
+command= echo &quot;start2 job&quot;
+
+#stop.job
+type=command
+denpendencies=start1,start2
+command=echo &quot;stop job&quot;
+
+注意：有多个依赖的job，用逗号隔开
+</code></pre>
+<h4 id="HDFS操作任务"><a href="#HDFS操作任务" class="headerlink" title="HDFS操作任务"></a>HDFS操作任务</h4><ul>
+<li><p>1、创建job描述文件</p>
+<ul>
+<li>vim fs.job</li>
+</ul>
+<pre><code class="shell">#fs.job
+type=command
+command=echo &quot;start execute&quot;
+command.1=/kfly/install/hadoop-2.6.0-cdh5.14.2/bin/hdfs dfs -mkdir /azkaban
+command.2=/kfly/install/hadoop-2.6.0-cdh5.14.2/bin/hdfs dfs -put /home/hadoop/source.txt /azkaban
+</code></pre>
+</li>
+<li><p>2、将job资源文件打包成zip文件</p>
+<ul>
+<li>fs.zip</li>
+</ul>
+</li>
+<li><p>3、创建工程，上传zip包，最后启动工作流</p>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/fs.png" alt="fs"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/fs-hdfs.png" alt="fs-hdfs"></p>
+<h4 id="MAPREDUCE任务"><a href="#MAPREDUCE任务" class="headerlink" title="MAPREDUCE任务"></a>MAPREDUCE任务</h4><ul>
+<li><p>MR任务依然可以使用command的job类型来执行</p>
+</li>
+<li><p>1、创建job描述文件，及mr程序jar包</p>
+<ul>
+<li>示例中直接使用hadoop自带的example jar</li>
+<li>hdfs dfs -mkdir -p  /wordcount/in</li>
+</ul>
+<pre><code class="shell">#mr.job
+type=command
+command=/kfly/install/hadoop-2.6.0/bin/hadoop  jar hadoop-mapreduce-examples-2.6.0-cdh5.14.2.jar wordcount /wordcount/in /wordcount/out
+</code></pre>
+</li>
+<li><p>2、将job资源文件打包成zip文件</p>
+<ul>
+<li>mr.zip</li>
+</ul>
+</li>
+<li><p>3、创建工程，上传zip包，最后启动工作流</p>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/mr.png" alt="mr"></p>
+<h4 id="HIVE脚本任务"><a href="#HIVE脚本任务" class="headerlink" title="HIVE脚本任务"></a>HIVE脚本任务</h4><ul>
+<li><p>1、 创建job描述文件和hive脚本</p>
+<ul>
+<li>Hive脚本： test.sql</li>
+</ul>
+<pre><code class="sql">use default;
+create table if not exists test_azkaban(id int,name string,address string) row format delimited fields terminated by &#39;,&#39;;
+load data local inpath &#39;/home/hadoop/azkaban/test.txt&#39; into table test_azkaban;
+create table if not exists countaddress as select address,count(*) as num from test_azkaban group by address ;
+
+insert overwrite local directory &#39;/home/hadoop/azkaban/out&#39; select * from countaddress; 
+</code></pre>
+<ul>
+<li><p>准备数据</p>
+<ul>
+<li>vim /home/hadoop/azkaban/test.txt</li>
+</ul>
+<pre><code class="properties">1,zhangsan,shanghai
+2,lisi,beijing
+3,xiaoming,shanghai
+4,xiaozhang,shanghai
+5,xiaogang,beijing
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>2、创建job描述文件</p>
+<ul>
+<li>hive.job</li>
+</ul>
+<pre><code class="shell"># hive.job
+type=command
+command=/kkb/install/hive-1.1.0-cdh5.14.2/bin/hive -f &#39;test.sql&#39;
+</code></pre>
+</li>
+</ul>
+<ul>
+<li><p>3、将job资源文件打包成zip文件</p>
+<ul>
+<li>hive.zip</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务定时调度"><a href="#任务定时调度" class="headerlink" title="任务定时调度"></a>任务定时调度</h3><ul>
+<li>在启动工作流的时候，可以点击==Schedule==，实现定时调度一个工作流</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/schedule1.png" alt="schedule1"></p>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/schedule2.png" alt="schedule2"></p>
+<h3 id="webUI-传递参数"><a href="#webUI-传递参数" class="headerlink" title="webUI 传递参数"></a>webUI 传递参数</h3><ul>
+<li><p>可以通过webUI动态给job传递参数</p>
+</li>
+<li><p>1、创建一个job的描述文件</p>
+<ul>
+<li><p>parameter.job</p>
+<pre><code class="shell">#parameter.job
+type=command
+parameter=${param}
+command= echo ${parameter}
+</code></pre>
+</li>
+<li><p>其中</p>
+<ul>
+<li>==${param}== 表示解析页面传递的参数param的值，通过声明一个变量parameter去接受</li>
+<li>==${parameter}==表示获取该parameter变量的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>2、将job资源文件打包成zip文件</p>
+<ul>
+<li>parameter.zip</li>
+</ul>
+</li>
+<li><p>3、创建工程，上传zip包，最后启动工作流，并且设置参数</p>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/1572232468448.png" alt="1572232468448"></p>
+<ul>
+<li><p>4、运行完成后的结果</p>
+<p><img src="http://kflys.gitee.io/upic/2020/04/02/uPic/azkaban工作流调度器/assets/1572232525618.png" alt="1572232525618"></p>
+</li>
+</ul>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: 'azkaban工作流调度器',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>

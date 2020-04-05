@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Spark or Flink中Broadcast维表更新 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#案例分析"><span class="toc-text">案例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#维表方案"><span class="toc-text">维表方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预加载"><span class="toc-text">预加载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#在flink中，凡是继承了RichFunction的算子，都含有open方法。-可以再此方法里面实现对数据的预加载。"><span class="toc-text">在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#热存储关联"><span class="toc-text">热存储关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广播维表"><span class="toc-text">广播维表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#spark"><span class="toc-text">spark</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Flink"><span class="toc-text">Flink</span></a></li></ol></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Spark or Flink中Broadcast维表更新
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-10-03 12:54:30</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#调优" title="调优">调优</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#spark shuffle" title="spark shuffle">spark shuffle</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h1><ul>
+<li><p>实际开发中维表服务是经常遇到的。例如：</p>
+<ul>
+<li>在水务项目中，来自水源地的不同监测点（压力、温度、氯气浓度）等监测点数据的报警规则改变。</li>
+<li>用户行为数据中需要进行大区的转码</li>
+<li>商品信息中心只包含了商品Id等</li>
+</ul>
+<p>上述案例中都可以使用维表服务解决。</p>
+</li>
+</ul>
+<h2 id="维表方案"><a href="#维表方案" class="headerlink" title="维表方案"></a>维表方案</h2><h3 id="预加载"><a href="#预加载" class="headerlink" title="预加载"></a>预加载</h3><ul>
+<li><h4 id="在flink中，凡是继承了RichFunction的算子，都含有open方法。-可以再此方法里面实现对数据的预加载。"><a href="#在flink中，凡是继承了RichFunction的算子，都含有open方法。-可以再此方法里面实现对数据的预加载。" class="headerlink" title="在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。"></a>在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。</h4></li>
+</ul>
+<pre><code class="java"> RichMapFunction richMapFunction = new RichMapFunction&lt;String&gt;() {
+                    @Override
+            public void open(Configuration parameters) throws Exception {
+                super.open(parameters);
+            }        
+                       @Override
+            public Object map(String value) throws Exception {
+                return null;
+            }
+     }
+// 如果数据变更频次较低的，可以追加每分钟频次的时间调度器。
+</code></pre>
+<ul>
+<li>缺点<ul>
+<li>维度更新延迟</li>
+<li>加载到内存中，不适合数据量较大的场景</li>
+</ul>
+</li>
+</ul>
+<h3 id="热存储关联"><a href="#热存储关联" class="headerlink" title="热存储关联"></a>热存储关联</h3><ul>
+<li>IO变为异步IO，可使用cache缓存热数据(以guava为例)</li>
+</ul>
+<pre><code class="java">Cache&lt;String, String&gt; cache = CacheBuilder
+                .newBuilder()
+                .expireAfterAccess(300,TimeUnit.MILLISECONDS) // 按照时间访问过期
+                .expireAfterWrite(300,TimeUnit.MICROSECONDS) // 写入时间过期
+                .build();
+// 维度数据加载延迟
+</code></pre>
+<h3 id="广播维表"><a href="#广播维表" class="headerlink" title="广播维表"></a>广播维表</h3><h4 id="spark"><a href="#spark" class="headerlink" title="spark"></a>spark</h4><ul>
+<li>spark的broacast变量定义为只读，所以只能手动更新</li>
+</ul>
+<pre><code class="scala">// 监测点上报数据格式: P001,10(pointKey,value)
+val dataStream = KafkaUtils.createDirectStream[String,String](
+      sc,LocationStrategies.PreferConsistent,
+      ConsumerStrategies.Subscribe[String,String](topic1, kafkaParams))
+
+// 报警规则数据:P001,10,1,1(pointKey,max,min,isRemove)
+val broadCastStream = KafkaUtils.createDirectStream[String,String](
+    sc,LocationStrategies.PreferConsistent,
+    ConsumerStrategies.Subscribe[String,String](topic2, kafkaParams))
+
+// 首次加载所有数据
+var broadCastDomainMap = sc.sparkContext.broadcast(InitDomainMap)
+
+// 对broadCastStream监测点报警规则进行广播
+broadCastStream.foreachRDD(rdd=&gt;{
+  // 获取当前广播值
+  val mapData = broadCastDomainMap.value
+  // 删除广播
+  broadCastDomainMap.unpersist()
+  // 获取规则流中的数据，转为map
+  val streamingMap = rdd.map(line =&gt; {
+    val lines = line.value().split(&quot;,&quot;)
+    (lines(0), new MonitorPoint(lines(0), lines(1).toLong, lines(2).toLong, lines.length &gt;= 4 &amp;&amp; lines(3).equals(&quot;1&quot;)))
+  }).collect().toMap
+  // 表示已删除的规则，移除广播。
+  val removeKeys = streamingMap.filter(_._2.isRemove).map(_._1).toList
+  val broadcastData = mapData.filter(line =&gt; !removeKeys.contains(line._1)) ++ (streamingMap.filter(!_._2.isRemove))
+  // 重新进行广播
+  broadCastDomainMap = rdd.sparkContext.broadcast(broadcastData)
+})
+
+// 监测数据和报警规则关联
+dataStream.map(line=&gt;{
+  val lines = line.value().split(&quot;,&quot;)
+  val value = broadCastDomainMap.value
+  (lines(0),lines(1),value.get(lines(0)))
+}).print()
+
+  /**
+   * 第一次加载所有数据
+   */
+  def InitDomainMap:Map[String,MonitorPoint] = {
+    val map = Map(
+      &quot;P001&quot; -&gt; new MonitorPoint(&quot;P001&quot;,10,1,false),
+      &quot;P002&quot; -&gt; new MonitorPoint(&quot;P002&quot;,10,1,false)
+    )
+    map
+  }
+</code></pre>
+<h4 id="Flink"><a href="#Flink" class="headerlink" title="Flink"></a>Flink</h4><ul>
+<li>flink广播变量支持增量更新到State</li>
+</ul>
+<pre><code class="java">// 存储维度信息
+MapStateDescriptor&lt;String, AlarmParam&gt; alarmData = 
+                                  new MapStateDescriptor&lt;String,AlarmParam&gt;(
+                                                  &quot;alarmData&quot;, 
+                                                  Types.STRING,
+                                                  Types.POJO(AlarmParam.class)
+                                                );
+// kafka数据流
+DataStreamSource&lt;String&gt; dataStreamSource = env.addSource(flinkKafkaConsumer010);
+
+// 报警数据流
+DataStreamSource&lt;String&gt; broadcastStreamSource = env.addSource(broadcastStream);
+
+// 处理函数
+BroadcastProcessFunction processFunction = 
+  new BroadcastProcessFunction&lt;String, String, Tuple3&lt;String, Long, AlarmParam&gt;&gt;() {
+        @Override
+        public void processElement(String value, ReadOnlyContext ctx, Collector out){
+          String[] split = value.split(&quot;,&quot;);
+          // 获取广播数据
+          ReadOnlyBroadcastState broadcastState = ctx.getBroadcastState(alarmData);
+          out.collect(1,2,broadcastState.get(1)); // 关联数据
+        }
+
+        @Override
+        public void processBroadcastElement(String value, Context ctx, Collector out){
+          BroadcastState broadcastState = ctx.getBroadcastState(alarmData);
+          String[] split = value.split(&quot;,&quot;);
+          boolean isRemove = split[3].equals(&quot;1&quot;);
+          if (split.length &gt;= 4 &amp;&amp; !isRemove) {
+            // 增量更新数据
+            broadcastState.put(split[0], new AlarmParam(1,2,3,4));
+          } else {
+            // 已删除数据从广播去除
+            broadcastState.remove(split[0]);
+          }
+        }
+      };
+
+        SingleOutputStreamOperatorresult = dataStreamSource
+                .connect(broadcastStreamSource.broadcast(alarmData))
+                .process(processFunction);
+        result.print();
+</code></pre>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: 'Spark or Flink中Broadcast维表更新',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>
