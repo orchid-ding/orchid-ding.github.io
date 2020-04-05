@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        zookeeper分布式协调框架 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#zookeeper分布式协调框架"><span class="toc-text">zookeeper分布式协调框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行"><span class="toc-text">命令行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-API"><span class="toc-text">Java API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Watcher监视与通知"><span class="toc-text">Watcher监视与通知</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作原理"><span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL访问控制列表"><span class="toc-text">ACL访问控制列表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置ACL"><span class="toc-text">设置ACL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HDFS-HA方案"><span class="toc-text">HDFS HA方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-text">原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper读写"><span class="toc-text">ZooKeeper读写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ZooKeeper集群架构图"><span class="toc-text">ZooKeeper集群架构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读操作"><span class="toc-text">读操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#写操作"><span class="toc-text">写操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZooKeeper状态同步"><span class="toc-text">ZooKeeper状态同步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper服务"><span class="toc-text">ZooKeeper服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#架构问题"><span class="toc-text">架构问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全新集群leader选举"><span class="toc-text">全新集群leader选举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZAB算法"><span class="toc-text">ZAB算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#仲裁quorum"><span class="toc-text">仲裁quorum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网络分区、脑裂"><span class="toc-text">网络分区、脑裂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZAB算法-1"><span class="toc-text">ZAB算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZooKeeper服务器个数"><span class="toc-text">ZooKeeper服务器个数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式锁"><span class="toc-text">分布式锁</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        zookeeper分布式协调框架
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-11-27 22:24:20</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#zookeeper" title="zookeeper">zookeeper</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#zookeeper ha" title="zookeeper ha">zookeeper ha</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="zookeeper分布式协调框架"><a href="#zookeeper分布式协调框架" class="headerlink" title="zookeeper分布式协调框架"></a>zookeeper分布式协调框架</h1><ul>
+<li><p>ZooKeeper简单易用，能够很好的解决分布式框架在运行中，出现的各种协调问题。比如集群master主备切换、节点的上下线感知、统一命名服务、状态同步服务、集群管理、分布式应用配置项的管理等等</p>
+</li>
+<li><p>是Google的Chubby的一个开源实现版</p>
+</li>
+<li>ZooKeeper<ul>
+<li>一个分布式的，开源的，用于分布式应用程序的协调服务（service）</li>
+<li>主从架构</li>
+</ul>
+</li>
+<li>Zookeeper 作为一个分布式的服务框架<ul>
+<li>主要用来解决分布式集群中应用系统的一致性问题</li>
+<li>它能提供基于类似于文件系统的<strong>目录节点树</strong>方式的数据存储，</li>
+<li>Zookeeper 作用主要是用来维护和监控存储的数据的状态变化，通过监控这些数据状态的变化，从而达到基于数据的集群管理</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201906091839.png" alt=""></p>
+<h3 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h3><ul>
+<li>集群命令（<strong>每个节点运行此命令</strong>）</li>
+</ul>
+<pre><code class="shell"># 启动ZooKeeper集群；在ZooKeeper集群中的每个节点执行此命令
+${ZK_HOME}/bin/zkServer.sh start
+# 停止ZooKeeper集群（每个节点执行以下命令）
+${ZK_HOME}/bin/zkServer.sh stop
+# 查看集群状态（每个节点执行此命令）
+${ZK_HOME}/bin/zkServer.sh status
+</code></pre>
+<pre><code class="shell"># 使用ZooKeeper自带的脚本，连接ZooKeeper的服务器
+zkCli.sh -server node01:2181,node02:2181,node03:2181
+</code></pre>
+<pre><code class="shell">#查看ZooKeeper根目录/下的文件列表
+ls /
+</code></pre>
+<pre><code class="shell">#创建节点，并指定数据
+create /kfly    kfly
+</code></pre>
+<pre><code class="shell">#获得某节点的数据
+get /kfly
+</code></pre>
+<pre><code class="shell">#修改节点的数据
+set /kfly kfly_top
+#删除节点
+delete /kfly
+</code></pre>
+<h3 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h3><ul>
+<li><a href=" http://curator.apache.org/ " target="_blank" rel="noopener">Curator官网</a></li>
+<li><p>Curator编程</p>
+<p><code>`</code>java<br>// 重试连接策略，失败重试次数；每次休眠5000毫秒<br>// RetryPolicy policy = new ExponentialBackoffRetry(3000, 3);<br>RetryNTimes retryPolicy = new RetryNTimes(10, 5000);<br>// 设置客户端参数，参数1：指定连接的服务器集端口列表；参数2：重试策略<br>client = CuratorFrameworkFactory.newClient(ZK_ADDRESS, retryPolicy);<br>// 启动客户端，连接到zk集群<br>client.start();</p>
+</li>
+</ul>
+<p>///a/b/c<br>client.create().<br>  creatingParentsIfNeeded().<br>  withMode(CreateMode.PERSISTENT).<br>  forPath(“/kfly/top/orchid”, zNodeData.getBytes());</p>
+<p>// 查询节点列表<br>client.getChildren().forPath(“/“)<br>// 删除节点<br>client.delete().forPath(ZK_PATH);<br>// 查询节点数据<br>client.getData().forPath(ZK_PATH)<br>// 修改节点数据<br>client.setData().forPath(ZK_PATH, data2.getBytes())</p>
+<p>//设置节点的cache<br>TreeCache treeCache = new TreeCache(client, “/zk_test”);<br>//设置监听器和处理过程<br>treeCache.getListenable().addListener(new TreeCacheListener(){</p>
+<p>})</p>
+<pre><code>
+## 基本概念和操作
+
+&gt; 分布式通信有几种方式
+&gt;
+&gt; 1、直接通过网络连接的方式进行通信；
+&gt;
+&gt; 2、通过共享存储的方式，来进行通信或数据的传输
+&gt;
+&gt; ZooKeeper使用第二种方式，提供分布式协调服务
+
+### 数据结构
+
+**ZooKeeper=①简版文件系统(Znode)+②原语+③通知机制(Watcher)。**
+
+- ZK文件系统
+  - 基于类似于文件系统的**目录节点树**方式的数据存储
+- 原语
+  - 可简单理解成ZooKeeper的基本的命令
+- Watcher（监听器）
+
+![img](http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/fcfaaf51f3deb48f36625a57fa1f3a292df57834.jpg)
+
+![](http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201909181739.png)
+
+
+
+### **数据节点**ZNode
+
+|            | 持久节点  | 临时节点     |
+| ---------- | --------- | ------------ |
+| 非有序节点 | create    | create -e    |
+| 有序节点   | create -s | create -s -e |
+
+
+### 会话（Session) 
+
+- 客户端要对ZooKeeper集群进行读写操作，得先与某一ZooKeeper服务器建立TCP长连接；此TCP长连接称为建立一个会话Session。
+
+- 每个会话有超时时间：SessionTimeout
+  - 当客户端与集群建立会话后，如果超过SessionTimeout时间，两者间没有通信，会话超时
+
+**特点**
+
+- 客户端打开一个Session中的请求以FIFO（先进先出）的顺序执行；
+  - 如客户端client01与集群建立会话后，先发出一个create请求，再发出一个get请求；
+  - 那么在执行时，会先执行create，再执行get
+- 若打开两个Session，无法保证Session间，请求FIFO执行；只能保证一个session中请求的FIFO
+
+**生命周期**
+
+![](http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201905311514.png)
+
+### 事务zxid
+
+- 事务
+  - 客户端的写请求，会对ZooKeeper中的数据做出更改；如增删改的操作
+  - 每次写请求，会生成一次事务
+  - 每个事务有一个全局唯一的事务ID，用 ZXID 表示；全局自增
+
+- 事务特点
+  - ACID：
+  - 原子性atomicity | 一致性consistency | 隔离性isolation | 持久性durability
+
+- ZXID结构：
+  - 通常是一个64位的数字。由**epoch+counter**组成
+  - epoch、counter各32位
+
+  ```shell
+  cd /kfly/install/zookeeper-3.4.5-cdh5.14.2/zkdatas/version-2
+  cat currentEpoch 
+  4 # 记录当前leader是选举出来的第几任
+
+  get /kfly kfly
+  cZxid = 0x400000007 # 第四任leader通过的第七个事务
+  # zxid = epoch(32位) + counter(32位)
+</code></pre><h3 id="Watcher监视与通知"><a href="#Watcher监视与通知" class="headerlink" title="Watcher监视与通知"></a>Watcher监视与通知</h3><ul>
+<li><p>客户端获取ZooKeeper服务器上的最新数据</p>
+<ul>
+<li><strong>方式一</strong>轮询：ZooKeeper以远程服务的方式，被客户端访问；客户端以轮询的方式获得znode数据，效率会比较低（代价比较大）</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201905291811.png" alt=""></p>
+<ul>
+<li><strong>方式二</strong>基于通知的机制：<ul>
+<li>客户端在znode上注册一个Watcher监视器</li>
+<li>当znode上数据出现变化，watcher监测到此变化，通知客户端</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201905291818.png" alt=""></p>
+</li>
+</ul>
+<ul>
+<li>客户端在服务器端，注册的事件监听器；</li>
+<li>watcher用于监听znode上的某些事件<ul>
+<li>比如znode数据修改、节点增删等；</li>
+<li>当监听到事件后，watcher会触发通知客户端</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注意：<strong>Watcher是一个<font color="red">单次触发的操作</font></strong></p>
+</blockquote>
+<pre><code class="shell"># stat path [watch] 查看path节点状态
+# ls path [watch]  查看节点有哪些子节点
+# ls2 path [watch] 查看节点有哪些子节点、状态、相当于ls+stat
+# get path [watch] 获得节点各种数据
+</code></pre>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><ul>
+<li>ZooKeeper使用原子广播协议叫做Zab(ZooKeeper Automic Broadcast)协议</li>
+<li>Zab协议有两种模式<ul>
+<li><strong>恢复模式（选主）</strong>：因为ZooKeeper也是主从架构；当ZooKeeper集群没有主的角色leader时，从众多服务器中选举leader时，处于此模式</li>
+<li><strong>广播模式（同步）</strong>：当集群有了leader后，客户端向ZooKeeper集群读写数据时，集群处于此模式</li>
+</ul>
+</li>
+<li>为了保证事务的顺序一致性，ZooKeeper采用了递增的事务id号（zxid）来标识事务，所有提议（proposal）都有zxid</li>
+</ul>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ul>
+<li>ZooKeeper应用场景</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/20170221224856838.png" alt=""></p>
+<ol>
+<li><p>NameNode使用ZooKeeper实现高可用.</p>
+</li>
+<li><p>Yarn ResourceManager使用ZooKeeper实现高可用.</p>
+</li>
+<li><p>利用ZooKeeper对HBase集群做高可用配置</p>
+</li>
+<li><p>kafka使用ZooKeeper</p>
+<ul>
+<li><p>保存消息消费信息比如offset.</p>
+</li>
+<li><p>用于检测崩溃</p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>主题topic发现</p>
+<ul>
+<li>保持主题的生产和消费状态</li>
+</ul>
+</li>
+</ul>
+<h2 id="ACL访问控制列表"><a href="#ACL访问控制列表" class="headerlink" title="ACL访问控制列表"></a>ACL访问控制列表</h2><p>zk做为分布式架构中的重要中间件，通常会在上面以节点的方式存储一些关键信息，默认情况下，所有应用都可以读写任何节点，在复杂的应用中，这不太安全，ZK通过ACL机制来解决访问权限问题\</p>
+<p>ACL(Access Control List)可以设置某些客户端，对zookeeper服务器上节点的权限，如增删改查等</p>
+<p>ZooKeeper 采用 ACL（Access Control Lists）策略来进行权限控制。ZooKeeper 定义了如下5种权限。</p>
+<ul>
+<li><p>CREATE: 创建<strong>子节点</strong>的权限。</p>
+</li>
+<li><p>READ: 获取节点数据和子节点列表的权限。</p>
+</li>
+<li><p>WRITE：更新节点数据的权限。</p>
+</li>
+<li><p>DELETE: 删除<strong>子节点</strong>的权限。</p>
+</li>
+<li><p>ADMIN: 设置节点ACL的权限。</p>
+</li>
+</ul>
+<blockquote>
+<p> 注意：CREATE 和 DELETE 都是针对子节点的权限控制。</p>
+</blockquote>
+<h3 id="设置ACL"><a href="#设置ACL" class="headerlink" title="设置ACL"></a>设置ACL</h3><ol>
+<li><p>五种权限简称</p>
+<pre><code class="shell">CREATE -&gt; 增 -&gt; c
+READ -&gt; 查 -&gt; r
+WRITE -&gt; 改 -&gt; w
+DELETE -&gt; 删 -&gt; d
+ADMIN -&gt; 管理 -&gt; a
+这5种权限简写为**crwda**
+</code></pre>
+</li>
+<li><p>鉴权模式</p>
+</li>
+</ol>
+<pre><code class="shell">- world：默认方式，相当于全世界都能访问
+- auth：代表已经认证通过的用户(cli中可以通过addauth digest user:pwd 来添加当前上下文中的授权用户)
+- digest：即用户名:密码这种方式认证，这也是业务系统中最常用的
+- ip：使用Ip地址认证
+</code></pre>
+<ol start="3">
+<li>演示auth方式</li>
+</ol>
+<pre><code class="shell"># 1）增加一个认证用户
+# addauth digest 用户名:密码明文
+addauth digest kfly:kflt
+
+# 2）设置权限
+# setAcl /path auth:用户名:密码明文:权限
+setAcl /zk_test auth:kfly:kfly:rw
+
+# 3）查看ACL设置
+getAcl /zk_test
+</code></pre>
+<h2 id="HDFS-HA方案"><a href="#HDFS-HA方案" class="headerlink" title="HDFS HA方案"></a>HDFS HA方案</h2><ul>
+<li><p>关于ZooKeeper监听器有三个重要的逻辑：</p>
+<ul>
+<li><p><strong>注册</strong>：客户端向ZooKeeper集群注册监听器</p>
+</li>
+<li><p><strong>监听事件</strong>：监听器负责监听特定的事件</p>
+</li>
+<li><p><strong>回调函数</strong>：当监听器监听到事件的发生后，调用注册监听器时定义的回调函数</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote>
+<p>关键逻辑：</p>
+<p>①监听器：<strong>注册、监听事件、回调函数</strong></p>
+<p>②共享存储：JournalNode</p>
+</blockquote>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201905211519.png" alt="">   </p>
+<ul>
+<li><p>在Hadoop 1.x版本，HDFS集群的NameNode一直存在单点故障问题：</p>
+<ul>
+<li>集群只存在一个NameNode节点，它维护了HDFS所有的元数据信息</li>
+<li>当该节点所在服务器宕机或者服务不可用，整个HDFS集群处于不可用状态</li>
+</ul>
+</li>
+<li><p>Hadoop 2.x版本提出了高可用 (High Availability, HA) 解决方案</p>
+</li>
+</ul>
+<blockquote>
+<p>HDFS HA方案，主要分两部分：</p>
+<p>①元数据同步</p>
+<p>②主备切换</p>
+</blockquote>
+<ul>
+<li>元数据同步</li>
+<li>在同一个HDFS集群，运行两个互为主备的NameNode节点。<ul>
+<li>一台为主Namenode节点，处于Active状态，一台为备NameNode节点，处于Standby状态。</li>
+<li>其中只有Active NameNode对外提供读写服务，Standby NameNode会根据Active NameNode的状态变化，在必要时<strong>切换</strong>成Active状态。</li>
+<li><strong>JournalNode集群</strong><ul>
+<li>在主备切换过程中，新的Active NameNode必须确保与原Active NamNode元数据同步完成，才能对外提供服务</li>
+<li>所以用JournalNode集群作为共享存储系统；</li>
+<li>当客户端对HDFS做操作，会在Active NameNode中edits.log文件中作日志记录，同时日志记录也会写入JournalNode集群；负责存储HDFS新产生的元数据</li>
+<li>当有新数据写入JournalNode集群时，Standby NameNode能监听到此情况，将新数据同步过来</li>
+<li>Active NameNode(写入)和Standby NameNode(读取)实现元数据同步</li>
+<li>另外，所有datanode会向两个主备namenode做block report</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201909200732.png" alt=""></p>
+<ul>
+<li><font color="blue">②主备切换</font>
+</li>
+<li><p><strong>ZKFC涉及角色</strong></p>
+<ul>
+<li>每个NameNode节点上各有一个ZKFC进程</li>
+<li>ZKFC即ZKFailoverController，作为独立进程存在，负责控制NameNode的主备切换</li>
+<li>ZKFC会监控NameNode的健康状况，当发现Active NameNode异常时，通过Zookeeper集群进行namenode主备选举，完成Active和Standby状态的切换<ul>
+<li>ZKFC在启动时，同时会初始化HealthMonitor和ActiveStandbyElector服务</li>
+<li>ZKFC同时会向HealthMonitor和ActiveStandbyElector注册相应的回调方法（如上图的①回调、②回调）</li>
+<li><strong>HealthMonitor</strong>定时调用NameNode的HAServiceProtocol RPC接口(monitorHealth和getServiceStatus)，监控NameNode的健康状态并向ZKFC反馈</li>
+<li><strong>ActiveStandbyElector</strong>接收ZKFC的选举请求，通过Zookeeper自动完成namenode主备选举</li>
+<li>选举完成后回调ZKFC的主备切换方法对NameNode进行Active和Standby状态的切换</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>主备选举过程：</strong>两个ZKFC通过各自ActiveStandbyElector发起NameNode的主备选举，这个过程利用Zookeeper的写一致性和临时节点机制实现</p>
+<ul>
+<li>当发起一次<strong>主备</strong>选举时，ActiveStandbyElector会尝试在Zookeeper创建临时节点<code>/hadoop-ha/${dfs.nameservices}/ActiveStandbyElectorLock</code>，Zookeeper的写一致性保证最终只会有一个ActiveStandbyElector创建成功</li>
+</ul>
+</li>
+<li><p>ActiveStandbyElector从ZooKeeper获得选举结果</p>
+<ul>
+<li>创建成功的 ActiveStandbyElector回调ZKFC的回调方法②，将对应的NameNode切换为Active NameNode状态</li>
+</ul>
+</li>
+<li><p>而创建失败的ActiveStandbyElector回调ZKFC的回调方法②，将对应的NameNode切换为Standby NameNode状态</p>
+</li>
+<li><p>不管是否选举成功，所有ActiveStandbyElector都会在临时节点ActiveStandbyElectorLock上注册一个Watcher监听器，来监听这个节点的状态变化事件</p>
+<ul>
+<li>如果Active NameNode对应的HealthMonitor检测到NameNode状态异常时，通知对应ZKFC</li>
+</ul>
+</li>
+<li><p>ZKFC会调用 ActiveStandbyElector 方法，删除在Zookeeper上创建的临时节点ActiveStandbyElectorLock</p>
+<ul>
+<li>此时，Standby NameNode的ActiveStandbyElector注册的Watcher就会监听到此节点的 NodeDeleted事件。</li>
+</ul>
+</li>
+<li><p>收到这个事件后，此ActiveStandbyElector发起主备选举，成功创建临时节点ActiveStandbyElectorLock，如果创建成功，则Standby NameNode被选举为Active NameNode（过程同上）</p>
+</li>
+<li><p><strong>如何防止脑裂</strong></p>
+<ul>
+<li><p>脑裂</p>
+<p>在分布式系统中双主现象又称为脑裂，由于Zookeeper的“假死”、长时间的垃圾回收或其它原因都可能导致双Active NameNode现象，此时两个NameNode都可以对外提供服务，无法保证数据一致性</p>
+</li>
+<li><p>隔离</p>
+<p>对于生产环境，这种情况的出现是毁灭性的，必须通过自带的<strong>隔离（Fencing）</strong>机制预防此类情况</p>
+</li>
+<li><p>原理</p>
+<ul>
+<li><p>ActiveStandbyElector成功创建ActiveStandbyElectorLock临时节点后，会创建另一个ActiveBreadCrumb持久节点</p>
+</li>
+<li><p>ActiveBreadCrumb持久节点保存了Active NameNode的地址信息</p>
+</li>
+<li><p>当Active NameNode在正常的状态下断开Zookeeper Session，会一并删除临时节点ActiveStandbyElectorLock、持久节点ActiveBreadCrumb</p>
+</li>
+<li><p>但是如果ActiveStandbyElector在异常的状态下关闭Zookeeper Session，那么持久节点ActiveBreadCrumb会保留下来（此时有可能由于active NameNode与ZooKeeper通信不畅导致，所以此NameNode<strong>还处于active状态</strong>）</p>
+</li>
+<li><p>当另一个NameNode要由standy变成active状态时，会发现上一个Active NameNode遗留下来的ActiveBreadCrumb节点，那么会回调ZKFailoverController的方法对旧的Active NameNode进行    fencing</p>
+<p>①首先ZKFC会尝试调用旧Active NameNode的HAServiceProtocol RPC接口的transitionToStandby方法，看能否将其状态切换为Standby</p>
+<p>②如果transitionToStandby方法切换状态失败，那么就需要执行Hadoop自带的隔离措施，Hadoop目前主要提供两种隔离措施：<br>sshfence：SSH to the Active NameNode and kill the process；<br>shellfence：run an arbitrary shell command to fence the Active NameNode</p>
+<p>③只有成功地fencing之后，选主成功的ActiveStandbyElector才会回调ZKFC的becomeActive方法将对应的NameNode切换为Active，开始对外提供服务</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="ZooKeeper读写"><a href="#ZooKeeper读写" class="headerlink" title="ZooKeeper读写"></a>ZooKeeper读写</h2><h3 id="ZooKeeper集群架构图"><a href="#ZooKeeper集群架构图" class="headerlink" title="ZooKeeper集群架构图"></a>ZooKeeper集群架构图</h3><ul>
+<li>ZooKeeper集群也是主从架构<ul>
+<li>主角色：leader</li>
+<li>从角色：follower或observer；统称为learner</li>
+</ul>
+</li>
+</ul>
+<h3 id="读操作"><a href="#读操作" class="headerlink" title="读操作"></a>读操作</h3><p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201910251149.png" alt=""></p>
+<ul>
+<li><p>常见的读取操作，如ls /查看目录；get /zktest查询ZNode数据</p>
+</li>
+<li><p>读操作</p>
+<ul>
+<li><p>客户端先与某个ZK服务器建立Session</p>
+</li>
+<li><p>然后，直接从此ZK服务器读取数据，并返回客户端即可</p>
+</li>
+<li><p>关闭Session</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="写操作"><a href="#写操作" class="headerlink" title="写操作"></a>写操作</h3><ul>
+<li>写操作比较复杂；为了便于理解，先举个生活中的例子：去银行存钱<ul>
+<li>银行柜台共有5个桂圆姐姐，编程从①到⑤，其中③是<strong>领导leader</strong></li>
+<li>有两个客户</li>
+<li>客户①找到桂圆①，说：昨天少给我存了1000万，现在需要给我加进去</li>
+<li>桂圆①说，对不起先生，我没有这么大的权限，请你稍等一下，我向领导<strong>leader</strong>③汇报一下</li>
+<li>领导③收到消息后，为了做出英明的决策，要征询下属的意见(<strong>proposal</strong>)①②④⑤</li>
+<li>只要有<strong>过半数quorum</strong>（5/2+1=3，包括leader自己）同意，则leader做出决定(<strong>commit</strong>)，同意此事</li>
+<li>leader告知所有下属follower，你们都记下此事生效</li>
+<li>桂圆①答复客户①，说已经给您账号里加了1000万</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image2019061212537.png" alt=""></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201910251203.png" alt=""></p>
+<ul>
+<li><p>客户端写操作</p>
+<ul>
+<li><p>①客户端向zk集群写入数据，如create /kfly；与一个follower建立Session连接，从节点follower01</p>
+</li>
+<li><p>②follower将写请求转发给leader</p>
+</li>
+<li><p>③leader收到消息后，发出<strong>proposal提案</strong>（创建/kfly），每个follower先<strong>记录下</strong>要创建/kfly</p>
+</li>
+<li><p>④超过<strong>半数quorum</strong>（包括leader自己）同意提案，则leader提交<strong>commit提案</strong>，leader本地创建/kfly节点ZNode</p>
+</li>
+<li><p>⑤leader通知所有follower，也commit提案；follower各自在本地创建/kfly</p>
+</li>
+<li><p>⑥follower01响应client</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="ZooKeeper状态同步"><a href="#ZooKeeper状态同步" class="headerlink" title="ZooKeeper状态同步"></a>ZooKeeper状态同步</h3><p>完成leader选举后，zk就进入ZooKeeper之间状态同步过程</p>
+<ol>
+<li>leader构建NEWLEADER封包，包含leader中最大的zxid值；广播给其它follower</li>
+<li>follower收到后，如果自己的最大zxid小于leader的，则需要与leader状态同步；否则不需要</li>
+<li>leader给需要同步的每个follower创建LearnerHandler线程，负责数据同步请求</li>
+<li>leader主线程等待LearnHandler线程处理结果</li>
+<li>只有多数follower完成同步，leader才开始对外服务，响应写请求</li>
+<li>LearnerHandler线程处理逻辑<ol>
+<li>接收follower封包FOLLOWERINFO，包含此follower最大zxid（代称f-max-zxid）</li>
+<li>f-max-zxid与leader最大zxid（代称l-max-zxid）比较</li>
+<li>若相等，说明当前follower是最新的</li>
+<li>另外，若在判断期间，有没有新提交的proposal<ol>
+<li>如果有那么会发送DIFF封包将有差异的数据同步过去.同时将follower没有的数据逐个发送COMMIT封包给follower要求记录下来.</li>
+<li>如果follower数据id更大,那么会发送TRUNC封包告知截除多余数据.</li>
+<li>如果这一阶段内没有提交的提议值,直接发送SNAP封包将快照同步发送给follower.</li>
+</ol>
+</li>
+<li>以上消息完毕之后,发送UPTODATE封包告知follower当前数据就是最新的了</li>
+<li>再次发送NEWLEADER封包宣称自己是leader,等待follower的响应.</li>
+</ol>
+</li>
+</ol>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201906140856.png" alt=""></p>
+<h2 id="ZooKeeper服务"><a href="#ZooKeeper服务" class="headerlink" title="ZooKeeper服务"></a>ZooKeeper服务</h2><h3 id="架构问题"><a href="#架构问题" class="headerlink" title="架构问题"></a><strong>架构问题</strong></h3><p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/zkservice.jpg" alt=""></p>
+<ul>
+<li>leader很重要？</li>
+<li><p>如果没有leader怎么办？</p>
+<ul>
+<li>开始选举新的leader</li>
+</ul>
+</li>
+<li><p><strong>ZooKeeper服务器四种状态：</strong></p>
+<ul>
+<li><p>looking：服务器处于寻找Leader群首的状态</p>
+</li>
+<li><p>leading：服务器作为群首时的状态</p>
+</li>
+<li><p>following：服务器作为follower跟随者时的状态</p>
+</li>
+<li><p>observing：服务器作为观察者时的状态</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>leader选举分<strong>两种情况</strong></p>
+<ul>
+<li><p>全新集群leader选举</p>
+</li>
+<li><p>非全新集群leader选举</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="全新集群leader选举"><a href="#全新集群leader选举" class="headerlink" title="全新集群leader选举"></a>全新集群leader选举</h3><p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201906130749.png" alt=""></p>
+<ul>
+<li><p>以3台机器组成的ZooKeeper集群为例 </p>
+</li>
+<li><p>原则：集群中过<strong>半数</strong>（多数派quorum）Server启动后，才能选举出Leader；</p>
+<ul>
+<li>此处quorum数是多少？3/2+1=2</li>
+<li>即quorum=集群服务器数除以2，再加1</li>
+</ul>
+</li>
+<li><p>理解leader选举前，先了解几个概念</p>
+<pre><code>- 选举过程中，每个server需发出投票；投票信息**vote信息**结构为(sid, zxid)
+
+    全新集群，server1~3初始投票信息分别为：
+
+    ​    server1 -&gt;  **(1, 0)**
+  ​    ​server2 -&gt;  **(2, 0)**
+  ​    server3 -&gt;  **(3, 0)**
+</code></pre><ul>
+<li><p><strong>leader选举公式</strong>：</p>
+<p>​    server1 vote信息 (sid1,zxid1)</p>
+<p>​    server2 vote信息 (sid2,zxid2)</p>
+<p>​    <strong>①zxid大的server胜出；</strong></p>
+<p>​    <strong>②若zxid相等，再根据判断sid判断，sid大的胜出</strong></p>
+</li>
+</ul>
+</li>
+<li><p>选举leader流程：</p>
+<blockquote>
+<p>假设按照ZK1、ZK2、ZK3的依次启动</p>
+</blockquote>
+<ul>
+<li><p>启动ZK1后，投票给自己，vote信息(1,0)，没有过半数，选举不出leader</p>
+</li>
+<li><p>再启动ZK2；ZK1和ZK2票投给自己及其他服务器；ZK1的投票为(1, 0)，ZK2的投票为(2, 0)</p>
+</li>
+<li><p>处理投票。每个server将收到的多个投票做处理</p>
+<ul>
+<li>如ZK1投给自己的票(1,0)与ZK2传过来的票(2,0)比较；</li>
+<li>利用leader选举公式，因为zxid都为0，相等；所以判断sid最大值；2&gt;1；ZK1更新自己的投票为(2, 0)</li>
+<li>ZK2也是如此逻辑，ZK2更新自己的投票为(2,0)</li>
+</ul>
+</li>
+<li><p>再次发起投票</p>
+<ul>
+<li>ZK1、ZK2上的投票都是(2,0)</li>
+<li>发起投票后，ZK1上有一个自己的票(2,0)和一票来自ZK2的票(2,0)，这两票都选ZK2为leader</li>
+<li>ZK2上有一个自己的票(2,0)和一票来自ZK1的票(2,0)，这两票都选ZK2为leader</li>
+<li>统计投票。server统计投票信息，是否有半数server投同一个服务器为leader；<ul>
+<li>ZK2当选2票；多数</li>
+</ul>
+</li>
+<li>改变服务器状态。确定Leader后，各服务器更新自己的状态<ul>
+<li>更改ZK2状态从looking到leading，为Leader</li>
+<li>更改ZK1状态从looking到following，为Follower</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>当K3启动时，发现已有Leader，不再选举，直接从LOOKING改为FOLLOWING</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>选举原理同上比较zxid、sid</li>
+</ul>
+<h2 id="ZAB算法"><a href="#ZAB算法" class="headerlink" title="ZAB算法"></a>ZAB算法</h2><h3 id="仲裁quorum"><a href="#仲裁quorum" class="headerlink" title="仲裁quorum"></a>仲裁quorum</h3><ul>
+<li><p>什么是仲裁quorum？</p>
+<ul>
+<li>发起proposal时，只要多数派同意，即可生效</li>
+</ul>
+</li>
+<li><p>为什么要仲裁？</p>
+<ul>
+<li>多数据派不需要所有的服务器都响应，proposal就能生效</li>
+<li>且能提高集群的响应速度</li>
+</ul>
+</li>
+<li><p>quorum数如何选择？</p>
+<ul>
+<li><strong>集群节点数 / 2 + 1</strong></li>
+<li>如3节点的集群：quorum数=3/2+1=2</li>
+</ul>
+</li>
+</ul>
+<h3 id="网络分区、脑裂"><a href="#网络分区、脑裂" class="headerlink" title="网络分区、脑裂"></a>网络分区、脑裂</h3><ul>
+<li><p>网络分区：网络通信故障，集群被分成了2部分</p>
+</li>
+<li><p>脑裂：</p>
+<ul>
+<li>原leader处于一个分区；</li>
+<li>另外一个分区选举出新的leader </li>
+<li>集群出现2个leader</li>
+</ul>
+</li>
+</ul>
+<h3 id="ZAB算法-1"><a href="#ZAB算法-1" class="headerlink" title="ZAB算法"></a>ZAB算法</h3><blockquote>
+<p><a href="http://thesecretlivesofdata.com/raft/#replication" target="_blank" rel="noopener">raft算法动图地址</a></p>
+</blockquote>
+<ul>
+<li><p><strong>ZAB与RAFT相似，区别如下：</strong></p>
+<p>1、zab心跳从follower到leader；raft相反</p>
+<p>2、zab任期叫epoch</p>
+</li>
+<li><p>一下以RAFT算法动图为例，分析ZAB算法</p>
+</li>
+</ul>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/脑裂.gif" alt=""></p>
+<p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/脑裂-1560463867696.png" alt=""></p>
+<h3 id="ZooKeeper服务器个数"><a href="#ZooKeeper服务器个数" class="headerlink" title="ZooKeeper服务器个数"></a>ZooKeeper服务器个数</h3><ul>
+<li>仲裁模式下，服务器个数最好为奇数个。</li>
+</ul>
+<pre><code class="table">quorum数=3/2+1=2
+集群数                quorum数            最大可容灾数
+5 / 2 + 1 = 3                            5-3=2
+6 / 2 +1 =  4                            6-4=2
+</code></pre>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p><img src="http://kflys.gitee.io/upic/2020/03/31/uPic/kfly-top/zookeeper分布式协调框架/assets/Image201906121639.png" alt=""></p>
+<pre><code class="shell">create -s -e /locker/node_ ndata
+</code></pre>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令</a></span>
+        <span>/</span>
+        
+        <span><a href="http://redisdoc.com/">Redis命令</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: 'zookeeper分布式协调框架',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>

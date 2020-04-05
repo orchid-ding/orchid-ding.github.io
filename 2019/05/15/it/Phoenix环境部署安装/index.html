@@ -299,50 +299,39 @@ bin/sqlline.py node01:2181
 !scan               Scan for installed JDBC drivers
 !script             Start saving a script to a file
 !set                Set a sqlline variable
-</code></pre></li>
+</code></pre><p><code>`</code></p>
+</li>
 </ul>
-<p>Variable        Value      Description<br>=============== ========== ================================<br>autoCommit      true/false Enable/disable automatic<br>                           transaction commit<br>autoSave        true/false Automatically save preferences<br>color           true/false Control whether color is used<br>                           for display<br>fastConnect     true/false Skip building table/column list<br>                           for tab-completion<br>force           true/false Continue running script even<br>                           after errors<br>headerInterval  integer    The interval between which<br>                           headers are displayed<br>historyFile     path       File in which to save command<br>                           history. Default is<br>                           $HOME/.sqlline/history (UNIX,<br>                           Linux, Mac OS),<br>                           $HOME/sqlline/history (Windows)<br>incremental     true/false Do not receive all rows from<br>                           server before printing the first<br>                           row. Uses fewer resources,<br>                           especially for long-running<br>                           queries, but column widths may<br>                           be incorrect.<br>isolation       LEVEL      Set transaction isolation level<br>maxColumnWidth  integer    The maximum width to use when<br>                           displaying columns<br>maxHeight       integer    The maximum height of the<br>                           terminal<br>maxWidth        integer    The maximum width of the<br>                           terminal<br>numberFormat    pattern    Format numbers using<br>                           DecimalFormat pattern<br>outputFormat    table/vertical/csv/tsv Format mode for<br>                           result display<br>propertiesFile  path       File from which SqlLine reads<br>                           properties on startup; default is<br>                           $HOME/.sqlline/sqlline.properties<br>                           (UNIX, Linux, Mac OS),<br>                           $HOME/sqlline/sqlline.properties<br>                           (Windows)<br>rowLimit        integer    Maximum number of rows returned<br>                           from a query; zero means no<br>                           limit<br>showElapsedTime true/false Display execution time when<br>                           verbose<br>showHeader      true/false Show column names in query<br>                           results<br>showNestedErrs  true/false Display nested errors<br>showWarnings    true/false Display connection warnings<br>silent          true/false Be more silent<br>timeout         integer    Query timeout in seconds; less<br>                           than zero means no timeout<br>trimScripts     true/false Remove trailing spaces from<br>                           lines read from script files<br>verbose         true/false Show verbose error messages and<br>                           debug info<br>!sql                Execute a SQL command<br>!tables             List all the tables in the database<br>!typeinfo           Display the type map for the current connection<br>!verbose            Set verbose mode on</p>
-<pre><code>* 1、建立employee的映射表
+<ul>
+<li><p>1、建立employee的映射表</p>
+<p>进入hbase客户端，创建一个普通表employee，并且有两个列族 company 和family</p>
+<pre><code>cd /kfly/install/hbase-1.2.0-cdh5.14.2/
+bin/hbase shell
+hbase(main):001:0&gt; create &#39;employee&#39;,&#39;company&#39;,&#39;family&#39;
+</code></pre></li>
+<li><p>2、添加数据</p>
+<pre><code>put &#39;employee&#39;,&#39;row1&#39;,&#39;company:name&#39;,&#39;ted&#39;
+put &#39;employee&#39;,&#39;row1&#39;,&#39;company:position&#39;,&#39;worker&#39;
+put &#39;employee&#39;,&#39;row1&#39;,&#39;family:tel&#39;,&#39;13600912345&#39;
+put &#39;employee&#39;,&#39;row2&#39;,&#39;company:name&#39;,&#39;michael&#39;
+put &#39;employee&#39;,&#39;row2&#39;,&#39;company:position&#39;,&#39;manager&#39;
+put &#39;employee&#39;,&#39;row2&#39;,&#39;family:tel&#39;,&#39;1894225698&#39;
+</code></pre></li>
+<li><p>3、建立hbase到phoenix的映射表</p>
+<p>node02进入到phoenix的客户端，然后创建映射表</p>
+<pre><code>cd kflyb/install/apache-phoenix-4.14.0-cdh5.14.2-bin
+bin/sqlline.py node01:2181
+</code></pre><p>执行语句</p>
+<pre><code class="sql">CREATE TABLE IF NOT EXISTS &quot;employee&quot; (&quot;no&quot; VARCHAR(10) NOT NULL PRIMARY KEY, &quot;company&quot;.&quot;name&quot; VARCHAR(30),&quot;company&quot;.&quot;position&quot; VARCHAR(20), &quot;family&quot;.&quot;tel&quot; VARCHAR(20), &quot;family&quot;.&quot;age&quot; INTEGER) column_encoded_bytes=0;
 
-  进入hbase客户端，创建一个普通表employee，并且有两个列族 company 和family
-
-  ~~~
-  cd /kfly/install/hbase-1.2.0-cdh5.14.2/
-  bin/hbase shell
-  hbase(main):001:0&gt; create &#39;employee&#39;,&#39;company&#39;,&#39;family&#39;
-  ~~~
-
-* 2、添加数据
-
-  ~~~
-  put &#39;employee&#39;,&#39;row1&#39;,&#39;company:name&#39;,&#39;ted&#39;
-  put &#39;employee&#39;,&#39;row1&#39;,&#39;company:position&#39;,&#39;worker&#39;
-  put &#39;employee&#39;,&#39;row1&#39;,&#39;family:tel&#39;,&#39;13600912345&#39;
-  put &#39;employee&#39;,&#39;row2&#39;,&#39;company:name&#39;,&#39;michael&#39;
-  put &#39;employee&#39;,&#39;row2&#39;,&#39;company:position&#39;,&#39;manager&#39;
-  put &#39;employee&#39;,&#39;row2&#39;,&#39;family:tel&#39;,&#39;1894225698&#39;
-  ~~~
-
-* 3、建立hbase到phoenix的映射表
-
-  node02进入到phoenix的客户端，然后创建映射表
-
-  ~~~
-  cd kflyb/install/apache-phoenix-4.14.0-cdh5.14.2-bin
-  bin/sqlline.py node01:2181
-  ~~~
-
-  执行语句
-
-  ```sql
-  CREATE TABLE IF NOT EXISTS &quot;employee&quot; (&quot;no&quot; VARCHAR(10) NOT NULL PRIMARY KEY, &quot;company&quot;.&quot;name&quot; VARCHAR(30),&quot;company&quot;.&quot;position&quot; VARCHAR(20), &quot;family&quot;.&quot;tel&quot; VARCHAR(20), &quot;family&quot;.&quot;age&quot; INTEGER) column_encoded_bytes=0;
-
-</code></pre><blockquote>
+</code></pre>
+<blockquote>
 <p>说明</p>
 <p>在建立映射表之前要说明的是，Phoenix是==大小写敏感==的，并且所有命令都是大写，如果你建的表名没有用双引号括起来，那么无论你输入的是大写还是小写，建立出来的表名都是大写的，如果你需要建立出同时包含大写和小写的表名和字段名，请把表名或者字段名用双引号括起来。 </p>
 </blockquote>
-<ul>
-<li>4、查询映射表数据</li>
+</li>
+<li><p>4、查询映射表数据</p>
+</li>
 </ul>
 <pre><code>0: jdbc:phoenix:node1:2181&gt; select * from &quot;employee&quot;;
 +-------+----------+-----------+--------------+-------+
@@ -394,10 +383,7 @@ bin/sqlline.py node01:2181
 </li>
 </ul>
 <p><img src="/Users/dingchuangshi/Downloads/20191115-HBase第四次课/phoenix安装部署/assets/1571282342354.png" alt="1571282342354"></p>
-<h3 id="5-3-3-通过dbeaver连接phoenix"><a href="#5-3-3-通过dbeaver连接phoenix" class="headerlink" title="5.3.3 通过dbeaver连接phoenix"></a>5.3.3 通过dbeaver连接phoenix</h3><p><img src="/Users/dingchuangshi/Downloads/20191115-HBase第四次课/phoenix安装部署/assets/1571282405612.png" alt="1571282405612"></p>
-<p><img src="/Users/dingchuangshi/Downloads/20191115-HBase第四次课/phoenix安装部署/assets/1571282452922.png" alt="1571282452922"></p>
-<p><img src="/Users/dingchuangshi/Downloads/20191115-HBase第四次课/phoenix安装部署/assets/1571282684917.png" alt="1571282684917"></p>
-<ul>
+<h3 id="5-3-3-通过dbeaver连接phoenix"><a href="#5-3-3-通过dbeaver连接phoenix" class="headerlink" title="5.3.3 通过dbeaver连接phoenix"></a>5.3.3 通过dbeaver连接phoenix</h3><ul>
 <li>注意：如果连接不上，可能不是操作配置的问题，有可能是因为dbeaver软件的问题，将dbeaver软件重启几次试试看</li>
 </ul>
 <h3 id="5-4-4-创建数据库表，并实现sql进行操作"><a href="#5-4-4-创建数据库表，并实现sql进行操作" class="headerlink" title="5.4.4 创建数据库表，并实现sql进行操作"></a>5.4.4 创建数据库表，并实现sql进行操作</h3><ul>
@@ -529,7 +515,10 @@ public class PhoenixSearch {
         <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
         <span>/</span>
         
-        <span><a href="https://wangchujiang.com/linux-command/">linux命令行工具</a></span>
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令</a></span>
+        <span>/</span>
+        
+        <span><a href="http://redisdoc.com/">Redis命令</a></span>
         <span>/</span>
         
         <span><a href="https://github.com/orchid-ding">github</a></span>

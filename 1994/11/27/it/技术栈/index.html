@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        技术栈 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#技术栈"><span class="toc-text">技术栈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据采集"><span class="toc-text">数据采集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Flume"><span class="toc-text">Flume</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LogState"><span class="toc-text">LogState</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Canal"><span class="toc-text">Canal</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据存储"><span class="toc-text">数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL"><span class="toc-text">MySQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PostgreSQL"><span class="toc-text">PostgreSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB"><span class="toc-text">MongoDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS"><span class="toc-text">HDFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HBase"><span class="toc-text">HBase</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓冲层"><span class="toc-text">缓冲层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算层"><span class="toc-text">计算层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资源调度层"><span class="toc-text">资源调度层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据检索层"><span class="toc-text">数据检索层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式调度工具"><span class="toc-text">分布式调度工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#辅助工具"><span class="toc-text">辅助工具</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        技术栈
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>1994-11-27 22:24:20</span></span>
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h1 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h1><h2 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h2><h3 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h3><h3 id="LogState"><a href="#LogState" class="headerlink" title="LogState"></a>LogState</h3><h3 id="Canal"><a href="#Canal" class="headerlink" title="Canal"></a>Canal</h3><h2 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h2><h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><h3 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h3><h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h2 id="缓冲层"><a href="#缓冲层" class="headerlink" title="缓冲层"></a>缓冲层</h2><p>ACTIVEMQ KAFKA REDIS</p>
+<h2 id="计算层"><a href="#计算层" class="headerlink" title="计算层"></a>计算层</h2><p>flink、SparkSQL、SparkStreaming、hive、MapReduce</p>
+<h2 id="资源调度层"><a href="#资源调度层" class="headerlink" title="资源调度层"></a>资源调度层</h2><p>yarn</p>
+<h2 id="数据检索层"><a href="#数据检索层" class="headerlink" title="数据检索层"></a>数据检索层</h2><p>Elasticsearch、impalla、phoenix、kylin</p>
+<h2 id="分布式调度工具"><a href="#分布式调度工具" class="headerlink" title="分布式调度工具"></a>分布式调度工具</h2><p>Zookeeper</p>
+<h2 id="辅助工具"><a href="#辅助工具" class="headerlink" title="辅助工具"></a>辅助工具</h2><p>sqoop、azkaban、hue、</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令</a></span>
+        <span>/</span>
+        
+        <span><a href="http://redisdoc.com/">Redis命令</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/gitment.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: '技术栈',
+        owner: 'orchid-ding',
+        repo: 'kfly-blog-comment',
+        oauth: {
+            client_id: '0770cdab79393197b6f5',
+            client_secret: '376fb6c7bcd5047718b356712f596b89e490360c',
+        },
+    })
+    gitment.render('comment-container')
+</script>
+
+
+
+
+</html>
