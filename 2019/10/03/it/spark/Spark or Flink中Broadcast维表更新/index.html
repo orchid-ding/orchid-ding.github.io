@@ -95,7 +95,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#案例分析"><span class="toc-text">案例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#维表方案"><span class="toc-text">维表方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预加载"><span class="toc-text">预加载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#在flink中，凡是继承了RichFunction的算子，都含有open方法。-可以再此方法里面实现对数据的预加载。"><span class="toc-text">在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#热存储关联"><span class="toc-text">热存储关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广播维表"><span class="toc-text">广播维表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#spark"><span class="toc-text">spark</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Flink"><span class="toc-text">Flink</span></a></li></ol></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#案例分析"><span class="toc-text">案例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#维表方案"><span class="toc-text">维表方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预加载"><span class="toc-text">预加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#热存储关联"><span class="toc-text">热存储关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广播维表"><span class="toc-text">广播维表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#spark"><span class="toc-text">spark</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Flink"><span class="toc-text">Flink</span></a></li></ol></li></ol></li></ol></li></ol>
 </div>
     
 </div>
@@ -158,7 +158,7 @@
 </li>
 </ul>
 <h2 id="维表方案"><a href="#维表方案" class="headerlink" title="维表方案"></a>维表方案</h2><h3 id="预加载"><a href="#预加载" class="headerlink" title="预加载"></a>预加载</h3><ul>
-<li><h4 id="在flink中，凡是继承了RichFunction的算子，都含有open方法。-可以再此方法里面实现对数据的预加载。"><a href="#在flink中，凡是继承了RichFunction的算子，都含有open方法。-可以再此方法里面实现对数据的预加载。" class="headerlink" title="在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。"></a>在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。</h4></li>
+<li>在flink中，凡是继承了RichFunction的算子，都含有open方法。 可以再此方法里面实现对数据的预加载。</li>
 </ul>
 <pre><code class="java"> RichMapFunction richMapFunction = new RichMapFunction&lt;String&gt;() {
                     @Override
