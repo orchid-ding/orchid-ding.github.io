@@ -95,7 +95,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#深入理解Spark-Streaming流量控制及反压机制"><span class="toc-text">深入理解Spark Streaming流量控制及反压机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Receiver-Stream"><span class="toc-text">Receiver Stream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-Stream"><span class="toc-text">Direct Stream</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spark-Streaming-反压机制"><span class="toc-text">Spark Streaming 反压机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于PID机制的速率估算器"><span class="toc-text">基于PID机制的速率估算器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RateController"><span class="toc-text">RateController</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RateController两个子类"><span class="toc-text">RateController两个子类</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ReceiverRateController"><span class="toc-text">ReceiverRateController</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#通过RPC发布流量阈值"><span class="toc-text">通过RPC发布流量阈值</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DirectKafkaRateController"><span class="toc-text">DirectKafkaRateController</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#反压机制"><span class="toc-text">反压机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#接收数据的两种方式"><span class="toc-text">接收数据的两种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Receiver-Stream"><span class="toc-text">Receiver Stream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-Stream"><span class="toc-text">Direct Stream</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spark-Streaming-反压机制"><span class="toc-text">Spark Streaming 反压机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于PID机制的速率估算器"><span class="toc-text">基于PID机制的速率估算器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RateController"><span class="toc-text">RateController</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RateController两个子类"><span class="toc-text">RateController两个子类</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ReceiverRateController"><span class="toc-text">ReceiverRateController</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#通过RPC发布流量阈值"><span class="toc-text">通过RPC发布流量阈值</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DirectKafkaRateController"><span class="toc-text">DirectKafkaRateController</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
 </div>
     
 </div>
@@ -147,14 +147,13 @@
 </span>
     </div>
     <div class="post-content ">
-        <h1 id="深入理解Spark-Streaming流量控制及反压机制"><a href="#深入理解Spark-Streaming流量控制及反压机制" class="headerlink" title="深入理解Spark Streaming流量控制及反压机制"></a>深入理解Spark Streaming流量控制及反压机制</h1><blockquote>
+        <h1 id="反压机制"><a href="#反压机制" class="headerlink" title="反压机制"></a>反压机制</h1><blockquote>
 <p>Spark Streaming 作为基于 <strong>微批次</strong>（micro-batch）的流处理框架，其流量的理想状态就是官方文档中所说的 “batches of data should be processed as fast as they are being generated”，即每一批次的处理时长 batchprocesstime 需要小于（但是又比较接近）我们设定的批次间隔 batchinterval。如果 batchprocesstime &gt; batchinterval，说明程序的处理能力不足，积累的数据越来越多，最终会造成 Executor 内存溢出。如果 batchprocesstime &lt;&lt; batch_interval ，说明系统有很长时间是空闲的，应该适当提升流量。</p>
 </blockquote>
-<p>##接收数据的两种方式</p>
-<h3 id="Receiver-Stream"><a href="#Receiver-Stream" class="headerlink" title="Receiver Stream"></a>Receiver Stream</h3><ul>
+<h2 id="接收数据的两种方式"><a href="#接收数据的两种方式" class="headerlink" title="接收数据的两种方式"></a>接收数据的两种方式</h2><h3 id="Receiver-Stream"><a href="#Receiver-Stream" class="headerlink" title="Receiver Stream"></a>Receiver Stream</h3><ul>
 <li>Spark Streaming 通过 Executor 里的 Receiver 组件源源不断地接收外部数据，并通过 BlockManager 将外部数据转化为 Spark 中的块进行存储。Spark Streaming 中Receiver方式机制的简单框图如下所示。</li>
 </ul>
-<p><img src="assets/image-20200407155624244.png" alt="image-20200407155624244"></p>
+<p><img src="https://kflys.gitee.io/upic/2020/04/07/uPic/spark%E5%8F%8D%E5%8E%8B/assets/image-20200407155624244.png" alt="image-20200407155624244"></p>
 <ul>
 <li>要限制 Receiver 接收数据的速率，可以在 SparkConf 中设置配置项 <code>spark.streaming.receiver.maxRate</code>，单位为数据条数/秒。</li>
 </ul>
@@ -320,8 +319,8 @@ object RateEstimator {
 <ul>
 <li>PIDRateEstimator 充分运用了工控领域中常见的 PID 控制器的思想。所谓 PID 控制器，即比例（Proportional）-积分（Integral）-微分（Derivative）控制器，本质上是一种反馈回路（loop feedback）。它把收集到的数据和一个设定值（setpoint）进行比较，然后用它们之间的差计算新的输入值，该输入值可以让系统数据尽量接近或者达到设定值。</li>
 </ul>
-<p><img src="assets/image-20200407162210511.png" alt="image-20200407162210511"></p>
-<p><img src="assets/image-20200407162234229.png" alt="image-20200407162234229"></p>
+<p><img src="https://kflys.gitee.io/upic/2020/04/07/uPic/spark%E5%8F%8D%E5%8E%8B/assets/image-20200407162210511.png" alt="image-20200407162210511"></p>
+<p><img src="https://kflys.gitee.io/upic/2020/04/07/uPic/spark%E5%8F%8D%E5%8E%8B/assets/image-20200407162234229.png" alt="image-20200407162234229"></p>
 <ul>
 <li><p>其中 e(t) 代表误差，即设定值与回授值之间的差。也就是说，比例单元对应当前误差，积分单元对应过去累积误差，而微分单元对应将来误差。控制三个单元的增益因子分别为 Kp、Ki、Kd。</p>
 </li>
@@ -457,7 +456,7 @@ private[receiver] abstract class RateLimiter(conf: SparkConf) extends Logging {
   }
 }
 </code></pre>
-<p><img src="assets/image-20200407164947975.png" alt="image-20200407164947975"></p>
+<p><img src="https://kflys.gitee.io/upic/2020/04/07/uPic/spark%E5%8F%8D%E5%8E%8B/assets/image-20200407164947975.png" alt="image-20200407164947975"></p>
 <h5 id="DirectKafkaRateController"><a href="#DirectKafkaRateController" class="headerlink" title="DirectKafkaRateController"></a>DirectKafkaRateController</h5><ul>
 <li>DirectKafkaRateController只继承了RateController，并未在 publish() 加过多的内容，我们主要看一下<code>DirectKafkaInputDStream</code>这个类。</li>
 </ul>
