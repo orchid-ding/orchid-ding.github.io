@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        HBase Coprocessor的实现与应用 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>简历</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase-Coprocessor的实现与应用"><span class="toc-text">HBase Coprocessor的实现与应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Coprocessor简介"><span class="toc-text">Coprocessor简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现目的"><span class="toc-text">实现目的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#灵感来源"><span class="toc-text">灵感来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#提供接口"><span class="toc-text">提供接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应用范围"><span class="toc-text">应用范围</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EndPoint实现"><span class="toc-text">EndPoint实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Protobuf定义"><span class="toc-text">Protobuf定义</span></a></li></ol></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        HBase Coprocessor的实现与应用
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-04-03 12:54:30</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#hbase" title="hbase">hbase</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#opentsdb" title="opentsdb">opentsdb</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="HBase-Coprocessor的实现与应用"><a href="#HBase-Coprocessor的实现与应用" class="headerlink" title="HBase Coprocessor的实现与应用"></a>HBase Coprocessor的实现与应用</h2><p><em>原文：叶铿    烽火大数据平台    研发负责人    <strong>转发</strong></em></p>
+<h3 id="Coprocessor简介"><a href="#Coprocessor简介" class="headerlink" title="Coprocessor简介"></a>Coprocessor简介</h3><ul>
+<li>HBase协处理器的灵感来自于Jeff  Dean  09年的演讲，根据该演讲实现类似于Bigtable的协处理器，包括以下特性:每个表服务器的任意子表都可以运行代码客户端的高层调用接口(客户端能够直接访问数据表的行地址，多行读写会自动分片成多个并行的RPC调用)，提供一个非常灵活的、可用于建立分布式服务的数据模型，能够自动化扩展、负载均衡、应用请求路由。HBase的协处理器灵感来自Bigtable，但是实现细节不尽相同。HBase建立框架为用户提供类库和运行时环境，使得代码能够在HBase Region Server和Master上面进行处理。</li>
+</ul>
+<h4 id="实现目的"><a href="#实现目的" class="headerlink" title="实现目的"></a>实现目的</h4><ul>
+<li>1.HBase无法轻易建立“二级索引”；</li>
+<li>2.执行求和、计数、排序等操作比较困难，必须通过MapReduce/Spark实现，对于简单的统计或聚合计算，可能会因为网络与IO开销大而带来性能问题。</li>
+</ul>
+<h4 id="灵感来源"><a href="#灵感来源" class="headerlink" title="灵感来源"></a>灵感来源</h4><ul>
+<li>灵感来源于Bigtable的协处理器，包含如下特性：<ul>
+<li>1.每个表服务器的任意子表都可以运行代码；</li>
+<li>2.客户端能够直接访问数据表的行，多行读写会自动分片成多个并行的RPC调用。</li>
+</ul>
+</li>
+</ul>
+<h4 id="提供接口"><a href="#提供接口" class="headerlink" title="提供接口"></a>提供接口</h4><ul>
+<li>1.RegionObserver：提供客户端的数据操纵事件钩子：Get、Put、Delete、Scan等</li>
+<li>2.WALObserver：提供WAL相关操作钩子；</li>
+<li>3.MasterObserver：提供DDL-类型的操作钩子。如创建、删除、修改数据表等；</li>
+<li>4.Endpoint：终端是动态RPC插件的接口，它的实现代码被安装在服务器端，能够通过HBase RPC调用唤醒。</li>
+</ul>
+<h4 id="应用范围"><a href="#应用范围" class="headerlink" title="应用范围"></a>应用范围</h4><ul>
+<li>Apache HBase实战技术总结–中国HBase技术社区</li>
+<li>1.通过使用RegionObserver接口可以实现二级索引的创建和维护；</li>
+<li>2.通过使用Endpoint接口，在对数据进行简单排序和sum，count等统计操作时，能够极大提高性能。</li>
+</ul>
+<p>本文将通过具体实例来演示两种协处理器的开发方法的详细实现过程。</p>
+<h3 id="EndPoint实现"><a href="#EndPoint实现" class="headerlink" title="EndPoint实现"></a>EndPoint实现</h3><ul>
+<li>在传统关系型数据库里面，可以随时的对某列进行求和sum，但是目前HBase目前所提供的接口，直接求和是比较困难的，所以先编写好服务端代码，并加载到对应的Table上，加载协处理器有几种方法，可以通过HTableDescriptor的add Coprocessor方法直接加载，同理也可以通过removeCoprocessor方法卸载协处理器。</li>
+<li>Endpoint协处理器类似传统数据库的存储过程，客户端调用Endpoint协处理器执行一段Server端代码，并将Server端代码的结果返回给Client进一步处理，最常见的用法就是进行聚合操作。举个例子说明：如果没有协处理器，当用户需要找出一张表中的最大数据即max聚合操作，必须进行全表扫描，客户端代码遍历扫描结果并执行求max操作，这样的方法无法利用底层集群的并发能力，而将所有计算都集中到Client端统一执行，效率非常低。但是使用Coprocessor，用户将求max的代码部署到HBase Server端，HBase将利用底层Cluster的多个节点并行执行求max的操作即在每个Region范围内执行求最大值逻辑，将每个Region的最大值在Region Server端计算出，仅仅将该max值返回给客户端。客户端进一步将多个Region的max进一步处理而找到其中的max，这样整体执行效率提高很多。但是一定要注意的是Coprocessor一定要写正确，否则导致RegionServer宕机</li>
+</ul>
+<p><img src="/Users/dingchuangshi/Documents/net-repository/kfly-blog/source/_posts/it/hbase/assets/HBase-EndPoint.png" alt="HBase-EndPoint"></p>
+<h4 id="Protobuf定义"><a href="#Protobuf定义" class="headerlink" title="Protobuf定义"></a>Protobuf定义</h4><ul>
+<li>如前所述，客户端和服务端之间需要进行RPC通信，所以两者间需要确定接口，当前版本的HBase的协处理器是通过Google  Protobuf协议来实现数据交换的，所以需要通过Protobuf来定义接口。如下所示：</li>
+</ul>
+<pre><code class="protobuf">option java_package = &quot;com.my.hbase.protobuf.generated&quot;;
+option java_outer_classname = &quot;AggregateProtos&quot;;
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+import &quot;Client.proto&quot;;
+
+message AggregateRequest {
+    required string interpreter_class_name = 1;
+    required Scan scan = 2;
+    optional bytes  interpreter_specific_bytes = 3;
+}
+
+message AggregateResponse {
+    repeated bytes first_part = 1;
+    optional bytes second_part = 2;
+}
+
+service AggregateService {
+    rpc GetMax (AggregateRequest) returns (AggregateResponse);
+    rpc GetMin (AggregateRequest) returns (AggregateResponse);
+    rpc GetSum (AggregateRequest) returns (AggregateResponse);
+    rpc GetRowNum (AggregateRequest) returns (AggregateResponse);
+    rpc GetAvg (AggregateRequest) returns (AggregateResponse);
+    rpc GetStd (AggregateRequest) returns (AggregateResponse);
+    rpc GetMedian (AggregateRequest) returns (AggregateResponse);
+}
+</code></pre>
+<ul>
+<li><p>可以看到这里定义7个聚合服务RPC，名字分别叫做GetMax、GetMin、GetSum等，本文通过GetSum进行举例，其他的聚合RPC也是类似的内部实现。RPC有一个入口参数，用消息AggregateRequest表示；RPC的返回值用消息AggregateResponse表示。Service是一个抽象概念，RPC的Server端可以看作一个用来提供服务的Service。在HBaseCoprocessor中Service就是Server端需要提供的EndpointCoprocessor服务，主要用来给HBase的Client提供服务。AggregateService.java是由Protobuf软件通过终端命令<code>protoc filename.proto --java_out=OUT_DIR</code>自动生成的，其作用是将.proto文件定义的消息结构以及服务转换成对应接口的RPC实现，其中包括如何构建request消息和response响应以及消息包含的内容的处理方式，并且将AggregateService包装成一个抽象类，具体的服务以类的方法的形式提供。AggregateService.java定义Client端与Server端通信的协议，代码中包含请求信息结构AggregateRequest、响应信息结构AggregateResponse、 提 供 的 服 务 种 类AggregateService，其中AggregateRequest中的interpreter_class_name指的是column  interpreter的类名，此类的作用在于将数据格式从存储类型解析成所需类型。AggregateService.java由于代码太长，在这里就不贴出来了。</p>
+</li>
+<li><p>下面我们来讲一下服务端的架构：</p>
+</li>
+<li><p>首先，EndpointCoprocessor是一个Protobuf  Service的实现，因此需要它必须继承某个ProtobufService。我们在前面已经通过proto文件定义Service，命名为AggregateService，因此Server端代码需要重载该类，其次作为HBase的协处理器，Endpoint 还必须实现HBase定义的协处理器协议，用Java的接口来定义。具体来说就是CoprocessorService和Coprocessor，这些HBase接口负责将协处理器和HBase 的RegionServer等实例联系起来以便协同工作。Coprocessor接口定义两个接口函数：start和stop。</p>
+</li>
+<li><p>加载Coprocessor之后Region打开的时候被RegionServer自动加载，并会调用器start 接口完成初始化工作。一般情况该接口函数仅仅需要将协处理器的运行上下文环境变量CoprocessorEnvironment保存到本地即可。</p>
+</li>
+<li><p>CoprocessorEnvironment保存协处理器的运行环境，每个协处理器都是在一个RegionServer进程内运行并隶属于某个Region。通过该变量获取Region的实例等HBase运行时环境对象。</p>
+</li>
+<li><p>Coprocessor接口还定义stop()接口函数，该函数在Region被关闭时调用，用来进行协处理器的清理工作。本文里我们没有进行任何清理工作，因此该函数什么也不干。我们的协处理器还需要实现CoprocessorService接口。该接口仅仅定义一个接口函数getService()。我们仅需要将本实例返回即可。</p>
+</li>
+<li><p>HBase的Region Server在接收到客户端的调用请求时，将调用该接口获取实现RPCService的实例，因此本函数一般情况下就是返回自身实例即可。完成以上三个接口函数之后，Endpoint的框架代码就已完成。每个Endpoint协处理器都必须实现这些框架代码而且写法雷同。</p>
+<p><img src="/Users/dingchuangshi/Documents/net-repository/kfly-blog/source/_posts/it/hbase/assets/Endpoint Service端实现.png" alt="Endpoint Service端实现"></p>
+</li>
+<li><p>Server端的代码就是一个Protobuf  RPC的Service实现，即通过Protobuf提供的某种服务。其开发内容主要包括</p>
+</li>
+</ul>
+<pre><code>
+</code></pre><p><a href="http://hbase.group/slides/188#page=120" target="_blank" rel="noopener">未完待续</a></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令</a></span>
+        <span>/</span>
+        
+        <span><a href="http://redisdoc.com/">Redis命令</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
