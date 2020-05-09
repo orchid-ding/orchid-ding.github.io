@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="天行健、君子以自强不息；地势坤，君子以厚德载物。">
+    <meta name="keyword"  content="兰草">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Mysql索引优化 - kfly的博客 | kfly&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1598291_q3el2wqimj.css" type="text/css">
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>kfly</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont iconhome"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+ 	   <li >
+                <a href="/spec/">
+                    <i class="iconfont iconzhuanti"></i>
+                    <span>专题</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引介绍"><span class="toc-text">索引介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#索引是什么"><span class="toc-text">索引是什么</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的优劣"><span class="toc-text">索引的优劣</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优势"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#劣势"><span class="toc-text">劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引的分类"><span class="toc-text">索引的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#组合索引"><span class="toc-text">组合索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#全文索引"><span class="toc-text">全文索引</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的使用"><span class="toc-text">索引的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用索引的情况"><span class="toc-text">使用索引的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么使用组合索引"><span class="toc-text">为什么使用组合索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引与原理分析"><span class="toc-text">索引与原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引存储结构"><span class="toc-text">索引存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B树索引"><span class="toc-text">B树索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-树索引"><span class="toc-text">B+树索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#区别-B-与-B"><span class="toc-text">区别 B 与 B+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非聚集索引-MyISAM"><span class="toc-text">非聚集索引(MyISAM)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主键索引"><span class="toc-text">主键索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#辅助索引"><span class="toc-text">辅助索引</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#聚集索引-InnoDB"><span class="toc-text">聚集索引(InnoDB)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主键索引-1"><span class="toc-text">主键索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#辅助索引-次要索引"><span class="toc-text">辅助索引(次要索引)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXPLAIN"><span class="toc-text">EXPLAIN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参数"><span class="toc-text">参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#id"><span class="toc-text">id</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#select-type"><span class="toc-text">select_type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#table"><span class="toc-text">table</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#type"><span class="toc-text">type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#possible-keys"><span class="toc-text">possible_keys</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#key"><span class="toc-text">key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#key-len"><span class="toc-text">key_len</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ref"><span class="toc-text">ref</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rows"><span class="toc-text">rows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#extra"><span class="toc-text">extra</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引使用注意事项"><span class="toc-text">索引使用注意事项</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> 君子谦谦，温和有礼，有才而不骄，得志而不傲，居于谷而不卑。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Mysql索引优化
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-05-08 15:48:11</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#mysql" title="mysql">mysql</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#索引" title="索引">索引</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h2 id="索引介绍"><a href="#索引介绍" class="headerlink" title="索引介绍"></a>索引介绍</h2><h3 id="索引是什么"><a href="#索引是什么" class="headerlink" title="索引是什么"></a>索引是什么</h3><ul>
+<li><p>索引是帮助MySQL<strong>高效获取数据</strong>的<strong>数据结构</strong>。更通俗的说，数据库索引好比是一本书前</p>
+<p>面的目录，能<strong>加快数据库的查询速度</strong>。</p>
+<ul>
+<li><p>方便查找—检索</p>
+</li>
+<li><p>索引查询内容—覆盖索引</p>
+</li>
+<li><p>排序</p>
+</li>
+</ul>
+</li>
+<li><p>一般来说索引本身也很大，不可能全部存储在内存中，因此<strong>索引往往是存储在磁盘上的文件中的</strong> (可能存储在单独的索引文件中，也可能和数据一起存储在数据文件中)。</p>
+</li>
+<li><p><strong>我们通常所说的索引，包括聚集索引、覆盖索引、组合索引、前缀索引、唯一索引等，没有特别说 明，默认都是使用**</strong>B+<em>**</em>树结构组织(多路搜索树，并不一定是二叉的)的索引。</p>
+</li>
+</ul>
+<h2 id="索引的优劣"><a href="#索引的优劣" class="headerlink" title="索引的优劣"></a>索引的优劣</h2><h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ul>
+<li><strong>可以提高数据检索的效率，降低数据库的**</strong>IO成本<strong>，类似于书的目录。 – 检索 </strong></li>
+<li><strong>通过</strong>索引列对数据进行排序**，降低数据排序的成本，降低了CPU的消耗。 –排序<ul>
+<li>被索引的列会自动进行排序，包括【单列索引】和【组合索引】，只是组合索引的排序要复 杂一些。</li>
+<li>如果按照索引列的顺序进行排序，对应order by语句来说，效率就会提高很多。</li>
+<li>where 索引列 在存储引擎层 处理 </li>
+<li>覆盖索引，不需要回表查询</li>
+</ul>
+</li>
+</ul>
+<h3 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h3><ul>
+<li><strong>索引会占据磁盘空间 索引虽然会提高查询效率，但是会降低更新表的效率</strong>。</li>
+<li>比如每次对表进行增删改操作，MySQL不 仅要保存数据，还有保存或者更新对应的索引文件。</li>
+</ul>
+<h3 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a><strong>索引的分类</strong></h3><p>####<strong>单列索引</strong></p>
+<ul>
+<li>普通索引:MySQL中基本索引类型，没有什么限制，允许在定义索引的列中插入重复值和空值， 纯粹为了查询数据更快一点。 add index 唯一索引:索引列中的值必须是唯一的，但是允许为空值. add unique index 主键索引:是一种特殊的唯一索引，不允许有空值。 pk</li>
+</ul>
+<h4 id="组合索引"><a href="#组合索引" class="headerlink" title="组合索引"></a><strong>组合索引</strong></h4><ul>
+<li>在表中的<strong>多个字段组合上创建的索引</strong> add index(col1,col2..) 组合索引的使用，需要遵循<strong>最左前缀原则(最左匹配原则，后面高级篇讲解)</strong>。 一般情况下，<strong>建议使用组合索引代替单列索引</strong>(主键索引除外，具体原因后面知识点讲解)。</li>
+</ul>
+<h4 id="全文索引"><a href="#全文索引" class="headerlink" title="全文索引"></a><strong>全文索引</strong></h4><ul>
+<li><p>只有在<strong>MyISAM**</strong>引擎、InnoDB**(5.6以后)上才能使用，而且只能在CHAR,VARCHAR,TEXT类型字段上</p>
+</li>
+<li><p>使用全文索引。 fulltext</p>
+</li>
+<li>优先级最高 先执行 不会执行其他索引 存储引擎 决定执行一个索引</li>
+</ul>
+<h2 id="索引的使用"><a href="#索引的使用" class="headerlink" title="索引的使用"></a>索引的使用</h2><ul>
+<li>单列索引之普通索引</li>
+</ul>
+<pre><code class="sql">create index index_name on table_name(column1)
+alter table table_name add index index_name(column_name(length))
+</code></pre>
+<ul>
+<li>单列索引之唯一索引</li>
+</ul>
+<pre><code class="sql">create unique index  index_name on table_name(column1)
+alter table table_name add unique index index_name(column_name(length))
+</code></pre>
+<ul>
+<li>单列索引之全文索引</li>
+</ul>
+<pre><code class="sql">create fulltext index index_name on table_name(column1)
+alter table table_name add fulltext index index_name(column_name(length))
+</code></pre>
+<ul>
+<li>组合索引</li>
+</ul>
+<pre><code class="sql">alter table table_name add index index_name(title(50),time(20))
+</code></pre>
+<ul>
+<li>删除索引</li>
+</ul>
+<pre><code class="sql">drop index index_name on table
+</code></pre>
+<ul>
+<li>查看索引</li>
+</ul>
+<pre><code class="sql">show index  from table_name 
+</code></pre>
+<h3 id="使用索引的情况"><a href="#使用索引的情况" class="headerlink" title="使用索引的情况"></a>使用索引的情况</h3><pre><code>1. 主键自动建立唯一索引
+2. 频繁作为查询条件的字段应该创建索引
+3. 多表关联查询中，关联字段应该创建索引 on 两边都要创建索引 
+4. 查询中排序的字段，应该创建索引
+5. 频繁查找字段 覆盖索引
+6. 查询中统计或者分组字段，应该创建索引 group by
+</code></pre><h3 id="为什么使用组合索引"><a href="#为什么使用组合索引" class="headerlink" title="为什么使用组合索引"></a><strong>为什么使用组合索引</strong></h3><ul>
+<li><p>mysql创建组合索引的规则是首先会对组合索引的最左边的，也就是第一个name字段的数据进行排 序，在第一个字段的排序基础上，然后再对后面第二个的cid字段进行排序。其实就相当于实现了类似 order by name cid这样一种排序规则。</p>
+</li>
+<li><p><strong>为了节省**</strong>mysql<strong>**索引存储空间以及提升搜索性能</strong>，可建立组合索引(<strong>能使用组合索引就不使用单列索 引</strong>)</p>
+</li>
+</ul>
+<h2 id="索引与原理分析"><a href="#索引与原理分析" class="headerlink" title="索引与原理分析"></a>索引与原理分析</h2><h2 id="索引存储结构"><a href="#索引存储结构" class="headerlink" title="索引存储结构"></a>索引存储结构</h2><ul>
+<li>索引是在<strong>存储引擎中实现</strong>的，也就是说不同的存储引擎，会使用不同的索引 </li>
+<li><strong>MyISAM**</strong>和InnoDB存储引擎<strong>:只支持</strong>B+ TREE索引<strong>， 也就是说</strong>默认使用BTREE，不能够更换</li>
+<li><p>MEMORY/HEAP存储引擎:支持HASH和BTREE索引</p>
+</li>
+<li><p>B tree 和B+树  参见<a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" target="_blank" rel="noopener">https://www.cs.usfca.edu/~galles/visualization/Algorithms.html</a></p>
+</li>
+</ul>
+<h3 id="B树索引"><a href="#B树索引" class="headerlink" title="B树索引"></a>B树索引</h3><ul>
+<li>B树是为了磁盘或其它存储设备而设计的一种多叉(下面你会看到，相对于二叉，B树每个内结点有多个 分支，即多叉)平衡查找树。 多叉平衡</li>
+<li>B树的高度一般都是在2-4这个高度，树的高度直接影响IO读写的次数。 </li>
+<li>如果是三层树结构—支撑的数据可以达到20G，如果是四层树结构—支撑的数据可以达到几十T</li>
+</ul>
+<p><img src="https://gitee.com/kflys/uPic/raw/master/2020/05/09/uPic/image-20200509173252246.png" alt="image-20200509173252246"></p>
+<h3 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h3><p><img src="https://gitee.com/kflys/uPic/raw/master/2020/05/09/uPic/image-20200509173110723.png" alt="image-20200509173110723"></p>
+<h3 id="区别-B-与-B"><a href="#区别-B-与-B" class="headerlink" title="区别 B 与 B+"></a>区别 B 与 B+</h3><ul>
+<li>B树是非叶子节点和叶子节点都会存储数据。  </li>
+<li>B+树只有叶子节点才会存储数据，而且存储的数据都是在一行上，而且这些数据都是有指针指向的，也 就是有顺序的。 索引列 order by </li>
+</ul>
+<h3 id="非聚集索引-MyISAM"><a href="#非聚集索引-MyISAM" class="headerlink" title="非聚集索引(MyISAM)"></a>非聚集索引(MyISAM)</h3><ul>
+<li><p>B+树叶子节点只会存储数据行(数据文件)的指针，简单来说<strong>数据和索引不在一起</strong>，就是非聚集 索引。</p>
+</li>
+<li><p><strong>非聚集索引包含主键索引和辅助索引都会存储指针的值</strong></p>
+</li>
+</ul>
+<h4 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h4><p><img src="https://gitee.com/kflys/uPic/raw/master/2020/05/09/uPic/MyISAM中B+树索引.png" alt="MyISAM中B+树索引"></p>
+<h4 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h4><ul>
+<li>在MyISAM中，主索引和辅助索引没有什么区别，只不过主索引要求是唯一的，但是辅助索引可以重叠。</li>
+<li><strong>同样也是一颗</strong> <strong>B+Tree,data</strong> <strong>域保存数据记录的地址。</strong>因此,MyISAM 中索引检索的算法为首先按照 B+Tree 搜索算法搜索索引,如果指定的 Key 存在,则取出其data 域的值,然后以 data 域的值为地址,读取 相应数据记录。</li>
+</ul>
+<h3 id="聚集索引-InnoDB"><a href="#聚集索引-InnoDB" class="headerlink" title="聚集索引(InnoDB)"></a>聚集索引(InnoDB)</h3><ul>
+<li>主键索引(聚集索引)的叶子节点会存储数据行，<strong>也就是说数据和索引是在一起，这就是聚集索 引。</strong></li>
+<li>辅助索引只会存储主键值。</li>
+<li>如果没有没有主键，则使用唯一索引建立聚集索引;如果没有唯一索引，MySQL会按照一定规则 创建聚集索引。</li>
+</ul>
+<h4 id="主键索引-1"><a href="#主键索引-1" class="headerlink" title="主键索引"></a>主键索引</h4><ul>
+<li>InnoDB 要求表必须有主键(MyISAM 可以没有),如果没有显式指定,则 MySQL系统会自动选择一个可以 唯一标识数据记录的列作为主键,如果不存在这种列,则MySQL 自动为 InnoDB 表生成一个隐含字段作为 主键,类型为长整形。</li>
+</ul>
+<p><img src="https://gitee.com/kflys/uPic/raw/master/2020/05/09/uPic/image-20200509181204827.png" alt="image-20200509181204827"></p>
+<ul>
+<li>上图是 InnoDB 主索引(同时也是数据文件)的示意图,可以看到叶节点包含了完整的数据记录。这种索引 叫做聚集索引。因为 InnoDB 的数据文件本身要按主键聚集,</li>
+</ul>
+<h4 id="辅助索引-次要索引"><a href="#辅助索引-次要索引" class="headerlink" title="辅助索引(次要索引)"></a><strong>辅助索引(次要索引)</strong></h4><ul>
+<li>与 MyISAM 索引的不同是 InnoDB 的辅助索引 data 域<strong>存储相应记录主键的值而不是地址</strong>。换 句话说,InnoDB 的所有辅助索引都引用主键作为 data 域。</li>
+<li>聚集索引这种实现方式使得按主键的搜索十分高效,但是辅助索引搜索需要检索两遍索引:<ul>
+<li>首先检索辅助 索引获得主键,</li>
+<li>然后用主键到主索引中检索获得记录。</li>
+</ul>
+</li>
+<li><code>select * from user where name=&#39;Alice</code> 回表查询 检索两次 非主键索引 — pk—索引—&gt;数据</li>
+<li><code>select id,name from user where name=&#39;Alice&#39;</code> 不需要回表 在辅助索引树上就可以查询到了</li>
+</ul>
+<pre><code class="java">//  注意：
+// 引申:为什么不建议使用过长的字段作为主键? 因为所有辅助索引都引用主索引,过长的主索引会令辅助索引变得过大。
+// 请尽量在 InnoDB 上采用自增字段做表的主键。
+</code></pre>
+<h2 id="EXPLAIN"><a href="#EXPLAIN" class="headerlink" title="EXPLAIN"></a>EXPLAIN</h2><ul>
+<li>MySQL 提供了一个 <strong>EXPLAIN</strong> <strong>命令</strong>, 它可以<strong>对</strong> <strong>SELECT</strong> <strong>语句的执行计划进行分析</strong>, 并输出 SELECT 执行的 详细信息, 以供开发人员针对性优化.</li>
+<li>使用explain这个命令来查看一个这些SQL语句的执行计划，查看该SQL语句有没有使用上了索引，有没 有做全表扫描，这都可以通过explain命令来查看。</li>
+<li>可以通过explain命令深入了解MySQL的基于开销的优化器，还可以获得很多可能被优化器考虑到的访 问策略的细节，以及当运行SQL语句时哪种策略预计会被优化器采用。</li>
+</ul>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><pre><code class="sql">-- explain 展示数据有10列，分别为
+id、select_type、table、type、possible_keys、key、key_len、ref、rows、Extra
+</code></pre>
+<h4 id="id"><a href="#id" class="headerlink" title="id"></a>id</h4><ul>
+<li><p>每个 SELECT语句都会自动分配的一个唯一标识符. </p>
+</li>
+<li><p>表示查询中操作表的顺序，有三种情况:</p>
+<ul>
+<li>id相同:执行顺序由上到下</li>
+<li>id不同:如果是子查询，id号会自增，<strong>id**</strong>越大，优先级越高**。 </li>
+<li>id相同的不同的同时存在</li>
+</ul>
+</li>
+<li><p>id列为null的就表示这是一个结果集，不需要使用它来进行查询。</p>
+</li>
+</ul>
+<h4 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h4><blockquote>
+<p> 查询类型、主要用于区分普通查询、联合查询、子查询等复杂查询。</p>
+</blockquote>
+<ul>
+<li><p>simple </p>
+<ul>
+<li>表示不需要union操作或者不包含子查询的简单select查询。有连接查询时，外层的查询为simple，且 只有一个</li>
+</ul>
+</li>
+<li><p><strong>primary</strong></p>
+<ul>
+<li>一个需要union操作或者含有子查询的select，位于最外层的单位查询的select_type即为primary。且只 有一个</li>
+</ul>
+</li>
+<li><p><strong>subquery</strong></p>
+<ul>
+<li>除了from字句中包含的子查询外，其他地方出现的子查询都可能是subquery</li>
+</ul>
+</li>
+<li><p><strong>dependent subquery</strong></p>
+<ul>
+<li>与dependent union类似，表示这个subquery的查询要受到外部表查询的影响</li>
+</ul>
+</li>
+<li><p><strong>union</strong></p>
+<ul>
+<li>union连接的两个select查询，第一个查询是PRIMARY，除了第一个表外，第二个以后的表select_type都是union</li>
+</ul>
+</li>
+<li><p>dependent union</p>
+<ul>
+<li>与union一样，出现在union 或union all语句中，但是这个查询要受到外部查询的影响</li>
+</ul>
+</li>
+<li><p><strong>union result</strong></p>
+<ul>
+<li>包含union的结果集，在union和union all语句中,因为它不需要参与查询，所以id字段为null</li>
+</ul>
+</li>
+<li><p><strong>derived</strong> </p>
+<ul>
+<li>from字句中出现的子查询，也叫做派生表，其他数据库中可能叫做内联视图或嵌套select</li>
+</ul>
+</li>
+</ul>
+<h4 id="table"><a href="#table" class="headerlink" title="table"></a>table</h4><blockquote>
+<ol>
+<li>显示的查询表名，如果查询使用了别名，那么这里显示的是别名 </li>
+<li>如果不涉及对数据表的操作，那么这显示为null </li>
+<li>如果显示为尖括号括起来的就表示这个是临时表，后边的N就是执行计划中的id，表示结果来自于 这个查询产生。</li>
+<li>如果是尖括号括起来的，与类似，也是一个临时表，表示这个结果来自于union查 询的id为M,N的结果集。</li>
+</ol>
+</blockquote>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><pre><code class="sql">-- 依次从好到差:
+-- 除了all之外，其他的type都可以使用到索引，除了index_merge之外，其他的type只可以用到一个索引
+-- 最少要索引使用到range级别。
+system
+-- 表中只有一行数据或者是空表。
+const
+-- 使用唯一索引或者主键，返回记录一定是1行记录的等值where条件时，通常type是const。其他数据库也叫做唯一索引扫描
+eq_ref
+-- 关键字:连接字段主键或者唯一性索引。
+-- 此类型通常出现在多表的 join 查询, 表示对于前表的每一个结果, 都只能匹配到后表的一行结果. 并且查 询的比较操作通常是 &#39;=&#39;, 查询效率较高.
+ref
+-- 针对非唯一性索引，使用等值(=)查询非主键。或者是使用了最左前缀规则索引的查询。
+fulltext 
+-- 全文索引检索，要注意，全文索引的优先级很高，若全文索引和普通索引同时存在时，mysql不管代 价，优先选择使用全文索引
+ref_or_null
+-- 与ref方法类似，只是增加了null值的比较。实际用的不多。
+unique_subquery
+-- 用于where中的in形式子查询，子查询返回不重复值唯一值
+index_subquery
+-- 用于in形式子查询使用到了辅助索引或者in常数列表，子查询可能返回重复值，可以使用索引将子查询 去重。
+range
+-- 索引范围扫描，常见于使用&gt;,&lt;,is null,between ,in ,like等运算符的查询中。
+index_merge
+-- 表示查询使用了两个以上的索引，最后取交集或者并集，常见and ，or的条件使用了不同的索引，官方 排序这个在ref_or_null之后，但是实际上由于要读取所个索引，性能可能大部分时间都不如range
+index
+-- 关键字:条件是出现在索引树中的节点的。可能没有完全匹配索引。
+-- 索引全表扫描，把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可 以使用索引排序或者分组的查询。
+ALL
+-- 这个就是全表扫描数据文件，然后再在server层进行过滤返回符合要求的记录。
+</code></pre>
+<h4 id="possible-keys"><a href="#possible-keys" class="headerlink" title="possible_keys"></a><strong>possible_keys</strong></h4><blockquote>
+<p>此次查询中可能选用的索引，一个或多个</p>
+</blockquote>
+<h4 id="key"><a href="#key" class="headerlink" title="key"></a>key</h4><blockquote>
+<p>查询真正使用到的索引，select_type为index_merge时，这里可能出现两个以上的索引，其他的 select_type这里只会出现一个。</p>
+</blockquote>
+<h4 id="key-len"><a href="#key-len" class="headerlink" title="key_len"></a>key_len</h4><blockquote>
+<ol>
+<li>用于处理查询的索引长度，如果是单列索引，那就整个索引长度算进去，如果是多列索引，那么查 询不一定都能使用到所有的列，具体使用到了多少个列的索引，这里就会计算进去，没有使用到的 列，这里不会计算进去。 </li>
+<li>留意下这个列的值，算一下你的多列索引总长度就知道有没有使用到所有的列了。</li>
+<li><em>key_len只计算 where 条件用到的索引长度，而排序和分组就算用到了索引也不会计算到key_len中</em></li>
+</ol>
+</blockquote>
+<h4 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h4><blockquote>
+<ol>
+<li>如果是使用的常数等值查询，这里会显示const </li>
+<li>如果是连接查询，被驱动表的执行计划这里会显示驱动表的关联字段 </li>
+<li>如果是条件使用了表达式或者函数，或者条件列发生了内部隐式转换，这里可能显示为func</li>
+</ol>
+</blockquote>
+<h4 id="rows"><a href="#rows" class="headerlink" title="rows"></a><strong>rows</strong></h4><blockquote>
+<p>这里是执行计划中估算的扫描行数，不是精确值(InnoDB不是精确的值，MyISAM是精确的值，主要原 因是InnoDB里面使用了MVCC并发机制)</p>
+</blockquote>
+<h4 id="extra"><a href="#extra" class="headerlink" title="extra"></a><strong>extra</strong></h4><blockquote>
+<p>这个列包含不适合在其他列中显示单十分重要的额外的信息，这个列可以显示的信息非常多，有几十 种，常用的有</p>
+</blockquote>
+<ul>
+<li>using temporary<ul>
+<li>表示使用了临时表存储中间结果。 </li>
+<li>MySQL在对查询结果<strong>order by**</strong>和group by**时使用临时表</li>
+<li>临时表可以是内存临时表和磁盘临时表，执行计划中看不出来，需要查看status变量， used_tmp_table，used_tmp_disk_table才能看出来。</li>
+</ul>
+</li>
+<li><p><strong>no tables used</strong></p>
+<ul>
+<li>不带from字句的查询或者From dual查询</li>
+<li><strong>使用</strong>not in()形式子查询或not exists运算符的连接查询，这种叫做反连接即，一般连接查询是先查询内表，再查询外表，反连接就是先查询外表，再查询内表。</li>
+</ul>
+</li>
+<li><p><strong>using filesort</strong></p>
+<ul>
+<li>排序时无法使用到索引时，就会出现这个。</li>
+<li>常见于order by和group by语句中 说明MySQL会使用一个外部的索引排序，而不是按照索引顺序进行读取。 </li>
+<li>MySQL中无法利用索引完成的排序操作成为 ’文件排序‘</li>
+</ul>
+</li>
+<li><p><strong>using index</strong></p>
+<blockquote>
+<p>查询时<strong>不需要回表查询</strong>，直接通过索引就可以获取查询的数据。</p>
+</blockquote>
+<ul>
+<li>表示相应的SELECT查询中使用到了<strong>覆盖索引(**</strong>Covering Index)**，避免访问表的数据行，效率不 错!</li>
+<li>如果同时出现Using Where ，说明索引被用来执行查找索引键值</li>
+<li>如果没有同时出现Using Where ，表明索引用来读取数据而非执行查找动作。</li>
+</ul>
+</li>
+<li><p><strong>using where**</strong></p>
+<ul>
+<li>表示存储引擎返回的记录并不是所有的都满足查询条件，需要在server层进行过滤。</li>
+<li>查询条件中分为限制条件和检查条件，5.6之前，存储引擎只能根据限制条件扫描数据并返回，然 后server层根据检查条件进行过滤再返回真正符合查询的数据。5.6.x之后支持<strong>ICP</strong>特性，可以把检 查条件也下推到存储引擎层，不符合检查条件和限制条件的数据，直接不读取，这样就大大减少了 存储引擎扫描的记录数量。extra列显示using index condition</li>
+</ul>
+</li>
+<li><p><strong>firstmatch(tb_name)</strong></p>
+<ul>
+<li>5.6.x开始引入的优化子查询的新特性之一，常见于where字句含有in()类型的子查询。如果内表的数据 量比较大，就可能出现这个</li>
+</ul>
+</li>
+<li><p><strong>loosescan(m..n)</strong></p>
+<ul>
+<li>5.6.x之后引入的优化子查询的新特性之一，在in()类型的子查询中，子查询返回的可能有重复记录时， 就可能出现这个</li>
+<li>除了这些之外，还有很多查询数据字典库，执行计划过程中就发现不可能存在结果的一些提示信息</li>
+</ul>
+</li>
+<li><p><strong>filtered</strong></p>
+<ul>
+<li>使用explain extended时会出现这个列，5.7之后的版本默认就有这个字段，不需要使用explain extended了。这个字段表示存储引擎返回的数据在server层过滤后，剩下多少满足查询的记录数量的比 例，注意是百分比，不是具体记录数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">https://segmentfault.com/a/1190000008131735</a></p>
+<p> <a href="https://blog.csdn.net/rewiner120/article/details/70598797" target="_blank" rel="noopener">https://blog.csdn.net/rewiner120/article/details/70598797</a></p>
+<h3 id="索引使用注意事项"><a href="#索引使用注意事项" class="headerlink" title="索引使用注意事项"></a>索引使用注意事项</h3><pre><code class="sql">-- 尽量使用全值匹配,条件与索引一一对应
+-- 最佳左前缀法则
+    -- 如果索引了多个列，要遵守最佳左前缀法则。指的是查询从索引的最左前列开始 并且不跳过索引中的 列。
+-- 不要在索引上做计算
+    -- 不要进行这些操作:计算、函数、自动/手动类型转换，不然会导致索引失效而转向全表扫描
+-- 尽量使用覆盖索引
+    -- 尽量使用覆盖索引(只查询索引的列)，也就是索引列和查询列一致，减少select *
+-- 索引字段上尽量不要使用不等
+    -- 索引字段上使用(!= 或者 &lt; &gt;)判断时，会导致索引失效而转向全表扫描 注:主键索引会使用范围索引，辅助索引会失效
+-- 主键索引字段上不可以判断null
+    -- 主键字段上不可以使用 null
+    -- 索引字段上使用 is null / is not null 判断时，可使用索引
+-- 索引字段使用like不以通配符开头
+    -- 索引字段使用like以通配符开头(‘%字符串’)时，会导致索引失效而转向全表扫描
+-- 索引字段字符串要加单引号
+    -- 索引字段是字符串，但查询时不加单引号，会导致索引失效而转向全表扫描
+-- 索引字段不要使用or
+    -- 索引字段使用 or 时，会导致索引失效而转向全表扫描
+</code></pre>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://blog.sev7e0.site/">大数据施工现场</a></span>
+        <span>/</span>
+        
+        <span><a href="https://wangchujiang.com/linux-command/">linux命令</a></span>
+        <span>/</span>
+        
+        <span><a href="http://redisdoc.com/">Redis命令</a></span>
+        <span>/</span>
+        
+        <span><a href="https://github.com/orchid-ding">github</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

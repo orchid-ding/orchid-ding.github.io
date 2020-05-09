@@ -95,7 +95,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase-Coprocessor的实现与应用"><span class="toc-text">HBase Coprocessor的实现与应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Coprocessor简介"><span class="toc-text">Coprocessor简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现目的"><span class="toc-text">实现目的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#灵感来源"><span class="toc-text">灵感来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#提供接口"><span class="toc-text">提供接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应用范围"><span class="toc-text">应用范围</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EndPoint实现"><span class="toc-text">EndPoint实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Protobuf定义"><span class="toc-text">Protobuf定义</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase-Coprocessor的实现与应用"><span class="toc-text">HBase Coprocessor的实现与应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Coprocessor简介"><span class="toc-text">Coprocessor简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现目的"><span class="toc-text">实现目的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#灵感来源"><span class="toc-text">灵感来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#提供接口"><span class="toc-text">提供接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应用范围"><span class="toc-text">应用范围</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EndPoint实现"><span class="toc-text">EndPoint实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Protobuf定义"><span class="toc-text">Protobuf定义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Endpoint-协处理的基本框架"><span class="toc-text">Endpoint 协处理的基本框架</span></a></li></ol></li></ol>
 </div>
     
 </div>
@@ -169,9 +169,11 @@
 <li>4.Endpoint：终端是动态RPC插件的接口，它的实现代码被安装在服务器端，能够通过HBase RPC调用唤醒。</li>
 </ul>
 <h4 id="应用范围"><a href="#应用范围" class="headerlink" title="应用范围"></a>应用范围</h4><ul>
-<li>Apache HBase实战技术总结–中国HBase技术社区</li>
+<li>Apache HBase实战技术总结–中国HBase技术社区<ul>
 <li>1.通过使用RegionObserver接口可以实现二级索引的创建和维护；</li>
 <li>2.通过使用Endpoint接口，在对数据进行简单排序和sum，count等统计操作时，能够极大提高性能。</li>
+</ul>
+</li>
 </ul>
 <p>本文将通过具体实例来演示两种协处理器的开发方法的详细实现过程。</p>
 <h3 id="EndPoint实现"><a href="#EndPoint实现" class="headerlink" title="EndPoint实现"></a>EndPoint实现</h3><ul>
@@ -228,7 +230,14 @@ service AggregateService {
 <p><img src="/Users/dingchuangshi/Documents/net-repository/kfly-blog/source/_posts/it/hbase/assets/Endpoint Service端实现.png" alt="Endpoint Service端实现"></p>
 </li>
 <li><p>Server端的代码就是一个Protobuf  RPC的Service实现，即通过Protobuf提供的某种服务。其开发内容主要包括</p>
+<ul>
+<li>实现Coprocessor的基本框架代码</li>
+<li>实现服务的RPC具体代码</li>
+</ul>
 </li>
+</ul>
+<h3 id="Endpoint-协处理的基本框架"><a href="#Endpoint-协处理的基本框架" class="headerlink" title="Endpoint 协处理的基本框架"></a>Endpoint 协处理的基本框架</h3><ul>
+<li>Endpoint 是一个Server端Service的具体实现，其实现有一些框架代码，这些框架代码与具体的业务需求逻辑无关。仅仅是为了和HBase运行时环境协同工作而必须遵循和完成的一些粘合代码。因此多数情况下仅仅需要从一个例子程序拷贝过来并进行命名修改即可。不过我们还是完整地对这些粘合代码进行粗略的讲解以便更好地理解代码</li>
 </ul>
 <pre><code>
 </code></pre><p><a href="http://hbase.group/slides/188#page=120" target="_blank" rel="noopener">未完待续</a></p>
