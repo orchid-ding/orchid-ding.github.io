@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Elasticasearch安装部署 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/57.538bf884.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>ELK笔记</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/130694/" class="sidebar-link">什么是ELK</a></li><li><a href="/pages/0f597f/" aria-current="page" class="active sidebar-link">Elasticasearch安装部署</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0f597f/#_1-什么是elasticsearch" class="sidebar-link">1. 什么是ElasticSearch</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#_2-elasticsearch使用案例" class="sidebar-link">2. ElasticSearch使用案例</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#_3-elasticsearch的安装部署" class="sidebar-link">3. Elasticsearch的安装部署</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0f597f/#第一步-创建普通用户" class="sidebar-link">第一步 ：创建普通用户</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#第二步-下载并上传压缩-包-然后解压" class="sidebar-link">第二步 ：下载并上传压缩 包， 然后解压</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#第三步-修改配置文件" class="sidebar-link">第三步 ：修改配置文件</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#第四步-将安装包分发到其他服务器上面" class="sidebar-link">第四步 ：将安装包分发到其他服务器上面</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#第五步-node02-与-node03-修改es-配置文件" class="sidebar-link">第五步 ：node02 与 node03 修改es 配置文件</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#第六步-修改系统-配置-解决启动时候的问题" class="sidebar-link">第六步 ： 修改系统 配置 ， 解决启动时候的问题</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#第七步-启动-es服务" class="sidebar-link">第七步 ：启动 ES服务</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#_4、-安装elasticsearch-head-插件" class="sidebar-link">4、 安装elasticsearch-head 插件</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0f597f/#_1-、node01-机器安装nodejs" class="sidebar-link">1  、node01 机器安装nodejs</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#_2-、node01-机器-安装-elasticsearch-head-插件" class="sidebar-link">2  、node01 机器 安装 elasticsearch-head 插件</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#_3-node01-机器-启动head服务" class="sidebar-link">3. node01 机器 启动head服务</a></li><li class="sidebar-sub-header"><a href="/pages/0f597f/#_4-访问elasticsearch-head界面" class="sidebar-link">4. 访问elasticsearch-head界面</a></li></ul></li></ul></li><li><a href="/pages/6255b5/" class="sidebar-link">ElasticaSearch基础知识</a></li><li><a href="/pages/0898ba/" class="sidebar-link">ElasticaSearch Api操作</a></li><li><a href="/pages/d0dbbc/" class="sidebar-link">LogState日志采集</a></li><li><a href="/pages/34a56b/" class="sidebar-link">Kibana报表展示</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8AELK%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《ELK》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=ELK%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>ELK笔记</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-11-24</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABGpJREFUSA3tVVtoXFUU3fvOI53UlmCaKIFmwEhsE7QK0ipFEdHEKpXaZGrp15SINsXUWvBDpBgQRKi0+KKoFeJHfZA+ED9KKoIU2gYD9UejTW4rVIzm0VSTziPzuNu1z507dibTTjL4U/DAzLn3nL3X2o91ziX6f9wMFdh6Jvbm9nNSV0msViVO6tN1Rm7NMu2OpeJ9lWBUTDxrJbYTS0hInuwciu9eLHlFxCLCZEk3MegsJmZ5K/JD6t7FkFdEvGUo1g7qJoG3MHImqRIn8/nzY1K9UPKKiJmtnUqHVE3Gbuay6vJE/N2FEmuxFjW2nUuE0yQXRRxLiTUAzs36zhZvOXJPdX850EVnnLZkB8prodQoM5JGj7Xk2mvC7JB8tG04Ef5PiXtG0UtxupRQSfTnBoCy554x18yJHI6I+G5Eru4LHmPJZEQsrvPUbMiA8G/WgMK7w7I+ez7++o2ANfbrjvaOl1tFMs+htG3IrZH9/hDX1Pr8Tc0UvH8tcX29KzAgIGcEkINyW5BF9x891hw6VYqgJHEk0huccS7vh3C6gTiODL+26huuBtbct8eZnqLML8PkxGYpuPZBqtqwkSjgc4mB5gbgig5i+y0UDK35LMxXisn9xQtK+nd26gTIHsHe/oblK/b29fUmN/8Y+9jAQrnBp56m1LcDlDp9irKTExSKduXJVWSqdBMA08pEJnEIOB3FPPMybu/oeV8zFeYN3xx576Q6RH+VmplE4ncQV5v+5rzSoyOU7PuEAg8g803PwBJ0CExno/jcMbN8tONYeOmHiuUNryvm3fRUy4tMPVLdAGkUhNWuggGrJcXPv+ouCjz0MKUHz1J2/E8IC9nqTabcxgaBYM0hPhD5Y65FsbxRQKxCQrDjDctW7PUM3HuZunFyifSAqEfuzCp48Il24luWUWZoyJCaPR82jE0+kFA643wRFVni4RYSq3ohJO2pZ7B5dO4xkDWbEpossJPLSrPjYID8rS2UHTlvyNxqIGsg674XJJ7vnh5L7PNwC4hh2sjCI96mzszOTpxLF0T7l88Yz7lAuK6OnL8gXLOnTvpzSb22YG8W7us3jSebFHeeqnXRG1vt+MoUM84LQIBmMsCTAcOauTh0T0l0neQK7m2bLMt2mGxU3HYssS0J2cdv5wljlPsrIuZLAG/2DOZIXgCYT8uMGZN+e2kSirfxZOPCsC0f24nTZzspnVn9VePS1Z5vubmAGGXG8ZFno9Hel0yfA5ZPhF7Dh972BQJ2qCpgH67lmWtBYbvk6sz02wjky2vXyz0XErP/kFB619js1BtwfOV4OPRqOQBjy3Qbk18vigUPPSD5ceHnwck7W9bhAqZdd7SuG7w4/P2F/GaJh8c7e9qgow+Q7cGBo+98WsLkuktFqiZabtXuQTu/Y5ETbR0v7tNSFnvrmu6pjdoan2KjMu8q/Hmj1EfCO2ZGfEIbIXKUlw8qaX9/b2oeSJmFksSeT/Fn0V3nSypChh4Gjh74ybO9aeZ/AN2dwciu2/MhAAAAAElFTkSuQmCC">
+          Elasticasearch安装部署
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-什么是elasticsearch"><a href="#_1-什么是elasticsearch" class="header-anchor">#</a> 1. 什么是ElasticSearch</h2> <blockquote><p>Elaticsearch，简称为es， es是一个开源的高扩展的分布式全文检索引擎，它可以近乎实时的存储、检索数据；本身扩展性很好，可以扩展到上百台服务器，处理PB级别的数据。es也使用Java开发并使用Lucene作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单。</p></blockquote> r
+<h2 id="_2-elasticsearch使用案例"><a href="#_2-elasticsearch使用案例" class="header-anchor">#</a> 2. ElasticSearch使用案例</h2> <p>• 2013年初，GitHub抛弃了Solr，采取ElasticSearch 来做PB级的搜索。 “GitHub使用ElasticSearch搜索20TB的数据，包括13亿文件和1300亿行代码”</p> <p>• 维基百科：启动以elasticsearch为基础的核心搜索架构</p> <p>• SoundCloud：“SoundCloud使用ElasticSearch为1.8亿用户提供即时而精准的音乐搜索服务”</p> <p>• 百度：百度目前广泛使用ElasticSearch作为文本数据分析，采集百度所有服务器上的各类指标数据及用户自定义数据，通过对各种数据进行多维分析展示，辅助定位分析实例异常或业务层面异常。目前覆盖百度内部20多个业务线（包括casio、云分析、网盟、预测、文库、直达号、钱包、风控等），单集群最大100台机器，200个ES节点，每天导入30TB+数据</p> <p>• 新浪使用ES 分析处理32亿条实时日志</p> <p>• 阿里使用ES 构建挖财自己的日志采集和分析体系</p> <h2 id="_3-elasticsearch的安装部署"><a href="#_3-elasticsearch的安装部署" class="header-anchor">#</a> 3. Elasticsearch的安装部署</h2> <h3 id="第一步-创建普通用户"><a href="#第一步-创建普通用户" class="header-anchor">#</a> 第一步 ：创建普通用户</h3> <p>注意：ES不能使用root用户来启动，必须使用普通用户来安装启动。这里我们使用hadoop用户来安装我们的es服务</p> <h3 id="第二步-下载并上传压缩-包-然后解压"><a href="#第二步-下载并上传压缩-包-然后解压" class="header-anchor">#</a> 第二步 ：下载并上传压缩 包， 然后解压</h3> <p>将es的安装包下载并上传到node01服务器的/ kfly/soft</p> <p>node01服务器使用es用户执行以下命令</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>[hadoop@node01 ~]$ cd / kfly/soft/
+
+[hadoop@node01 soft]$ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.0.tar.gz
+
+ 
+
+[hadoop@node01 soft]$ tar -zxf elasticsearch-6.7.0.tar.gz  -C / kfly/install/
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h3 id="第三步-修改配置文件"><a href="#第三步-修改配置文件" class="header-anchor">#</a> 第三步 ：修改配置文件</h3> <h4 id="修改-elasticsearch-yml"><a href="#修改-elasticsearch-yml" class="header-anchor">#</a> 修改 elasticsearch.yml</h4> <p>node01服务器使用hadoop用户来修改配置文件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-6.7.0/config/
+
+mkdir -p / kfly/install/elasticsearch-6.7.0/logs/
+
+mkdir -p / kfly/install/elasticsearch-6.7.0/datas
+
+vim elasticsearch.yml
+
+ 
+
+cluster.name: myes
+
+node.name: node01
+
+path.data: /kfly/install/elasticsearch-6.7.0/datas
+
+path.logs: /kfly/install/elasticsearch-6.7.0/logs
+
+network.host: 192.168.52.100
+
+http.port: 9200
+
+discovery.zen.ping.unicast.hosts: [&quot;node01&quot;, &quot;node02&quot;, &quot;node03&quot;]
+
+bootstrap.system_call_filter: false
+
+bootstrap.memory_lock: false
+
+http.cors.enabled: true
+
+http.cors.allow-origin: &quot;*&quot;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br></div></div><h4 id="修改-jvm-option"><a href="#修改-jvm-option" class="header-anchor">#</a> 修改 jvm.option</h4> <p>修改jvm.option配置文件，调整jvm堆内存大小</p> <p>node01使用es用户执行以下命令调整jvm堆内存大小，每个人根据自己服务器的内存大小来进行调整</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-6.7.0/config
+
+vim jvm.options
+
+ 
+
+-Xms2g
+
+-Xmx2g
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h3 id="第四步-将安装包分发到其他服务器上面"><a href="#第四步-将安装包分发到其他服务器上面" class="header-anchor">#</a> 第四步 ：将安装包分发到其他服务器上面</h3> <p>node01使用es用户将安装包分发到其他服务器上面去</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/
+
+scp -r elasticsearch-6.7.0/ node02:$PWD
+
+scp -r elasticsearch-6.7.0/ node03:$PWD
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h3 id="第五步-node02-与-node03-修改es-配置文件"><a href="#第五步-node02-与-node03-修改es-配置文件" class="header-anchor">#</a> 第五步 ：node02 与 node03 修改es 配置文件</h3> <p>node02与node03也需要修改es配置文件</p> <p>node02使用hadoop用户执行以下命令修改es配置文件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-6.7.0/config/
+
+vim elasticsearch.yml
+
+ 
+
+cluster.name: myes
+
+node.name: node02
+
+path.data: / kfly/install/elasticsearch-6.7.0/datas
+
+path.logs: / kfly/install/elasticsearch-6.7.0/logs
+
+network.host: 192.168.52.110
+
+http.port: 9200
+
+discovery.zen.ping.unicast.hosts: [&quot;node01&quot;, &quot;node02&quot;, &quot;node03&quot;]
+
+bootstrap.system_call_filter: false
+
+bootstrap.memory_lock: false
+
+http.cors.enabled: true
+
+http.cors.allow-origin: &quot;*&quot;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br></div></div><p>node03使用hadoop</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd /kfly/install/elasticsearch-6.7.0/config/ 
+
+vim elasticsearch.yml
+
+
+cluster.name: myes
+
+node.name: node03
+
+path.data: / kfly/install/elasticsearch-6.7.0/datas
+
+path.logs: / kfly/install/elasticsearch-6.7.0/logs
+
+network.host: 192.168.52.120
+
+http.port: 9200
+
+discovery.zen.ping.unicast.hosts: [&quot;node01&quot;, &quot;node02&quot;, &quot;node03&quot;]
+
+bootstrap.system_call_filter: false
+
+bootstrap.memory_lock: false
+
+http.cors.enabled: true
+
+http.cors.allow-origin: &quot;*&quot;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><h3 id="第六步-修改系统-配置-解决启动时候的问题"><a href="#第六步-修改系统-配置-解决启动时候的问题" class="header-anchor">#</a> 第六步 ： 修改系统 配置 ， 解决启动时候的问题</h3> <p>由于现在使用普通用户来安装es服务，且es服务对服务器的资源要求比较多，包括内存大小，线程数等。所以我们需要给普通用户解开资源的束缚</p> <h4 id="解决-启动问题一-普通用户打开文件的最大数限制"><a href="#解决-启动问题一-普通用户打开文件的最大数限制" class="header-anchor">#</a> 解决 启动问题一 ： 普通用户打开文件的最大数限制</h4> <p>问题错误信息描述：</p> <p><em>max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]</em></p> <p>ES因为需要大量的创建索引文件，需要大量的打开系统的文件，所以我们需要解除linux系统当中打开文件最大数目的限制，不然ES启动就会抛错</p> <p>三台机器使用es用户执行以下命令解除打开文件数据的限制</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sudo vi /etc/security/limits.conf
+
+ 
+\* soft nofile 65536
+\* hard nofile 131072
+\* soft nproc 2048
+\* hard nproc 4096
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h4 id="解决-启动问题二-普通-用户启动线程数限制"><a href="#解决-启动问题二-普通-用户启动线程数限制" class="header-anchor">#</a> 解决 启动问题二： 普通 用户启动线程数限制</h4> <p>三台机器执行以下命令打开文件最大数</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sudo vi /etc/sysctl.conf
+
+ 
+vm.max_map_count=655360
+
+fs.file-max=655360
+
+# 执行以下命令生效
+
+sudo sysctl -p
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><p>注意：以上两个问题修改完成之后，一定要重新连接linux生效。关闭secureCRT或者XShell工具，然后重新打开工具连接linux即可</p> <p>重新连接之后执行以下命令，出现这个结果即可准备启动ES了</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>[hadoop@node01 ~]$ ulimit -Hn
+
+131072
+
+[hadoop@node01 ~]$ ulimit -Sn
+
+65536
+
+[hadoop@node01 ~]$ ulimit -Hu
+
+4096
+
+[hadoop@node01 ~]$ ulimit -Su
+
+4096
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h3 id="第七步-启动-es服务"><a href="#第七步-启动-es服务" class="header-anchor">#</a> 第七步 ：启动 ES服务</h3> <p>三台机器使用hadoop用户执行以下命令启动es服务</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>nohup / kfly/install/elasticsearch-6.7.0/bin/elasticsearch 2&gt;&amp;1 &amp;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>启动成功之后jsp即可看到es的服务进程，并且访问页面</p> <p>http://node01:9200/?pretty</p> <p>能够看到es启动之后的一些信息</p> <p>注意：如果哪一台机器服务启动失败，那么就到哪一台机器的</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/kfly/install/elasticsearch-6.7.0/logs
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>这个路径下面去查看错误日志</p> <h2 id="_4、-安装elasticsearch-head-插件"><a href="#_4、-安装elasticsearch-head-插件" class="header-anchor">#</a> 4、 安装elasticsearch-head 插件</h2> <p>由于es服务启动之后，访问界面比较丑陋，为了更好的查看索引库当中的信息，我们可以通过安装elasticsearch-head这个插件来实现，这个插件可以更方便快捷的看到es的管理界面</p> <h3 id="_1-、node01-机器安装nodejs"><a href="#_1-、node01-机器安装nodejs" class="header-anchor">#</a> 1  、node01 机器安装nodejs</h3> <p>Node.js是一个基于 Chrome V8 引擎的 JavaScript 运行环境。</p> <p>Node.js是一个Javascript运行环境(runtime environment)，发布于2009年5月，由Ryan Dahl开发，实质是对Chrome V8引擎进行了封装。Node.js 不是一个 JavaScript 框架，不同于CakePHP、Django、Rails。Node.js 更不是浏览器端的库，不能与 jQuery、ExtJS 相提并论。Node.js 是一个让 JavaScript 运行在服务端的开发平台，它让 JavaScript 成为与PHP、Python、Perl、Ruby 等服务端语言平起平坐的脚本语言。</p> <p>安装步骤参考：https://www.cnblogs.com/kevingrace/p/8990169.html</p> <h4 id="第一步-下载安装包"><a href="#第一步-下载安装包" class="header-anchor">#</a> 第一步 ：下载安装包</h4> <p>node01机器执行以下命令下载安装包，然后进行解压</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/soft/
+wget https://npm.taobao.org/mirrors/node/v8.1.0/node-v8.1.0-linux-x64.tar.gz
+
+tar -zxf node-v8.1.0-linux-x64.tar.gz  -C / kfly/install/
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h4 id="第二步-创建软连接"><a href="#第二步-创建软连接" class="header-anchor">#</a> 第二步 ：创建软连接</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>node01执行以下命令创建软连接
+
+sudo ln -s / kfly/install/node-v8.1.0-linux-x64/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+
+sudo ln -s / kfly/install/node-v8.1.0-linux-x64/bin/node /usr/local/bin/node
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h4 id="第三步-修改环境变量"><a href="#第三步-修改环境变量" class="header-anchor">#</a> 第三步 ：修改环境变量</h4> <p>node01服务器添加环境变量</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sudo vim /etc/profile
+
+*export NODE_HOME=/ kfly/install/node-v8.1.0-linux-x64*
+
+*export PATH=:$PATH:$NODE_HOME/bin*
+
+修改完环境变量使用source生效
+
+source /etc/profile
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="第四步-验证安装成功"><a href="#第四步-验证安装成功" class="header-anchor">#</a> 第四步 ：验证安装成功</h4> <p>node01执行以下命令验证安装生效</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>node -v
+
+npm -v
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><img src="C:\Users\kfly\AppData\Local\Temp\ksohtml\wpsA541.tmp.jpg" alt="img" style="zoom:150%;"> <h3 id="_2-、node01-机器-安装-elasticsearch-head-插件"><a href="#_2-、node01-机器-安装-elasticsearch-head-插件" class="header-anchor">#</a> 2  、node01 机器 安装 elasticsearch-head 插件</h3> <p>elasticsearch-head这个插件是es提供的一个用于图形化界面查看的一个插件工具，可以安装上这个插件之后，通过这个插件来实现我们通过浏览器查看es当中的数据</p> <p>安装elasticsearch-head这个插件这里提供两种方式进行安装，第一种方式就是自己下载源码包进行编译，耗时比较长，网络较差的情况下，基本上不可能安装成功</p> <p>第二种方式就是直接使用我已经编译好的安装包，进行修改配置即可</p> <h4 id="_1、第一种-方式-在线-安装elasticsearch-head-插件-网速慢-不推荐"><a href="#_1、第一种-方式-在线-安装elasticsearch-head-插件-网速慢-不推荐" class="header-anchor">#</a> 1、第一种 方式： 在线 安装elasticsearch-head 插件（ 网速慢 ，不推荐 ）</h4> <p>这里选择node01进行安装</p> <h5 id="第一步-在线-安装必须依赖包"><a href="#第一步-在线-安装必须依赖包" class="header-anchor">#</a> 第一步 ： 在线 安装必须依赖包</h5> <div class="language- line-numbers-mode"><pre class="language-text"><code># 初始化目录*
+*cd /kfly/install*
+*# 安装GCC*
+*sudo yum install -y gcc-c++ make git
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h5 id="第二步-从-git上面克隆-编译-包-并-进行安装"><a href="#第二步-从-git上面克隆-编译-包-并-进行安装" class="header-anchor">#</a> 第二步 ： 从 git上面克隆 编译 包 并 进行安装</h5> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd /kfly/install
+git clone https://github.com/mobz/elasticsearch-head.git
+# 进入安装目录
+cd /kfly/install/elasticsearch-head
+# intall 才会有 node-modules
+npm install
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241531785.jpg" alt="img"></p> <p>以下进度信息</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>npm WARN notice [SECURITY] lodash has the following vulnerability: 1 low. Go here for more details: 
+
+npm WARN notice [SECURITY] debug has the following vulnerability: 1 low. Go here for more details: https://nodesecurity.io/advisories?search=debug&amp;version=0.7.4 - Run `npm i npm@latest -g` to upgrade your npm version, and then `npm audit` to get more info.
+
+npm ERR! Unexpected end of input at 1:2096
+
+npm ERR! 7c1a1bc21c976bb49f3ea&quot;,&quot;tarball&quot;:&quot;https://registry.npmjs.org/safer-bu
+
+npm ERR!                                    ^
+
+npm ERR! A complete log of this run can be found in:
+
+npm ERR!   / kfly/soft/.npm/_logs/2018-11-27T14_35_39_453Z-debug.log
+
+以上错误可以不用管。
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h5 id="第三步-node-01机器-修改-gruntfile-js"><a href="#第三步-node-01机器-修改-gruntfile-js" class="header-anchor">#</a> 第三步. node 01机器 修改 Gruntfile.js</h5> <p>第一台机器修改Gruntfile.js这个文件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-head
+vim Gruntfile.js
+
+找到以下代码：
+
+添加一行： hostname: '192.168.52.100',
+
+connect: {
+                        server: {
+                              options: {
+                                     hostname: '192.168.52.100',
+                                     port: 9100,
+                                     base: '.',
+                                     keepalive: travelue
+                                }
+                        }
+                }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br></div></div><h5 id="第四步-node01-机器修改-app-js"><a href="#第四步-node01-机器修改-app-js" class="header-anchor">#</a> 第四步. node01 机器修改 app.js</h5> <p>第一台机器修改app.js</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-head/_site
+
+vim app.js 
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241532509.jpg" alt="img"></p> <p>更改前：http://localhost:9200*
+*更改后：http://node01:9200</p> <h4 id="_2、第二种方式-直接使用提供的编译之后的源码包解压之后修改配置文件即可-强烈推荐"><a href="#_2、第二种方式-直接使用提供的编译之后的源码包解压之后修改配置文件即可-强烈推荐" class="header-anchor">#</a> 2、第二种方式：直接使用提供的编译之后的源码包解压之后修改配置文件即可（强烈推荐）</h4> <h5 id="第一步-上传-压缩包-到-kfly-soft-路径下-去"><a href="#第一步-上传-压缩包-到-kfly-soft-路径下-去" class="header-anchor">#</a> 第一步 ：上传 压缩包 到/ kfly/soft 路径下 去</h5> <p>将我们的压缩包 elasticsearch-head-compile-after.tar.gz  上传到node01机器的/ kfly/soft路径下面去</p> <h5 id="第二步-解压-安装包"><a href="#第二步-解压-安装包" class="header-anchor">#</a> 第二步 ：解压 安装包</h5> <p>node01执行以下命令解压安装包</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/soft/
+
+tar -zxvf elasticsearch-head-compile-after.tar.gz -C / kfly/install/
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><h5 id="第三步-node-01机器-修改-gruntfile-js-2"><a href="#第三步-node-01机器-修改-gruntfile-js-2" class="header-anchor">#</a> 第三步. node 01机器 修改 Gruntfile.js</h5> <p>修改Gruntfile.js这个文件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-head
+
+vim Gruntfile.js
+
+找到以下代码：
+
+添加一行： hostname: '192.168.52.100',
+
+connect: {
+                        server: {
+                              options: {
+                                     hostname: '192.168.52.100',
+                                     port: 9100,
+                                     base: '.',
+                                     keepalive: true
+                                }
+                        }
+                }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><h5 id="第四步-node01-机器修改-app-js-2"><a href="#第四步-node01-机器修改-app-js-2" class="header-anchor">#</a> 第四步. node01 机器修改 app.js</h5> <p>第一台机器修改app.js</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-head/_site
+
+vim app.js 
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241505552.jpg" alt="img"></p> <p>更改前：http://localhost:9200*
+*更改后：http://node01:9200</p> <h3 id="_3-node01-机器-启动head服务"><a href="#_3-node01-机器-启动head服务" class="header-anchor">#</a> 3. node01 机器 启动head服务</h3> <p>node01启动elasticsearch-head插件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-head/node_modules/grunt/bin/
+
+进程后台启动命令
+
+nohup ./grunt server &gt;/dev/null 2&gt;&amp;1 &amp;
+
+如何停止：elasticsearch-head进程
+
+执行以下命令找到elasticsearch-head的插件进程，然后使用kill  -9  杀死进程即可
+
+sudo yum install net-tools   
+
+netstat -nltp | grep 9100
+
+kill -9 8328
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241534348.jpg" alt="img"></p> <h3 id="_4-访问elasticsearch-head界面"><a href="#_4-访问elasticsearch-head界面" class="header-anchor">#</a> 4. 访问elasticsearch-head界面</h3> <p>打开Google Chrome访问</p> <p>http://192.168.52.100:9100/</p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《ELK》笔记/10.ELK笔记/02.Elasticasearch安装部署.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=ElasticaSearch" title="标签">#ElasticaSearch</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">11/25/2021, 4:33:54 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/130694/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">什么是ELK</div></a> <a href="/pages/6255b5/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">ElasticaSearch基础知识</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/130694/" class="prev">什么是ELK</a></span> <span class="next"><a href="/pages/6255b5/">ElasticaSearch基础知识</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/57.538bf884.js" defer></script>
+  </body>
+</html>

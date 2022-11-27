@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Flink重的State和容错 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/64.7aafe0f4.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Flink入门基础</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/25c5d8/" class="sidebar-link">Flink入门基础简介</a></li><li><a href="/pages/974b7f/" class="sidebar-link">Flink分布式计算任务</a></li><li><a href="/pages/fd6f8c/" aria-current="page" class="active sidebar-link">Flink重的State和容错</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_1-state" class="sidebar-link">1 State</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_1-1-state概述" class="sidebar-link">1.1 state概述</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_1-2-state类型" class="sidebar-link">1.2 State类型</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_1-3-keyed-state的案例演示" class="sidebar-link">1.3 Keyed State的案例演示</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_1-4-operator-state案例演示" class="sidebar-link">1.4  Operator State案例演示</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_1-5-keyedstate-案例演示" class="sidebar-link">1.5 KeyedState 案例演示</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_2-state-backend" class="sidebar-link">2 State backend</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_2-1-概述" class="sidebar-link">2.1 概述</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_2-2-memorystatebackend" class="sidebar-link">2.2 MemoryStateBackend</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_2-3-fsstatebackend" class="sidebar-link">2.3  FSStateBackend</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_2-4-rocksdbstatebackend" class="sidebar-link">2.4 RocksDBStateBackend</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_2-5-statebackend配置方式" class="sidebar-link">2.5 StateBackend配置方式</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_3-checkpoint-容错" class="sidebar-link">3 checkpoint(容错)</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_3-1-checkpoint概述" class="sidebar-link">3.1 checkpoint概述</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_3-2-checkpoint配置" class="sidebar-link">3.2  checkpoint配置</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_4-恢复数据-容错" class="sidebar-link">4 恢复数据(容错)</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_4-1-重启策略概述" class="sidebar-link">4.1 重启策略概述</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_4-2-重启策略" class="sidebar-link">4.2 重启策略</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_4-3-多checkpoint" class="sidebar-link">4.3 多checkpoint</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_4-4-从checkpoint恢复数据" class="sidebar-link">4.4 从checkpoint恢复数据</a></li><li class="sidebar-sub-header"><a href="/pages/fd6f8c/#_4-5-savepoint" class="sidebar-link">4.5 savepoint</a></li></ul></li></ul></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>FlinkSQL</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Flink进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8AFlink%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《Flink》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=Flink%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80" title="分类" data-v-70a2d273>Flink入门基础</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-11-23</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABKFJREFUSA3tVl1oFVcQnrMbrak3QUgkya1akpJYcrUtIqW1JvFBE9LiQ5v6JmJpolbMg32rVrhgoYK0QiMY6i9Y6EMaW5D+xFJaTYItIuK2Kr3+BJNwkxBj05sQY3b3nM6cs2dv9t7NT/vQJw/sndk5M/PNzJkzewGerP+pAmy+ON8lLzUJgA8ZYxYIYZmGYRnctDaWvJJAmTtfP1pvXsBCCPP8QFcCaRkZYACgDZFO4stNIcBCajEOlmmC9XpJ9bAGCaPaPmzPl32dvLSVu3BWCTQs0XQQ6g0DYgwLIoAZbBCdW/i+781o1VVlm/410mw4h06Y7bIPHNyWDyL4FHkX03Q8SrzNhZTZriieckWt7cL6MM85YcLpsi/7O9/iXFT6MswI0DmmpkSaJ0qLxFIm3+i1THHB3zmBH3PYx9CcykcLOeQVVa7QtdxTgQgEleX2AjHYfwA+2ddV77ruGoJUbhGDI09YSNXyMpUt5ylOzxgbUmtOp7NmbNt8v3arjTBfYELmLUV+M+nSawNNAUqpT3ClJWg5I3BLT+cGW/DXNGCa6tx1aakCGEigArTn4TDIPdrXXYKCZNrHLMCOEPvHBlLQ99s9eHB7EB6NTki73CVPQ2F5MSx/uRQixfmq7rK0wYD8w8E905bnPDfwoWs/rfv93NWN/ZfvwsLIU7A09gxECyISeGJkHAau98L97tuw7NXnoPyNF8FcYGLGKsOs0mN3OEyec9esGW/ZEl945dTP34wlR2FZVQWU1q0Cw8Tr7p+hgLLNL0FPxx/Q35mA8aEUrH6nCgwEl0tn7wUiZYJnNRh6DK4UH/k0lfyrsBKdPVv/AriGIQcEDQZ65LBAGe2Rzui9Ybjz7XUppz1/uKBbyVPGkN3ZAeC6hr0x7Nr38N5+EqkoOm17xpoqR9ohQF55ERSvr4Dkr3chNfC3DMzGJlNBElW8w9nsGQvhNGIzDkXzCg8cLK951xHsFBlTJspJNi3ZFIMF2AeDV3q8DNOB+YHi6QTrChDIWDBRi5U5f+ZMfJLu3ccrqxtdxk4SKH336LFxSmkqefwU5T8fhdSdQf9IVKD6aNiwI/hnmcAZ91isYMJIaCUCx9W098+LgruikeTqzqqxKPUwqJyCPJiyemVVZBOijDGjD38Os0jOiSPL1z3SPjXNANbiNPXAdzTfukjjuknNBbyz3nwgTd3AVFqUJ5hpHlq9MveLnWwttUfoygBmvVjuikxND3znrhsELnZk7k+OjIGxeNEkomyLVta0xxn+HZhjBc4YZ/AFjHjz9u3xRZl2BN4aq9nFwWh16IrQ1aHHEd3j1+4/dB9OtH4e29A2H1DyHQRmOSfQZ1Fy7MHBTGB6J/Djq6p3OxyO2cB+4Car7v/o3GXgfAkj23+x9ID1Teoamo/SXcbvSf2PX7Vc8DdCmE1vN9di+32P9/5YR3vLnhCVGUWBjEkr3yh4H8v9CzmsbdhzOKzsJKM90iFdaTMjRPhGVsakRvOaRidljo6H6G7j+ctrJpsP+4COhDIl0La2+FS4+5mlocBaXY5QnGZysIBYoeSsl5qQzrSj/cgNrfuEzlWBfwA+EjrZyWUvpAAAAABJRU5ErkJggg==">
+          Flink重的State和容错
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-state"><a href="#_1-state" class="header-anchor">#</a> 1 State</h2> <h3 id="_1-1-state概述"><a href="#_1-1-state概述" class="header-anchor">#</a> 1.1 state概述</h3> <p><strong>Apache Flink® — Stateful Computations over Data Streams</strong></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 单词计数
+ */
+public class WordCount {
+    public static void main(String[] args) throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;String&gt; data = env.socketTextStream(&quot;localhost&quot;, 8888);
+        SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = data.flatMap(new FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt;() {
+            @Override
+            public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; collector) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                for (String word : fields) {
+                    collector.collect(new Tuple2&lt;&gt;(word, 1));
+                }
+            }
+        }).keyBy(&quot;0&quot;)
+                .sum(1);
+
+        result.print();
+
+        env.execute(&quot;WordCount&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br></div></div><p>输入</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>hadoop,hadoop
+hadoop
+hive,hadoop 
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>输出</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>4&gt; (hadoop,1)
+4&gt; (hadoop,2)
+4&gt; (hadoop,3)
+1&gt; (hive,1)
+4&gt; (hadoop,4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>我们会发现，单词出现的次数有累计的效果。如果没有状态的管理，是不会有累计的效果的，所以Flink里面还有state的概念。</p> <p><img src="D:%5Cdocument%5Cflink%5C20200209_flink3_%E8%AF%BE%E4%BB%B6%5C20200209_flink3_%E8%AF%BE%E4%BB%B6%5C%E7%AC%AC%E4%B8%89%E5%A4%A9%5Cassets%5CState.png" alt="State"></p> <p><strong>state</strong>：一般指一个具体的task/operator的状态。State可以被记录，在失败的情况下数据还可以恢复，Flink中有两种基本类型的State：Keyed State，Operator State，他们两种都可以以两种形式存在：原始状态(raw state)和托管状态(managed state)
+<strong>托管状态</strong>：由Flink框架管理的状态，我们通常使用的就是这种。
+<strong>原始状态</strong>：由用户自行管理状态具体的数据结构，框架在做checkpoint的时候，使用byte[]来读写状态内容，对其内部数据结构一无所知。通常在DataStream上的状态推荐使用托管的状态，当实现一个用户自定义的operator时，<strong>会使用到原始状态</strong>。但是我们工作中一般不常用，所以我们不考虑他。</p> <h3 id="_1-2-state类型"><a href="#_1-2-state类型" class="header-anchor">#</a> 1.2 State类型</h3> <h4 id="_1-2-1-operator-state"><a href="#_1-2-1-operator-state" class="header-anchor">#</a> 1.2.1 Operator State</h4> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231604483.png" alt="Operator State"></p> <ol><li><p>operator state是task级别的state，说白了就是每个task对应一个state</p></li> <li><p>Kafka Connector source中的每个分区（task）都需要记录消费的topic的partition和offset等信息。</p></li> <li><p>operator state 只有一种托管状态：</p> <p>​	<code>ValueState</code></p></li></ol> <h4 id="_1-2-2-keyed-state"><a href="#_1-2-2-keyed-state" class="header-anchor">#</a> 1.2.2 Keyed State</h4> <p>![Keyed State](D:\document\flink\20200209_flink3_课件\20200209_flink3_课件\第三天\assets\Keyed State-1573781173705.png)</p> <ol><li>keyed state 记录的是每个key的状态</li> <li>Keyed state托管状态有六种类型：
+<ol><li>ValueState</li> <li>ListState</li> <li>MapState</li> <li>ReducingState</li> <li>AggregatingState</li> <li>FoldingState</li></ol></li></ol> <h3 id="_1-3-keyed-state的案例演示"><a href="#_1-3-keyed-state的案例演示" class="header-anchor">#</a> 1.3 Keyed State的案例演示</h3> <h4 id="_1-3-1-valuestate"><a href="#_1-3-1-valuestate" class="header-anchor">#</a> 1.3.1 ValueState</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ *  ValueState&lt;T&gt; ：这个状态为每一个 key 保存一个值
+ *      value() 获取状态值
+ *      update() 更新状态值
+ *      clear() 清除状态
+ */
+public class CountWindowAverageWithValueState
+        extends RichFlatMapFunction&lt;Tuple2&lt;Long, Long&gt;, Tuple2&lt;Long, Double&gt;&gt; {
+    // 用以保存每个 key 出现的次数，以及这个 key 对应的 value 的总值
+    // managed keyed state
+    //1. ValueState 保存的是对应的一个 key 的一个状态值
+    private ValueState&lt;Tuple2&lt;Long, Long&gt;&gt; countAndSum;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        // 注册状态
+        ValueStateDescriptor&lt;Tuple2&lt;Long, Long&gt;&gt; descriptor =
+                new ValueStateDescriptor&lt;Tuple2&lt;Long, Long&gt;&gt;(
+                        &quot;average&quot;,  // 状态的名字
+                        Types.TUPLE(Types.LONG, Types.LONG)); // 状态存储的数据类型
+        countAndSum = getRuntimeContext().getState(descriptor);
+    }
+
+    @Override
+    public void flatMap(Tuple2&lt;Long, Long&gt; element,
+                        Collector&lt;Tuple2&lt;Long, Double&gt;&gt; out) throws Exception {
+        // 拿到当前的 key 的状态值
+        Tuple2&lt;Long, Long&gt; currentState = countAndSum.value();
+
+        // 如果状态值还没有初始化，则初始化
+        if (currentState == null) {
+            currentState = Tuple2.of(0L, 0L);
+        }
+
+        // 更新状态值中的元素的个数
+        currentState.f0 += 1;
+
+        // 更新状态值中的总值
+        currentState.f1 += element.f1;
+
+        // 更新状态
+        countAndSum.update(currentState);
+
+        // 判断，如果当前的 key 出现了 3 次，则需要计算平均值，并且输出
+        if (currentState.f0 &gt;= 3) {
+            double avg = (double)currentState.f1 / currentState.f0;
+            // 输出 key 及其对应的平均值
+            out.collect(Tuple2.of(element.f0, avg));
+            //  清空状态值
+            countAndSum.clear();
+        }
+    }
+}
+
+
+
+
+/**
+ * 需求：当接收到的相同 key 的元素个数等于 3 个
+ *  就计算这些元素的 value 的平均值。
+ *  计算 keyed stream 中每 3 个元素的 value 的平均值
+ */
+public class TestKeyedStateMain {
+    public static void main(String[] args) throws  Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStreamSource&lt;Tuple2&lt;Long, Long&gt;&gt; dataStreamSource =
+                env.fromElements(Tuple2.of(1L, 3L), Tuple2.of(1L, 5L), Tuple2.of(1L, 7L),
+                        Tuple2.of(2L, 4L), Tuple2.of(2L, 2L), Tuple2.of(2L, 5L));
+
+        // 输出：
+        //(1,5.0)
+        //(2,3.6666666666666665)
+        dataStreamSource
+                .keyBy(0)
+                .flatMap(new CountWindowAverageWithValueState())
+                .print();
+
+        env.execute(&quot;TestStatefulApi&quot;);
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br></div></div><p>结果输出：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>3&gt; (1,5.0)
+4&gt; (2,3.6666666666666665)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h4 id="_1-3-2-liststate"><a href="#_1-3-2-liststate" class="header-anchor">#</a> 1.3.2 ListState</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ *  ListState&lt;T&gt; ：这个状态为每一个 key 保存集合的值
+ *      get() 获取状态值
+ *      add() / addAll() 更新状态值，将数据放到状态中
+ *      clear() 清除状态
+ */
+public class CountWindowAverageWithListState
+        extends RichFlatMapFunction&lt;Tuple2&lt;Long, Long&gt;, Tuple2&lt;Long, Double&gt;&gt; {
+    // managed keyed state
+    //1. ListState 保存的是对应的一个 key 的出现的所有的元素
+    private ListState&lt;Tuple2&lt;Long, Long&gt;&gt; elementsByKey;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        // 注册状态
+        ListStateDescriptor&lt;Tuple2&lt;Long, Long&gt;&gt; descriptor =
+                new ListStateDescriptor&lt;Tuple2&lt;Long, Long&gt;&gt;(
+                        &quot;average&quot;,  // 状态的名字
+                        Types.TUPLE(Types.LONG, Types.LONG)); // 状态存储的数据类型
+        elementsByKey = getRuntimeContext().getListState(descriptor);
+    }
+
+    @Override
+    public void flatMap(Tuple2&lt;Long, Long&gt; element,
+                        Collector&lt;Tuple2&lt;Long, Double&gt;&gt; out) throws Exception {
+        // 拿到当前的 key 的状态值
+        Iterable&lt;Tuple2&lt;Long, Long&gt;&gt; currentState = elementsByKey.get();
+
+        // 如果状态值还没有初始化，则初始化
+        if (currentState == null) {
+            elementsByKey.addAll(Collections.emptyList());
+        }
+
+        // 更新状态
+        elementsByKey.add(element);
+
+        // 判断，如果当前的 key 出现了 3 次，则需要计算平均值，并且输出
+        List&lt;Tuple2&lt;Long, Long&gt;&gt; allElements = Lists.newArrayList(elementsByKey.get());
+        if (allElements.size() &gt;= 3) {
+            long count = 0;
+            long sum = 0;
+            for (Tuple2&lt;Long, Long&gt; ele : allElements) {
+                count++;
+                sum += ele.f1;
+            }
+            double avg = (double) sum / count;
+            out.collect(Tuple2.of(element.f0, avg));
+
+            // 清除状态
+            elementsByKey.clear();
+        }
+    }
+}
+
+
+/**
+ * 需求：当接收到的相同 key 的元素个数等于 3 个或者超过 3 个的时候
+ *  就计算这些元素的 value 的平均值。
+ *  计算 keyed stream 中每 3 个元素的 value 的平均值
+ */
+public class TestKeyedStateMain {
+    public static void main(String[] args) throws  Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStreamSource&lt;Tuple2&lt;Long, Long&gt;&gt; dataStreamSource =
+                env.fromElements(Tuple2.of(1L, 3L), Tuple2.of(1L, 5L), Tuple2.of(1L, 7L),
+                        Tuple2.of(2L, 4L), Tuple2.of(2L, 2L), Tuple2.of(2L, 5L));
+
+        // 输出：
+        //(1,5.0)
+        //(2,3.6666666666666665)
+        dataStreamSource
+                .keyBy(0)
+                .flatMap(new CountWindowAverageWithListState())
+                .print();
+
+        env.execute(&quot;TestStatefulApi&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br></div></div><p>结果输出：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>3&gt; (1,5.0)
+4&gt; (2,3.6666666666666665)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h4 id="_1-3-3-mapstate"><a href="#_1-3-3-mapstate" class="header-anchor">#</a> 1.3.3 MapState</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ *  MapState&lt;K, V&gt; ：这个状态为每一个 key 保存一个 Map 集合
+ *      put() 将对应的 key 的键值对放到状态中
+ *      values() 拿到 MapState 中所有的 value
+ *      clear() 清除状态
+ */
+public class CountWindowAverageWithMapState
+        extends RichFlatMapFunction&lt;Tuple2&lt;Long, Long&gt;, Tuple2&lt;Long, Double&gt;&gt; {
+    // managed keyed state
+    //1. MapState ：key 是一个唯一的值，value 是接收到的相同的 key 对应的 value 的值
+    private MapState&lt;String, Long&gt; mapState;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        // 注册状态
+        MapStateDescriptor&lt;String, Long&gt; descriptor =
+                new MapStateDescriptor&lt;String, Long&gt;(
+                        &quot;average&quot;,  // 状态的名字
+                        String.class, Long.class); // 状态存储的数据类型
+        mapState = getRuntimeContext().getMapState(descriptor);
+    }
+
+    @Override
+    public void flatMap(Tuple2&lt;Long, Long&gt; element,
+                        Collector&lt;Tuple2&lt;Long, Double&gt;&gt; out) throws Exception {
+        mapState.put(UUID.randomUUID().toString(), element.f1);
+
+        // 判断，如果当前的 key 出现了 3 次，则需要计算平均值，并且输出
+        List&lt;Long&gt; allElements = Lists.newArrayList(mapState.values());
+        if (allElements.size() &gt;= 3) {
+            long count = 0;
+            long sum = 0;
+            for (Long ele : allElements) {
+                count++;
+                sum += ele;
+            }
+            double avg = (double) sum / count;
+            out.collect(Tuple2.of(element.f0, avg));
+
+            // 清除状态
+            mapState.clear();
+        }
+    }
+}
+
+
+/**
+ * 需求：当接收到的相同 key 的元素个数等于 3 个或者超过 3 个的时候
+ *  就计算这些元素的 value 的平均值。
+ *  计算 keyed stream 中每 3 个元素的 value 的平均值
+ */
+public class TestKeyedStateMain {
+    public static void main(String[] args) throws  Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStreamSource&lt;Tuple2&lt;Long, Long&gt;&gt; dataStreamSource =
+                env.fromElements(Tuple2.of(1L, 3L), Tuple2.of(1L, 5L), Tuple2.of(1L, 7L),
+                        Tuple2.of(2L, 4L), Tuple2.of(2L, 2L), Tuple2.of(2L, 5L));
+
+        // 输出：
+        //(1,5.0)
+        //(2,3.6666666666666665)
+        dataStreamSource
+                .keyBy(0)
+                .flatMap(new CountWindowAverageWithMapState())
+                .print();
+
+        env.execute(&quot;TestStatefulApi&quot;);
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br></div></div><p>输出结果：</p> <p>4&gt; (2,3.6666666666666665)
+3&gt; (1,5.0)</p> <h4 id="_1-3-4-reducingstate"><a href="#_1-3-4-reducingstate" class="header-anchor">#</a> 1.3.4 ReducingState</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ *  ReducingState&lt;T&gt; ：这个状态为每一个 key 保存一个聚合之后的值
+ *      get() 获取状态值
+ *      add()  更新状态值，将数据放到状态中
+ *      clear() 清除状态
+ */
+public class SumFunction
+        extends RichFlatMapFunction&lt;Tuple2&lt;Long, Long&gt;, Tuple2&lt;Long, Long&gt;&gt; {
+    // managed keyed state
+    // 用于保存每一个 key 对应的 value 的总值
+    private ReducingState&lt;Long&gt; sumState;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        // 注册状态
+        ReducingStateDescriptor&lt;Long&gt; descriptor =
+                new ReducingStateDescriptor&lt;Long&gt;(
+                        &quot;sum&quot;,  // 状态的名字
+                        new ReduceFunction&lt;Long&gt;() { // 聚合函数
+                            @Override
+                            public Long reduce(Long value1, Long value2) throws Exception {
+                                return value1 + value2;
+                            }
+                        }, Long.class); // 状态存储的数据类型
+        sumState = getRuntimeContext().getReducingState(descriptor);
+    }
+
+    @Override
+    public void flatMap(Tuple2&lt;Long, Long&gt; element,
+                        Collector&lt;Tuple2&lt;Long, Long&gt;&gt; out) throws Exception {
+        // 将数据放到状态中
+        sumState.add(element.f1);
+
+        out.collect(Tuple2.of(element.f0, sumState.get()));
+    }
+}
+
+
+public class TestKeyedStateMain2 {
+    public static void main(String[] args) throws  Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStreamSource&lt;Tuple2&lt;Long, Long&gt;&gt; dataStreamSource =
+                env.fromElements(Tuple2.of(1L, 3L), Tuple2.of(1L, 5L), Tuple2.of(1L, 7L),
+                        Tuple2.of(2L, 4L), Tuple2.of(2L, 2L), Tuple2.of(2L, 5L));
+
+        // 输出：
+        //(1,5.0)
+        //(2,3.6666666666666665)
+        dataStreamSource
+                .keyBy(0)
+                .flatMap(new SumFunction())
+                .print();
+
+        env.execute(&quot;TestStatefulApi&quot;);
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br></div></div><p>输出：</p> <p>4&gt; (2,4)
+4&gt; (2,6)
+4&gt; (2,11)
+3&gt; (1,3)
+3&gt; (1,8)
+3&gt; (1,15)</p> <h4 id="_1-3-5-aggregatingstate"><a href="#_1-3-5-aggregatingstate" class="header-anchor">#</a> 1.3.5 AggregatingState</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class ContainsValueFunction
+        extends RichFlatMapFunction&lt;Tuple2&lt;Long, Long&gt;, Tuple2&lt;Long, String&gt;&gt; {
+
+    private AggregatingState&lt;Long, String&gt; totalStr;
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        // 注册状态
+        AggregatingStateDescriptor&lt;Long, String, String&gt; descriptor =
+                new AggregatingStateDescriptor&lt;Long, String, String&gt;(
+                        &quot;totalStr&quot;,  // 状态的名字
+                        new AggregateFunction&lt;Long, String, String&gt;() {
+                            @Override
+                            public String createAccumulator() {
+                                return &quot;Contains：&quot;;
+                            }
+
+                            @Override
+                            public String add(Long value, String accumulator) {
+                                if (&quot;Contains：&quot;.equals(accumulator)) {
+                                    return accumulator + value;
+                                }
+                                return accumulator + &quot; and &quot; + value;
+                            }
+
+                            @Override
+                            public String getResult(String accumulator) {
+                                return accumulator;
+                            }
+
+                            @Override
+                            public String merge(String a, String b) {
+                                return a + &quot; and &quot; + b;
+                            }
+                        }, String.class); // 状态存储的数据类型
+        totalStr = getRuntimeContext().getAggregatingState(descriptor);
+    }
+
+    @Override
+    public void flatMap(Tuple2&lt;Long, Long&gt; element,
+                        Collector&lt;Tuple2&lt;Long, String&gt;&gt; out) throws Exception {
+        totalStr.add(element.f1);
+        out.collect(Tuple2.of(element.f0, totalStr.get()));
+    }
+}
+
+
+
+public class TestKeyedStateMain2 {
+    public static void main(String[] args) throws  Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStreamSource&lt;Tuple2&lt;Long, Long&gt;&gt; dataStreamSource =
+                env.fromElements(Tuple2.of(1L, 3L), Tuple2.of(1L, 5L), Tuple2.of(1L, 7L),
+                        Tuple2.of(2L, 4L), Tuple2.of(2L, 2L), Tuple2.of(2L, 5L));
+
+   
+        dataStreamSource
+                .keyBy(0)
+                .flatMap(new ContainsValueFunction())
+                .print();
+
+        env.execute(&quot;TestStatefulApi&quot;);
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br></div></div><p>输出：</p> <p>4&gt; (2,Contains：4)
+3&gt; (1,Contains：3)
+3&gt; (1,Contains：3 and 5)
+3&gt; (1,Contains：3 and 5 and 7)
+4&gt; (2,Contains：4 and 2)
+4&gt; (2,Contains：4 and 2 and 5)</p> <h3 id="_1-4-operator-state案例演示"><a href="#_1-4-operator-state案例演示" class="header-anchor">#</a> 1.4  Operator State案例演示</h3> <h4 id="_1-4-1-liststate"><a href="#_1-4-1-liststate" class="header-anchor">#</a> 1.4.1 ListState</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class CustomSink
+        implements SinkFunction&lt;Tuple2&lt;String, Integer&gt;&gt;, CheckpointedFunction {
+
+    // 用于缓存结果数据的
+    private List&lt;Tuple2&lt;String, Integer&gt;&gt; bufferElements;
+    // 表示内存中数据的大小阈值
+    private int threshold;
+    // 用于保存内存中的状态信息
+    private ListState&lt;Tuple2&lt;String, Integer&gt;&gt; checkpointState;
+    // StateBackend
+    // checkpoint
+
+    public CustomSink(int threshold) {
+        this.threshold = threshold;
+        this.bufferElements = new ArrayList&lt;&gt;();
+    }
+
+    @Override
+    public void invoke(Tuple2&lt;String, Integer&gt; value, Context context) throws Exception {
+        // 可以将接收到的每一条数据保存到任何的存储系统中
+        bufferElements.add(value);
+        if (bufferElements.size() == threshold) {
+            // 简单打印
+            System.out.println(&quot;自定义格式：&quot; + bufferElements);
+            bufferElements.clear();
+        }
+    }
+
+    // 用于将内存中数据保存到状态中
+    @Override
+    public void snapshotState(FunctionSnapshotContext context) throws Exception {
+        checkpointState.clear();
+        for (Tuple2&lt;String, Integer&gt; ele : bufferElements) {
+            checkpointState.add(ele);
+        }
+    }
+    // 用于在程序挥发的时候从状态中恢复数据到内存
+    @Override
+    public void initializeState(FunctionInitializationContext context) throws Exception {
+        ListStateDescriptor&lt;Tuple2&lt;String, Integer&gt;&gt; descriptor =
+                new ListStateDescriptor&lt;Tuple2&lt;String, Integer&gt;&gt;(
+                        &quot;bufferd -elements&quot;,
+                        TypeInformation.of(new TypeHint&lt;Tuple2&lt;String, Integer&gt;&gt;() {}));
+        // 注册一个 operator state
+        checkpointState = context.getOperatorStateStore().getListState(descriptor);
+
+        if (context.isRestored()) {
+            for (Tuple2&lt;String, Integer&gt; ele : checkpointState.get()) {
+                bufferElements.add(ele);
+            }
+        }
+    }
+}
+
+
+/**
+ * 需求: 每两条数据打印一次结果
+ */
+public class TestOperatorStateMain {
+    public static void main(String[] args) throws  Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        DataStreamSource&lt;Tuple2&lt;String, Integer&gt;&gt; dataStreamSource =
+                env.fromElements(Tuple2.of(&quot;Spark&quot;, 3), Tuple2.of(&quot;Hadoop&quot;, 5), Tuple2.of(&quot;Hadoop&quot;, 7),
+                        Tuple2.of(&quot;Spark&quot;, 4));
+
+        // 输出：
+        //(1,5.0)
+        //(2,3.6666666666666665)
+        dataStreamSource
+                .addSink(new CustomSink(2)).setParallelism(1);
+
+        env.execute(&quot;TestStatefulApi&quot;);
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br></div></div><p>输出结果：</p> <p>自定义格式：[(Spark,3), (Hadoop,5)]
+自定义格式：[(Hadoop,7), (Spark,4)]</p> <h3 id="_1-5-keyedstate-案例演示"><a href="#_1-5-keyedstate-案例演示" class="header-anchor">#</a> 1.5 KeyedState 案例演示</h3> <p>需求：将两个流中，订单号一样的数据合并在一起输出</p> <p>orderinfo1数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>123,拖把,30.0
+234,牙膏,20.0
+345,被子,114.4
+333,杯子,112.2
+444,Mac电脑,30000.0
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>orderinfo2数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>123,2019-11-11 10:11:12,江苏
+234,2019-11-11 11:11:13,云南
+345,2019-11-11 12:11:14,安徽
+333,2019-11-11 13:11:15,北京
+444,2019-11-11 14:11:16,深圳
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>代码实现：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class Constants {
+    public static final String ORDER_INFO1_PATH=&quot;D:\\kfly\\flinklesson\\src\\main\\input\\OrderInfo1.txt&quot;;
+    public static final String ORDER_INFO2_PATH=&quot;D:\\kfly\\flinklesson\\src\\main\\input\\OrderInfo2.txt&quot;;
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>public class OrderInfo1 {
+    //订单ID
+    private Long orderId;
+    //商品名称
+    private String productName;
+    //价格
+    private Double price;
+
+   public OrderInfo1(){
+
+   }
+
+   public OrderInfo1(Long orderId,String productName,Double price){
+       this.orderId=orderId;
+       this.productName=productName;
+       this.price=price;
+   }
+
+    @Override
+    public String toString() {
+        return &quot;OrderInfo1{&quot; +
+                &quot;orderId=&quot; + orderId +
+                &quot;, productName='&quot; + productName + '\'' +
+                &quot;, price=&quot; + price +
+                '}';
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public static OrderInfo1 string2OrderInfo1(String line){
+        OrderInfo1 orderInfo1 = new OrderInfo1();
+        if(line != null &amp;&amp; line.length() &gt; 0){
+           String[] fields = line.split(&quot;,&quot;);
+            orderInfo1.setOrderId(Long.parseLong(fields[0]));
+            orderInfo1.setProductName(fields[1]);
+            orderInfo1.setPrice(Double.parseDouble(fields[2]));
+       }
+       return orderInfo1;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>public class OrderInfo2 {
+    //订单ID
+    private Long orderId;
+    //下单时间
+    private String orderDate;
+    //下单地址
+    private String address;
+
+    public OrderInfo2(){
+
+    }
+    public OrderInfo2(Long orderId,String orderDate,String address){
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;OrderInfo2{&quot; +
+                &quot;orderId=&quot; + orderId +
+                &quot;, orderDate='&quot; + orderDate + '\'' +
+                &quot;, address='&quot; + address + '\'' +
+                '}';
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    public static OrderInfo2 string2OrderInfo2(String line){
+        OrderInfo2 orderInfo2 = new OrderInfo2();
+        if(line != null &amp;&amp; line.length() &gt; 0){
+            String[] fields = line.split(&quot;,&quot;);
+            orderInfo2.setOrderId(Long.parseLong(fields[0]));
+            orderInfo2.setOrderDate(fields[1]);
+            orderInfo2.setAddress(fields[2]);
+        }
+
+        return orderInfo2;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 自定义source
+ */
+public class FileSource implements SourceFunction&lt;String&gt; {
+    //文件路径
+    public String filePath;
+    public FileSource(String filePath){
+        this.filePath = filePath;
+    }
+
+    private InputStream inputStream;
+    private BufferedReader reader;
+
+    private Random random = new Random();
+
+    @Override
+    public void run(SourceContext&lt;String&gt; ctx) throws Exception {
+
+           reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
+           String line = null;
+           while ((line = reader.readLine()) != null) {
+               // 模拟发送数据
+               TimeUnit.MILLISECONDS.sleep(random.nextInt(500));
+               // 发送数据
+               ctx.collect(line);
+           }
+        if(reader != null){
+            reader.close();
+        }
+        if(inputStream != null){
+            inputStream.close();
+        }
+
+    }
+
+    @Override
+    public void cancel()  {
+      try{
+          if(reader != null){
+              reader.close();
+          }
+          if(inputStream != null){
+              inputStream.close();
+          }
+      }catch (Exception e){
+
+      }
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>public class OrderStream {
+    public static void main(String[] args) throws  Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;String&gt; info1 = env.addSource(new FileSource(Constants.ORDER_INFO1_PATH));
+        DataStreamSource&lt;String&gt; info2 = env.addSource(new FileSource(Constants.ORDER_INFO2_PATH));
+
+        KeyedStream&lt;OrderInfo1, Long&gt; orderInfo1Stream = info1.map(line -&gt; string2OrderInfo1(line))
+                .keyBy(orderInfo1 -&gt; orderInfo1.getOrderId());
+
+        KeyedStream&lt;OrderInfo2, Long&gt; orderInfo2Stream = info2.map(line -&gt; string2OrderInfo2(line))
+                .keyBy(orderInfo2 -&gt; orderInfo2.getOrderId());
+
+        orderInfo1Stream.connect(orderInfo2Stream)
+                .flatMap(new EnrichmentFunction())
+                .print();
+
+        env.execute(&quot;OrderStream&quot;);
+
+    }
+
+    /**
+     *   IN1, 第一个流的输入的数据类型 
+         IN2, 第二个流的输入的数据类型
+         OUT，输出的数据类型
+     */
+    public static class EnrichmentFunction extends
+            RichCoFlatMapFunction&lt;OrderInfo1,OrderInfo2,Tuple2&lt;OrderInfo1,OrderInfo2&gt;&gt;{
+		//定义第一个流 key对应的state
+        private ValueState&lt;OrderInfo1&gt; orderInfo1State;
+        //定义第二个流 key对应的state
+        private ValueState&lt;OrderInfo2&gt; orderInfo2State;
+
+        @Override
+        public void open(Configuration parameters) {
+            orderInfo1State = getRuntimeContext()
+                    .getState(new ValueStateDescriptor&lt;OrderInfo1&gt;(&quot;info1&quot;, OrderInfo1.class));
+            orderInfo2State = getRuntimeContext()
+                    .getState(new ValueStateDescriptor&lt;OrderInfo2&gt;(&quot;info2&quot;,OrderInfo2.class));
+
+        }
+
+        @Override
+        public void flatMap1(OrderInfo1 orderInfo1, Collector&lt;Tuple2&lt;OrderInfo1, OrderInfo2&gt;&gt; out) throws Exception {
+            OrderInfo2 value2 = orderInfo2State.value();
+            if(value2 != null){
+                orderInfo2State.clear();
+                out.collect(Tuple2.of(orderInfo1,value2));
+            }else{
+                orderInfo1State.update(orderInfo1);
+            }
+
+        }
+
+        @Override
+        public void flatMap2(OrderInfo2 orderInfo2, Collector&lt;Tuple2&lt;OrderInfo1, OrderInfo2&gt;&gt; out)throws Exception {
+            OrderInfo1 value1 = orderInfo1State.value();
+            if(value1 != null){
+                orderInfo1State.clear();
+                out.collect(Tuple2.of(value1,orderInfo2));
+            }else{
+                orderInfo2State.update(orderInfo2);
+            }
+
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br></div></div><h2 id="_2-state-backend"><a href="#_2-state-backend" class="header-anchor">#</a> 2 State backend</h2> <h3 id="_2-1-概述"><a href="#_2-1-概述" class="header-anchor">#</a> 2.1 概述</h3> <p>Flink支持的StateBackend:</p> <ul><li><em>MemoryStateBackend</em></li> <li><em>FsStateBackend</em></li> <li><em>RocksDBStateBackend</em></li></ul> <h3 id="_2-2-memorystatebackend"><a href="#_2-2-memorystatebackend" class="header-anchor">#</a> 2.2 MemoryStateBackend</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231558408.png" alt="MemoryStateBackend"></p> <p>默认情况下，状态信息是存储在 TaskManager 的堆内存中的，c heckpoint 的时候将状态保存到 JobManager 的堆内存中。
+缺点：</p> <p>​	只能保存数据量小的状态</p> <p>​	状态数据有可能会丢失</p> <p>优点：</p> <p>​	开发测试很方便</p> <h3 id="_2-3-fsstatebackend"><a href="#_2-3-fsstatebackend" class="header-anchor">#</a> 2.3  FSStateBackend</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231606326.png" alt="FSStateBackend"></p> <p>状态信息存储在 TaskManager 的堆内存中的，checkpoint 的时候将状态保存到指定的文件中 (HDFS 等文件系统)</p> <p>缺点：
+状态大小受TaskManager内存限制(默认支持5M)
+优点：
+状态访问速度很快
+状态信息不会丢失
+用于： 生产，也可存储状态数据量大的情况</p> <h3 id="_2-4-rocksdbstatebackend"><a href="#_2-4-rocksdbstatebackend" class="header-anchor">#</a> 2.4 RocksDBStateBackend</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231606228.png" alt="RocksDBStateBackend"></p> <p>状态信息存储在 RocksDB 数据库 (key-value 的数据存储服务)， 最终保存在本地文件中
+checkpoint 的时候将状态保存到指定的文件中 (HDFS 等文件系统)
+缺点：
+状态访问速度有所下降
+优点：
+可以存储超大量的状态信息
+状态信息不会丢失
+用于： 生产，可以存储超大量的状态信息</p> <h3 id="_2-5-statebackend配置方式"><a href="#_2-5-statebackend配置方式" class="header-anchor">#</a> 2.5 StateBackend配置方式</h3> <p>（1）单任务调整</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>修改当前任务代码
+env.setStateBackend(new FsStateBackend(&quot;hdfs://namenode:9000/flink/checkpoints&quot;));
+或者new MemoryStateBackend()
+或者new RocksDBStateBackend(filebackend, true);【需要添加第三方依赖】
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>（2）全局调整</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>修改flink-conf.yaml
+state.backend: filesystem
+state.checkpoints.dir: hdfs://namenode:9000/flink/checkpoints
+注意：state.backend的值可以是下面几种：jobmanager(MemoryStateBackend), filesystem(FsStateBackend), rocksdb(RocksDBStateBackend)
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h2 id="_3-checkpoint-容错"><a href="#_3-checkpoint-容错" class="header-anchor">#</a> 3 checkpoint(容错)</h2> <h3 id="_3-1-checkpoint概述"><a href="#_3-1-checkpoint概述" class="header-anchor">#</a> 3.1 checkpoint概述</h3> <p>（1）为了保证state的容错性，Flink需要对state进行checkpoint。
+（2）Checkpoint是Flink实现容错机制最核心的功能，它能够根据配置周期性地基于Stream中各个Operator/task的状态来生成快照，从而将这些状态数据定期持久化存储下来，当Flink程序一旦意外崩溃时，重新运行程序时可以有选择地从这些快照进行恢复，从而修正因为故障带来的程序数据异常
+（3）Flink的checkpoint机制可以与(stream和state)的持久化存储交互的前提：
+持久化的source，它需要支持在一定时间内重放事件。这种sources的典型例子是持久化的消息队列（比如Apache Kafka，RabbitMQ等）或文件系统（比如HDFS，S3，GFS等）
+用于state的持久化存储，例如分布式文件系统（比如HDFS，S3，GFS等）</p> <p>生成快照。5s</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231606797.png" alt="1569326195474"></p> <p>恢复快照</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231558388.png" alt="1569326229867"></p> <h3 id="_3-2-checkpoint配置"><a href="#_3-2-checkpoint配置" class="header-anchor">#</a> 3.2  checkpoint配置</h3> <p>​		默认checkpoint功能是disabled的，想要使用的时候需要先启用，checkpoint开启之后，checkPointMode有两种，Exactly-once和At-least-once，默认的checkPointMode是Exactly-once，Exactly-once对于大多数应用来说是最合适的。At-least-once可能用在某些延迟超低的应用程序（始终延迟为几毫秒）。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>默认checkpoint功能是disabled的，想要使用的时候需要先启用
+StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+// 每隔1000 ms进行启动一个检查点【设置checkpoint的周期】
+env.enableCheckpointing(1000);
+// 高级选项：
+// 设置模式为exactly-once （这是默认值）
+env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+// 确保检查点之间有至少500 ms的间隔【checkpoint最小间隔】
+env.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
+// 检查点必须在一分钟内完成，或者被丢弃【checkpoint的超时时间】
+env.getCheckpointConfig().setCheckpointTimeout(60000);
+// 同一时间只允许进行一个检查点
+env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
+// 表示一旦Flink处理程序被cancel后，会保留Checkpoint数据，以便根据实际需要恢复到指定的Checkpoint【详细解释见备注】
+env.getCheckpointConfig().enableExternalizedCheckpoints(ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h2 id="_4-恢复数据-容错"><a href="#_4-恢复数据-容错" class="header-anchor">#</a> 4 恢复数据(容错)</h2> <h3 id="_4-1-重启策略概述"><a href="#_4-1-重启策略概述" class="header-anchor">#</a> 4.1 重启策略概述</h3> <p>​		Flink支持不同的重启策略，以在故障发生时控制作业如何重启，集群在启动时会伴随一个默认的重启策略，在没有定义具体重启策略时会使用该默认策略。 如果在工作提交时指定了一个重启策略，该策略会覆盖集群的默认策略，默认的重启策略可以通过 Flink 的配置文件 flink-conf.yaml 指定。配置参数 restart-strategy 定义了哪个策略被使用。
+常用的重启策略
+（1）固定间隔 (Fixed delay)
+（2）失败率 (Failure rate)
+（3）无重启 (No restart)
+​		如果没有启用 checkpointing，则使用无重启 (no restart) 策略。
+​		如果启用了 checkpointing，但没有配置重启策略，则使用固定间隔 (fixed-delay) 策略， 尝试重启次数默认值是：Integer.MAX_VALUE，重启策略可以在flink-conf.yaml中配置，表示全局的配置。也可以在应用代码中动态指定，会覆盖全局配置。</p> <h3 id="_4-2-重启策略"><a href="#_4-2-重启策略" class="header-anchor">#</a> 4.2 重启策略</h3> <p>固定间隔 (Fixed delay)</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>第一种：全局配置 flink-conf.yaml
+restart-strategy: fixed-delay
+restart-strategy.fixed-delay.attempts: 3
+restart-strategy.fixed-delay.delay: 10 s
+第二种：应用代码设置
+env.setRestartStrategy(RestartStrategies.fixedDelayRestart(
+  3, // 尝试重启的次数
+  Time.of(10, TimeUnit.SECONDS) // 间隔
+));
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><p>失败率 (Failure rate)</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>第一种：全局配置 flink-conf.yaml
+restart-strategy: failure-rate
+restart-strategy.failure-rate.max-failures-per-interval: 3
+restart-strategy.failure-rate.failure-rate-interval: 5 min
+restart-strategy.failure-rate.delay: 10 s
+第二种：应用代码设置
+env.setRestartStrategy(RestartStrategies.failureRateRestart(
+  3, // 一个时间段内的最大失败次数
+  Time.of(5, TimeUnit.MINUTES), // 衡量失败次数的是时间段
+  Time.of(10, TimeUnit.SECONDS) // 间隔
+));
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><p>无重启 (No restart)</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>第一种：全局配置 flink-conf.yaml
+restart-strategy: none
+第二种：应用代码设置
+env.setRestartStrategy(RestartStrategies.noRestart());
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h3 id="_4-3-多checkpoint"><a href="#_4-3-多checkpoint" class="header-anchor">#</a> 4.3 多checkpoint</h3> <p>默认情况下，如果设置了Checkpoint选项，则Flink只保留最近成功生成的1个Checkpoint，而当Flink程序失败时，可以从最近的这个Checkpoint来进行恢复。但是，如果我们希望保留多个Checkpoint，并能够根据实际需要选择其中一个进行恢复，这样会更加灵活，比如，我们发现最近4个小时数据记录处理有问题，希望将整个状态还原到4小时之前Flink可以支持保留多个Checkpoint，需要在Flink的配置文件conf/flink-conf.yaml中，添加如下配置，指定最多需要保存Checkpoint的个数：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>state.checkpoints.num-retained: 20
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>这样设置以后就查看对应的Checkpoint在HDFS上存储的文件目录
+hdfs dfs -ls hdfs://namenode:9000/flink/checkpoints
+如果希望回退到某个Checkpoint点，只需要指定对应的某个Checkpoint路径即可实现</p> <h3 id="_4-4-从checkpoint恢复数据"><a href="#_4-4-从checkpoint恢复数据" class="header-anchor">#</a> 4.4 从checkpoint恢复数据</h3> <p>如果Flink程序异常失败，或者最近一段时间内数据处理错误，我们可以将程序从某一个Checkpoint点进行恢复</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>bin/flink run -s hdfs://namenode:9000/flink/checkpoints/467e17d2cc343e6c56255d222bae3421/chk-56/_metadata flink-job.jar
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>程序正常运行后，还会按照Checkpoint配置进行运行，继续生成Checkpoint数据。</p> <p>当然恢复数据的方式还可以在自己的代码里面指定checkpoint目录，这样下一次启动的时候即使代码发生了改变就自动恢复数据了。</p> <h3 id="_4-5-savepoint"><a href="#_4-5-savepoint" class="header-anchor">#</a> 4.5 savepoint</h3> <p>Flink通过Savepoint功能可以做到程序升级后，继续从升级前的那个点开始执行计算，保证数据不中断
+全局，一致性快照。可以保存数据源offset，operator操作状态等信息，可以从应用在过去任意做了savepoint的时刻开始继续消费</p> <p>checkPoint vs savePoint</p> <p><strong>checkPoint</strong>
+应用定时触发，用于保存状态，会过期，内部应用失败重启的时候使用。
+<strong>savePoint</strong>
+用户手动执行，是指向Checkpoint的指针，不会过期，在升级的情况下使用。
+注意：为了能够在作业的不同版本之间以及 Flink 的不同版本之间顺利升级，强烈推荐程序员通过 uid(String) 方法手动的给算子赋予 ID，这些 ID 将用于确定每一个算子的状态范围。如果不手动给各算子指定 ID，则会由 Flink 自动给每个算子生成一个 ID。只要这些 ID 没有改变就能从保存点（savepoint）将程序恢复回来。而这些自动生成的 ID 依赖于程序的结构，并且对代码的更改是很敏感的。因此，强烈建议用户手动的设置 ID。</p> <p>savepoint的使用</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>1：在flink-conf.yaml中配置Savepoint存储位置
+不是必须设置，但是设置后，后面创建指定Job的Savepoint时，可以不用在手动执行命令时指定Savepoint的位置
+state.savepoints.dir: hdfs://namenode:9000/flink/savepoints
+2：触发一个savepoint【直接触发或者在cancel的时候触发】
+bin/flink savepoint jobId [targetDirectory] [-yid yarnAppId]【针对on yarn模式需要指定-yid参数】
+
+
+bin/flink cancel -s [targetDirectory] jobId [-yid yarnAppId]【针对on yarn模式需要指定-yid参数】
+
+flink cancel -s hdfs://xxx/savepoint jobId f849c15ee894d82f0e74297be658248bStart -yid applicationID
+
+3：从指定的savepoint启动job
+bin/flink run -s savepointPath [runArgs]
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《Flink》笔记/10.Flink入门基础/03.Flink中的State和容错.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=flink%20state" title="标签">#flink state</a><a href="/tags/?tag=flink" title="标签">#flink</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">11/23/2021, 5:45:41 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/974b7f/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">Flink分布式计算任务</div></a> <a href="/pages/80431c/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Flink Table和SQL编程开发</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/974b7f/" class="prev">Flink分布式计算任务</a></span> <span class="next"><a href="/pages/80431c/">Flink Table和SQL编程开发</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/64.7aafe0f4.js" defer></script>
+  </body>
+</html>

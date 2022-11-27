@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sqoop数据迁移工具 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/14.5cb33b3a.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>大数据文章</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>大数据辅助框架</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/2737da/" class="sidebar-link">工作流调度引擎oozie</a></li><li><a href="/pages/ae8a76/" class="sidebar-link">图形化界面整合Hue</a></li><li><a href="/pages/2f4df8/" class="sidebar-link">大数据技术之Impala</a></li><li><a href="/pages/72efb9/" class="sidebar-link">Flume日志采集框架</a></li><li><a href="/pages/4ed21b/" aria-current="page" class="active sidebar-link">Sqoop数据迁移工具</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_1-sqoop介绍" class="sidebar-link">1. Sqoop介绍</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_1-1-sqoop的工作机制" class="sidebar-link">1.1 Sqoop的工作机制</a></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_1-2-sqoop基本架构" class="sidebar-link">1.2 Sqoop基本架构</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_2-数据导入" class="sidebar-link">2 数据导入</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_2-1-增量导入" class="sidebar-link">2.1 增量导入</a></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_2-2-第一种增量导入实现" class="sidebar-link">2.2 第一种增量导入实现</a></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_2-3-第二种增量导入实现" class="sidebar-link">2.3 第二种增量导入实现</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_3-mysql导入hbase" class="sidebar-link">3. mysql导入hbase</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_3-1-mysql表数据导入到hbase中" class="sidebar-link">3.1 mysql表数据导入到hbase中</a></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_3-2-mysql导入hbase-不同的列族" class="sidebar-link">3.2 mysql导入hbase 不同的列族</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_4-数据导出" class="sidebar-link">4. 数据导出</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_4-1-hdfs-mysql" class="sidebar-link">4.1 hdfs-&gt;mysql</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_5-sqoop-job" class="sidebar-link">5. Sqoop job</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_5-1-创建job" class="sidebar-link">5.1 创建job</a></li><li class="sidebar-sub-header"><a href="/pages/4ed21b/#_5-4-查看job" class="sidebar-link">5.4 查看job</a></li></ul></li></ul></li><li><a href="/pages/bd6912/" class="sidebar-link">工作流调度Azkaban</a></li></ul></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>分布式协调框架</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>大数据缓冲层框架</span> <span class="arrow right"></span></p> <!----></section></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>学习笔记</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/bigdata" title="大数据-目录页" data-v-70a2d273>大数据</a></li> <li data-v-70a2d273><a href="/bigdata/#大数据文章" title="大数据#大数据文章" data-v-70a2d273>大数据文章</a></li> <li data-v-70a2d273><a href="/bigdata/#大数据辅助框架" title="大数据#大数据辅助框架" data-v-70a2d273>大数据辅助框架</a></li></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-10-14</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABGpJREFUSA3tVVtoXFUU3fvOI53UlmCaKIFmwEhsE7QK0ipFEdHEKpXaZGrp15SINsXUWvBDpBgQRKi0+KKoFeJHfZA+ED9KKoIU2gYD9UejTW4rVIzm0VSTziPzuNu1z507dibTTjL4U/DAzLn3nL3X2o91ziX6f9wMFdh6Jvbm9nNSV0msViVO6tN1Rm7NMu2OpeJ9lWBUTDxrJbYTS0hInuwciu9eLHlFxCLCZEk3MegsJmZ5K/JD6t7FkFdEvGUo1g7qJoG3MHImqRIn8/nzY1K9UPKKiJmtnUqHVE3Gbuay6vJE/N2FEmuxFjW2nUuE0yQXRRxLiTUAzs36zhZvOXJPdX850EVnnLZkB8prodQoM5JGj7Xk2mvC7JB8tG04Ef5PiXtG0UtxupRQSfTnBoCy554x18yJHI6I+G5Eru4LHmPJZEQsrvPUbMiA8G/WgMK7w7I+ez7++o2ANfbrjvaOl1tFMs+htG3IrZH9/hDX1Pr8Tc0UvH8tcX29KzAgIGcEkINyW5BF9x891hw6VYqgJHEk0huccS7vh3C6gTiODL+26huuBtbct8eZnqLML8PkxGYpuPZBqtqwkSjgc4mB5gbgig5i+y0UDK35LMxXisn9xQtK+nd26gTIHsHe/oblK/b29fUmN/8Y+9jAQrnBp56m1LcDlDp9irKTExSKduXJVWSqdBMA08pEJnEIOB3FPPMybu/oeV8zFeYN3xx576Q6RH+VmplE4ncQV5v+5rzSoyOU7PuEAg8g803PwBJ0CExno/jcMbN8tONYeOmHiuUNryvm3fRUy4tMPVLdAGkUhNWuggGrJcXPv+ouCjz0MKUHz1J2/E8IC9nqTabcxgaBYM0hPhD5Y65FsbxRQKxCQrDjDctW7PUM3HuZunFyifSAqEfuzCp48Il24luWUWZoyJCaPR82jE0+kFA643wRFVni4RYSq3ohJO2pZ7B5dO4xkDWbEpossJPLSrPjYID8rS2UHTlvyNxqIGsg674XJJ7vnh5L7PNwC4hh2sjCI96mzszOTpxLF0T7l88Yz7lAuK6OnL8gXLOnTvpzSb22YG8W7us3jSebFHeeqnXRG1vt+MoUM84LQIBmMsCTAcOauTh0T0l0neQK7m2bLMt2mGxU3HYssS0J2cdv5wljlPsrIuZLAG/2DOZIXgCYT8uMGZN+e2kSirfxZOPCsC0f24nTZzspnVn9VePS1Z5vubmAGGXG8ZFno9Hel0yfA5ZPhF7Dh972BQJ2qCpgH67lmWtBYbvk6sz02wjky2vXyz0XErP/kFB619js1BtwfOV4OPRqOQBjy3Qbk18vigUPPSD5ceHnwck7W9bhAqZdd7SuG7w4/P2F/GaJh8c7e9qgow+Q7cGBo+98WsLkuktFqiZabtXuQTu/Y5ETbR0v7tNSFnvrmu6pjdoan2KjMu8q/Hmj1EfCO2ZGfEIbIXKUlw8qaX9/b2oeSJmFksSeT/Fn0V3nSypChh4Gjh74ybO9aeZ/AN2dwciu2/MhAAAAAElFTkSuQmCC">
+          Sqoop数据迁移工具
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-sqoop介绍"><a href="#_1-sqoop介绍" class="header-anchor">#</a> 1. Sqoop介绍</h2> <p>​		Sqoop是apache旗下的一款 ”Hadoop和关系数据库之间传输数据”的工具。数据导入：将MySQL，Oracle导入数据到Hadoop的HDFS、HIVE、HBASE等数据存储系统。导出数据：从Hadoop的文件系统中导出数据到关系数据库。</p> <h3 id="_1-1-sqoop的工作机制"><a href="#_1-1-sqoop的工作机制" class="header-anchor">#</a> 1.1 Sqoop的工作机制</h3> <ul><li>将导入和导出的命令翻译成mapreduce程序实现</li> <li>在翻译出的mapreduce中主要是对inputformat和outputformat进行定制</li></ul> <h3 id="_1-2-sqoop基本架构"><a href="#_1-2-sqoop基本架构" class="header-anchor">#</a> 1.2 Sqoop基本架构</h3> <ul><li>sqoop在发展中的过程中演进出来了两种不同的架构.</li> <li>架构演变史：https://blogs.apache.org/sqoop/entry/apache_sqoop_highlights_of_sqoop#comment-1561314193000</li></ul> <h4 id="_1-2-1-版本号为1-4-x0"><a href="#_1-2-1-版本号为1-4-x0" class="header-anchor">#</a> 1.2.1 版本号为1.4.x0</h4> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613789783047-2bc79eb3-87a9-45db-8620-f49d1e8b9a8a.jpeg" alt="image"></p> <h4 id="_1-2-2-版本号为1-99x为sqoop2"><a href="#_1-2-2-版本号为1-99x为sqoop2" class="header-anchor">#</a> 1.2.2 版本号为1.99x为sqoop2</h4> <p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/434900/1613789783042-f97f65c4-0f98-4485-aef0-50e571f46611.jpeg" alt="image"></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>在架构上：sqoop2引入了sqoop server，对connector实现了集中的管理 
+访问方式：REST API、 JAVA API、 WEB UI以及CLI控制台方式进行访问
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p>![sqoop1 VS sqoop2](https://kflys.gitee.io/upic/2020/04/02/uPic/sqoop数据迁移工具/assets//sqoop1 VS sqoop2.png)</p> <h2 id="_2-数据导入"><a href="#_2-数据导入" class="header-anchor">#</a> 2 数据导入</h2> <p>​		导入单个表从RDBMS到HDFS。表中的每一行被视为HDFS的记录。所有记录都存储为文本文件的文本数据（或者Avro、sequence文件等二进制数据）</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>## 命令行查看帮助文档
+sqoop list-databases --help
+
+## 列出node03上mysql数据库中所有的数据库名称
+sqoop list-databases --connect jdbc:mysql://node03:3306/ --username root --password 123456
+
+## 查看某一个数据库下面的所有数据表
+sqoop list-tables --connect jdbc:mysql://node03:3306/hive --username root --password 123456
+
+## 导入数据库表数据到HDFS
+sqoop import \
+  --connect jdbc:mysql://node02:3306/userdb \
+  --username root   \
+  --password 123456 \
+  --table emp \
+  --m 1
+  
+## 导出数据到指定目录,指定分隔符
+sqoop import  \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--delete-target-dir \
+--table emp  \
+--target-dir /sqoop/emp1 \
+--fields-terminated-by '#' \
+--m 1
+
+
+#参数解释
+--connect   指定mysql链接地址
+--username  连接mysql的用户名
+--password  连接mysql的密码
+--table     指定要导入的mysql表名称
+--m:        表示这个MR程序需要多少个MapTask去运行，默认为4
+--target-dir    来指定导出目的地，
+--delete-target-dir 来判断导出目录是否存在，如果存在就删掉
+--fields-terminated-by '#' 指定数据的分隔符
+## 默认路径是/user/hadoop下
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>--  导入关系表到Hive中
+create database sqooptohive;
+
+create external table sqooptohive.emp_hive(id int,name string,deg string,salary double ,dept string) row format delimited fields terminated by '\001';
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>## 导入数据到hive表
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--table emp \
+--fields-terminated-by '\001' \
+--hive-import \
+--hive-table sqooptohive.emp_hive \
+--hive-overwrite \
+--delete-target-dir \
+--m 1
+
+## 导入数据库表数据到hive中(并自动创建hive表)
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--table emp \
+--hive-database sqooptohive \
+--hive-table emp1 \
+--hive-import \
+--m 1 
+
+## 导入表数据子集
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--table emp \
+--target-dir /sqoop/emp_where \
+--delete-target-dir \
+--where &quot;dept = 'TP'&quot; \
+--m 1 
+
+## sql语句查找导入hive
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--target-dir /sqoop/emp_sql \
+--delete-target-dir \
+--query 'select * from emp where salary &gt;30000 and $CONDITIONS' \
+--m 1
+
+###  $CONTITONS是linux系统的变量，如果你想通过并行的方式导入结果，每个map task需要执行sql查询后脚语句的副本，结果会根据sqoop推测的边界条件分区。query必须包含$CONDITIONS。这样每个sqoop程序都会被替换为一个独立的条件。同时你必须指定 --split-by '字段'，后期是按照字段进行数据划分，最后可以达到多个MapTask并行运行。
+
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--target-dir /sqoop/emp_sql_2 \
+--delete-target-dir \
+--query 'select * from emp where salary &gt;30000 and $CONDITIONS' \
+--split-by 'id' \
+--m 2
+
+
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--target-dir /sqoop/emp_sql_2 \
+--delete-target-dir \
+--query 'select * from emp where id &gt;1 and $CONDITIONS' \
+--split-by 'salary' \
+--m 2
+
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--target-dir /sqoop/emp_sql_2 \
+--delete-target-dir \
+--query 'select * from emp where id &gt;1 and $CONDITIONS' \
+--split-by 'id' \
+--m 7
+### --split-by '字段'： 后期按照字段进行数据划分实现并行运行多个MapTask。
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br></div></div><h3 id="_2-1-增量导入"><a href="#_2-1-增量导入" class="header-anchor">#</a> 2.1 增量导入</h3> <ul><li>在实际工作当中，数据的导入很多时候都是只需要导入增量数据即可，并不需要将表中的数据全部导入到hive或者hdfs当中去，肯定会出现重复的数据的状况，所以我们一般都是选用一些字段进行增量的导入，为了支持增量的导入，sqoop也给我们考虑到了这种情况并且支持增量的导入数据</li> <li>增量导入是仅导入新添加的表中的行的技术。</li> <li>它需要添加 ==‘incremental’, ‘check-column’, 和 ‘last-value’==选项来执行增量导入。</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>--incremental &lt;mode&gt;
+--check-column &lt;column name&gt;
+--last value &lt;last check column value&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><h3 id="_2-2-第一种增量导入实现"><a href="#_2-2-第一种增量导入实现" class="header-anchor">#</a> 2.2 第一种增量导入实现</h3> <p>基于递增列的增量数据导入（Append方式）</p> <ul><li><p>导入emp表当中id大于1202的所有数据</p></li> <li><ul><li>注意：这里不能加上 --delete-target-dir  参数，添加就报错</li></ul></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--table emp \
+--incremental append \
+--check-column id \
+--last-value 1202  \
+--target-dir /sqoop/increment \
+--m 1
+
+
+##参数解释
+--incremental   这里使用基于递增列的增量数据导入
+--check-column  递增列字段
+--last-value    指定上一次导入中检查列指定字段最大值
+--target-dir    数据导入的目录
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br></div></div><h3 id="_2-3-第二种增量导入实现"><a href="#_2-3-第二种增量导入实现" class="header-anchor">#</a> 2.3 第二种增量导入实现</h3> <p>基于时间列的增量数据导入（LastModified方式）</p> <ul><li>此方式要求原有表中有time字段，它能指定一个时间戳</li> <li>user表结构和数据</li></ul> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613789782963-3f639094-07b6-4a8e-acbc-0ec761d46f1b.png" alt="image"></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456  \
+--table user \
+--incremental lastmodified  \
+--check-column createTime  \
+--last-value '2019-10-01 10:30:00'  \
+--target-dir /sqoop/increment2 \
+--m 1
+
+##参数解释
+--incremental   这里使用基于时间列的增量导入
+--check-column  时间字段
+--last-value    指定上一次导入中检查列指定字段最大值
+--target-dir    数据导入的目录
+                如果该目录存在(可能已经有数据)
+                再使用的时候需要添加 --merge-key or --append
+        --merge-key 指定合并key（对于有修改的）
+        --append    直接追加修改的数据
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><h2 id="_3-mysql导入hbase"><a href="#_3-mysql导入hbase" class="header-anchor">#</a> 3. mysql导入hbase</h2> <h3 id="_3-1-mysql表数据导入到hbase中"><a href="#_3-1-mysql表数据导入到hbase中" class="header-anchor">#</a> 3.1 mysql表数据导入到hbase中</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456  \
+--table emp \
+--hbase-table  mysqluser \
+--column-family  f1 \
+--hbase-create-table \
+--hbase-row-key id  \
+--m 1 
+
+
+#参数说明
+--hbase-table           指定hbase表名
+--column-family         指定表的列族
+--hbase-create-table    表不存在就创建
+--hbase-row-key         指定hbase表的id
+--m                     指定使用的MapTask个数
+list
+scan 'mysqluser'
+disable 'mysqluser'
+drop 'mysqluser'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><h3 id="_3-2-mysql导入hbase-不同的列族"><a href="#_3-2-mysql导入hbase-不同的列族" class="header-anchor">#</a> 3.2 mysql导入hbase 不同的列族</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456  \
+--columns id,salary,dept \
+--table emp \
+--hbase-table  mysqluser2 \
+--column-family  f1 \
+--hbase-create-table \
+--hbase-row-key id  \
+--m 1 
+
+
+sqoop import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456  \
+--columns id,name,deg \
+--table emp \
+--hbase-table  mysqluser2 \
+--column-family  f2 \
+--hbase-create-table \
+--hbase-row-key id  \
+--m 1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br></div></div><h2 id="_4-数据导出"><a href="#_4-数据导出" class="header-anchor">#</a> 4. 数据导出</h2> <p>将数据从HDFS把文件导出到RDBMS数据库\导出前，目标表必须存在于目标数据库中。</p> <ul><li>默认操作是从将文件中的数据使用INSERT语句插入到表中</li> <li>更新模式下，是生成UPDATE语句更新表数据</li></ul> <h3 id="_4-1-hdfs-mysql"><a href="#_4-1-hdfs-mysql" class="header-anchor">#</a> 4.1 hdfs-&gt;mysql</h3> <p>数据是在HDFS当中的如下目录/user/hive/warehouse/hive_source，数据内容如下</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>1 zhangsan 20 hubei
+2 lisi 30 hunan
+3 wangwu 40 beijing
+4 xiaoming 50 shanghai
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>CREATE TABLE  userdb.fromhdfs (
+   id INT DEFAULT NULL,
+   name VARCHAR(100) DEFAULT NULL,
+   age int DEFAULT NULL,
+   address VARCHAR(100) DEFAULT NULL
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop export \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--table fromhdfs \
+--export-dir /user/hive/warehouse/hive_source \
+--input-fields-terminated-by &quot; &quot; 
+
+##参数解释
+--table                       指定导出的mysql表名
+--export-dir                  指定hdfs数据文件目录
+--input-fields-terminated-by  指定文件数据字段的分隔符
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h2 id="_5-sqoop-job"><a href="#_5-sqoop-job" class="header-anchor">#</a> 5. Sqoop job</h2> <p>将事先定义好的数据导入导出任务按照指定流程运行</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop job (generic-args) (job-args)
+   [-- [subtool-name] (subtool-args)]
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h3 id="_5-1-创建job"><a href="#_5-1-创建job" class="header-anchor">#</a> 5.1 创建job</h3> <p>创建一个名为myjob,实现从mysql表数据导入到hdfs上的作业,在创建job时，命令&quot;-- import&quot; 中间有个空格。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop job --help
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h4 id="_5-2-创建一个sqoop-job"><a href="#_5-2-创建一个sqoop-job" class="header-anchor">#</a> 5.2 创建一个sqoop job</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop job \
+--create myjob1 \
+-- import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456 \
+--table emp \
+--target-dir /sqoop/myjob \
+--delete-target-dir \
+--m 1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h4 id="_5-3-创建一个sqoop增量导入的job"><a href="#_5-3-创建一个sqoop增量导入的job" class="header-anchor">#</a> 5.3 创建一个sqoop增量导入的job</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop  job  \
+--create incrementJob1 \
+-- import \
+--connect jdbc:mysql://node03:3306/userdb \
+--username root \
+--password 123456  \
+--table user \
+--target-dir /sqoop/incrementJob \
+--incremental append  \
+--check-column createTime  \
+--last-value '2019-11-19 16:40:21'  \
+--m 1
+
+## incremental.last.value
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><h3 id="_5-4-查看job"><a href="#_5-4-查看job" class="header-anchor">#</a> 5.4 查看job</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop job --list
+
+最后显示：
+Available jobs:
+  myjob
+## 展示job
+sqoop job --show myjob1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h4 id="_5-5-执行job"><a href="#_5-5-执行job" class="header-anchor">#</a> 5.5 执行job</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>  sqoop job --exec myjob1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h4 id="_5-6-解决sqoop需要输入密码的问题"><a href="#_5-6-解决sqoop需要输入密码的问题" class="header-anchor">#</a> 5.6 解决sqoop需要输入密码的问题</h4> <ul><li>vi sqoop-site.xml</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>&lt;property&gt;
+    &lt;name&gt;sqoop.metastore.client.record.password&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+    &lt;description&gt;If true, allow saved passwords in the metastore.
+    &lt;/description&gt;
+&lt;/property&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h4 id="_5-7-删除job"><a href="#_5-7-删除job" class="header-anchor">#</a> 5.7 删除job</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>sqoop job --delete myjob
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/01.大数据/10.大数据文章/10.大数据辅助框架/05.Sqoop数据迁移工具.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=sqoop" title="标签">#sqoop</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">10/14/2021, 5:07:46 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/72efb9/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">Flume日志采集框架</div></a> <a href="/pages/bd6912/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">工作流调度Azkaban</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/72efb9/" class="prev">Flume日志采集框架</a></span> <span class="next"><a href="/pages/bd6912/">工作流调度Azkaban</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/14.5cb33b3a.js" defer></script>
+  </body>
+</html>

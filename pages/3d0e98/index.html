@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>轨迹监控模块开发 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/41.e3b7229f.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>出行大数据项目</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/e7c1ba/" class="sidebar-link">项目概括</a></li><li><a href="/pages/cf0c33/" class="sidebar-link">项目需求及其技术架构选型</a></li><li><a href="/pages/d9ab6c/" class="sidebar-link">日志格式数据说明</a></li><li><a href="/pages/0f50c9/" class="sidebar-link">项目创建</a></li><li><a href="/pages/c475a9/" class="sidebar-link">模拟示例数据回放</a></li><li><a href="/pages/3d0e98/" aria-current="page" class="active sidebar-link">轨迹监控模块开发</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/3d0e98/#业务说明" class="sidebar-link">业务说明：</a></li><li class="sidebar-sub-header"><a href="/pages/3d0e98/#轨迹监控模块开发" class="sidebar-link">轨迹监控模块开发</a></li></ul></li><li><a href="/pages/fd681e/" class="sidebar-link">虚拟车站功能模块</a></li><li><a href="/pages/036d8c/" class="sidebar-link">业务数据库功能模块</a></li><li><a href="/pages/d77c2c/" class="sidebar-link">业务数据库分析</a></li><li><a href="/pages/79d62d/" class="sidebar-link">Spark使用中的优化</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/project" title="项目-目录页" data-v-70a2d273>项目</a></li> <li data-v-70a2d273><a href="/project/#出行大数据项目" title="项目#出行大数据项目" data-v-70a2d273>出行大数据项目</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-10-03</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABH1JREFUSA3tVl1oHFUUPmdmd2ltklqbpJDiNnXFmgbFktho7YMPNiJSSZM0+CAYSkUELVhM6YuwIPpgoOKDqOBDC0XE2CQoNtQXBUFTTcCi+Wlh1V2TQExsUzcltd3M9Tt3ZjZzZ2fT+OJTL8yeM+eee757fmeJbq//KQL8X3DUSFOcfr7cRsRtxNQMWueeVzOkaITIGqQHNg5y8+jNW9ldM7A6nTpAjuolUikAwq7CE3WcM2RRDz+XGVgN3FptU/aUSlvq9Pa3iZ1+sgAqJyyAFqkipd9dqiwHF3P65YycLWc/6sqGrvoEoIp6DOFaX5h6+dnfjkWprwqsPk0dUGq5vySwDImC10KxFHgGL1SWoc92O3eVht09qdXNH11I2SsTsJYqMWzihqGMi+A+Garf3BAuuLI5oGlULyNfyB/HYNujwktOfRrMr5t77NmevqaUopx0grnKAyvVpmwUDB4x6FPXuGvYLTDwWsejwgtgkYKPqRJg8SV6xaiZ3ZTppGneS4yfH5/66fZSDHv+QZci/+h5c5UHtpy67JUqGppM0sh0Nc1dW6/N1W5Yoqat8/TU/VnadmdeW2PLLSyh0cvxBs3KbqTmwYPpxN4do/mzE8nEpvX/UMu2Wbp74zUAK5q6WkHns7V0eWkdPbPzd3rxkTGybadYySumVzhcaJFbs5UrEkQ/+CK8gF5dnh/6ciIZ73gwQ927L1IitoxKLXYP3SjYdOrHHfTZhRRlFyrorafPk20B3HPD1y2G3qKZME5Jcf3t/HUC13/8tSd++vqFveMUTwAUxSUFI1QekR1+bIze3D9MF2aq6cPvG72CgnldWCFqyRw3lwH8ZMerjTD9ElRO7Gv44wNpC90aASqGfVlz/Rx17srQ57/UU26hkhQqUB7dBR71WmzQhHUnblGmVOEw0jhbV1n9OlXUDCIRGaNV5Jp43N516fN7JmnTHdfp7Hgy0luO4aMhtkLL8Bi3bUWYvzh5Mn1dTxrL6QmGuRhGL/TiTTxRoEdTszSaq9GR0NGA3KdkOz3hqSV3MIDhQ5IVX/Ivx3umBti2es2h4eZby7x8br1rkf7Mo90AqC8aQ3sJeNzqFRu+vSANAQe3PL7l0HGOAdwDCeZYvNKeoZp1Qfs6Aipndh86HmFRi0LAnEO47wsqM6cdfjh3jBPUzhZy7nvlUfFsamED1VQt6aISHVymXZ/B2aCtIG8AI8xfobj2d3en1wWVhOeHELKmLQ1s211s88comkv4UCwWyF787mJdYXtNfhKAXVqnKTq8QZvGAGGOfaTo5pGZ/PwbUCr5+DPr/1J92JNHr9aOl/F3iI5+O1nfybsGxoimvZ3ViWSluDITw3P37mypheDIPY0tw7+O/5ApbkYw+zpfaUVu32Pi98+defdUhEpZkRFq0aqyNh9FuL9hpYbEm6iwi0z2REd09ZmyENEbuhjDWzKvZXTqKYaBIr3tt5kuPtQBZFvEUwHt60vfCNu41XsksH9Ij1BMMz1Y0OOunHNShFIP5868g5zeXmuLwL9T4b6Q2+KejgAAAABJRU5ErkJggg==">
+          轨迹监控模块开发
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="业务说明"><a href="#业务说明" class="header-anchor">#</a> 业务说明：</h2> <p>对于正在出行的订单，我们需要将数据保存起来，实时的实现订单轨迹的监控回放
+数据处理过程：
+1：通过sparkStreaming实现消费kafka当中的数据，然后将海口以及成都数据全部都保存到Hbase对应的表当中去
+2、将海口数据的GPS位置经纬度信息保存到redis当中去，实现实时轨迹监控以及历史轨迹回放等功能
+3、通过Hbase的海口数据，实现虚拟车站的统计功能
+4、自主维护sparkStreaming消费kafka的offset值</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619386867-969cc63c-8206-4f96-81f9-5ceb8369904f.png" alt=""></p> <h2 id="轨迹监控模块开发"><a href="#轨迹监控模块开发" class="header-anchor">#</a> 轨迹监控模块开发</h2> <p>通过sparkStreaming程序消费kafak当中的成都以及海口的数据，并将数据保存到redis和hbase当中去，实现实时轨迹监控模块的功能
+在我们的travel_spark模块的scala下面的com.travel.programApp这个package下面，创建scala的object代码StreamingKafka</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import com.travel.common.{ConfigUtil, Constants, HBaseUtil, JedisUtil}
+import com.travel.loggings.Logging
+import com.travel.utils.HbaseTools
+import org.apache.hadoop.hbase.client.{Admin, Connection}
+import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor, TableName}
+import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.kafka.common.serialization.StringDeserializer
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.streaming.dstream.InputDStream
+import org.apache.spark.streaming.kafka010.{HasOffsetRanges, OffsetRange}
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.{SparkConf, SparkContext}
+import redis.clients.jedis.Jedis
+
+object StreamingKafka  extends Logging{
+
+  def main(args: Array[String]): Unit = {
+    val brokers = ConfigUtil.getConfig(Constants.KAFKA_BOOTSTRAP_SERVERS)
+    val topics = Array(ConfigUtil.getConfig(Constants.CHENG_DU_GPS_TOPIC),ConfigUtil.getConfig(Constants.HAI_KOU_GPS_TOPIC))
+    val conf = new SparkConf().setMaster(&quot;local[1]&quot;).setAppName(&quot;sparkKafka&quot;)
+    val group:String = &quot;gps_consum_group&quot;
+    val kafkaParams = Map[String, Object](
+      &quot;bootstrap.servers&quot; -&gt; brokers,
+      &quot;key.deserializer&quot; -&gt; classOf[StringDeserializer],
+      &quot;value.deserializer&quot; -&gt; classOf[StringDeserializer],
+      &quot;group.id&quot; -&gt; group,
+      &quot;auto.offset.reset&quot; -&gt; &quot;latest&quot;,_// earliest,latest,和none_
+      &quot;enable.auto.commit&quot; -&gt; (false: java.lang.Boolean)
+    )
+    val sparkSession: SparkSession = SparkSession.builder().config(conf).getOrCreate()
+    val context: SparkContext = sparkSession.sparkContext
+    context.setLogLevel(&quot;WARN&quot;)
+   _// val streamingContext = new StreamingContext(conf,Seconds(5))_
+    _//获取streamingContext_
+    val streamingContext: StreamingContext =  new StreamingContext(context,Seconds(1))
+    val result: InputDStream[ConsumerRecord[String, String]] = HbaseTools.getStreamingContextFromHBase(streamingContext,kafkaParams,topics,group,&quot;(.*)gps_topic&quot;)
+    _/**_
+_      * 将数据保存到HBase当中去，以及将成都的数据，保存到redis里面去_
+_      */_
+    result.foreachRDD(eachRdd =&gt;{
+      if(!eachRdd.isEmpty()){
+        eachRdd.foreachPartition(eachPartition =&gt;{
+          val connection: Connection = HBaseUtil.getConnection
+          val jedis: Jedis = JedisUtil.getJedis
+          _//判断表是否存在，如果不存在就进行创建_
+          val admin: Admin = connection.getAdmin
+          if(!admin.tableExists(TableName.valueOf(Constants.HTAB_GPS))){
+            val htabgps = new HTableDescriptor(TableName.valueOf(Constants.HTAB_GPS))
+            htabgps.addFamily(new HColumnDescriptor(Constants.DEFAULT_FAMILY))
+            admin.createTable(htabgps)
+          }
+          if(!admin.tableExists(TableName.valueOf(Constants.HTAB_HAIKOU_ORDER))){
+            val htabgps = new HTableDescriptor(TableName.valueOf(Constants.HTAB_HAIKOU_ORDER))
+            htabgps.addFamily(new HColumnDescriptor(Constants.DEFAULT_FAMILY))
+            admin.createTable(htabgps)
+          }
+          eachPartition.foreach(record =&gt;{
+            _//保存到HBase和redis_
+            val consumerRecords: ConsumerRecord[String, String] = HbaseTools.saveToHBaseAndRedis(connection,jedis, record)
+          })
+          JedisUtil.returnJedis(jedis)
+          connection.close()
+        })
+
+        _//更新offset_
+        val offsetRanges: Array[OffsetRange] = eachRdd.asInstanceOf[HasOffsetRanges].offsetRanges
+        _//result.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)  //将offset提交到默认的kafka的topic里面去保存_
+        for(eachrange &lt;-  offsetRanges){
+          val startOffset: Long = eachrange.fromOffset  _//起始offset_
+          val endOffset: Long = eachrange.untilOffset  _//结束offset_
+          val topic: String = eachrange.topic
+          val partition: Int = eachrange.partition
+          HbaseTools.saveBatchOffset(group,topic,partition+&quot;&quot;,endOffset)
+        }
+      }
+    })
+    streamingContext.start()
+    streamingContext.awaitTermination()
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br></div></div><p>以上代码将成都以及海口数据保存到了Hbase当中去，并且将海口数据的经纬度数据保存到了redis当中去，我们就可以通过浏览器web界面访问轨迹回放模块，查看轨迹监控的功能模块</p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/03.项目/10.出行大数据项目/06.轨迹监控模块开发.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=%E5%87%BA%E8%A1%8C%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A1%B9%E7%9B%AE" title="标签">#出行大数据项目</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">1/21/2022, 3:12:36 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/c475a9/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">模拟示例数据回放</div></a> <a href="/pages/fd681e/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">虚拟车站功能模块</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/c475a9/" class="prev">模拟示例数据回放</a></span> <span class="next"><a href="/pages/fd681e/">虚拟车站功能模块</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/41.e3b7229f.js" defer></script>
+  </body>
+</html>

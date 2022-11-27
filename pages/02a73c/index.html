@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Scala数组集合 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/30.f4967fc4.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Python语言</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Scala语言</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/c8458e/" class="sidebar-link">Scala基础</a></li><li><a href="/pages/02a73c/" aria-current="page" class="active sidebar-link">Scala数组集合</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/02a73c/#_1-数组" class="sidebar-link">1. 数组</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/02a73c/#_1-定长数组" class="sidebar-link">1 定长数组</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_2-变长数组" class="sidebar-link">2 变长数组</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_3-遍历数组" class="sidebar-link">3 遍历数组</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_4-数组常用操作" class="sidebar-link">4 数组常用操作</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_2-元组" class="sidebar-link">2. 元组</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/02a73c/#_1-定义元组" class="sidebar-link">1 定义元组</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_2-示例" class="sidebar-link">2 示例</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_3-访问元组" class="sidebar-link">3 访问元组</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_3-映射map" class="sidebar-link">3. 映射Map</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/02a73c/#_1-不可变map" class="sidebar-link">1 不可变Map</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_2-可变map" class="sidebar-link">2 可变Map</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_3-map基本操作" class="sidebar-link">3 Map基本操作</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_4-set集合" class="sidebar-link">4. Set集合</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/02a73c/#_1-不可变set集合" class="sidebar-link">1 不可变Set集合</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_2-可变set集合" class="sidebar-link">2 可变Set集合</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_5-列表-list" class="sidebar-link">5. 列表 List</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/02a73c/#_1-不可变列表" class="sidebar-link">1 不可变列表</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_2-可变列表" class="sidebar-link">2 可变列表</a></li><li class="sidebar-sub-header"><a href="/pages/02a73c/#_3-列表操作" class="sidebar-link">3 列表操作</a></li></ul></li></ul></li><li><a href="/pages/6e2793/" class="sidebar-link">Scala函数式编程</a></li><li><a href="/pages/6e24c0/" class="sidebar-link">Scala面向对象</a></li><li><a href="/pages/0e7335/" class="sidebar-link">Scala模式匹配和样例类</a></li><li><a href="/pages/3701ca/" class="sidebar-link">Scala语法进阶</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Redis数据库</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/technology" title="技术-目录页" data-v-70a2d273>技术</a></li> <li data-v-70a2d273><a href="/technology/#Scala语言" title="技术#Scala语言" data-v-70a2d273>Scala语言</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-10-05</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABGpJREFUSA3tVVtoXFUU3fvOI53UlmCaKIFmwEhsE7QK0ipFEdHEKpXaZGrp15SINsXUWvBDpBgQRKi0+KKoFeJHfZA+ED9KKoIU2gYD9UejTW4rVIzm0VSTziPzuNu1z507dibTTjL4U/DAzLn3nL3X2o91ziX6f9wMFdh6Jvbm9nNSV0msViVO6tN1Rm7NMu2OpeJ9lWBUTDxrJbYTS0hInuwciu9eLHlFxCLCZEk3MegsJmZ5K/JD6t7FkFdEvGUo1g7qJoG3MHImqRIn8/nzY1K9UPKKiJmtnUqHVE3Gbuay6vJE/N2FEmuxFjW2nUuE0yQXRRxLiTUAzs36zhZvOXJPdX850EVnnLZkB8prodQoM5JGj7Xk2mvC7JB8tG04Ef5PiXtG0UtxupRQSfTnBoCy554x18yJHI6I+G5Eru4LHmPJZEQsrvPUbMiA8G/WgMK7w7I+ez7++o2ANfbrjvaOl1tFMs+htG3IrZH9/hDX1Pr8Tc0UvH8tcX29KzAgIGcEkINyW5BF9x891hw6VYqgJHEk0huccS7vh3C6gTiODL+26huuBtbct8eZnqLML8PkxGYpuPZBqtqwkSjgc4mB5gbgig5i+y0UDK35LMxXisn9xQtK+nd26gTIHsHe/oblK/b29fUmN/8Y+9jAQrnBp56m1LcDlDp9irKTExSKduXJVWSqdBMA08pEJnEIOB3FPPMybu/oeV8zFeYN3xx576Q6RH+VmplE4ncQV5v+5rzSoyOU7PuEAg8g803PwBJ0CExno/jcMbN8tONYeOmHiuUNryvm3fRUy4tMPVLdAGkUhNWuggGrJcXPv+ouCjz0MKUHz1J2/E8IC9nqTabcxgaBYM0hPhD5Y65FsbxRQKxCQrDjDctW7PUM3HuZunFyifSAqEfuzCp48Il24luWUWZoyJCaPR82jE0+kFA643wRFVni4RYSq3ohJO2pZ7B5dO4xkDWbEpossJPLSrPjYID8rS2UHTlvyNxqIGsg674XJJ7vnh5L7PNwC4hh2sjCI96mzszOTpxLF0T7l88Yz7lAuK6OnL8gXLOnTvpzSb22YG8W7us3jSebFHeeqnXRG1vt+MoUM84LQIBmMsCTAcOauTh0T0l0neQK7m2bLMt2mGxU3HYssS0J2cdv5wljlPsrIuZLAG/2DOZIXgCYT8uMGZN+e2kSirfxZOPCsC0f24nTZzspnVn9VePS1Z5vubmAGGXG8ZFno9Hel0yfA5ZPhF7Dh972BQJ2qCpgH67lmWtBYbvk6sz02wjky2vXyz0XErP/kFB619js1BtwfOV4OPRqOQBjy3Qbk18vigUPPSD5ceHnwck7W9bhAqZdd7SuG7w4/P2F/GaJh8c7e9qgow+Q7cGBo+98WsLkuktFqiZabtXuQTu/Y5ETbR0v7tNSFnvrmu6pjdoan2KjMu8q/Hmj1EfCO2ZGfEIbIXKUlw8qaX9/b2oeSJmFksSeT/Fn0V3nSypChh4Gjh74ybO9aeZ/AN2dwciu2/MhAAAAAElFTkSuQmCC">
+          Scala数组集合
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-数组"><a href="#_1-数组" class="header-anchor">#</a> 1. 数组</h2> <ul><li>scala中数组的概念是和Java类似，可以用数组来存放一组数据</li> <li>scala中，有两种数组，一种是<strong>定长数组</strong>，另一种是<strong>变长数组</strong></li></ul> <h3 id="_1-定长数组"><a href="#_1-定长数组" class="header-anchor">#</a> 1 定长数组</h3> <ul><li>定长数组指的是数组的<strong>长度</strong>是<strong>不允许改变</strong>的</li> <li>数组的<strong>元素</strong>是<strong>可以改变</strong>的</li> <li>语法</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 通过指定长度定义数组
+val/var 变量名 = new Array[元素类型](数组长度)
+
+// 用元素直接初始化数组
+val/var 变量名 = Array(元素1, 元素2, 元素3...)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><ul><li>注意</li></ul> <div class="language-html line-numbers-mode"><pre class="language-html"><code>在scala中，数组的泛型使用[]来指定
+使用()来获取元素
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><ul><li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; val a=new Array[Int](10)
+a: Array[Int] = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+scala&gt; a(0)
+res19: Int = 0
+
+scala&gt; a(0)=10
+
+scala&gt; a
+res21: Array[Int] = Array(10, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+//////////////////////////////////////////////////////////////////
+scala&gt; val b =Array(&quot;hadoop&quot;,&quot;spark&quot;,&quot;hive&quot;)
+b: Array[String] = Array(hadoop, spark, hive)
+
+scala&gt; b(0)
+res24: String = hadoop
+
+scala&gt; b.length
+res25: Int = 3
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><h3 id="_2-变长数组"><a href="#_2-变长数组" class="header-anchor">#</a> 2 变长数组</h3> <ul><li>变长数组指的是数组的长度是可变的，可以往数组中添加、删除元素</li> <li>创建变长数组，需要提前导入ArrayBuffer类</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>import scala.collection.mutable.ArrayBuffer
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>语法
+<ul><li>创建空的ArrayBuffer变长数组</li></ul></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var a = ArrayBuffer[元素类型]()
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>创建带有初始元素的ArrayBuffer</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var a = ArrayBuffer(元素1，元素2，元素3....)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//导入ArrayBuffer类型
+scala&gt; import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.ArrayBuffer
+
+//定义一个长度为0的整型变长数组
+scala&gt; val a=ArrayBuffer[Int]()
+a: scala.collection.mutable.ArrayBuffer[Int] = ArrayBuffer()
+
+//定义一个有初始元素的变长数组
+scala&gt; val b = ArrayBuffer(&quot;hadoop&quot;, &quot;storm&quot;, &quot;spark&quot;)
+b: scala.collection.mutable.ArrayBuffer[String] = ArrayBuffer(hadoop, storm, spark)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><ul><li>变长数组的增删改操作
+<ul><li>使用<code>+=</code>添加元素</li> <li>使用<code>-=</code>删除元素</li> <li>使用<code>++=</code>追加一个数组到变长数组</li></ul></li> <li>示例</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 定义变长数组
+scala&gt; val a = ArrayBuffer(&quot;hadoop&quot;, &quot;spark&quot;, &quot;flink&quot;)
+a: scala.collection.mutable.ArrayBuffer[String] = ArrayBuffer(hadoop, spark, flink)
+
+// 追加一个元素
+scala&gt; a += &quot;flume&quot;
+res10: a.type = ArrayBuffer(hadoop, spark, flink, flume)
+
+// 删除一个元素
+scala&gt; a -= &quot;hadoop&quot;
+res11: a.type = ArrayBuffer(spark, flink, flume)
+
+// 追加一个数组
+scala&gt; a ++= Array(&quot;hive&quot;, &quot;sqoop&quot;)
+res12: a.type = ArrayBuffer(spark, flink, flume, hive, sqoop)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h3 id="_3-遍历数组"><a href="#_3-遍历数组" class="header-anchor">#</a> 3 遍历数组</h3> <ul><li>可以使用以下两种方式来遍历数组：
+<ul><li>使用for表达式 直接遍历数组中的元素</li> <li>使用 索引 遍历数组中的元素</li></ul></li> <li>示例</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; for(i &lt;- a)println(i)
+hadoop
+hive
+flume
+spark
+
+scala&gt; for(i &lt;- 0 to a.length -1 )println(a(i))
+hadoop
+hive
+flume
+spark
+
+scala&gt; for(i &lt;- 0 until a.length) println(a(i))
+hadoop
+hive
+flume
+spark
+
+
+//0 until n ——生成一系列的数字，包含0，不包含n
+//0 to n    ——包含0，也包含n
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h3 id="_4-数组常用操作"><a href="#_4-数组常用操作" class="header-anchor">#</a> 4 数组常用操作</h3> <ul><li>scala中的数组封装了丰富的计算操作，将来在对数据处理的时候，不需要我们自己再重新实现。
+<ul><li>求和——sum方法</li> <li>求最大值——max方法</li> <li>求最小值——min方法</li> <li>排序——sorted方法</li></ul></li> <li>示例</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; val array=Array(1,3,4,2,5)
+array: Array[Int] = Array(1, 3, 4, 2, 5)
+
+//求和
+scala&gt; array.sum
+res10: Int = 15
+
+//求最大值
+scala&gt; array.max
+res11: Int = 5
+
+//求最小值
+scala&gt; array.min
+res12: Int = 1
+
+//升序
+scala&gt; array.sorted
+res13: Array[Int] = Array(1, 2, 3, 4, 5)
+
+//降序    reverse 反转
+scala&gt; array.sorted.reverse
+res14: Array[Int] = Array(5, 4, 3, 2, 1)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><h2 id="_2-元组"><a href="#_2-元组" class="header-anchor">#</a> 2. 元组</h2> <ul><li>元组可以用来包含一组不同类型的值。例如：姓名，年龄，性别，出生年月。元组的元素是不可变 的。</li></ul> <h3 id="_1-定义元组"><a href="#_1-定义元组" class="header-anchor">#</a> 1 定义元组</h3> <ul><li>语法
+<ul><li>使用括号来定义元组</li></ul></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var 元组变量名称 = (元素1, 元素2, 元素3....)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>使用箭头来定义元素（元组只有两个元素）</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var 元组 = 元素1-&gt;元素2
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h3 id="_2-示例"><a href="#_2-示例" class="header-anchor">#</a> 2 示例</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 可以直接使用括号来定义一个元组 
+scala&gt; val a = (1, &quot;张三&quot;, 20, &quot;北京市&quot;) 
+a: (Int, String, Int, String) = (1,张三,20,北京市)
+
+//使用箭头来定义元素
+scala&gt; val b = 1-&gt;2 
+b: (Int, Int) = (1,2)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h3 id="_3-访问元组"><a href="#_3-访问元组" class="header-anchor">#</a> 3 访问元组</h3> <ul><li>使用
+来访问元组中的元素，_1表示访问第一个元素，依次类推</li></ul> <div class="language-html line-numbers-mode"><pre class="language-html"><code> _1、_2、_3....
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>示例</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; val a = (1, &quot;张三&quot;, 20, &quot;北京市&quot;)
+a: (Int, String, Int, String) = (1,张三,20,北京市)
+
+//获取元组中的第一个元素
+scala&gt; a._1
+res18: Int = 1
+
+//获取元组中的第二个元素
+scala&gt; a._2
+res19: String = 张三
+
+//获取元组中的第三个元素
+scala&gt; a._3
+res20: Int = 20
+
+//获取元组中的第四个元素
+scala&gt; a._4
+res21: String = 北京市
+
+//不能修改元组中的值
+scala&gt; a._4=&quot;上海&quot;
+&lt;console&gt;:12: error: reassignment to val
+       a._4=&quot;上海&quot;
+           ^
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br></div></div><h2 id="_3-映射map"><a href="#_3-映射map" class="header-anchor">#</a> 3. 映射Map</h2> <ul><li>Map可以称之为映射。它是由键值对组成的集合。scala当中的Map集合与java当中的Map类似，也是key，value对形式的。</li> <li>在scala中，Map也分为不可变Map和可变 Map。</li></ul> <h3 id="_1-不可变map"><a href="#_1-不可变map" class="header-anchor">#</a> 1 不可变Map</h3> <ul><li>定义语法</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var map = Map(键-&gt;值, 键-&gt;值, 键-&gt;值...)    // 推荐，可读性更好 
+val/var map = Map((键, 值), (键, 值), (键, 值), (键, 值)...)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><ul><li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; val map1 = Map(&quot;zhangsan&quot;-&gt;30, &quot;lisi&quot;-&gt;40) 
+map: scala.collection.immutable.Map[String,Int] = Map(zhangsan -&gt; 30, lisi -&gt; 40)
+
+scala&gt; val map2 = Map((&quot;zhangsan&quot;, 30), (&quot;lisi&quot;, 30)) 
+map: scala.collection.immutable.Map[String,Int] = Map(zhangsan -&gt; 30, lisi -&gt; 30)
+// 根据key获取value 
+scala&gt; map1(&quot;zhangsan&quot;) 
+res10: Int = 30
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h3 id="_2-可变map"><a href="#_2-可变map" class="header-anchor">#</a> 2 可变Map</h3> <ul><li>可变Map需要手动导入import scala.collection.mutable.Map, 定义语法与不可变Map一致。</li> <li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//导包
+scala&gt; import scala.collection.mutable.Map
+import scala.collection.mutable.Map
+
+//定义可变的map
+scala&gt; val map3 = Map(&quot;zhangsan&quot;-&gt;30, &quot;lisi&quot;-&gt;40)
+map3: scala.collection.mutable.Map[String,Int] = Map(lisi -&gt; 40, zhangsan -&gt; 30)
+
+//获取zhangsan这个key对应的value
+scala&gt; map3(&quot;zhangsan&quot;)
+res26: Int = 30
+
+//给zhangsan这个key重新赋值value
+scala&gt; map3(&quot;zhangsan&quot;)=50
+
+//显示map3
+scala&gt; map3
+res28: scala.collection.mutable.Map[String,Int] = Map(lisi -&gt; 40, zhangsan -&gt; 50)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><h3 id="_3-map基本操作"><a href="#_3-map基本操作" class="header-anchor">#</a> 3 Map基本操作</h3> <ul><li>创建一个可变的map</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//导包
+scala&gt; import scala.collection.mutable.Map
+import scala.collection.mutable.Map
+
+scala&gt; val map = Map(&quot;zhangsan&quot;-&gt;30, &quot;lisi&quot;-&gt;40) 
+map: scala.collection.mutable.Map[String,Int] = Map(lisi -&gt; 40, zhangsan -&gt; 30)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><ul><li>按照key获取value</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 获取zhagnsan的年龄 
+scala&gt; map(&quot;zhangsan&quot;)
+res10: Int = 30
+
+// 获取wangwu的年龄，如果wangwu不存在，则返回-1 比较友好，避免遇到不存在的key而报错
+scala&gt; map.getOrElse(&quot;wangwu&quot;, -1) 
+res11: Int = -1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><ul><li>修改key对应的value</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; map(&quot;lisi&quot;)=50
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>添加key-value键值对</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; map+=(&quot;wangwu&quot; -&gt;35)
+res12: map.type = Map(lisi -&gt; 50, zhangsan -&gt; 30, wangwu -&gt; 35)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><ul><li>删除key-value键值对</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>scala&gt; map -=&quot;wangwu&quot;
+res13: map.type = Map(lisi -&gt; 50, zhangsan -&gt; 30)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><ul><li>获取所有的key和所有的value</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//获取所有的key
+scala&gt; map.keys
+res36: Iterable[String] = Set(lisi, zhangsan)
+
+//获取所有的key
+scala&gt; map.keySet
+res37: scala.collection.Set[String] = Set(lisi, zhangsan)
+
+//获取所有的value
+scala&gt; map.values
+res38: Iterable[Int] = HashMap(50, 30)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><ul><li>遍历map</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//第一种遍历
+scala&gt; for(k &lt;- map.keys) println(k+&quot; -&gt; &quot; +map(k))
+lisi -&gt; 50
+zhangsan -&gt; 30
+
+
+//第二种遍历
+scala&gt; for((k,v) &lt;- map) println(k+&quot; -&gt; &quot;+v)
+lisi -&gt; 50
+zhangsan -&gt; 30
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h2 id="_4-set集合"><a href="#_4-set集合" class="header-anchor">#</a> 4. Set集合</h2> <ul><li>Set是代表没有重复元素的集合。</li> <li>Set具备以下性质：
+<ul><li>1、元素不重复</li> <li>2、不保证插入顺序</li></ul></li> <li>scala中的set集合也分为两种，一种是不可变集合，另一种是可变集合。</li></ul> <h3 id="_1-不可变set集合"><a href="#_1-不可变set集合" class="header-anchor">#</a> 1 不可变Set集合</h3> <ul><li>语法</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//创建一个空的不可变集
+val/var 变量名 = Set[类型]()
+
+//给定元素来创建一个不可变集
+val/var 变量名 = Set[类型](元素1, 元素2, 元素3...)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><ul><li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 创建set集合 
+scala&gt; val a = Set(1,1,2,3,4,5) 
+a: scala.collection.immutable.Set[Int] = Set(5, 1, 2, 3, 4)
+
+// 获取集合的大小 
+scala&gt; a.size 
+res0: Int = 5
+
+// 遍历集合
+scala&gt; for(i &lt;- a) println(i)
+
+//添加元素生成新的集合
+scala&gt; a + 6
+res1: scala.collection.immutable.Set[Int] = Set(5, 1, 6, 2, 3, 4)
+
+// 删除一个元素 
+scala&gt; a - 1 
+res2: scala.collection.immutable.Set[Int] = Set(5, 2, 3, 4)
+
+// 删除set集合中存在的元素 
+scala&gt; a -- Set(2,3) 
+res3: scala.collection.immutable.Set[Int] = Set(5, 1, 4)
+
+// 拼接两个集合 
+scala&gt; a ++ Set(6,7,8) 
+res4: scala.collection.immutable.Set[Int] = Set(5, 1, 6, 2, 7, 3, 8, 4)
+
+//求2个Set集合的交集
+scala&gt; a &amp; Set(3,4,5,6)
+res5: scala.collection.immutable.Set[Int] = Set(5, 3, 4)
+
+
+
+//注意：这里对不可变的set集合进行添加删除等操作，对于该集合来说是没有发生任何变化，这里是生成了新的集合，新的集合相比于原来的集合来说发生了变化。
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br></div></div><h3 id="_2-可变set集合"><a href="#_2-可变set集合" class="header-anchor">#</a> 2 可变Set集合</h3> <ul><li>要使用可变集，必须要手动导入： import scala.collection.mutable.Set</li> <li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//导包
+scala&gt; import scala.collection.mutable.Set
+import scala.collection.mutable.Set
+
+//定义可变的set集合
+scala&gt; val set=Set(1,2,3,4,5)
+set: scala.collection.mutable.Set[Int] = Set(1, 5, 2, 3, 4)
+
+//添加单个元素
+scala&gt; set +=6
+res10: set.type = Set(1, 5, 2, 6, 3, 4)
+
+//添加多个元素
+scala&gt; set +=(6,7,8,9)
+res11: set.type = Set(9, 1, 5, 2, 6, 3, 7, 4, 8)
+
+//添加一个set集合中的元素
+scala&gt; set ++=Set(10,11)
+res12: set.type = Set(9, 1, 5, 2, 6, 3, 10, 7, 4, 11, 8)
+
+//删除一个元素
+scala&gt; set -=11
+res13: set.type = Set(9, 1, 5, 2, 6, 3, 10, 7, 4, 8)
+
+//删除多个元素
+scala&gt; set -=(9,10)
+res15: set.type = Set(1, 5, 2, 6, 3, 7, 4, 8)
+
+//删除一个set子集
+scala&gt; set --=Set(7,8)
+res19: set.type = Set(1,5, 2, 6, 3, 4)
+
+scala&gt; set.remove(1)
+res17: Boolean = true
+
+scala&gt; set
+res18: scala.collection.mutable.Set[Int] = Set(5, 2, 6, 3, 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br></div></div><h2 id="_5-列表-list"><a href="#_5-列表-list" class="header-anchor">#</a> 5. 列表 List</h2> <ul><li>List是scala中最重要的、也是最常用的数据结构。</li> <li>List具备以下性质：
+<ul><li>1、可以保存重复的值</li> <li>2、有先后顺序</li></ul></li> <li>在scala中，也有两种列表，一种是不可变列表、另一种是可变列表</li></ul> <h3 id="_1-不可变列表"><a href="#_1-不可变列表" class="header-anchor">#</a> 1 不可变列表</h3> <ul><li>不可变列表就是列表的元素、长度都是不可变的</li> <li>语法
+<ul><li>使用 List(元素1, 元素2, 元素3, ...) 来创建一个不可变列表，语法格式</li></ul></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var 变量名 = List(元素1, 元素2, 元素3...)
+
+//使用 Nil 创建一个不可变的空列表
+val/var 变量名 = Nil
+
+//使用 :: 方法创建一个不可变列表
+val/var 变量名 = 元素1 :: 元素2 :: Nil
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><ul><li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//创建一个不可变列表，存放以下几个元素（1,2,3,4）
+scala&gt; val  list1=List(1,2,3,4)
+list1: List[Int] = List(1, 2, 3, 4)
+
+//使用Nil创建一个不可变的空列表
+scala&gt; val  list2=Nil
+list2: scala.collection.immutable.Nil.type = List()
+
+//使用 :: 方法创建列表，包含1、2、3三个元素
+scala&gt; val list3=1::2::3::Nil
+list3: List[Int] = List(1, 2, 3)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><h3 id="_2-可变列表"><a href="#_2-可变列表" class="header-anchor">#</a> 2 可变列表</h3> <ul><li>可变列表就是列表的元素、长度都是可变的。</li> <li>要使用可变列表，先要导入 import scala.collection.mutable.ListBuffer</li> <li>语法
+<ul><li>使用ListBuffer元素类型 创建空的可变列表，语法结构</li></ul></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var 变量名 = ListBuffer[Int]()
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>使用ListBuffer(元素1, 元素2, 元素3...)创建可变列表，语法结构</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>val/var 变量名 = ListBuffer(元素1，元素2，元素3...)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>演示</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//导包
+scala&gt; import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.ListBuffer
+
+//定义一个空的可变列表
+scala&gt; val a=ListBuffer[Int]()
+a: scala.collection.mutable.ListBuffer[Int] = ListBuffer()
+
+//定义一个有初始元素的可变列表
+scala&gt; val b=ListBuffer(1,2,3,4)
+b: scala.collection.mutable.ListBuffer[Int] = ListBuffer(1, 2, 3, 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><h3 id="_3-列表操作"><a href="#_3-列表操作" class="header-anchor">#</a> 3 列表操作</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>//导包
+scala&gt; import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.ListBuffer
+
+//定义一个可变的列表
+scala&gt; val list=ListBuffer(1,2,3,4)
+list: scala.collection.mutable.ListBuffer[Int] = ListBuffer(1, 2, 3, 4)
+
+//获取第一个元素
+scala&gt; list(0)
+res4: Int = 1
+//获取第一个元素
+scala&gt; list.head
+res5: Int = 1
+
+//获取除了第一个元素外其他元素组成的列表
+scala&gt; list.tail
+res6: scala.collection.mutable.ListBuffer[Int] = ListBuffer(2, 3, 4)
+
+//添加单个元素
+scala&gt; list +=5
+res7: list.type = ListBuffer(1, 2, 3, 4, 5)
+
+//添加一个不可变的列表
+scala&gt; list ++=List(6,7)
+res8: list.type = ListBuffer(1, 2, 3, 4, 5, 6, 7)
+
+//添加一个可变的列表
+scala&gt; list ++=ListBuffer(8,9)
+res9: list.type = ListBuffer(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+//删除单个元素
+scala&gt; list -=9
+res10: list.type = ListBuffer(1, 2, 3, 4, 5, 6, 7, 8)
+
+//删除一个不可变的列表存在的元素
+scala&gt; list --=List(7,8)
+res11: list.type = ListBuffer(1, 2, 3, 4, 5, 6)
+
+//删除一个可变的列表存在的元素
+scala&gt; list --=ListBuffer(5,6)
+res12: list.type = ListBuffer(1, 2, 3, 4)
+
+//可变的列表转为不可变列表
+scala&gt; list.toList
+res13: List[Int] = List(1, 2, 3, 4)
+
+//可变的列表转为不可变数组
+scala&gt; list.toArray
+res14: Array[Int] = Array(1, 2, 3, 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br></div></div></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/02.技术/30.Scala语言/02.Scala数组集合.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=scala" title="标签">#scala</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">1/21/2022, 3:12:36 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/c8458e/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">Scala基础</div></a> <a href="/pages/6e2793/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Scala函数式编程</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/c8458e/" class="prev">Scala基础</a></span> <span class="next"><a href="/pages/6e2793/">Scala函数式编程</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/30.f4967fc4.js" defer></script>
+  </body>
+</html>

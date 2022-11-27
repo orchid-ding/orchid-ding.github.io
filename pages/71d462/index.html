@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Streaming流量控制和反压 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/106.4347b2a7.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Spark Core</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Spark SQL</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Spark Streaming</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/76b186/" class="sidebar-link">Spark Streaming基础知识</a></li><li><a href="/pages/71d462/" aria-current="page" class="active sidebar-link">Streaming流量控制和反压</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/71d462/#receiver-stream" class="sidebar-link">Receiver Stream</a></li><li class="sidebar-sub-header"><a href="/pages/71d462/#direct-stream" class="sidebar-link">Direct Stream</a></li><li class="sidebar-sub-header"><a href="/pages/71d462/#控制反压机制的配置文件如下" class="sidebar-link">控制反压机制的配置文件如下：</a></li><li class="sidebar-sub-header"><a href="/pages/71d462/#基于pid机制的速率估算器" class="sidebar-link">基于PID机制的速率估算器</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/71d462/#速率估算器" class="sidebar-link">速率估算器</a></li><li class="sidebar-sub-header"><a href="/pages/71d462/#伴生对象" class="sidebar-link">伴生对象</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/71d462/#receiverratecontroller" class="sidebar-link">ReceiverRateController</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/71d462/#通过rpc发布流量阈值" class="sidebar-link">通过RPC发布流量阈值</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/71d462/#directkafkaratecontroller" class="sidebar-link">DirectKafkaRateController</a></li></ul></li><li><a href="/pages/e8305c/" class="sidebar-link">Streaming数据倾斜</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8ASpark%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《Spark》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=Spark%20Streaming" title="分类" data-v-70a2d273>Spark Streaming</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-09-30</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABH1JREFUSA3tVl1oHFUUPmdmd2ltklqbpJDiNnXFmgbFktho7YMPNiJSSZM0+CAYSkUELVhM6YuwIPpgoOKDqOBDC0XE2CQoNtQXBUFTTcCi+Wlh1V2TQExsUzcltd3M9Tt3ZjZzZ2fT+OJTL8yeM+eee757fmeJbq//KQL8X3DUSFOcfr7cRsRtxNQMWueeVzOkaITIGqQHNg5y8+jNW9ldM7A6nTpAjuolUikAwq7CE3WcM2RRDz+XGVgN3FptU/aUSlvq9Pa3iZ1+sgAqJyyAFqkipd9dqiwHF3P65YycLWc/6sqGrvoEoIp6DOFaX5h6+dnfjkWprwqsPk0dUGq5vySwDImC10KxFHgGL1SWoc92O3eVht09qdXNH11I2SsTsJYqMWzihqGMi+A+Garf3BAuuLI5oGlULyNfyB/HYNujwktOfRrMr5t77NmevqaUopx0grnKAyvVpmwUDB4x6FPXuGvYLTDwWsejwgtgkYKPqRJg8SV6xaiZ3ZTppGneS4yfH5/66fZSDHv+QZci/+h5c5UHtpy67JUqGppM0sh0Nc1dW6/N1W5Yoqat8/TU/VnadmdeW2PLLSyh0cvxBs3KbqTmwYPpxN4do/mzE8nEpvX/UMu2Wbp74zUAK5q6WkHns7V0eWkdPbPzd3rxkTGybadYySumVzhcaJFbs5UrEkQ/+CK8gF5dnh/6ciIZ73gwQ927L1IitoxKLXYP3SjYdOrHHfTZhRRlFyrorafPk20B3HPD1y2G3qKZME5Jcf3t/HUC13/8tSd++vqFveMUTwAUxSUFI1QekR1+bIze3D9MF2aq6cPvG72CgnldWCFqyRw3lwH8ZMerjTD9ElRO7Gv44wNpC90aASqGfVlz/Rx17srQ57/UU26hkhQqUB7dBR71WmzQhHUnblGmVOEw0jhbV1n9OlXUDCIRGaNV5Jp43N516fN7JmnTHdfp7Hgy0luO4aMhtkLL8Bi3bUWYvzh5Mn1dTxrL6QmGuRhGL/TiTTxRoEdTszSaq9GR0NGA3KdkOz3hqSV3MIDhQ5IVX/Ivx3umBti2es2h4eZby7x8br1rkf7Mo90AqC8aQ3sJeNzqFRu+vSANAQe3PL7l0HGOAdwDCeZYvNKeoZp1Qfs6Aipndh86HmFRi0LAnEO47wsqM6cdfjh3jBPUzhZy7nvlUfFsamED1VQt6aISHVymXZ/B2aCtIG8AI8xfobj2d3en1wWVhOeHELKmLQ1s211s88comkv4UCwWyF787mJdYXtNfhKAXVqnKTq8QZvGAGGOfaTo5pGZ/PwbUCr5+DPr/1J92JNHr9aOl/F3iI5+O1nfybsGxoimvZ3ViWSluDITw3P37mypheDIPY0tw7+O/5ApbkYw+zpfaUVu32Pi98+defdUhEpZkRFq0aqyNh9FuL9hpYbEm6iwi0z2REd09ZmyENEbuhjDWzKvZXTqKYaBIr3tt5kuPtQBZFvEUwHt60vfCNu41XsksH9Ij1BMMz1Y0OOunHNShFIP5868g5zeXmuLwL9T4b6Q2+KejgAAAABJRU5ErkJggg==">
+          Streaming流量控制和反压
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><p>Spark Streaming 作为基于 <strong>微批次</strong>（micro-batch）的流处理框架，其流量的理想状态就是官方文档中所说的 “batches of data should be processed as fast as they are being generated”，即每一批次的处理时长 batchprocesstime 需要小于（但是又比较接近）我们设定的批次间隔 batchinterval。如果 batchprocesstime &gt; batchinterval，说明程序的处理能力不足，积累的数据越来越多，最终会造成 Executor 内存溢出。如果 batchprocesstime &lt;&lt; batch_interval ，说明系统有很长时间是空闲的，应该适当提升流量。</p> <h1 id="接收数据的两种方式"><a href="#接收数据的两种方式" class="header-anchor">#</a> 接收数据的两种方式</h1> <h2 id="receiver-stream"><a href="#receiver-stream" class="header-anchor">#</a> Receiver Stream</h2> <p>Spark Streaming 通过 Executor 里的 Receiver 组件源源不断地接收外部数据，并通过 BlockManager 将外部数据转化为 Spark 中的块进行存储。Spark Streaming 中Receiver方式机制的简单框图如下所示。</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1612408336019-86afe0a1-6567-4997-8e06-e3300182b2c6.png" alt="img"></p> <p>要限制 Receiver 接收数据的速率，可以在 SparkConf 中设置配置项 <code>spark.streaming.receiver.maxRate</code>，单位为数据条数/秒。</p> <p>这两种方式的优点是设置非常简单，只需要通过实际业务的吞吐量估算一下使批次间隔和处理耗时基本达到平衡的速率就可以了。缺点是一旦业务量发生变化，就只能手动修改参数并重启 Streaming 程序。另外，人为估计的参数毕竟有可能不准，设置得太激进或太保守都不好</p> <h2 id="direct-stream"><a href="#direct-stream" class="header-anchor">#</a> Direct Stream</h2> <p>如果采用的是基于 Direct Stream 方式的 Kafka 连接，不经过 Receiver，就得设置配置项 <code>spark.streaming.kafka.maxRatePerPartition</code> 来限流，单位是每分区的数据条数/秒。</p> <h1 id="spark-streaming-反压机制"><a href="#spark-streaming-反压机制" class="header-anchor">#</a> Spark Streaming 反压机制</h1> <p>以上两种通过参数控制非常方便，但是一旦业务量发生改变只能手动修改配置文件并重启程序。 所以在Spark 1.5加入了动态流量控制方案。能够根据当前系统的处理速度智能地调节流量阈值，名为 <strong>反压（back pressure）机制</strong>。</p> <h2 id="控制反压机制的配置文件如下"><a href="#控制反压机制的配置文件如下" class="header-anchor">#</a> 控制反压机制的配置文件如下：</h2> <table><thead><tr><th>参数名称</th> <th>默认值</th> <th>说明</th></tr></thead> <tbody><tr><td>spark.streaming.backpressure.enabled</td> <td>false</td> <td>是否启用反压机制</td></tr> <tr><td>spark.streaming.backpressure.initialRate</td> <td>无</td> <td>初始最大接收速率。只适用于Receiver Stream，不适用于Direct Stream。</td></tr> <tr><td>spark.streaming.backpressure.rateEstimator</td> <td>pid</td> <td>速率控制器,Spark 默认只支持此控制器，可自定义。</td></tr> <tr><td>spark.streaming.backpressure.pid.proportional</td> <td>1.0</td> <td>只能为非负值。当前速率与最后一批速率之间的差值对总控制信号贡献的权重。用默认值即可。</td></tr> <tr><td>spark.streaming.backpressure.pid.integral</td> <td>0.2</td> <td>只能为非负值。比例误差累积对总控制信号贡献的权重。用默认值即可</td></tr> <tr><td>spark.streaming.backpressure.pid.derived</td> <td>0</td> <td>只能为非负值。比例误差变化对总控制信号贡献的权重。用默认值即可</td></tr> <tr><td>spark.streaming.backpressure.pid.minRate</td> <td>100</td> <td>只能为正数，最小速率</td></tr></tbody></table> <h2 id="基于pid机制的速率估算器"><a href="#基于pid机制的速率估算器" class="header-anchor">#</a> 基于PID机制的速率估算器</h2> <p><code>org.apache.spark.streaming.scheduler.rate.RateEstimator</code>是一个很短的特征，其中只给出了计算流量阈值的方法 compute() 的定义。它还有一个伴生对象用于创建速率估算器的实例，其中写出了更多关于反压机制的配置参数。</p> <h3 id="速率估算器"><a href="#速率估算器" class="header-anchor">#</a> 速率估算器</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>private[streaming] trait RateEstimator extends Serializable {
+  def compute(
+      time: Long,
+      elements: Long,
+      processingDelay: Long,
+      schedulingDelay: Long): Option[Double]
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h3 id="伴生对象"><a href="#伴生对象" class="header-anchor">#</a> 伴生对象</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>
+object RateEstimator {
+  def create(conf: SparkConf, batchInterval: Duration): RateEstimator =
+    conf.get(&quot;spark.streaming.backpressure.rateEstimator&quot;, &quot;pid&quot;) match {
+      case &quot;pid&quot; =&gt;
+        val proportional = conf.getDouble(&quot;spark.streaming.backpressure.pid.proportional&quot;, 1.0)
+        val integral = conf.getDouble(&quot;spark.streaming.backpressure.pid.integral&quot;, 0.2)
+        val derived = conf.getDouble(&quot;spark.streaming.backpressure.pid.derived&quot;, 0.0)
+        val minRate = conf.getDouble(&quot;spark.streaming.backpressure.pid.minRate&quot;, 100)
+        new PIDRateEstimator(batchInterval.milliseconds, proportional, integral, derived, minRate)
+      case estimator =&gt;
+        throw new IllegalArgumentException(s&quot;Unknown rate estimator: $estimator&quot;)
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><p>RateEstimator 的唯一实现类是 PIDRateEstimator，亦即 <code>spark.streaming.backpressure.rateEstimator</code> 配置项的值只能为 pid。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>private[streaming] class PIDRateEstimator(
+    batchIntervalMillis: Long,
+    proportional: Double,
+    integral: Double,
+    derivative: Double,
+    minRate: Double
+  ) extends RateEstimator with Logging {
+
+  private var firstRun: Boolean = true
+  private var latestTime: Long = -1L
+  private var latestRate: Double = -1D
+  private var latestError: Double = -1L
+
+  require(
+    batchIntervalMillis &gt; 0,
+    s&quot;Specified batch interval $batchIntervalMillis in PIDRateEstimator is invalid.&quot;)
+  require(
+    proportional &gt;= 0,
+    s&quot;Proportional term $proportional in PIDRateEstimator should be &gt;= 0.&quot;)
+  require(
+    integral &gt;= 0,
+    s&quot;Integral term $integral in PIDRateEstimator should be &gt;= 0.&quot;)
+  require(
+    derivative &gt;= 0,
+    s&quot;Derivative term $derivative in PIDRateEstimator should be &gt;= 0.&quot;)
+  require(
+    minRate &gt; 0,
+    s&quot;Minimum rate in PIDRateEstimator should be &gt; 0&quot;)
+
+  logInfo(s&quot;Created PIDRateEstimator with proportional = $proportional, integral = $integral, &quot; +
+    s&quot;derivative = $derivative, min rate = $minRate&quot;)
+
+  def compute(
+      time: Long, // in milliseconds
+      numElements: Long,
+      processingDelay: Long, // in milliseconds
+      schedulingDelay: Long // in milliseconds
+    ): Option[Double] = {
+    logTrace(s&quot;\ntime = $time, # records = $numElements, &quot; +
+      s&quot;processing time = $processingDelay, scheduling delay = $schedulingDelay&quot;)
+    this.synchronized {
+      if (time &gt; latestTime &amp;&amp; numElements &gt; 0 &amp;&amp; processingDelay &gt; 0) {
+        val delaySinceUpdate = (time - latestTime).toDouble / 1000
+        val processingRate = numElements.toDouble / processingDelay * 1000
+        val error = latestRate - processingRate
+        val historicalError = schedulingDelay.toDouble * processingRate / batchIntervalMillis
+        val dError = (error - latestError) / delaySinceUpdate
+        val newRate = (latestRate - proportional * error -
+                                    integral * historicalError -
+                                    derivative * dError).max(minRate)
+        logTrace(s&quot;&quot;&quot;
+            | latestRate = $latestRate, error = $error
+            | latestError = $latestError, historicalError = $historicalError
+            | delaySinceUpdate = $delaySinceUpdate, dError = $dError
+            &quot;&quot;&quot;.stripMargin)
+        latestTime = time
+        if (firstRun) {
+          latestRate = processingRate
+          latestError = 0D
+          firstRun = false
+          logTrace(&quot;First run, rate estimation skipped&quot;)
+          None
+        } else {
+          latestRate = newRate
+          latestError = error
+          logTrace(s&quot;New rate = $newRate&quot;)
+          Some(newRate)
+        }
+      } else {
+        logTrace(&quot;Rate estimation skipped&quot;)
+        None
+      }
+    }
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br></div></div><p>PIDRateEstimator 充分运用了工控领域中常见的 PID 控制器的思想。所谓 PID 控制器，即比例（Proportional）-积分（Integral）-微分（Derivative）控制器，本质上是一种反馈回路（loop feedback）。它把收集到的数据和一个设定值（setpoint）进行比较，然后用它们之间的差计算新的输入值，该输入值可以让系统数据尽量接近或者达到设定值。</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1612408336034-b645729d-089a-4e46-a213-27c58c4ee95e.png" alt="img"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1612408336040-11efbff8-4732-47da-a973-8181b686d571.png" alt="img"></p> <p>其中 e(t) 代表误差，即设定值与回授值之间的差。也就是说，比例单元对应当前误差，积分单元对应过去累积误差，而微分单元对应将来误差。控制三个单元的增益因子分别为 Kp、Ki、Kd。</p> <p>回到 PIDRateEstimator 的源码来，对应以上的式子，我们可以得知：</p> <ul><li>处理速率的设定值其实就是上一批次的处理速率 latestRate，回授值就是这一批次的速率 processingRate，误差 error 自然就是两者之差。</li> <li>过去累积误差在这里体现为调度时延的过程中数据积压的速度，也就是schedulingDelay * processingRate / batchInterval。</li> <li>将来误差就是上面算出的error对时间微分的结果。</li></ul> <p>将上面三者综合起来，就可以根据 Spark Streaming 在上一批次以及这一批次的处理速率，估算出一个合适的用于下一批次的流量阈值。比例增益 Kp 由 <code>spark.streaming.backpressure.pid.proportional</code> 控制，默认值 1.0；积分增益 Ki 由 <code>spark.streaming.backpressure.pid.integral</code> 控制，默认值0.2；微分增益Kd由 <code>spark.streaming.backpressure.pid.derived</code>控制，默认值0.0。</p> <h1 id="ratecontroller"><a href="#ratecontroller" class="header-anchor">#</a> RateController</h1> <p>动态流量控制器,类<code>org.apache.spark.streaming.scheduler.RateController</code>是动态流量控制器的核心。他有两个子类，分别对应两种数据接收方式。Receiver 和 Direct</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>private[streaming] abstract class RateController(val streamUID: Int, rateEstimator: RateEstimator) extends StreamingListener  // 抽象类继承自 StreamingListener 特征，表示它是一个 Streaming 监听器。
+with Serializable {
+  // 监听 StreamingListenerBatchCompleted 事件，该事件表示一个批次已经处理完成。
+  override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted) {
+    val elements = batchCompleted.batchInfo.streamIdToInputInfo
+
+    for {
+      // 处理完成的时间戳 processingEndTime
+      processingEnd &lt;- batchCompleted.batchInfo.processingEndTime
+      // 实际处理时长 processingDelay（从批次的第一个 job 开始处理到最后一个job处理完成经过的时间）
+      workDelay &lt;- batchCompleted.batchInfo.processingDelay
+      // 调度时延schedulingDelay（从批次被提交给 Streaming JobScheduler 到第一个 job 开始处理经过的时间）。
+      waitDelay &lt;- batchCompleted.batchInfo.schedulingDelay
+      // 批次输入数据的条数 numRecords。
+      elems &lt;- elements.get(streamUID).map(_.numRecords)
+    } computeAndPublish(processingEnd, elems, workDelay, waitDelay)
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><h2 id="receiverratecontroller"><a href="#receiverratecontroller" class="header-anchor">#</a> ReceiverRateController</h2> <p>通过 RateController 的子类 ReceiverRateController 实现的 publish() 抽象方法可知，新的流量阈值是发布给了 ReceiverTracker。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+   * A RateController that sends the new rate to receivers, via the receiver tracker.
+   */
+private[streaming] class ReceiverRateController(id: Int, estimator: RateEstimator)
+extends RateController(id, estimator) {
+  override def publish(rate: Long): Unit =
+  ssc.scheduler.receiverTracker.sendRateUpdate(id, rate)
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h3 id="通过rpc发布流量阈值"><a href="#通过rpc发布流量阈值" class="header-anchor">#</a> 通过RPC发布流量阈值</h3> <p>回来看 ReceiverTracker，顾名思义，它负责追踪 Receiver 的状态。其 sendRateUpdate() 方法如下</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 1. endpoint 是 RPC 端点的引用。具体来说，是 ReceiverTrackerEndpoint 的引用
+private var endpoint: RpcEndpointRef = null
+
+/** Update a receiver's maximum ingestion rate */
+def sendRateUpdate(streamUID: Int, newRate: Long): Unit = synchronized {
+  if (isTrackerStarted) {
+    // 2. endpoint 将流 ID 与新的流量阈值包装在 UpdateReceiverRateLimit 消息中发送过去。
+    endpoint.send(UpdateReceiverRateLimit(streamUID, newRate))
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><ul><li>ReceiverTrackerEndpoint 收到这条消息后，会再将其包装为 UpdateRateLimit 消息并发送给 Receiver 注册时的 RPC 端点（位于 ReceiverSupervisorImpl 类中）。</li> <li>ReceiverTrackerEndpoint 收到这条消息后，会再将其包装为 UpdateRateLimit 消息并发送给 Receiver 注册时的 RPC 端点（位于 ReceiverSupervisorImpl 类中）。</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>/** RpcEndpointRef for receiving messages from the ReceiverTracker in the driver */
+private val endpoint = env.rpcEnv.setupEndpoint(
+  &quot;Receiver-&quot; + streamId + &quot;-&quot; + System.currentTimeMillis(), new ThreadSafeRpcEndpoint {
+    override val rpcEnv: RpcEnv = env.rpcEnv
+
+    override def receive: PartialFunction[Any, Unit] = {
+      case StopReceiver =&gt;
+      logInfo(&quot;Received stop signal&quot;)
+      ReceiverSupervisorImpl.this.stop(&quot;Stopped by driver&quot;, None)
+      case CleanupOldBlocks(threshTime) =&gt;
+      logDebug(&quot;Received delete old batch signal&quot;)
+      cleanupOldBlocks(threshTime)
+      case UpdateRateLimit(eps) =&gt;
+      logInfo(s&quot;Received a new rate limit: $eps.&quot;)
+      // 1. 收到该消息之后调用了 BlockGenerator.updateRate() 方法。
+      registeredBlockGenerators.asScala.foreach { bg =&gt;
+        bg.updateRate(eps)
+      }
+    }
+  })
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>// 2. BlockGenerator 是 RateLimiter 的子类，它负责将收到的流数据转化成块存储。updateRate() 方法是在 RateLimiter 抽象类中实现的。
+private[streaming] class BlockGenerator(
+    listener: BlockGeneratorListener,
+    receiverId: Int,
+    conf: SparkConf,
+    clock: Clock = new SystemClock()
+  ) extends RateLimiter(conf) with Logging {}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>// 这里借住了guava的RateLimiter
+import com.google.common.util.concurrent.{RateLimiter =&gt; GuavaRateLimiter}
+
+private[receiver] abstract class RateLimiter(conf: SparkConf) extends Logging {
+  // treated as an upper limit
+  private val maxRateLimit = conf.getLong(&quot;spark.streaming.receiver.maxRate&quot;, Long.MaxValue)
+  private lazy val rateLimiter = GuavaRateLimiter.create(getInitialRateLimit().toDouble)
+  def waitToPush() {
+    rateLimiter.acquire()
+  }
+  /**
+   * Return the current rate limit. If no limit has been set so far, it returns {{{Long.MaxValue}}}.
+   */
+  def getCurrentLimit: Long = rateLimiter.getRate.toLong
+
+  /**
+   * Set the rate limit to `newRate`. The new rate will not exceed the maximum rate configured by
+   * {{{spark.streaming.receiver.maxRate}}}, even if `newRate` is higher than that.
+   *
+   * @param newRate A new rate in records per second. It has no effect if it's 0 or negative.
+   */
+  // 3. 更细Rate
+  private[receiver] def updateRate(newRate: Long): Unit =
+    if (newRate &gt; 0) {
+      if (maxRateLimit &gt; 0) {
+        rateLimiter.setRate(newRate.min(maxRateLimit))
+      } else {
+        rateLimiter.setRate(newRate)
+      }
+    }
+  /**
+   * Get the initial rateLimit to initial rateLimiter
+   */
+  private def getInitialRateLimit(): Long = {
+    math.min(conf.getLong(&quot;spark.streaming.backpressure.initialRate&quot;, maxRateLimit), maxRateLimit)
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1612408336053-25225470-b9ee-4ce8-ae44-d108daf0d70a.png" alt="img"></p> <h2 id="directkafkaratecontroller"><a href="#directkafkaratecontroller" class="header-anchor">#</a> DirectKafkaRateController</h2> <p>DirectKafkaRateController只继承了RateController，并未在 publish() 加过多的内容，我们主要看一下<code>DirectKafkaInputDStream</code>这个类。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>private[spark] class DirectKafkaInputDStream[K, V](
+    _ssc: StreamingContext,
+    locationStrategy: LocationStrategy,
+    consumerStrategy: ConsumerStrategy[K, V],
+    ppc: PerPartitionConfig
+  ) extends InputDStream[ConsumerRecord[K, V]](_ssc) with Logging with CanCommitOffsets 
+
+  /**
+   * Asynchronously maintains &amp; sends new rate limits to the receiver through the receiver tracker.
+   异步，通过ReceiverTracker发送新的速率限制
+   */
+  override protected[streaming] val rateController: Option[RateController] = {
+    if (RateController.isBackPressureEnabled(ssc.conf)) {
+      Some(new DirectKafkaRateController(id,
+        RateEstimator.create(ssc.conf, context.graph.batchDuration)))
+    } else {
+      None
+    }
+  }
+	// 主要实现在这里
+  protected[streaming] def maxMessagesPerPartition(
+    offsets: Map[TopicPartition, Long]): Option[Map[TopicPartition, Long]] = {
+    //   调用RateController 的 def getLatestRate(): Long = rateLimit.get()获取rateLimiter    
+    val estimatedRateLimit = rateController.map(_.getLatestRate())
+
+    // calculate a per-partition rate limit based on current lag
+    val effectiveRateLimitPerPartition = estimatedRateLimit.filter(_ &gt; 0) match {
+      case Some(rate) =&gt;
+      	// offset range的消息量 totalLag
+        val lagPerPartition = offsets.map { case (tp, offset) =&gt;
+          tp -&gt; Math.max(offset - currentOffsets(tp), 0)
+        }
+        val totalLag = lagPerPartition.values.sum
+
+        lagPerPartition.map { case (tp, lag) =&gt;
+          // 设置的maxRatePerPartition
+          val maxRateLimitPerPartition = ppc.maxRatePerPartition(tp)
+          val backpressureRate = Math.round(lag / totalLag.toFloat * rate)
+          tp -&gt; (if (maxRateLimitPerPartition &gt; 0) {
+        	 // 有效速率=取设置的maxRatePerPartition和预估的速率最小值
+            Math.min(backpressureRate, maxRateLimitPerPartition)} else backpressureRate)
+        }
+      case None =&gt; offsets.map { case (tp, offset) =&gt; tp -&gt; ppc.maxRatePerPartition(tp) }
+    }
+
+    if (effectiveRateLimitPerPartition.values.sum &gt; 0) {
+      val secsPerBatch = context.graph.batchDuration.milliseconds.toDouble / 1000
+      Some(effectiveRateLimitPerPartition.map {
+        case (tp, limit) =&gt; tp -&gt; (secsPerBatch * limit).toLong
+      })
+    } else {
+      None
+    }
+  }
+  /**
+   * A RateController to retrieve the rate from RateEstimator.
+   * 实现RateController抽象类，并未具体实现publish方法，主要用来取回rate数据
+   */
+  private[streaming] class DirectKafkaRateController(id: Int, estimator: RateEstimator)
+    extends RateController(id, estimator) {
+    override def publish(rate: Long): Unit = ()
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br></div></div></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《Spark》笔记/30.Spark Streaming/08.Streaming流量控制和反压.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=streaming" title="标签">#streaming</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">10/11/2021, 5:53:41 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/76b186/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">Spark Streaming基础知识</div></a> <a href="/pages/e8305c/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Streaming数据倾斜</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/76b186/" class="prev">Spark Streaming基础知识</a></span> <span class="next"><a href="/pages/e8305c/">Streaming数据倾斜</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/106.4347b2a7.js" defer></script>
+  </body>
+</html>

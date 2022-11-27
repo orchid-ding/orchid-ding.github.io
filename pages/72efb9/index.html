@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Flume日志采集框架 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/13.2c54c92b.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>大数据文章</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>大数据辅助框架</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/2737da/" class="sidebar-link">工作流调度引擎oozie</a></li><li><a href="/pages/ae8a76/" class="sidebar-link">图形化界面整合Hue</a></li><li><a href="/pages/2f4df8/" class="sidebar-link">大数据技术之Impala</a></li><li><a href="/pages/72efb9/" aria-current="page" class="active sidebar-link">Flume日志采集框架</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/72efb9/#_1-框架结构" class="sidebar-link">1. 框架结构</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/72efb9/#_1-1-flume构成组件" class="sidebar-link">1.1 flume构成组件</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_1-2-系统结构图" class="sidebar-link">1.2 系统结构图</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_2-安装使用" class="sidebar-link">2. 安装使用</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/72efb9/#_2-1-采集文件到控制台" class="sidebar-link">2.1 采集文件到控制台</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_2-2-采集文件到hdfs" class="sidebar-link">2.2 采集文件到HDFS</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_2-3-采集目录到hdfs" class="sidebar-link">2.3 采集目录到HDFS</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_2-4-两个agent级联" class="sidebar-link">2.4 两个agent级联</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-高可用配置案例" class="sidebar-link">3. 高可用配置案例</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-1-failover故障转移" class="sidebar-link">3.1 failover故障转移</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-2-负载均衡" class="sidebar-link">3.2 负载均衡</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-3-静态拦截器使用" class="sidebar-link">3.3 静态拦截器使用</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-4-自定义拦截器" class="sidebar-link">3.4 自定义拦截器</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-5-自定义source" class="sidebar-link">3.5 自定义Source</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_3-6-自定义sink" class="sidebar-link">3.6 自定义Sink</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_4-注意事项" class="sidebar-link">4. 注意事项</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/72efb9/#_4-1-hdfs配置说明" class="sidebar-link">4.1 HDFS配置说明</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_4-2-实现数据的断点续传" class="sidebar-link">4.2 实现数据的断点续传</a></li><li class="sidebar-sub-header"><a href="/pages/72efb9/#_4-3-header参数配置讲解" class="sidebar-link">4.3 header参数配置讲解</a></li></ul></li></ul></li><li><a href="/pages/4ed21b/" class="sidebar-link">Sqoop数据迁移工具</a></li><li><a href="/pages/bd6912/" class="sidebar-link">工作流调度Azkaban</a></li></ul></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>分布式协调框架</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>大数据缓冲层框架</span> <span class="arrow right"></span></p> <!----></section></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>学习笔记</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/bigdata" title="大数据-目录页" data-v-70a2d273>大数据</a></li> <li data-v-70a2d273><a href="/bigdata/#大数据文章" title="大数据#大数据文章" data-v-70a2d273>大数据文章</a></li> <li data-v-70a2d273><a href="/bigdata/#大数据辅助框架" title="大数据#大数据辅助框架" data-v-70a2d273>大数据辅助框架</a></li></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-10-14</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABGpJREFUSA3tVVtoXFUU3fvOI53UlmCaKIFmwEhsE7QK0ipFEdHEKpXaZGrp15SINsXUWvBDpBgQRKi0+KKoFeJHfZA+ED9KKoIU2gYD9UejTW4rVIzm0VSTziPzuNu1z507dibTTjL4U/DAzLn3nL3X2o91ziX6f9wMFdh6Jvbm9nNSV0msViVO6tN1Rm7NMu2OpeJ9lWBUTDxrJbYTS0hInuwciu9eLHlFxCLCZEk3MegsJmZ5K/JD6t7FkFdEvGUo1g7qJoG3MHImqRIn8/nzY1K9UPKKiJmtnUqHVE3Gbuay6vJE/N2FEmuxFjW2nUuE0yQXRRxLiTUAzs36zhZvOXJPdX850EVnnLZkB8prodQoM5JGj7Xk2mvC7JB8tG04Ef5PiXtG0UtxupRQSfTnBoCy554x18yJHI6I+G5Eru4LHmPJZEQsrvPUbMiA8G/WgMK7w7I+ez7++o2ANfbrjvaOl1tFMs+htG3IrZH9/hDX1Pr8Tc0UvH8tcX29KzAgIGcEkINyW5BF9x891hw6VYqgJHEk0huccS7vh3C6gTiODL+26huuBtbct8eZnqLML8PkxGYpuPZBqtqwkSjgc4mB5gbgig5i+y0UDK35LMxXisn9xQtK+nd26gTIHsHe/oblK/b29fUmN/8Y+9jAQrnBp56m1LcDlDp9irKTExSKduXJVWSqdBMA08pEJnEIOB3FPPMybu/oeV8zFeYN3xx576Q6RH+VmplE4ncQV5v+5rzSoyOU7PuEAg8g803PwBJ0CExno/jcMbN8tONYeOmHiuUNryvm3fRUy4tMPVLdAGkUhNWuggGrJcXPv+ouCjz0MKUHz1J2/E8IC9nqTabcxgaBYM0hPhD5Y65FsbxRQKxCQrDjDctW7PUM3HuZunFyifSAqEfuzCp48Il24luWUWZoyJCaPR82jE0+kFA643wRFVni4RYSq3ohJO2pZ7B5dO4xkDWbEpossJPLSrPjYID8rS2UHTlvyNxqIGsg674XJJ7vnh5L7PNwC4hh2sjCI96mzszOTpxLF0T7l88Yz7lAuK6OnL8gXLOnTvpzSb22YG8W7us3jSebFHeeqnXRG1vt+MoUM84LQIBmMsCTAcOauTh0T0l0neQK7m2bLMt2mGxU3HYssS0J2cdv5wljlPsrIuZLAG/2DOZIXgCYT8uMGZN+e2kSirfxZOPCsC0f24nTZzspnVn9VePS1Z5vubmAGGXG8ZFno9Hel0yfA5ZPhF7Dh972BQJ2qCpgH67lmWtBYbvk6sz02wjky2vXyz0XErP/kFB619js1BtwfOV4OPRqOQBjy3Qbk18vigUPPSD5ceHnwck7W9bhAqZdd7SuG7w4/P2F/GaJh8c7e9qgow+Q7cGBo+98WsLkuktFqiZabtXuQTu/Y5ETbR0v7tNSFnvrmu6pjdoan2KjMu8q/Hmj1EfCO2ZGfEIbIXKUlw8qaX9/b2oeSJmFksSeT/Fn0V3nSypChh4Gjh74ybO9aeZ/AN2dwciu2/MhAAAAAElFTkSuQmCC">
+          Flume日志采集框架
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725305127-ac24dc3c-d3be-4cc5-ad3f-bee197388fe7.png" alt="img"></p> <p>​		在一个完整的离线大数据处理系统中，除了hdfs+mapreduce+hive组成分析系统的核心之外，还需要数据采集、结果数据导出、任务调度等不可或缺的辅助系统，而这些辅助工具在hadoop生态体系中都有便捷的开源框架。</p> <ul><li><p>Flume是Cloudera提供的一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统</p></li> <li><p>Flume支持在日志系统中定制各类数据发送方，用于收集数据；</p></li> <li><p>Flume提供对数据进行简单处理，并写到各种数据接受方（可定制）的能力。</p></li></ul> <p>​		重构后的版本统称为 Flume NG（next generation）；改动的另一原因是将 Flume 纳入 apache 旗下，cloudera Flume 改名为 Apache Flume。</p> <p>官方网站： http://flume.apache.org/</p> <h2 id="_1-框架结构"><a href="#_1-框架结构" class="header-anchor">#</a> 1. 框架结构</h2> <p>​		Flume 的核心是把数据从数据源收集过来，再送到目的地。为了保证输送一定成功，在送到目的地之前，会先缓存数据，待数据真正到达目的地后，删除自己缓存的数据。</p> <p>​		Flume分布式系统中最核心的角色是agent，flume采集系统就是由一个个agent所连接起来形成。</p> <h3 id="_1-1-flume构成组件"><a href="#_1-1-flume构成组件" class="header-anchor">#</a> 1.1 flume构成组件</h3> <ul><li><p>Client</p> <p>​	Client生产数据，运行在一个独立的线程。</p></li> <li><p>Event</p> <p>​	一个数据单元，消息头和消息体组成。（Events可以是日志记录、 avro 对象等。）</p></li> <li><p>Flow</p> <p>​	Event从源点到达目的点的迁移的抽象。</p></li> <li><p>Agent结构</p> <p>​	Flume 运行的核心是 Agent。Flume以agent为最小的独立运行单位。一个agent就是一个JVM。它是一个完整的数据收集工具，含有三个核心组件，分别是source、 channel、 sink。通过这些组件， Event 可以从一个地方流向另一个地方，如下图所示。</p></li> <li><p>Source</p> <p>​	Source是数据的收集端，负责将数据捕获后进行特殊的格式化，将数据封装到事件（event） 里，然后将事件推入Channel中。 Flume提供了很多内置的Source， 支持 Avro， log4j， syslog 和 http post(body为json格式)。可以让应用程序同已有的Source直接打交道，如AvroSource，SyslogTcpSource。 如果内置的Source无法满足需要， Flume还支持自定义Source。</p></li> <li><p>Channel</p> <p>​	Channel是连接Source和Sink的组件，大家可以将它看做一个数据的缓冲区（数据队列），它可以将事件暂存到内存中也可以持久化到本地磁盘上， 直到Sink处理完该事件。介绍两个较为常用的Channel， MemoryChannel和FileChannel。</p></li> <li><p>Sink</p> <p>​	Sink从Channel中取出事件，然后将数据发到别处，可以向文件系统、数据库、 hadoop存数据， 也可以是其他agent的Source。在日志数据较少时，可以将数据存储在文件系统中，并且设定一定的时间间隔保存数据。</p></li></ul> <h3 id="_1-2-系统结构图"><a href="#_1-2-系统结构图" class="header-anchor">#</a> 1.2 系统结构图</h3> <h4 id="_1-2-1-单个agent采集数据"><a href="#_1-2-1-单个agent采集数据" class="header-anchor">#</a> 1.2.1 单个agent采集数据</h4> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725305035-b407b013-e36d-45d2-84c0-04f5a1b8edc6.png" alt="img"></p> <h4 id="_1-2-2-2个agent串联"><a href="#_1-2-2-2个agent串联" class="header-anchor">#</a> 1.2.2  2个agent串联</h4> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304836-a8abc00b-ff5c-43c8-aaf3-8fee00a221eb.png" alt="img"></p> <h4 id="_1-2-3-多个agent串联"><a href="#_1-2-3-多个agent串联" class="header-anchor">#</a> 1.2.3 多个agent串联</h4> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304839-2ca37d3f-0661-4cb3-9d80-48a85e18f19a.png" alt="img"></p> <h4 id="_1-2-4-多个channel"><a href="#_1-2-4-多个channel" class="header-anchor">#</a> 1.2.4 多个channel</h4> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304870-b771f3a4-80f2-4f79-859f-353192176331.png" alt="img"></p> <h2 id="_2-安装使用"><a href="#_2-安装使用" class="header-anchor">#</a> 2. 安装使用</h2> <p>下载：http://archive.cloudera.com/cdh5/cdh/5/flume-ng-1.6.0-cdh5.14.2.tar.gz</p> <ul><li>vim flume-env.sh，</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code><span class="token comment"># 添加java环境变量</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/kkb/install/jdk1.8.0_141
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h3 id="_2-1-采集文件到控制台"><a href="#_2-1-采集文件到控制台" class="header-anchor">#</a> 2.1 采集文件到控制台</h3> <ul><li>vim tail-memory-logger.conf</li></ul> <div class="language-yaml line-numbers-mode"><pre class="language-yaml"><code><span class="token comment"># Name the components on this agent</span>
+<span class="token comment">#定义一个agent，分别指定source、channel、sink别名</span>
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+
+<span class="token comment">#配置source</span>
+<span class="token comment">#指定source的类型为exec，通过Unix命令来传输结果数据</span>
+a1.sources.r1.type = exec
+<span class="token comment">#监控一个文件，有新的数据产生就不断采集走</span>
+a1.sources.r1.command = tail <span class="token punctuation">-</span>F /kfly/install/flumeData/tail.log
+<span class="token comment">#指定source的数据流入的channel中</span>
+a1.sources.r1.channels = c1
+
+<span class="token comment">#配置channel</span>
+<span class="token comment">#指定channel的类型为memory</span>
+a1.channels.c1.type = memory
+<span class="token comment">#指定channel的最多可以存放数据的容量</span>
+a1.channels.c1.capacity = 1000
+<span class="token comment">#指定在一个事务中source写数据到channel或者sink从channel取数据最大条数</span>
+a1.channels.c1.transactionCapacity = 100
+
+<span class="token comment">#配置sink</span>
+a1.sinks.k1.channel = c1
+<span class="token comment">#类型是日志格式，结果会打印在控制台</span>
+a1.sinks.k1.type = logger
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><ul><li>启动agent</li></ul> <div class="language-plain line-numbers-mode"><pre class="language-plain"><code>其中：
+-n表示指定该agent名称
+-c表示配置文件所在的目录
+-f表示配置文件的路径名称
+-D表示指定key=value键值对---这里指定的是启动的日志输出级别
+
+bin/flume-ng agent -n a1 -c myconf -f myconf/tail-memory-logger.conf -Dflume.root.logger=info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h3 id="_2-2-采集文件到hdfs"><a href="#_2-2-采集文件到hdfs" class="header-anchor">#</a> 2.2 采集文件到HDFS</h3> <ul><li>vim file2Hdfs.conf</li></ul> <div class="language-yaml line-numbers-mode"><pre class="language-yaml"><code><span class="token comment"># Name the components on this agent</span>
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+
+<span class="token comment">#配置source</span>
+a1.sources.r1.type = exec
+a1.sources.r1.command = tail <span class="token punctuation">-</span>F /kfly/install/flumeData/tail.log
+a1.sources.r1.channels = c1
+
+<span class="token comment">#配置channel</span>
+a1.channels.c1.type = file
+<span class="token comment">#设置检查点目录--该目录是记录下event在数据目录下的位置</span>
+a1.channels.c1.checkpointDir=/kfly/data/flume_checkpoint
+<span class="token comment">#数据存储所在的目录</span>
+a1.channels.c1.dataDirs=/kfly/data/flume_data
+
+<span class="token comment">#配置sink</span>
+a1.sinks.k1.channel = c1
+<span class="token comment">#指定sink类型为hdfs</span>
+a1.sinks.k1.type = hdfs
+<span class="token comment">#指定数据收集到hdfs目录</span>
+a1.sinks.k1.hdfs.path = hdfs<span class="token punctuation">:</span>//node01<span class="token punctuation">:</span>8020/tailFile/%Y<span class="token punctuation">-</span>%m<span class="token punctuation">-</span>%d/%H%M
+<span class="token comment">#指定生成文件名的前缀</span>
+a1.sinks.k1.hdfs.filePrefix = events<span class="token punctuation">-</span>
+<span class="token comment">#是否启用时间上的”舍弃”   --&gt;控制目录 </span>
+a1.sinks.k1.hdfs.round = true
+<span class="token comment">#时间上进行“舍弃”的值</span>
+<span class="token comment"># 如 12:10 -- 12:19 =&gt; 12:10</span>
+<span class="token comment"># 如 12:20 -- 12:29 =&gt; 12:20</span>
+a1.sinks.k1.hdfs.roundValue = 10
+<span class="token comment">#时间上进行“舍弃”的单位</span>
+a1.sinks.k1.hdfs.roundUnit = minute
+
+<span class="token comment"># 控制文件个数</span>
+<span class="token comment">#60s或者50字节或者10条数据，谁先满足，就开始滚动生成新文件</span>
+a1.sinks.k1.hdfs.rollInterval = 60
+a1.sinks.k1.hdfs.rollSize = 50
+a1.sinks.k1.hdfs.rollCount = 10
+<span class="token comment">#每个批次写入的数据量</span>
+
+a1.sinks.k1.hdfs.batchSize = 100
+<span class="token comment">#开始本地时间戳--开启后就可以使用%Y-%m-%d去解析时间</span>
+a1.sinks.k1.hdfs.useLocalTimeStamp = true
+<span class="token comment">#生成的文件类型，默认是Sequencefile，可用DataStream，则为普通文本</span>
+  a1.sinks.k1.hdfs.fileType = DataStream
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br></div></div><ul><li>启动</li></ul> <div class="language-plain line-numbers-mode"><pre class="language-plain"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/file2Hdfs.conf -Dflume.root.logger=info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h3 id="_2-3-采集目录到hdfs"><a href="#_2-3-采集目录到hdfs" class="header-anchor">#</a> 2.3 采集目录到HDFS</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304838-086ee7f2-6aaf-4b88-9929-1d775de71c6a.png" alt="img"></p> <ul><li>vim  dir2Hdfs.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment"># Name the components on this agent</span>
+<span class="token attr-name">a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">r1</span>
+<span class="token attr-name">a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1</span>
+<span class="token attr-name">a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+
+<span class="token comment"># 配置source</span>
+<span class="token comment">##注意：不能往监控目中重复丢同名文件</span>
+<span class="token attr-name">a1.sources.r1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">spooldir</span>
+<span class="token attr-name">a1.sources.r1.spoolDir</span> <span class="token punctuation">=</span> <span class="token attr-value">/kfly/install/flumeData/files</span>
+<span class="token comment"># 是否将文件的绝对路径添加到header</span>
+<span class="token attr-name">a1.sources.r1.fileHeader</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token attr-name">a1.sources.r1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+
+
+<span class="token comment">#配置channel</span>
+<span class="token attr-name">a1.channels.c1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.c1.capacity</span> <span class="token punctuation">=</span> <span class="token attr-value">1000</span>
+<span class="token attr-name">a1.channels.c1.transactionCapacity</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+
+
+<span class="token comment">#配置sink</span>
+<span class="token attr-name">a1.sinks.k1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">hdfs</span>
+<span class="token attr-name">a1.sinks.k1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.path</span> <span class="token punctuation">=</span> <span class="token attr-value">hdfs://node01:8020/spooldir/%Y-%m-%d/%H%M</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.filePrefix</span> <span class="token punctuation">=</span> <span class="token attr-value">events-</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.round</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.roundValue</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.roundUnit</span> <span class="token punctuation">=</span> <span class="token attr-value">minute</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollInterval</span> <span class="token punctuation">=</span> <span class="token attr-value">60</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollSize</span> <span class="token punctuation">=</span> <span class="token attr-value">50</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollCount</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.batchSize</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.useLocalTimeStamp</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token comment">#生成的文件类型，默认是Sequencefile，可用DataStream，则为普通文本</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.fileType</span> <span class="token punctuation">=</span> <span class="token attr-value">DataStream</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br></div></div><ul><li>启动</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/dir2Hdfs.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h3 id="_2-4-两个agent级联"><a href="#_2-4-两个agent级联" class="header-anchor">#</a> 2.4 两个agent级联</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304830-adad9626-6dad-4a7c-8dee-8cb4df251304.png" alt="img"></p> <ul><li>第一个： vim dir2avro.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment"># Name the components on this agent</span>
+<span class="token attr-name">a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">r1</span>
+<span class="token attr-name">a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1</span>
+<span class="token attr-name">a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+
+<span class="token comment"># 配置source</span>
+<span class="token comment">##注意：不能往监控目录中重复丢同名文件</span>
+<span class="token attr-name">a1.sources.r1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">spooldir</span>
+<span class="token attr-name">a1.sources.r1.spoolDir</span> <span class="token punctuation">=</span> <span class="token attr-value">/kfly/install/flumeData/files</span>
+<span class="token attr-name">a1.sources.r1.fileHeader</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token attr-name">a1.sources.r1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+
+
+<span class="token comment">#配置channel</span>
+<span class="token attr-name">a1.channels.c1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.c1.capacity</span> <span class="token punctuation">=</span> <span class="token attr-value">1000</span>
+<span class="token attr-name">a1.channels.c1.transactionCapacity</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+
+<span class="token comment">#配置sink</span>
+<span class="token attr-name">a1.sinks.k1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token comment">#AvroSink是用来通过网络来传输数据的,可以将event发送到RPC服务器(比如AvroSource)</span>
+<span class="token attr-name">a1.sinks.k1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">avro</span>
+
+<span class="token comment">#node02 注意修改为自己的hostname</span>
+<span class="token attr-name">a1.sinks.k1.hostname</span> <span class="token punctuation">=</span> <span class="token attr-value">node02</span>
+<span class="token attr-name">a1.sinks.k1.port</span> <span class="token punctuation">=</span> <span class="token attr-value">5211</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><ul><li>第二个：vim avro2Hdfs.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment"># Name the components on this agent</span>
+<span class="token attr-name">a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">r1</span>
+<span class="token attr-name">a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1</span>
+<span class="token attr-name">a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+
+<span class="token comment">#配置source</span>
+<span class="token comment">#通过AvroSource接受AvroSink的网络数据</span>
+<span class="token attr-name">a1.sources.r1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">avro</span>
+<span class="token attr-name">a1.sources.r1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token comment">#AvroSource服务的ip地址</span>
+<span class="token attr-name">a1.sources.r1.bind</span> <span class="token punctuation">=</span> <span class="token attr-value">node02</span>
+<span class="token comment">#AvroSource服务的端口</span>
+<span class="token attr-name">a1.sources.r1.port</span> <span class="token punctuation">=</span> <span class="token attr-value">5211</span>
+
+<span class="token comment">#配置channel</span>
+<span class="token attr-name">a1.channels.c1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.c1.capacity</span> <span class="token punctuation">=</span> <span class="token attr-value">1000</span>
+<span class="token attr-name">a1.channels.c1.transactionCapacity</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+
+<span class="token comment">#配置sink</span>
+<span class="token attr-name">a1.sinks.k1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sinks.k1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">hdfs</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.path</span> <span class="token punctuation">=</span> <span class="token attr-value">hdfs://node01:8020/avro-hdfs/%Y-%m-%d/%H-%M</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.filePrefix</span> <span class="token punctuation">=</span> <span class="token attr-value">events-</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.round</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.roundValue</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.roundUnit</span> <span class="token punctuation">=</span> <span class="token attr-value">minute</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollInterval</span> <span class="token punctuation">=</span> <span class="token attr-value">60</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollSize</span> <span class="token punctuation">=</span> <span class="token attr-value">50</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollCount</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.batchSize</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.useLocalTimeStamp</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token comment">#生成的文件类型，默认是Sequencefile，可用DataStream，则为普通文本</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.fileType</span> <span class="token punctuation">=</span> <span class="token attr-value">DataStream</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br></div></div><ul><li>启动
+1、先启动第二个flume。然后在启动第一个flume</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/avro2Hdfs.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>​		2、 启动第一个</p> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/dir2avro.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h2 id="_3-高可用配置案例"><a href="#_3-高可用配置案例" class="header-anchor">#</a> 3. 高可用配置案例</h2> <h3 id="_3-1-failover故障转移"><a href="#_3-1-failover故障转移" class="header-anchor">#</a> 3.1 failover故障转移</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304855-5c476f74-241e-440d-beec-ed92e8310287.png" alt="img"></p> <h4 id="_3-1-1-节点分配"><a href="#_3-1-1-节点分配" class="header-anchor">#</a> 3.1.1 节点分配</h4> <table><thead><tr><th>名称</th> <th>服务器主机名</th> <th>ip地址</th> <th>角色</th></tr></thead> <tbody><tr><td>Agent1</td> <td>node01</td> <td>192.168.200.200</td> <td>WebServer</td></tr> <tr><td>Collector1</td> <td>node02</td> <td>192.168.200.210</td> <td>AgentMstr1</td></tr> <tr><td>Collector2</td> <td>node03</td> <td>192.168.200.220</td> <td>AgentMstr2</td></tr></tbody></table> <p>​	Agent1数据分别流入到Collector1和Collector2，Flume NG本身提供了Failover机制，可以自动切换和恢复。</p> <ul><li>vim flume-client-failover.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment">#agent name</span>
+<span class="token attr-name">a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">r1</span>
+<span class="token comment">#定义了2个sink</span>
+<span class="token attr-name">a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1 k2</span>
+
+<span class="token comment">#set gruop</span>
+<span class="token comment">#设置一个sink组，一个sink组下可以包含很多个sink</span>
+<span class="token attr-name">a1.sinkgroups</span> <span class="token punctuation">=</span> <span class="token attr-value">g1</span>
+
+<span class="token comment">#set sink group</span>
+<span class="token comment">#指定g1这个sink组下有k1  k2 这2个sink</span>
+<span class="token attr-name">a1.sinkgroups.g1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1 k2</span>
+
+<span class="token comment">#set source</span>
+<span class="token attr-name">a1.sources.r1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sources.r1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">exec</span>
+<span class="token attr-name">a1.sources.r1.command</span> <span class="token punctuation">=</span> <span class="token attr-value">tail -F /kfly/install/flumeData/tail.log</span>
+
+<span class="token comment">#set channel</span>
+<span class="token attr-name">a1.channels.c1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.c1.capacity</span> <span class="token punctuation">=</span> <span class="token attr-value">1000</span>
+<span class="token attr-name">a1.channels.c1.transactionCapacity</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+
+
+<span class="token comment"># set sink1    指定sink1的数据会传输给node02</span>
+<span class="token attr-name">a1.sinks.k1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sinks.k1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">avro</span>
+<span class="token attr-name">a1.sinks.k1.hostname</span> <span class="token punctuation">=</span> <span class="token attr-value">node02</span>
+<span class="token attr-name">a1.sinks.k1.port</span> <span class="token punctuation">=</span> <span class="token attr-value">52020</span>
+
+<span class="token comment"># set sink2    指定sink2的数据会传输给node03</span>
+<span class="token attr-name">a1.sinks.k2.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sinks.k2.type</span> <span class="token punctuation">=</span> <span class="token attr-value">avro</span>
+<span class="token attr-name">a1.sinks.k2.hostname</span> <span class="token punctuation">=</span> <span class="token attr-value">node03</span>
+<span class="token attr-name">a1.sinks.k2.port</span> <span class="token punctuation">=</span> <span class="token attr-value">52020</span>
+
+<span class="token comment">#set failover</span>
+<span class="token comment">#指定sink组高可用的策略---failover故障转移</span>
+<span class="token attr-name">a1.sinkgroups.g1.processor.type</span> <span class="token punctuation">=</span> <span class="token attr-value">failover</span>
+<span class="token comment">#指定k1这个sink的优先级</span>
+<span class="token attr-name">a1.sinkgroups.g1.processor.priority.k1</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token comment">#指定k2这个sink的优先级</span>
+<span class="token attr-name">a1.sinkgroups.g1.processor.priority.k2</span> <span class="token punctuation">=</span> <span class="token attr-value">5</span>
+<span class="token comment">#指定故障转移的最大时间，如果超时会出现异常</span>
+<span class="token attr-name">a1.sinkgroups.g1.processor.maxpenalty</span> <span class="token punctuation">=</span> <span class="token attr-value">10000</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br></div></div><p>说明：</p> <p>​		这里首先要申明一个sinkgroups,然后再设置2个sink ,k1与k2,其中2个优先级是10和5。而processor的maxpenalty被设置为10秒，默认是30秒.表示故障转移的最大时间。</p> <ul><li>vim flume-server-failover.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment">#set Agent name</span>
+<span class="token attr-name">a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">r1</span>
+<span class="token attr-name">a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1</span>
+
+<span class="token comment">#set channel</span>
+<span class="token attr-name">a1.channels.c1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.c1.capacity</span> <span class="token punctuation">=</span> <span class="token attr-value">1000</span>
+<span class="token attr-name">a1.channels.c1.transactionCapacity</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+
+<span class="token comment"># set source</span>
+<span class="token attr-name">a1.sources.r1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">avro</span>
+<span class="token attr-name">a1.sources.r1.bind</span> <span class="token punctuation">=</span> <span class="token attr-value">0.0.0.0</span>
+<span class="token attr-name">a1.sources.r1.port</span> <span class="token punctuation">=</span> <span class="token attr-value">52020</span>
+<span class="token attr-name">a1.sources.r1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+
+<span class="token comment">#配置拦截器</span>
+<span class="token comment">#指定2个拦截器  i1  i2 </span>
+<span class="token attr-name">a1.sources.r1.interceptors</span> <span class="token punctuation">=</span> <span class="token attr-value">i1 i2</span>
+<span class="token comment">#i1的类型为时间戳拦截器  可以解析%Y-%m-%d 时间</span>
+<span class="token attr-name">a1.sources.r1.interceptors.i1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">timestamp</span>
+<span class="token comment">#i2的类型为主机拦截器，可以获取当前event中携带的主机名</span>
+<span class="token attr-name">a1.sources.r1.interceptors.i2.type</span> <span class="token punctuation">=</span> <span class="token attr-value">host</span>
+<span class="token comment">#指定主机名变量</span>
+<span class="token attr-name">a1.sources.r1.interceptors.i2.hostHeader</span><span class="token punctuation">=</span><span class="token attr-value">hostname</span>
+
+<span class="token comment">#set sink to hdfs</span>
+<span class="token attr-name">a1.sinks.k1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sinks.k1.type</span><span class="token punctuation">=</span><span class="token attr-value">hdfs</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.path</span><span class="token punctuation">=</span><span class="token attr-value">hdfs://node01:8020/failover/logs/%{hostname}</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.filePrefix</span><span class="token punctuation">=</span><span class="token attr-value">%Y-%m-%d</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.round</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.roundValue</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.roundUnit</span> <span class="token punctuation">=</span> <span class="token attr-value">minute</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollInterval</span> <span class="token punctuation">=</span> <span class="token attr-value">60</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollSize</span> <span class="token punctuation">=</span> <span class="token attr-value">50</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.rollCount</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.batchSize</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+<span class="token attr-name">a1.sinks.k1.hdfs.fileType</span> <span class="token punctuation">=</span> <span class="token attr-value">DataStream</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><ul><li>先分别在node02和node03上启动flume</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/flume-server-failover.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>然后在node01上启动flume</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/flume-client-failover.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h3 id="_3-2-负载均衡"><a href="#_3-2-负载均衡" class="header-anchor">#</a> 3.2 负载均衡</h3> <ul><li>第一个：vim  flume-client-loadbalance.conf</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>  <span class="token comment">#agent name</span>
+  a1.channels <span class="token operator">=</span> c1
+  a1.sources <span class="token operator">=</span> r1
+  a1.sinks <span class="token operator">=</span> k1 k2
+  <span class="token comment">#set gruop</span>
+  a1.sinkgroups <span class="token operator">=</span> g1
+  <span class="token comment">#set sink group</span>
+  a1.sinkgroups.g1.sinks <span class="token operator">=</span> k1 k2
+  <span class="token comment">#set source</span>
+  a1.sources.r1.channels <span class="token operator">=</span> c1
+  a1.sources.r1.type <span class="token operator">=</span> <span class="token builtin class-name">exec</span>
+  a1.sources.r1.command <span class="token operator">=</span> <span class="token function">tail</span> -F /kfly/install/flumeData/tail.log
+  
+  <span class="token comment">#set channel</span>
+  a1.channels.c1.type <span class="token operator">=</span> memory
+  a1.channels.c1.capacity <span class="token operator">=</span> <span class="token number">1000</span>
+  a1.channels.c1.transactionCapacity <span class="token operator">=</span> <span class="token number">100</span>
+  <span class="token comment"># set sink1</span>
+  a1.sinks.k1.channel <span class="token operator">=</span> c1
+  a1.sinks.k1.type <span class="token operator">=</span> avro
+  a1.sinks.k1.hostname <span class="token operator">=</span> node02
+  a1.sinks.k1.port <span class="token operator">=</span> <span class="token number">52020</span>
+  <span class="token comment"># set sink2</span>
+  a1.sinks.k2.channel <span class="token operator">=</span> c1
+  a1.sinks.k2.type <span class="token operator">=</span> avro
+  a1.sinks.k2.hostname <span class="token operator">=</span> node03
+  a1.sinks.k2.port <span class="token operator">=</span> <span class="token number">52020</span>
+  <span class="token comment">#set load-balance</span>
+  <span class="token comment">#指定sink组高可用的策略---load_balance负载均衡</span>
+  a1.sinkgroups.g1.processor.type <span class="token operator">=</span>load_balance
+  <span class="token comment"># 默认是round_ robin，还可以选择random</span>
+  a1.sinkgroups.g1.processor.selector <span class="token operator">=</span> round_robin
+  <span class="token comment">#如果backoff被开启，则sink processor会屏蔽故障的sink</span>
+  a1.sinkgroups.g1.processor.backoff <span class="token operator">=</span> <span class="token boolean">true</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br></div></div><ul><li>后两个：vim  flume-server-loadbalance.conf</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>  <span class="token comment">#set Agent name</span>
+  a1.sources <span class="token operator">=</span> r1
+  a1.channels <span class="token operator">=</span> c1
+  a1.sinks <span class="token operator">=</span> k1
+  
+  <span class="token comment">#set channel</span>
+  a1.channels.c1.type <span class="token operator">=</span> memory
+  a1.channels.c1.capacity <span class="token operator">=</span> <span class="token number">1000</span>
+  a1.channels.c1.transactionCapacity <span class="token operator">=</span> <span class="token number">100</span>
+  
+  <span class="token comment"># set source</span>
+  a1.sources.r1.type <span class="token operator">=</span> avro
+  a1.sources.r1.bind <span class="token operator">=</span> <span class="token number">0.0</span>.0.0
+  a1.sources.r1.port <span class="token operator">=</span> <span class="token number">52020</span>
+  a1.sources.r1.channels <span class="token operator">=</span> c1
+  
+  <span class="token comment">#配置拦截器</span>
+  a1.sources.r1.interceptors <span class="token operator">=</span> i1 i2
+  a1.sources.r1.interceptors.i1.type <span class="token operator">=</span> timestamp
+  a1.sources.r1.interceptors.i2.type <span class="token operator">=</span> <span class="token function">host</span>
+  a1.sources.r1.interceptors.i2.hostHeader<span class="token operator">=</span>hostname
+  <span class="token comment">#hostname不使用ip显示，直接就是该服务器对应的主机名</span>
+  a1.sources.r1.interceptors.i2.useIP<span class="token operator">=</span>false
+  
+  <span class="token comment">#set sink to hdfs</span>
+  a1.sinks.k1.channel <span class="token operator">=</span> c1
+  a1.sinks.k1.type<span class="token operator">=</span>hdfs
+  a1.sinks.k1.hdfs.path<span class="token operator">=</span>hdfs://node01:8020/loadbalance/logs/%<span class="token punctuation">{</span>hostname<span class="token punctuation">}</span>
+  a1.sinks.k1.hdfs.filePrefix<span class="token operator">=</span>%Y-%m-%d
+  a1.sinks.k1.hdfs.round <span class="token operator">=</span> <span class="token boolean">true</span>
+  a1.sinks.k1.hdfs.roundValue <span class="token operator">=</span> <span class="token number">10</span>
+  a1.sinks.k1.hdfs.roundUnit <span class="token operator">=</span> minute
+  a1.sinks.k1.hdfs.rollInterval <span class="token operator">=</span> <span class="token number">60</span>
+  a1.sinks.k1.hdfs.rollSize <span class="token operator">=</span> <span class="token number">50</span>
+  a1.sinks.k1.hdfs.rollCount <span class="token operator">=</span> <span class="token number">10</span>
+  a1.sinks.k1.hdfs.batchSize <span class="token operator">=</span> <span class="token number">100</span>
+  a1.sinks.k1.hdfs.fileType <span class="token operator">=</span> DataStream
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br></div></div><ul><li>先分别启动后两个flume</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/flume-server-loadbalance.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>然后在node01上启动flume</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>bin/flume-ng agent -n a1 -c myconf -f myconf/flume-client-loadbalance.conf -Dflume.root.logger<span class="token operator">=</span>info,console
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h3 id="_3-3-静态拦截器使用"><a href="#_3-3-静态拦截器使用" class="header-anchor">#</a> 3.3 静态拦截器使用</h3> <ul><li>场景</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>A、B两台日志服务机器实时生产日志主要类型为access.log、nginx.log、web.log 
+现在需要把A、B 机器中的access.log、nginx.log、web.log 采集汇总到C机器上然后统一收集到hdfs中。
+但是在hdfs中要求的目录为：
+/source/logs/access/20180101/**
+/source/logs/nginx/20180101/**
+/source/logs/web/20180101/**
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><ul><li>场景分析</li></ul> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304850-aa01ae73-2379-4415-8fe6-3c2db672a90f.png" alt="img"></p> <ul><li>数据流程处理分析</li></ul> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1613725304834-4181fa31-49da-4f85-846c-dff415ddd8b9.png" alt="img"></p> <ul><li>vim exec_source_avro_sink.conf</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>Name the components on this agent
+
+<span class="token comment"># 定义三个source</span>
+a1.sources <span class="token operator">=</span> r1 r2 r3
+a1.sinks <span class="token operator">=</span> k1
+a1.channels <span class="token operator">=</span> c1
+
+<span class="token comment"># Describe/configure the source</span>
+a1.sources.r1.type <span class="token operator">=</span> <span class="token builtin class-name">exec</span>
+a1.sources.r1.command <span class="token operator">=</span> <span class="token function">tail</span> -F /kfly/install/flumeData/access.log
+
+<span class="token comment">#指定source r1 使用拦截器i1</span>
+a1.sources.r1.interceptors <span class="token operator">=</span> i1
+<span class="token comment">#拦截器类型static静态</span>
+a1.sources.r1.interceptors.i1.type <span class="token operator">=</span> static
+
+<span class="token comment"># static拦截器的功能就是往采集到的数据的header中插入自己定义的key-value对</span>
+<span class="token comment"># 自己进行设置,我们这里的key和value相当于键值对,k=type v=access</span>
+a1.sources.r1.interceptors.i1.key <span class="token operator">=</span> <span class="token builtin class-name">type</span>
+a1.sources.r1.interceptors.i1.value <span class="token operator">=</span> access
+
+a1.sources.r2.type <span class="token operator">=</span> <span class="token builtin class-name">exec</span>
+a1.sources.r2.command <span class="token operator">=</span> <span class="token function">tail</span> -F /kfly/install/flumeData/nginx.log
+<span class="token comment">#指定source r2 使用拦截器i2</span>
+a1.sources.r2.interceptors <span class="token operator">=</span> i2
+<span class="token comment">#拦截器类型static静态</span>
+a1.sources.r2.interceptors.i2.type <span class="token operator">=</span> static
+<span class="token comment"># 自己进行设置</span>
+a1.sources.r2.interceptors.i2.key <span class="token operator">=</span> <span class="token builtin class-name">type</span>
+a1.sources.r2.interceptors.i2.value <span class="token operator">=</span> nginx
+
+a1.sources.r3.type <span class="token operator">=</span> <span class="token builtin class-name">exec</span>
+a1.sources.r3.command <span class="token operator">=</span> <span class="token function">tail</span> -F /kfly/install/flumeData/web.log
+
+<span class="token comment">#指定source r3 使用拦截器i3</span>
+a1.sources.r3.interceptors <span class="token operator">=</span> i3
+<span class="token comment">#拦截器类型static静态</span>
+a1.sources.r3.interceptors.i3.type <span class="token operator">=</span> static
+<span class="token comment"># 自己进行设置</span>
+a1.sources.r3.interceptors.i3.key <span class="token operator">=</span> <span class="token builtin class-name">type</span>
+a1.sources.r3.interceptors.i3.value <span class="token operator">=</span> web
+
+<span class="token comment"># Use a channel which buffers events in memory</span>
+a1.channels.c1.type <span class="token operator">=</span> memory
+a1.channels.c1.capacity <span class="token operator">=</span> <span class="token number">20000</span>
+a1.channels.c1.transactionCapacity <span class="token operator">=</span> <span class="token number">10000</span>
+<span class="token comment"># Describe the sink</span>
+a1.sinks.k1.type <span class="token operator">=</span> avro
+a1.sinks.k1.hostname <span class="token operator">=</span> node03
+a1.sinks.k1.port <span class="token operator">=</span> <span class="token number">41414</span>
+a1.sinks.k1.channel <span class="token operator">=</span> c1
+
+<span class="token comment"># Bind the source and sink to the channel</span>
+a1.sources.r1.channels <span class="token operator">=</span> c1
+a1.sources.r2.channels <span class="token operator">=</span> c1
+a1.sources.r3.channels <span class="token operator">=</span> c1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br></div></div><ul><li>vim avro_source_hdfs_sink.conf</li></ul> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>a1.sources <span class="token operator">=</span> r1
+a1.sinks <span class="token operator">=</span> k1
+a1.channels <span class="token operator">=</span> c1
+
+<span class="token comment">#定义source</span>
+a1.sources.r1.type <span class="token operator">=</span> avro
+a1.sources.r1.bind <span class="token operator">=</span> node03
+a1.sources.r1.port <span class="token operator">=</span><span class="token number">41414</span>
+
+<span class="token comment">#定义channels</span>
+a1.channels.c1.type <span class="token operator">=</span> memory
+a1.channels.c1.capacity <span class="token operator">=</span> <span class="token number">20000</span>
+a1.channels.c1.transactionCapacity <span class="token operator">=</span> <span class="token number">1000</span>
+
+
+<span class="token comment">#定义sink</span>
+a1.sinks.k1.type <span class="token operator">=</span> hdfs
+<span class="token comment"># 此处的%{type} 这里是取我们在node01和node02定义的type的值,也就是value</span>
+a1.sinks.k1.hdfs.path<span class="token operator">=</span>hdfs://node01:8020/source/logs/%<span class="token punctuation">{</span>type<span class="token punctuation">}</span>/%Y%m%d
+a1.sinks.k1.hdfs.filePrefix <span class="token operator">=</span>events-
+a1.sinks.k1.hdfs.fileType <span class="token operator">=</span> DataStream
+a1.sinks.k1.hdfs.writeFormat <span class="token operator">=</span> Text
+<span class="token comment">#时间类型</span>
+a1.sinks.k1.hdfs.useLocalTimeStamp <span class="token operator">=</span> <span class="token boolean">true</span>
+<span class="token comment">#生成的文件不按条数生成</span>
+a1.sinks.k1.hdfs.rollCount <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token comment">#生成的文件按时间生成</span>
+a1.sinks.k1.hdfs.rollInterval <span class="token operator">=</span> <span class="token number">30</span>
+<span class="token comment">#生成的文件按大小生成</span>
+a1.sinks.k1.hdfs.rollSize  <span class="token operator">=</span> <span class="token number">10485760</span>
+<span class="token comment">#批量写入hdfs的个数</span>
+a1.sinks.k1.hdfs.batchSize <span class="token operator">=</span> <span class="token number">1000</span>
+<span class="token comment">#flume操作hdfs的线程数（包括新建，写入等）</span>
+a1.sinks.k1.hdfs.threadsPoolSize<span class="token operator">=</span><span class="token number">10</span>
+<span class="token comment">#操作hdfs超时时间</span>
+a1.sinks.k1.hdfs.callTimeout<span class="token operator">=</span><span class="token number">30000</span>
+
+
+<span class="token comment">#组装source、channel、sink</span>
+a1.sources.r1.channels <span class="token operator">=</span> c1
+a1.sinks.k1.channel <span class="token operator">=</span> c1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br></div></div><h3 id="_3-4-自定义拦截器"><a href="#_3-4-自定义拦截器" class="header-anchor">#</a> 3.4 自定义拦截器</h3> <div class="language-xml line-numbers-mode"><pre class="language-xml"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.apache.flume<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>flume-ng-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.6.0-cdh5.14.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token comment">// flume自定义拦截器对数据加密</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomInterceptor</span> <span class="token keyword">implements</span> <span class="token class-name">Interceptor</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 指定需要加密的字段下标</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> encrypted_field_index<span class="token punctuation">;</span>
+    <span class="token comment">// 指定不需要对应列的下标</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> out_index<span class="token punctuation">;</span>
+    <span class="token comment">// 提供构建方法，后期可以接受配置文件中的参数</span>
+    <span class="token keyword">public</span> <span class="token class-name">CustomInterceptor</span><span class="token punctuation">(</span><span class="token class-name">String</span> encrypted_field_index<span class="token punctuation">,</span> <span class="token class-name">String</span> out_index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+		<span class="token comment">// 定义拦截器规则</span>
+    <span class="token keyword">public</span> <span class="token class-name">Event</span> <span class="token function">intercept</span><span class="token punctuation">(</span><span class="token class-name">Event</span> event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token class-name">String</span> line <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>event<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">Charsets</span><span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// TODO 处理逻辑      </span>
+      event<span class="token punctuation">.</span><span class="token function">setBody</span><span class="token punctuation">(</span>newLine<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token class-name">Charsets</span><span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> event<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Event</span><span class="token punctuation">&gt;</span></span> <span class="token function">intercept</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Event</span><span class="token punctuation">&gt;</span></span> events<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 遍历调用intercept</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">MyBuilder</span>  <span class="token keyword">implements</span> <span class="token class-name">CustomInterceptor<span class="token punctuation">.</span>Builder</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 指定需要加密的字段下标</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> encrypted_field_index<span class="token punctuation">;</span>
+				<span class="token comment">// 指定不需要对应列的下标</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> out_index<span class="token punctuation">;</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token class-name">CustomInterceptor</span> <span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">CustomInterceptor</span><span class="token punctuation">(</span>encrypted_field_index<span class="token punctuation">,</span> out_index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">Context</span> context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token comment">// 后去flume配置文件中指定的内容          </span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>encrypted_field_index <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">&quot;encrypted_field_index&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>out_index <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">&quot;out_index&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><ul><li>打成jar包后放到flume安装目录下的lib中</li> <li>创建配置文件 flume-interceptor-hdfs.conf</li></ul> <div class="language-java line-numbers-mode"><pre class="language-java"><code># <span class="token class-name">Name</span> the components on <span class="token keyword">this</span> agent
+a1<span class="token punctuation">.</span>sources <span class="token operator">=</span> r1
+a1<span class="token punctuation">.</span>sinks <span class="token operator">=</span> k1
+a1<span class="token punctuation">.</span>channels <span class="token operator">=</span> c1
+
+#配置source
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>type <span class="token operator">=</span> exec
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>command <span class="token operator">=</span> tail <span class="token operator">-</span><span class="token class-name">F</span> <span class="token operator">/</span>kfly<span class="token operator">/</span>install<span class="token operator">/</span>flumeData<span class="token operator">/</span>user<span class="token punctuation">.</span>txt
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>channels <span class="token operator">=</span> c1
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>interceptors <span class="token operator">=</span>i1
+# 自定义拦截器路径
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>interceptors<span class="token punctuation">.</span>i1<span class="token punctuation">.</span>type <span class="token operator">=</span><span class="token class-name"><span class="token namespace">bigdata<span class="token punctuation">.</span>flume<span class="token punctuation">.</span></span>CustomInterceptor</span>$<span class="token class-name">MyBuilder</span>
+#  传入自定义拦截器的参数
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>interceptors<span class="token punctuation">.</span>i1<span class="token punctuation">.</span>encrypted_field_index<span class="token operator">=</span><span class="token number">0</span>
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>interceptors<span class="token punctuation">.</span>i1<span class="token punctuation">.</span>out_index<span class="token operator">=</span><span class="token number">3</span>
+
+#配置channel
+a1<span class="token punctuation">.</span>channels<span class="token punctuation">.</span>c1<span class="token punctuation">.</span>type <span class="token operator">=</span> memory
+a1<span class="token punctuation">.</span>channels<span class="token punctuation">.</span>c1<span class="token punctuation">.</span>capacity <span class="token operator">=</span> <span class="token number">1000</span>
+a1<span class="token punctuation">.</span>channels<span class="token punctuation">.</span>c1<span class="token punctuation">.</span>transactionCapacity <span class="token operator">=</span> <span class="token number">100</span>
+
+#配置sink
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>type <span class="token operator">=</span> hdfs
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>channel <span class="token operator">=</span> c1
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>path <span class="token operator">=</span> hdfs<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>node01<span class="token operator">:</span><span class="token number">8020</span><span class="token operator">/</span>interceptor<span class="token operator">/</span>files<span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">Y</span><span class="token operator">-</span><span class="token operator">%</span>m<span class="token operator">-</span><span class="token operator">%</span>d<span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">H</span><span class="token operator">%</span><span class="token class-name">M</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>filePrefix <span class="token operator">=</span> events<span class="token operator">-</span>
+# 时间舍弃
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>round <span class="token operator">=</span> <span class="token boolean">true</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>roundValue <span class="token operator">=</span> <span class="token number">10</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>roundUnit <span class="token operator">=</span> minute
+# 限定生成文件时机
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>rollInterval <span class="token operator">=</span> <span class="token number">5</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>rollSize <span class="token operator">=</span> <span class="token number">50</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>rollCount <span class="token operator">=</span> <span class="token number">10</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>batchSize <span class="token operator">=</span> <span class="token number">100</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>useLocalTimeStamp <span class="token operator">=</span> <span class="token boolean">true</span>
+#生成的文件类型，默认是<span class="token class-name">Sequencefile</span>，可用<span class="token class-name">DataStream</span>，则为普通文本
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>fileType <span class="token operator">=</span> <span class="token class-name">DataStream</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br></div></div><h3 id="_3-5-自定义source"><a href="#_3-5-自定义source" class="header-anchor">#</a> 3.5 自定义Source</h3> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomSource</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractSource</span> <span class="token keyword">implements</span> <span class="token class-name">Configurable</span><span class="token punctuation">,</span> <span class="token class-name">PollableSource</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">Status</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">EventDeliveryException</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+          	<span class="token comment">// 获取 events ，传入下方</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getChannelProcessor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">processEventBatch</span><span class="token punctuation">(</span>events<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token class-name">Status</span><span class="token punctuation">.</span>READY<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Status</span><span class="token punctuation">.</span>BACKOFF<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><ul><li>vim mysqlsource.conf</li></ul> <div class="language-java line-numbers-mode"><pre class="language-java"><code># <span class="token class-name">Name</span> the components on <span class="token keyword">this</span> agent
+a1<span class="token punctuation">.</span>sources <span class="token operator">=</span> r1
+a1<span class="token punctuation">.</span>sinks <span class="token operator">=</span> k1
+a1<span class="token punctuation">.</span>channels <span class="token operator">=</span> c1
+
+# <span class="token class-name">Describe</span><span class="token operator">/</span>configure the source
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>type <span class="token operator">=</span> <span class="token class-name"><span class="token namespace">bigdata<span class="token punctuation">.</span>flume<span class="token punctuation">.</span>source<span class="token punctuation">.</span></span>CustomSource</span>
+# 老师的是node01<span class="token punctuation">,</span>同学们改成自己的节点 一定要注意
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>connection<span class="token punctuation">.</span>url <span class="token operator">=</span> jdbc<span class="token operator">:</span>mysql<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>node03<span class="token operator">:</span><span class="token number">3306</span><span class="token operator">/</span>mysqlsource
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>connection<span class="token punctuation">.</span>user <span class="token operator">=</span> root
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>connection<span class="token punctuation">.</span>password <span class="token operator">=</span> <span class="token number">123456</span>
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>table <span class="token operator">=</span> student
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>columns<span class="token punctuation">.</span><span class="token keyword">to</span><span class="token punctuation">.</span>select <span class="token operator">=</span> <span class="token operator">*</span>
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>start<span class="token punctuation">.</span>from<span class="token operator">=</span><span class="token number">0</span>
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>run<span class="token punctuation">.</span>query<span class="token punctuation">.</span>delay<span class="token operator">=</span><span class="token number">3000</span>
+
+# <span class="token class-name">Describe</span> the channel
+a1<span class="token punctuation">.</span>channels<span class="token punctuation">.</span>c1<span class="token punctuation">.</span>type <span class="token operator">=</span> memory
+a1<span class="token punctuation">.</span>channels<span class="token punctuation">.</span>c1<span class="token punctuation">.</span>capacity <span class="token operator">=</span> <span class="token number">1000</span>
+a1<span class="token punctuation">.</span>channels<span class="token punctuation">.</span>c1<span class="token punctuation">.</span>transactionCapacity <span class="token operator">=</span> <span class="token number">100</span>
+
+# <span class="token class-name">Describe</span> the sink
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>type <span class="token operator">=</span> logger
+
+
+# <span class="token class-name">Bind</span> the source and sink <span class="token keyword">to</span> <span class="token namespace">the</span> channel
+a1<span class="token punctuation">.</span>sources<span class="token punctuation">.</span>r1<span class="token punctuation">.</span>channels <span class="token operator">=</span> c1
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>channel <span class="token operator">=</span> c1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br></div></div><h3 id="_3-6-自定义sink"><a href="#_3-6-自定义sink" class="header-anchor">#</a> 3.6 自定义Sink</h3> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MysqlSink</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractSink</span> <span class="token keyword">implements</span> <span class="token class-name">Configurable</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Status</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">Status</span> status <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token comment">// Start transaction</span>
+        <span class="token class-name">Channel</span> ch <span class="token operator">=</span> <span class="token function">getChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Transaction</span> txn <span class="token operator">=</span> ch<span class="token punctuation">.</span><span class="token function">getTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        txn<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name">Event</span> event <span class="token operator">=</span> ch<span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+						<span class="token comment">// event取出数据，存入mysql</span>
+            txn<span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> t<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            txn<span class="token punctuation">.</span><span class="token function">rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            t<span class="token punctuation">.</span><span class="token function">getCause</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            status <span class="token operator">=</span> <span class="token class-name">Status</span><span class="token punctuation">.</span>BACKOFF<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span><span class="token punctuation">{</span>
+            txn<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> status<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br></div></div><ul><li>vim mysqlsink.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token attr-name">    a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">r1</span>
+<span class="token attr-name">    a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">k1</span>
+<span class="token attr-name">    a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+    
+<span class="token comment">    #配置source</span>
+<span class="token attr-name">    a1.sources.r1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">exec</span>
+<span class="token attr-name">    a1.sources.r1.command</span> <span class="token punctuation">=</span> <span class="token attr-value">tail -F /kfly/install/flumeData/data.log</span>
+<span class="token attr-name">    a1.sources.r1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+    
+<span class="token comment">    #配置channel</span>
+<span class="token attr-name">    a1.channels.c1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">    a1.channels.c1.capacity</span> <span class="token punctuation">=</span> <span class="token attr-value">1000</span>
+<span class="token attr-name">    a1.channels.c1.transactionCapacity</span> <span class="token punctuation">=</span> <span class="token attr-value">100</span>
+    
+<span class="token comment">    #配置sink</span>
+<span class="token attr-name">    a1.sinks.k1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">c1</span>
+<span class="token attr-name">    a1.sinks.k1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">bigdata.flume.sink.CustomSink</span>
+<span class="token attr-name">    a1.sinks.k1.mysqlurl</span><span class="token punctuation">=</span><span class="token attr-value">jdbc:mysql://node03:3306/mysqlsource?useSSL=false</span>
+<span class="token attr-name">    a1.sinks.k1.username</span><span class="token punctuation">=</span><span class="token attr-value">root</span>
+<span class="token attr-name">    a1.sinks.k1.password</span><span class="token punctuation">=</span><span class="token attr-value">123456</span>
+<span class="token attr-name">    a1.sinks.k1.tablename</span><span class="token punctuation">=</span><span class="token attr-value">flume2mysql</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h2 id="_4-注意事项"><a href="#_4-注意事项" class="header-anchor">#</a> 4. 注意事项</h2> <div class="language-java line-numbers-mode"><pre class="language-java"><code>capacity：默认该通道中最大的可以存储的event数量
+trasactionCapacity：每次最大可以从source中拿到或者送到sink中的event数量
+注意：capacity <span class="token operator">&gt;</span> trasactionCapacity
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><h3 id="_4-1-hdfs配置说明"><a href="#_4-1-hdfs配置说明" class="header-anchor">#</a> 4.1 HDFS配置说明</h3> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code><span class="token comment">#定义sink</span>
+a1.sinks.k1.type <span class="token operator">=</span> hdfs
+a1.sinks.k1.hdfs.path<span class="token operator">=</span>hdfs://node01:8020/source/logs/%<span class="token punctuation">{</span>type<span class="token punctuation">}</span>/%Y%m%d
+a1.sinks.k1.hdfs.filePrefix <span class="token operator">=</span>events
+a1.sinks.k1.hdfs.fileType <span class="token operator">=</span> DataStream
+a1.sinks.k1.hdfs.writeFormat <span class="token operator">=</span> Text
+
+<span class="token comment">#时间类型</span>
+a1.sinks.k1.hdfs.useLocalTimeStamp <span class="token operator">=</span> <span class="token boolean">true</span>
+<span class="token comment">#生成的文件不按条数生成</span>
+a1.sinks.k1.hdfs.rollCount <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token comment">#生成的文件按时间生成</span>
+a1.sinks.k1.hdfs.rollInterval <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token comment">#生成的文件按大小生成</span>
+a1.sinks.k1.hdfs.rollSize  <span class="token operator">=</span> <span class="token number">10485760</span>
+
+<span class="token comment">#批量写入hdfs的个数</span>
+a1.sinks.k1.hdfs.batchSize <span class="token operator">=</span> <span class="token number">10000</span>
+<span class="token comment">#flume操作hdfs的线程数（包括新建，写入等）</span>
+a1.sinks.k1.hdfs.threadsPoolSize<span class="token operator">=</span><span class="token number">10</span>
+<span class="token comment">#操作hdfs超时时间</span>
+a1.sinks.k1.hdfs.callTimeout<span class="token operator">=</span><span class="token number">30000</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><table><thead><tr><th>hdfs.round</th> <th>false</th> <th>Should the timestamp be rounded down (if true, affects all time based escape sequences except %t)</th></tr></thead> <tbody><tr><td><strong>hdfs.roundValue</strong></td> <td>1</td> <td>Rounded down to the highest multiple of this (in the unit configured usinghdfs.roundUnit), less than current time.</td></tr> <tr><td><strong>hdfs.roundUnit</strong></td> <td>second</td> <td>The unit of the round down value - second, minute or hour.</td></tr></tbody></table> <p>Ø round： 默认值：false 是否启用时间上的”舍弃”，这里的”舍弃”，类似于”四舍五入”</p> <p>Ø roundValue：默认值：1  时间上进行“舍弃”的值；</p> <p>Ø roundUnit： 默认值：seconds时间上进行”舍弃”的单位，包含：second,minute,hour</p> <div class="language-java line-numbers-mode"><pre class="language-java"><code># 案例一：
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>path <span class="token operator">=</span> <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">Y</span><span class="token operator">-</span><span class="token operator">%</span>m<span class="token operator">-</span><span class="token operator">%</span>d<span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">H</span><span class="token operator">:</span><span class="token operator">%</span><span class="token class-name">M</span><span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">S</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>round <span class="token operator">=</span> <span class="token boolean">true</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>roundValue <span class="token operator">=</span> <span class="token number">10</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>roundUnit <span class="token operator">=</span> minute
+# 当时间为<span class="token number">2015</span><span class="token operator">-</span><span class="token number">10</span><span class="token operator">-</span><span class="token number">16</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">38</span><span class="token operator">:</span><span class="token number">59</span>时候，hdfs<span class="token punctuation">.</span>path依然会被解析为：
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2015</span><span class="token operator">-</span><span class="token number">10</span><span class="token operator">-</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">17</span><span class="token operator">:</span><span class="token number">30</span><span class="token operator">/</span><span class="token number">00</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2015</span><span class="token operator">-</span><span class="token number">10</span><span class="token operator">-</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">17</span><span class="token operator">:</span><span class="token number">40</span><span class="token operator">/</span><span class="token number">00</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2015</span><span class="token operator">-</span><span class="token number">10</span><span class="token operator">-</span><span class="token number">16</span><span class="token operator">/</span><span class="token number">17</span><span class="token operator">:</span><span class="token number">50</span><span class="token operator">/</span><span class="token number">00</span>
+# 因为设置的是舍弃<span class="token number">10</span>分钟内的时间，因此，该目录每<span class="token number">10</span>分钟新生成一个。
+
+# 案例二：
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>path <span class="token operator">=</span> <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">Y</span><span class="token operator">-</span><span class="token operator">%</span>m<span class="token operator">-</span><span class="token operator">%</span>d<span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">H</span><span class="token operator">:</span><span class="token operator">%</span><span class="token class-name">M</span><span class="token operator">/</span><span class="token operator">%</span><span class="token class-name">S</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>round <span class="token operator">=</span> <span class="token boolean">true</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>roundValue <span class="token operator">=</span> <span class="token number">10</span>
+a1<span class="token punctuation">.</span>sinks<span class="token punctuation">.</span>k1<span class="token punctuation">.</span>hdfs<span class="token punctuation">.</span>roundUnit <span class="token operator">=</span> second
+# 现象：<span class="token number">10</span>秒为时间梯度生成对应的目录，目录下面包括很多小文件！！！
+# 格式如下：
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">45</span><span class="token operator">/</span><span class="token number">10</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">45</span><span class="token operator">/</span><span class="token number">20</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">45</span><span class="token operator">/</span><span class="token number">30</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">45</span><span class="token operator">/</span><span class="token number">40</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">45</span><span class="token operator">/</span><span class="token number">50</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">46</span><span class="token operator">/</span><span class="token number">10</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">46</span><span class="token operator">/</span><span class="token number">20</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">46</span><span class="token operator">/</span><span class="token number">30</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">46</span><span class="token operator">/</span><span class="token number">40</span>
+# <span class="token operator">/</span>flume<span class="token operator">/</span>events<span class="token operator">/</span><span class="token number">2016</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">28</span><span class="token operator">/</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">46</span><span class="token operator">/</span><span class="token number">50</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br></div></div><h3 id="_4-2-实现数据的断点续传"><a href="#_4-2-实现数据的断点续传" class="header-anchor">#</a> 4.2 实现数据的断点续传</h3> <p>其本质就是记录下每一次消费的位置，把消费信息的位置保存到文件中，后续程序挂掉了再重启的时候，可以接着上一次消费的数据位置继续拉取。</p> <ul><li>vim taildir.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token attr-name">a1.sources</span> <span class="token punctuation">=</span> <span class="token attr-value">s1</span>
+<span class="token attr-name">a1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">ch1</span>
+<span class="token attr-name">a1.sinks</span> <span class="token punctuation">=</span> <span class="token attr-value">hdfs-sink1</span>
+
+<span class="token comment">#channel</span>
+<span class="token attr-name">a1.channels.ch1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.ch1.capacity</span><span class="token punctuation">=</span><span class="token attr-value">10000</span>
+<span class="token attr-name">a1.channels.ch1.transactionCapacity</span><span class="token punctuation">=</span><span class="token attr-value">500</span>
+
+<span class="token comment">#source</span>
+<span class="token attr-name">a1.sources.s1.channels</span> <span class="token punctuation">=</span> <span class="token attr-value">ch1</span>
+<span class="token comment">#监控一个目录下的多个文件新增的内容</span>
+<span class="token attr-name">a1.sources.s1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">taildir</span>
+<span class="token comment">#通过 json 格式存下每个文件消费的偏移量，避免从头消费</span>
+<span class="token attr-name">a1.sources.s1.positionFile</span> <span class="token punctuation">=</span> <span class="token attr-value">/k/install/flumeData/index/taildir_position.json</span>
+<span class="token attr-name">a1.sources.s1.filegroups</span> <span class="token punctuation">=</span> <span class="token attr-value">f1 f2 f3 </span>
+<span class="token attr-name">a1.sources.s1.filegroups.f1</span> <span class="token punctuation">=</span> <span class="token attr-value">/home/hadoop/taillogs/access.log</span>
+<span class="token attr-name">a1.sources.s1.filegroups.f2</span> <span class="token punctuation">=</span> <span class="token attr-value">/home/hadoop/taillogs/nginx.log</span>
+<span class="token attr-name">a1.sources.s1.filegroups.f3</span> <span class="token punctuation">=</span> <span class="token attr-value">/home/hadoop/taillogs/web.log</span>
+<span class="token attr-name">a1.sources.s1.headers.f1.headerKey</span> <span class="token punctuation">=</span> <span class="token attr-value">access</span>
+<span class="token attr-name">a1.sources.s1.headers.f2.headerKey</span> <span class="token punctuation">=</span> <span class="token attr-value">nginx</span>
+<span class="token attr-name">a1.sources.s1.headers.f3.headerKey</span> <span class="token punctuation">=</span> <span class="token attr-value">web</span>
+<span class="token attr-name">a1.sources.s1.fileHeader</span>  <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+
+<span class="token comment">##sink</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.channel</span> <span class="token punctuation">=</span> <span class="token attr-value">ch1</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.type</span> <span class="token punctuation">=</span> <span class="token attr-value">hdfs</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.path</span> <span class="token punctuation">=</span><span class="token attr-value">hdfs://node01:8020/demo/data/%{headerKey}</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.filePrefix</span> <span class="token punctuation">=</span> <span class="token attr-value">event_data</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.fileSuffix</span> <span class="token punctuation">=</span> <span class="token attr-value">.log</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.rollSize</span> <span class="token punctuation">=</span> <span class="token attr-value">1048576</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.rollInterval</span> <span class="token punctuation">=</span><span class="token attr-value">20</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.rollCount</span> <span class="token punctuation">=</span> <span class="token attr-value">10</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.batchSize</span> <span class="token punctuation">=</span> <span class="token attr-value">1500</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.round</span> <span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.roundUnit</span> <span class="token punctuation">=</span> <span class="token attr-value">minute</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.threadsPoolSize</span> <span class="token punctuation">=</span> <span class="token attr-value">25</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.fileType</span> <span class="token punctuation">=</span><span class="token attr-value">DataStream</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.writeFormat</span> <span class="token punctuation">=</span> <span class="token attr-value">Text</span>
+<span class="token attr-name">a1.sinks.hdfs-sink1.hdfs.callTimeout</span> <span class="token punctuation">=</span> <span class="token attr-value">60000</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br></div></div><div class="language-json line-numbers-mode"><pre class="language-json"><code># 运行后生成的 taildir_position.json文件信息如下：
+<span class="token punctuation">[</span>
+<span class="token punctuation">{</span><span class="token property">&quot;inode&quot;</span><span class="token operator">:</span><span class="token number">102626782</span><span class="token punctuation">,</span><span class="token property">&quot;pos&quot;</span><span class="token operator">:</span><span class="token number">123</span><span class="token punctuation">,</span><span class="token property">&quot;file&quot;</span><span class="token operator">:</span><span class="token string">&quot;/home/hadoop/taillogs/access.log&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token property">&quot;inode&quot;</span><span class="token operator">:</span><span class="token number">102626785</span><span class="token punctuation">,</span><span class="token property">&quot;pos&quot;</span><span class="token operator">:</span><span class="token number">123</span><span class="token punctuation">,</span><span class="token property">&quot;file&quot;</span><span class="token operator">:</span><span class="token string">&quot;/home/hadoop/taillogs/web.log&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token property">&quot;inode&quot;</span><span class="token operator">:</span><span class="token number">102626786</span><span class="token punctuation">,</span><span class="token property">&quot;pos&quot;</span><span class="token operator">:</span><span class="token number">123</span><span class="token punctuation">,</span><span class="token property">&quot;file&quot;</span><span class="token operator">:</span><span class="token string">&quot;/home/hadoop/taillogs/nginx.log&quot;</span><span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+
+#这里inode就是标记文件的，文件名称改变，这个iNode不会变，pos记录偏移量，file就是绝对路径
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h3 id="_4-3-header参数配置讲解"><a href="#_4-3-header参数配置讲解" class="header-anchor">#</a> 4.3 header参数配置讲解</h3> <ul><li>vim test-header.conf</li></ul> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment">#配置信息test-header.conf</span>
+<span class="token attr-name">a1.channels</span><span class="token punctuation">=</span><span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sources</span><span class="token punctuation">=</span><span class="token attr-value">r1</span>
+<span class="token attr-name">a1.sinks</span><span class="token punctuation">=</span><span class="token attr-value">k1</span>
+
+<span class="token comment">#source</span>
+<span class="token attr-name">a1.sources.r1.channels</span><span class="token punctuation">=</span><span class="token attr-value">c1</span>
+<span class="token attr-name">a1.sources.r1.type</span><span class="token punctuation">=</span> <span class="token attr-value">spooldir</span>
+<span class="token attr-name">a1.sources.r1.spoolDir</span><span class="token punctuation">=</span> <span class="token attr-value">/home/hadoop/test</span>
+<span class="token attr-name">a1.sources.r1.batchSize</span><span class="token punctuation">=</span> <span class="token attr-value">100</span>
+<span class="token attr-name">a1.sources.r1.inputCharset</span><span class="token punctuation">=</span> <span class="token attr-value">UTF-8</span>
+<span class="token comment">#是否添加一个key存储目录下文件的绝对路径</span>
+<span class="token attr-name">a1.sources.r1.fileHeader</span><span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token comment">#指定存储目录下文件的绝对路径的key</span>
+<span class="token attr-name">a1.sources.r1.fileHeaderKey</span><span class="token punctuation">=</span> <span class="token attr-value">mm</span>
+<span class="token comment">#是否添加一个key存储目录下的文件名称</span>
+<span class="token attr-name">a1.sources.r1.basenameHeader</span><span class="token punctuation">=</span> <span class="token attr-value">true</span>
+<span class="token comment">#指定存储目录下文件的名称的key</span>
+<span class="token attr-name">a1.sources.r1.basenameHeaderKey</span><span class="token punctuation">=</span> <span class="token attr-value">nn</span>
+
+<span class="token comment">#channel</span>
+<span class="token attr-name">a1.channels.c1.type</span><span class="token punctuation">=</span> <span class="token attr-value">memory</span>
+<span class="token attr-name">a1.channels.c1.capacity</span><span class="token punctuation">=</span><span class="token attr-value">10000</span>
+<span class="token attr-name">a1.channels.c1.transactionCapacity</span><span class="token punctuation">=</span><span class="token attr-value">500</span>
+
+
+<span class="token comment">#sink</span>
+<span class="token attr-name">a1.sinks.k1.type</span><span class="token punctuation">=</span><span class="token attr-value">logger</span>
+<span class="token attr-name">a1.sinks.k1.channel</span><span class="token punctuation">=</span><span class="token attr-value">c1</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br></div></div><ul><li>tail / tail -f /tail -F区别</li></ul> <div class="language-markdown line-numbers-mode"><pre class="language-markdown"><code><span class="token list punctuation">-</span> tail -f
+	等同于--follow=descriptor，根据文件描述符进行追踪，当文件改名或被删除，追踪停止
+<span class="token list punctuation">-</span> tail -F
+	等同于--follow=name --retry，根据文件名进行追踪，并保持重试，即该文件被删除或改名后，如果再次创建相同的文件名，会继续追踪
+<span class="token list punctuation">-</span> tailf
+	等同于tail -f -n 10（貌似tail -f或-F默认也是打印最后10行，然后追踪文件），与tail -f不同的是，如果文件不增长，它不会去访问磁盘文件，所以tailf特别适合那些便携机上跟踪日志文件，因为它减少了磁盘访问，
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/01.大数据/10.大数据文章/10.大数据辅助框架/04.Flume日志采集框架.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=flume" title="标签">#flume</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">10/14/2021, 5:07:46 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/2f4df8/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">大数据技术之Impala</div></a> <a href="/pages/4ed21b/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Sqoop数据迁移工具</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/2f4df8/" class="prev">大数据技术之Impala</a></span> <span class="next"><a href="/pages/4ed21b/">Sqoop数据迁移工具</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/13.2c54c92b.js" defer></script>
+  </body>
+</html>

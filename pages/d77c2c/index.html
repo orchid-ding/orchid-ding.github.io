@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>业务数据库分析 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/44.7235eb98.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>出行大数据项目</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/e7c1ba/" class="sidebar-link">项目概括</a></li><li><a href="/pages/cf0c33/" class="sidebar-link">项目需求及其技术架构选型</a></li><li><a href="/pages/d9ab6c/" class="sidebar-link">日志格式数据说明</a></li><li><a href="/pages/0f50c9/" class="sidebar-link">项目创建</a></li><li><a href="/pages/c475a9/" class="sidebar-link">模拟示例数据回放</a></li><li><a href="/pages/3d0e98/" class="sidebar-link">轨迹监控模块开发</a></li><li><a href="/pages/fd681e/" class="sidebar-link">虚拟车站功能模块</a></li><li><a href="/pages/036d8c/" class="sidebar-link">业务数据库功能模块</a></li><li><a href="/pages/d77c2c/" aria-current="page" class="active sidebar-link">业务数据库分析</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_1、sparksql自定义数据源" class="sidebar-link">1、sparkSQL自定义数据源</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_1、创建hbase数据源表" class="sidebar-link">1、创建hbase数据源表</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_2、创建hbase的数据保存表" class="sidebar-link">2、创建Hbase的数据保存表</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_3、自定义sparksql的数据源读取hbase数据以及将分析结果" class="sidebar-link">3、自定义SparkSQL的数据源读取Hbase数据以及将分析结果</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_2、自定义sparksql数据源进行数据分析" class="sidebar-link">2、自定义SparkSQL数据源进行数据分析</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_3、自定义sparksql数据源-将数据保存到hbase" class="sidebar-link">3、自定义SparkSQL数据源，将数据保存到Hbase</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_4、订单监控页面大屏开发" class="sidebar-link">4、订单监控页面大屏开发</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_1、统计每个城市每日以及每月车辆的总数量" class="sidebar-link">1、统计每个城市每日以及每月车辆的总数量</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_2、统计每个城市当日-当周-当月订单数量" class="sidebar-link">2、统计每个城市当日，当周，当月订单数量</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_3、汇总车辆以及订单指标" class="sidebar-link">3、汇总车辆以及订单指标</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_4、统计平台的总订单数-当月总订单数-出租车行驶总里程数-日均订单" class="sidebar-link">4、统计平台的总订单数，当月总订单数，出租车行驶总里程数，日均订单</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_5、统计平台总订单数-平台注册用户数-平台订单总金额" class="sidebar-link">5、统计平台总订单数，平台注册用户数，平台订单总金额</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_5、用户统计功能模块" class="sidebar-link">5、用户统计功能模块</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_1、统计各个城市当日新增和当日活跃用户数" class="sidebar-link">1、统计各个城市当日新增和当日活跃用户数</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_2、统计平台当日-本周-当月新注册用户数" class="sidebar-link">2、统计平台当日，本周，当月新注册用户数</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_3、用户留存率统计" class="sidebar-link">3、用户留存率统计</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_4、活跃用户统计" class="sidebar-link">4、活跃用户统计</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_6、司机统计功能模块" class="sidebar-link">6、司机统计功能模块</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_1、平台有效订单统计" class="sidebar-link">1、平台有效订单统计</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_2、平台全部订单统计" class="sidebar-link">2、平台全部订单统计</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_3、平台订单完成率统计" class="sidebar-link">3、平台订单完成率统计</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_4、汇总平台有效订单-平台全部订单以及平台订单完成率指标" class="sidebar-link">4、汇总平台有效订单，平台全部订单以及平台订单完成率指标</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_5、统计司机有效订单数" class="sidebar-link">5、统计司机有效订单数</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_6、统计司机订单总数" class="sidebar-link">6、统计司机订单总数</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_7、基于司机有效订单数以及订单总数统计司机订单完成率" class="sidebar-link">7、基于司机有效订单数以及订单总数统计司机订单完成率</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_8、各城市新增注册司机数" class="sidebar-link">8、各城市新增注册司机数</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_7、热门订单以及热门地区统计" class="sidebar-link">7、热门订单以及热门地区统计</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_1、统计每个六边形区域订单个数" class="sidebar-link">1、统计每个六边形区域订单个数</a></li><li class="sidebar-sub-header"><a href="/pages/d77c2c/#_2、统计每个热门区域的订单数量" class="sidebar-link">2、统计每个热门区域的订单数量</a></li></ul></li></ul></li><li><a href="/pages/79d62d/" class="sidebar-link">Spark使用中的优化</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/project" title="项目-目录页" data-v-70a2d273>项目</a></li> <li data-v-70a2d273><a href="/project/#出行大数据项目" title="项目#出行大数据项目" data-v-70a2d273>出行大数据项目</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-10-04</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABH1JREFUSA3tVl1oHFUUPmdmd2ltklqbpJDiNnXFmgbFktho7YMPNiJSSZM0+CAYSkUELVhM6YuwIPpgoOKDqOBDC0XE2CQoNtQXBUFTTcCi+Wlh1V2TQExsUzcltd3M9Tt3ZjZzZ2fT+OJTL8yeM+eee757fmeJbq//KQL8X3DUSFOcfr7cRsRtxNQMWueeVzOkaITIGqQHNg5y8+jNW9ldM7A6nTpAjuolUikAwq7CE3WcM2RRDz+XGVgN3FptU/aUSlvq9Pa3iZ1+sgAqJyyAFqkipd9dqiwHF3P65YycLWc/6sqGrvoEoIp6DOFaX5h6+dnfjkWprwqsPk0dUGq5vySwDImC10KxFHgGL1SWoc92O3eVht09qdXNH11I2SsTsJYqMWzihqGMi+A+Garf3BAuuLI5oGlULyNfyB/HYNujwktOfRrMr5t77NmevqaUopx0grnKAyvVpmwUDB4x6FPXuGvYLTDwWsejwgtgkYKPqRJg8SV6xaiZ3ZTppGneS4yfH5/66fZSDHv+QZci/+h5c5UHtpy67JUqGppM0sh0Nc1dW6/N1W5Yoqat8/TU/VnadmdeW2PLLSyh0cvxBs3KbqTmwYPpxN4do/mzE8nEpvX/UMu2Wbp74zUAK5q6WkHns7V0eWkdPbPzd3rxkTGybadYySumVzhcaJFbs5UrEkQ/+CK8gF5dnh/6ciIZ73gwQ927L1IitoxKLXYP3SjYdOrHHfTZhRRlFyrorafPk20B3HPD1y2G3qKZME5Jcf3t/HUC13/8tSd++vqFveMUTwAUxSUFI1QekR1+bIze3D9MF2aq6cPvG72CgnldWCFqyRw3lwH8ZMerjTD9ElRO7Gv44wNpC90aASqGfVlz/Rx17srQ57/UU26hkhQqUB7dBR71WmzQhHUnblGmVOEw0jhbV1n9OlXUDCIRGaNV5Jp43N516fN7JmnTHdfp7Hgy0luO4aMhtkLL8Bi3bUWYvzh5Mn1dTxrL6QmGuRhGL/TiTTxRoEdTszSaq9GR0NGA3KdkOz3hqSV3MIDhQ5IVX/Ivx3umBti2es2h4eZby7x8br1rkf7Mo90AqC8aQ3sJeNzqFRu+vSANAQe3PL7l0HGOAdwDCeZYvNKeoZp1Qfs6Aipndh86HmFRi0LAnEO47wsqM6cdfjh3jBPUzhZy7nvlUfFsamED1VQt6aISHVymXZ/B2aCtIG8AI8xfobj2d3en1wWVhOeHELKmLQ1s211s88comkv4UCwWyF787mJdYXtNfhKAXVqnKTq8QZvGAGGOfaTo5pGZ/PwbUCr5+DPr/1J92JNHr9aOl/F3iI5+O1nfybsGxoimvZ3ViWSluDITw3P37mypheDIPY0tw7+O/5ApbkYw+zpfaUVu32Pi98+defdUhEpZkRFq0aqyNh9FuL9hpYbEm6iwi0z2REd09ZmyENEbuhjDWzKvZXTqKYaBIr3tt5kuPtQBZFvEUwHt60vfCNu41XsksH9Ij1BMMz1Y0OOunHNShFIP5868g5zeXmuLwL9T4b6Q2+KejgAAAABJRU5ErkJggg==">
+          业务数据库分析
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><p>前面我们已经通过sparkStreaming的程序解析kafka当中业务库的数据，将数据全部都落地到了Hbase当中的四张表（order_info&quot;,&quot;renter_info&quot;,&quot;driver_info&quot;,&quot;opt_alliance_business
+）里面去了，针对以上订单表，司机表，用户表，司管方表等，我们可以针对以上存储在Hbase当中的数据进行统计分析，通过sparkSQL读取Hbase当中的数据，实现数据的统计分析，然后将统计分析的结果，通过sparkSQL自定义输出源，保存到Hbase里面去。这里涉及到通过自定义sparkSQL的Hbase数据源来实现读取Hbase的数据，以及自定义sparkSQL的数据保存，将统计的结果保存到Hbase里面去</p> <h2 id="_1、sparksql自定义数据源"><a href="#_1、sparksql自定义数据源" class="header-anchor">#</a> 1、sparkSQL自定义数据源</h2> <h3 id="_1、创建hbase数据源表"><a href="#_1、创建hbase数据源表" class="header-anchor">#</a> 1、创建hbase数据源表</h3> <p>为了实现我们的sparkSQL自定义数据源获取Hbase当中的数据，我们可以开发测试用例，通过自定义数据源实现获取Hbase当中的数据，然后将查询的数据保存到Hbase里面去</p> <ul><li>node01执行以下命令创建Hbase表</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd /kfly/install/hbase-1.2.0-cdh5.14.2/
+bin/hbase shell
+
+create 'spark_hbase_sql','cf'
+
+put 'spark_hbase_sql','0001','cf:name','zhangsan'
+put 'spark_hbase_sql','0001','cf:score','80'
+put 'spark_hbase_sql','0002','cf:name','lisi'
+put 'spark_hbase_sql','0002','cf:score','60'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h3 id="_2、创建hbase的数据保存表"><a href="#_2、创建hbase的数据保存表" class="header-anchor">#</a> 2、创建Hbase的数据保存表</h3> <ul><li>node01执行以下命令创建Hbase表，用于将分析之后的结果数据保存到Hbase当中来</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd /kfly/install/hbase-1.2.0-cdh5.14.2/
+
+bin/hbase shell
+create 'spark_hbase_write','cf'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h3 id="_3、自定义sparksql的数据源读取hbase数据以及将分析结果"><a href="#_3、自定义sparksql的数据源读取hbase数据以及将分析结果" class="header-anchor">#</a> 3、自定义SparkSQL的数据源读取Hbase数据以及将分析结果</h3> <p>关于sparkSQL自定义数据源，参见以下文章
+<a href="https://blog.csdn.net/zjerryj/article/details/84922369" target="_blank" rel="noopener noreferrer">https://blog.csdn.net/zjerryj/article/details/84922369<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> <a href="https://www.cnblogs.com/niutao/p/10801259.html" target="_blank" rel="noopener noreferrer">https://www.cnblogs.com/niutao/p/10801259.html<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>
+在我们的travel_spark这个项目模块下，创建package com.travel.programApp，然后在这个package下面创建scala的object文件HbaseSourceAndSink.scala</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import java.util
+import java.util.Optional
+import com.travel.utils.HbaseTools
+import org.apache.hadoop.hbase.TableName
+import org.apache.hadoop.hbase.client._
+import org.apache.hadoop.hbase.util.Bytes
+import org.apache.spark.sql.sources.v2.reader._
+import org.apache.spark.sql.sources.v2.writer.{DataSourceWriter, DataWriter, DataWriterFactory, WriterCommitMessage}
+import org.apache.spark.sql.sources.v2.{DataSourceOptions, DataSourceV2, ReadSupport, WriteSupport}
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
+
+object HBaseSourceAndSink {
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession
+      .builder()
+      .master(&quot;local[2]&quot;)
+      .getOrCreate()
+
+    val df = spark.read
+      .format(&quot;com.travel.programApp.HBaseSource&quot;)
+      .option(&quot;hbase.table.name&quot;, &quot;spark_hbase_sql&quot;)
+      .option(&quot;schema&quot;, &quot;`name` STRING,`score` STRING&quot;)
+      .option(&quot;cf.cc&quot;,&quot;cf:name,cf:score&quot;)
+      .load()
+    df.explain(true)
+
+    df.createOrReplaceTempView(&quot;sparkHBaseSQL&quot;)
+
+    df.printSchema()
+
+    val frame: DataFrame = spark.sql(&quot;select * from sparkHBaseSQL where score &gt; 60&quot;)
+
+    frame.write.format(&quot;com.travel.programApp.HBaseSource&quot;)
+      .mode(SaveMode.Overwrite)
+      .option(&quot;hbase.table.name&quot;,&quot;spark_hbase_write&quot;)
+      .save()
+
+  }
+}
+
+class HBaseSource extends DataSourceV2 with ReadSupport with WriteSupport{
+  override def createReader(options: DataSourceOptions): DataSourceReader = {
+    new HBaseDataSourceReader(options.get(&quot;hbase.table.name&quot;).get(),options.get(&quot;schema&quot;).get(),options.get(&quot;cf.cc&quot;).get())
+  }
+
+  override def createWriter(jobId: String, schema: StructType, mode: SaveMode, options: DataSourceOptions): Optional[DataSourceWriter] = {
+    Optional.of(new HBaseDataSourceWrite)
+
+  }
+}
+
+class HBaseDataSourceWrite extends DataSourceWriter{
+  override def createWriterFactory(): DataWriterFactory[Row] = {
+    new HBaseDataWriterFactory
+  }
+
+  override def commit(messages: Array[WriterCommitMessage]): Unit = {
+
+  }
+
+  override def abort(messages: Array[WriterCommitMessage]): Unit = {
+
+  }
+}
+
+
+class HBaseDataWriterFactory extends DataWriterFactory[Row]{
+  override def createDataWriter(partitionId: Int, attemptNumber: Int): DataWriter[Row] = {
+    new HBaseDataWriter
+  }
+}
+
+
+class HBaseDataWriter extends DataWriter[Row]{
+
+  private val conn: Connection = HbaseTools.getHbaseConn
+
+  private val table: Table = conn.getTable(TableName.valueOf(&quot;spark_hbase_write&quot;))
+
+  override def write(record: Row): Unit = {
+    val name: String = record.getString(0)
+    val score: String = record.getString(1)
+
+    val put = new Put(&quot;0001&quot;.getBytes())
+    put.addColumn(&quot;cf&quot;.getBytes(),&quot;name&quot;.getBytes(),name.getBytes())
+    put.addColumn(&quot;cf&quot;.getBytes(),&quot;score&quot;.getBytes(),score.getBytes())
+
+    table.put(put)
+
+  }
+
+  override def commit(): WriterCommitMessage = {
+    table.close()
+    conn.close()
+    null
+
+  }
+
+  override def abort(): Unit = {
+    null
+
+  }
+}
+
+class HBaseDataSourceReader(tableName:String,schema:String,cfcc:String) extends DataSourceReader  {
+  _//定义HBase的schema_
+  private val structType: StructType = StructType.fromDDL(schema)
+  override def readSchema(): StructType = {
+    structType
+  }
+  _//返回DataReaderFactory_
+  override def createDataReaderFactories(): util.List[DataReaderFactory[Row]] = {
+    import collection.JavaConverters._
+    Seq(
+    new HBaseReaderFactory(tableName,cfcc).asInstanceOf[DataReaderFactory[Row]]
+    ).asJava
+  }
+
+}
+
+
+class HBaseReaderFactory(tableName:String,cfcc:String) extends  DataReaderFactory[Row] {
+  override def createDataReader(): DataReader[Row] = {
+    new HBaseReader(tableName,cfcc)
+  }
+}
+
+class HBaseReader(tableName:String,cfcc:String) extends DataReader[Row] {
+
+  private var hbaseConnection:Connection = null
+  private var  resultScanner:ResultScanner = null
+
+  private var nextResult:Result  = null
+
+  _// 获取HBase当中的数_
+  val data: Iterator[Seq[AnyRef]] = getIterator
+
+  def getIterator: Iterator[Seq[AnyRef]] = {
+    import scala.collection.JavaConverters._
+    hbaseConnection = HbaseTools.getHbaseConn
+    val table: Table = hbaseConnection.getTable(TableName.valueOf(tableName))
+    resultScanner = table.getScanner(new Scan())
+    val iterator: Iterator[Seq[AnyRef]] = resultScanner.iterator().asScala.map(eachResult =&gt; {
+      val str: String = Bytes.toString(eachResult.getValue(&quot;cf&quot;.getBytes(), &quot;name&quot;.getBytes()))
+      val score: String = Bytes.toString(eachResult.getValue(&quot;cf&quot;.getBytes(), &quot;score&quot;.getBytes()))
+      Seq(str, score)
+    })
+    iterator
+  }
+  override def next(): Boolean = {
+    data.hasNext
+  }
+  override def get(): Row = {
+    val seq: Seq[Any] = data.next()
+    Row.fromSeq(seq)
+  }
+  override def close(): Unit = {
+    hbaseConnection.close()
+  }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br><span class="line-number">143</span><br><span class="line-number">144</span><br><span class="line-number">145</span><br><span class="line-number">146</span><br><span class="line-number">147</span><br><span class="line-number">148</span><br><span class="line-number">149</span><br><span class="line-number">150</span><br><span class="line-number">151</span><br><span class="line-number">152</span><br><span class="line-number">153</span><br><span class="line-number">154</span><br><span class="line-number">155</span><br><span class="line-number">156</span><br><span class="line-number">157</span><br><span class="line-number">158</span><br><span class="line-number">159</span><br><span class="line-number">160</span><br><span class="line-number">161</span><br><span class="line-number">162</span><br></div></div><p></p> <h2 id="_2、自定义sparksql数据源进行数据分析"><a href="#_2、自定义sparksql数据源进行数据分析" class="header-anchor">#</a> 2、自定义SparkSQL数据源进行数据分析</h2> <p>前面我们通过自定义sparkSQL数据源，可以获取Hbase当中的数据，以及将分析的结果保存到Hbase当中去，那么接下来我们就可以通过自定义SparkSQL数据源，实现分析Hbase当中的数据
+在travel_spark这个工程模块下的src/main/scala路径下创建package  com.travel.programApp 然后创建com.travel.programApp. SparkSQLHBaseSource.scala这个object文件，实现读取Hbase的数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import com.travel.transaction._
+import com.travel.utils.GlobalConfigUtils
+import org.apache.spark.sql.{DataFrame, SparkSession}
+
+object SparkSQLHBaseSource {
+def main(args: Array[String]): Unit = {
+
+    val sparkSession: SparkSession = SparkSession.builder().master(&quot;local[1]&quot;).appName(&quot;sparkSQLHBase&quot;).getOrCreate()
+      sparkSession.sparkContext.setLogLevel(&quot;WARN&quot;)
+      val order: DataFrame = sparkSession.read
+        .format(&quot;com.travel.programApp.hbaseSource.HBaseSource&quot;)
+        .options(Map(
+          GlobalConfigUtils.getProp(&quot;sparksql_table_schema&quot;) -&gt; GlobalConfigUtils.getProp(&quot;order.sparksql_table_schema&quot;),
+        GlobalConfigUtils.getProp(&quot;hbase_table_name&quot;) -&gt; GlobalConfigUtils.getProp(&quot;syn.table.order_info&quot;),
+        GlobalConfigUtils.getProp(&quot;hbase_table_schema&quot;) -&gt; GlobalConfigUtils.getProp(&quot;order.hbase_table_schema&quot;)
+        )).load()
+
+    val driver: DataFrame = sparkSession.read
+        .format(&quot;com.travel.programApp.hbaseSource.HBaseSource&quot;)
+        .options(Map(
+          GlobalConfigUtils.getProp(&quot;sparksql_table_schema&quot;) -&gt; GlobalConfigUtils.getProp(&quot;drivers.spark_sql_table_schema&quot;),
+        GlobalConfigUtils.getProp(&quot;hbase_table_name&quot;) -&gt; GlobalConfigUtils.getProp(&quot;syn.table.driver_info&quot;),
+        GlobalConfigUtils.getProp(&quot;hbase_table_schema&quot;) -&gt; GlobalConfigUtils.getProp(&quot;driver.hbase_table_schema&quot;)
+        )).load()
+
+    val renter: DataFrame = sparkSession.read
+        .format(&quot;com.travel.programApp.hbaseSource.HBaseSource&quot;)
+        .options(Map(
+          GlobalConfigUtils.getProp(&quot;sparksql_table_schema&quot;) -&gt; GlobalConfigUtils.getProp(&quot;registe.sparksql_table_schema&quot;),
+        GlobalConfigUtils.getProp(&quot;hbase_table_name&quot;) -&gt; GlobalConfigUtils.getProp(&quot;syn.table.renter_info&quot;),
+        GlobalConfigUtils.getProp(&quot;hbase_table_schema&quot;) -&gt; GlobalConfigUtils.getProp(&quot;registe.hbase_table_schema&quot;)
+        )).load()
+
+    //注册
+
+    order.createOrReplaceTempView(&quot;order&quot;)
+      driver.createOrReplaceTempView(&quot;driver&quot;)
+      renter.createOrReplaceTempView(&quot;renter&quot;)
+      //cache
+
+    sparkSession.sqlContext.cacheTable(&quot;order&quot;)
+      sparkSession.sqlContext.cacheTable(&quot;driver&quot;)
+      sparkSession.sqlContext.cacheTable(&quot;renter&quot;)
+
+  //  OrderTransation.init(sparkSession)
+
+   // RenterTransation.init(sparkSession)
+
+  //  DriverTransation.init(sparkSession)
+
+  //  HotOrderTransation.init(sparkSession)
+
+   //   HotAreaOrder.init(sparkSession)
+
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br></div></div><h2 id="_3、自定义sparksql数据源-将数据保存到hbase"><a href="#_3、自定义sparksql数据源-将数据保存到hbase" class="header-anchor">#</a> 3、自定义SparkSQL数据源，将数据保存到Hbase</h2> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.apache.spark.sql.{DataFrame, SaveMode}
+
+object SparkSQLHBaseSink {
+
+  def saveToHBase(dataFrame: DataFrame,tableName:String,rowkey:String,fields:String):Unit={
+      dataFrame.write.format(&quot;com.travel.programApp.hbaseSink.HBaseSink&quot;)
+          .mode(SaveMode.Overwrite)
+          .option(&quot;hbase.table.name&quot;,tableName)
+          .option(&quot;hbase.rowkey&quot;,rowkey)
+          .option(&quot;hbase.fields&quot;,fields)
+          .save()
+      }
+  }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><p></p> <h2 id="_4、订单监控页面大屏开发"><a href="#_4、订单监控页面大屏开发" class="header-anchor">#</a> 4、订单监控页面大屏开发</h2> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619389433-b413ef05-6c20-4860-abf0-579debad9acb.png" alt=""></p> <h3 id="_1、统计每个城市每日以及每月车辆的总数量"><a href="#_1、统计每个城市每日以及每月车辆的总数量" class="header-anchor">#</a> 1、统计每个城市每日以及每月车辆的总数量</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619389575-9d6b5bcf-c930-44b2-abd5-c9ec0860ed41.png" alt=""></p> <h4 id="_1-1、每个城市当日车辆总数量"><a href="#_1-1、每个城市当日车辆总数量" class="header-anchor">#</a> 1.1、每个城市当日车辆总数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(tb.begin_address_code , 1 ,4) as begin_address_code ,
+    count(distinct vehicle_license) as dayVehicleCount
+from
+    (select
+         begin_address_code ,
+         vehicle_license
+     from
+     order
+     where
+             date_format(create_time , 'yyyy-MM-dd')  = '2019-07-15
+') tb
+    group by
+substr(tb.begin_address_code , 1 ,4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><h4 id="_1-2、每个城市当月车辆总数量"><a href="#_1-2、每个城市当月车辆总数量" class="header-anchor">#</a> 1.2、每个城市当月车辆总数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(tb.begin_address_code , 1 ,4) as begin_address_code ,
+    count(distinct vehicle_license) as monthVehicleCount
+from
+    (select
+         begin_address_code ,
+         vehicle_license
+     from
+         order
+     where
+             date_format(create_time , 'yyyy-MM')  = '2019-07') tb
+    group by
+substr(tb.begin_address_code , 1 ,4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_1-3、汇总每个城市当日以及当月车辆总数量两个指标"><a href="#_1-3、汇总每个城市当日以及当月车辆总数量两个指标" class="header-anchor">#</a> 1.3、汇总每个城市当日以及当月车辆总数量两个指标</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    monthVehicle.begin_address_code ,
+    NVL(monthVehicle.monthVehicleCount ,0) as monthVehicleCount,
+    NVL(dayVehicle.dayVehicleCount , 0) as dayVehicleCount
+from
+    monthVehicle left join dayVehicle
+    on
+monthVehicle.begin_address_code = dayVehicle.begin_address_code
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h3 id="_2、统计每个城市当日-当周-当月订单数量"><a href="#_2、统计每个城市当日-当周-当月订单数量" class="header-anchor">#</a> 2、统计每个城市当日，当周，当月订单数量</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619389575-9d6b5bcf-c930-44b2-abd5-c9ec0860ed41-20211004100626647.png" alt="">
+对城市进行分组，然后将每个城市的订单进行分组求和</p> <h4 id="_2-1、每个城市当日订单总数量"><a href="#_2-1、每个城市当日订单总数量" class="header-anchor">#</a> 2.1、每个城市当日订单总数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(tb.begin_address_code , 1 , 4)  as begin_address_code  ,
+    count(1) as dayOrderCount
+from
+    (select begin_address_code from order
+        where
+date_format(create_time , 'yyyy-MM-dd') = '2019-07-15') tb
+    group by
+substr(tb.begin_address_code , 1 , 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_2-2、每个城市本周订单总数量"><a href="#_2-2、每个城市本周订单总数量" class="header-anchor">#</a> 2.2、每个城市本周订单总数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(tb.begin_address_code , 1 , 4)  as begin_address_code  ,
+    count(1) as weekOrderCount
+from
+    (select begin_address_code from order
+        where
+weekofyear(create_time) = '29') tb
+    group by
+substr(tb.begin_address_code , 1 , 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_2-3、每个城市本月订单总数量"><a href="#_2-3、每个城市本月订单总数量" class="header-anchor">#</a> 2.3、每个城市本月订单总数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(tb.begin_address_code , 1 , 4)  as begin_address_code  ,
+    count(1) as monthOrderCount
+from
+    (select begin_address_code from order
+        where
+date_format(create_time , 'yyyy-MM') = '2019-07') tb
+    group by
+substr(tb.begin_address_code , 1 , 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_2-4、汇总当日-当周-当月每个城市的订单总数量"><a href="#_2-4、汇总当日-当周-当月每个城市的订单总数量" class="header-anchor">#</a> 2.4、汇总当日，当周，当月每个城市的订单总数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    tb1.begin_address_code ,
+    tb1.monthOrderCount ,
+    tb1.weekOrderCount ,
+    dayOrder.dayOrderCount
+from
+    (select
+         monthOrder.begin_address_code ,
+         monthOrder.monthOrderCount ,
+         weekOrder.weekOrderCount
+     from
+         monthOrder left join weekOrder
+         on
+monthOrder.begin_address_code  =  weekOrder.begin_address_code)  tb1 left join dayOrder
+    on
+tb1.begin_address_code = dayOrder.begin_address_code
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><h3 id="_3、汇总车辆以及订单指标"><a href="#_3、汇总车辆以及订单指标" class="header-anchor">#</a> 3、汇总车辆以及订单指标</h3> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(
+                concat(
+                           if(v_begin_address_code is null ,o_begin_address_code , v_begin_address_code)
+        , '00')
+                as string) as rk,
+    cast(if(monthVehicleCount is null , 0 ,monthVehicleCount) as string) as monthVehicleCount ,
+    cast(if(dayVehicleCount is null , 0 , dayVehicleCount) as string) as dayVehicleCount ,
+    cast(
+                concat(
+                           if(o_begin_address_code is null ,v_begin_address_code , o_begin_address_code)
+        , '00')
+                as string) as o_begin_address_code,
+    cast(if(monthOrderCount is null , 0 , monthOrderCount) as string) as monthOrderCount ,
+    cast(if(weekOrderCount is null, 0 , weekOrderCount) as string) as weekOrderCount ,
+    cast(if(dayOrderCount is null ,0, dayOrderCount) as string) as dayOrderCount
+from
+    (select
+         vehcileCount.begin_address_code as v_begin_address_code,
+         vehcileCount.monthVehicleCount ,
+         vehcileCount.dayVehicleCount ,
+         _totalOrder.begin_address_code as o_begin_address_code ,
+         _totalOrder.monthOrderCount ,
+         _totalOrder.weekOrderCount ,
+         _totalOrder.dayOrderCount
+     from
+         vehcileCount full outer join _totalOrder
+         on
+vehcileCount.begin_address_code = _totalOrder.begin_address_code
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br></div></div><h3 id="_4、统计平台的总订单数-当月总订单数-出租车行驶总里程数-日均订单"><a href="#_4、统计平台的总订单数-当月总订单数-出租车行驶总里程数-日均订单" class="header-anchor">#</a> 4、统计平台的总订单数，当月总订单数，出租车行驶总里程数，日均订单</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619389722-f75ac41e-338c-436a-978d-b4fe7675a835.png" alt=""></p> <h4 id="_1、平台总订单"><a href="#_1、平台总订单" class="header-anchor">#</a> 1、平台总订单</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 myid ,
+    count(1) as totalOrderNum
+from
+    order
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h4 id="_2、当月总订单"><a href="#_2、当月总订单" class="header-anchor">#</a> 2、当月总订单</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 myid ,
+    count(1) as monthOrderNum
+from
+    order
+where
+        date_format(create_time , 'yyyy-MM') = '2019-07'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h4 id="_3、出租车行驶总里程数"><a href="#_3、出租车行驶总里程数" class="header-anchor">#</a> 3、出租车行驶总里程数</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 as myid ,
+    sum(charge_mileage)  as charge_mileage
+from
+    order
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h4 id="_4、日均订单数量"><a href="#_4、日均订单数量" class="header-anchor">#</a> 4、日均订单数量</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 as myid ,
+    round((tb.totalOrder /tb.num) , 2) as avgOrderNum
+from
+    (select
+             count(1) as totalOrder ,
+             (select
+                      DATEDIFF(
+max(date_format(create_time , 'yyyy-MM-dd')) ,
+min(date_format(create_time , 'yyyy-MM-dd'))
+) as dayNum
+              from
+                  order ) num
+         from order) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><h4 id="_5、汇总以上所有指标"><a href="#_5、汇总以上所有指标" class="header-anchor">#</a> 5、汇总以上所有指标</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(t2.myid as string) as rk,
+    cast(t2.totalOrderNum as string) as totalOrderNum,
+    cast(t2.monthOrderNum as  string) as monthOrderNum,
+    cast(t2.avgOrderNum as string) as avgOrderNum ,
+    cast(_totalCharge_mileage.charge_mileage as string)  as charge_mileage
+from
+    (select
+         t1.myid ,
+         t1.totalOrderNum ,
+         t1.monthOrderNum ,
+         avgOrder.avgOrderNum
+     from
+         (select
+              _total_order.myid ,
+              _total_order.totalOrderNum ,
+              month_totalOrder.monthOrderNum
+          from
+              _total_order left join month_totalOrder
+              on
+_total_order.myid = month_totalOrder.myid) t1 left join avgOrder
+         on
+t1.myid = avgOrder.myid) t2 left join _totalCharge_mileage
+    on
+t2.myid = _totalCharge_mileage.myid
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br></div></div><h3 id="_5、统计平台总订单数-平台注册用户数-平台订单总金额"><a href="#_5、统计平台总订单数-平台注册用户数-平台订单总金额" class="header-anchor">#</a> 5、统计平台总订单数，平台注册用户数，平台订单总金额</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619389875-fae0dce3-c8b5-4906-b5e1-834341770129.png" alt=""></p> <h4 id="_1、平台总订单数"><a href="#_1、平台总订单数" class="header-anchor">#</a> 1、平台总订单数</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 myid ,
+    count(1) as totalOrderNum
+from
+    order
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h4 id="_2、平台注册用户数"><a href="#_2、平台注册用户数" class="header-anchor">#</a> 2、平台注册用户数</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select 1 as myid , count(1) as registerTotalCount from renter
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h4 id="_3、平台总收入数"><a href="#_3、平台总收入数" class="header-anchor">#</a> 3、平台总收入数</h4> <p>sql语句定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select 1 as myid ,  sum(pay_all) pay_all from order
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h4 id="_4、汇总平台总订单数-平台注册用户数-平台订单总金额"><a href="#_4、汇总平台总订单数-平台注册用户数-平台订单总金额" class="header-anchor">#</a> 4、汇总平台总订单数，平台注册用户数，平台订单总金额</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    tb1.myid as myid,
+    cast(tb1.totalCount as string) as totalCount ,
+    cast(tb1.registerTotalCount as string) as registerTotalCount,
+    cast(pay_all.pay_all as string) as pay_all
+from
+    (select
+         totalOrders.myid ,
+         totalOrders.totalOrderNum as totalCount ,
+         rtc.registerTotalCount
+     from
+         totalOrders , rtc
+     where
+             totalOrders.myid = rtc.myid) tb1 , pay_all
+where
+        tb1.myid = pay_all.myid
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><h2 id="_5、用户统计功能模块"><a href="#_5、用户统计功能模块" class="header-anchor">#</a> 5、用户统计功能模块</h2> <p>统计用户留存率以及活跃用户
+<img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619390009-37f4e09d-c033-43b8-926e-95b391aa6fa5.png" alt=""></p> <h3 id="_1、统计各个城市当日新增和当日活跃用户数"><a href="#_1、统计各个城市当日新增和当日活跃用户数" class="header-anchor">#</a> 1、统计各个城市当日新增和当日活跃用户数</h3> <h4 id="_1、当日新增用户数"><a href="#_1、当日新增用户数" class="header-anchor">#</a> 1、当日新增用户数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(last_login_city , 1 , 4) as last_login_city ,
+    count(1) as _day_new_user
+from
+    (select last_login_city from renter
+        where
+date_format(create_time , 'yyyy-MM-dd') = '2019-07-15'
+and
+last_login_city != '') tb
+    group by substr(last_login_city , 1 , 4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h4 id="_2、当日活跃用户数"><a href="#_2、当日活跃用户数" class="header-anchor">#</a> 2、当日活跃用户数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    substr(last_login_city,1,4) as last_login_city ,
+    count(distinct id) DAU
+from
+    (select
+         last_login_city ,
+         id
+             from renter
+         where date_format(last_logon_time , 'yyyy-MM-dd') = '2019-07-15'
+         and
+         last_login_city != '') tb
+    group by
+substr(last_login_city,1,4)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_3、关联日新增和日活跃指标"><a href="#_3、关联日新增和日活跃指标" class="header-anchor">#</a> 3、关联日新增和日活跃指标</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(
+                concat(
+                           if(_dayRegister.last_login_city is null , _dayActive.last_login_city , _dayRegister.last_login_city)
+        , '00'
+        )
+                as string
+        ) as rk ,
+    cast(
+                concat(
+                           if(_dayRegister.last_login_city is null , _dayActive.last_login_city , _dayRegister.last_login_city)
+        , '00'
+        )
+                as string
+        ) as _city_code ,
+    cast(if(_dayRegister._day_new_user is null , 0 , _dayRegister._day_new_user) as string) as _day_new_user ,
+    cast(if(_dayActive.DAU is null , 0 , _dayActive.DAU) as  string) as DAU
+from
+    _dayRegister  full outer join _dayActive
+    on
+_dayRegister.last_login_city = _dayActive.last_login_city
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h3 id="_2、统计平台当日-本周-当月新注册用户数"><a href="#_2、统计平台当日-本周-当月新注册用户数" class="header-anchor">#</a> 2、统计平台当日，本周，当月新注册用户数</h3> <h4 id="_1、当日新增用户数-2"><a href="#_1、当日新增用户数-2" class="header-anchor">#</a> 1、当日新增用户数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 as myid ,
+    count(1) as dayNewUserCount
+from
+    (select id from renter
+        where
+date_format(create_time , 'yyyy-MM-dd') = '2019-07-15') tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h4 id="_2、本周新增用户数"><a href="#_2、本周新增用户数" class="header-anchor">#</a> 2、本周新增用户数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select 1 as myid , count(1) as weekNewUserCount
+from
+(select id from renter
+where
+weekofyear(create_time) = '29') tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h4 id="_3、当月新增用户数"><a href="#_3、当月新增用户数" class="header-anchor">#</a> 3、当月新增用户数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select 1 as myid , count(1) as monthNewUserCount
+from
+(select id from renter
+where
+date_format(create_time , 'yyyy-MM') = '2019-07') tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h4 id="_4、日、周、月新增用户数"><a href="#_4、日、周、月新增用户数" class="header-anchor">#</a> 4、日、周、月新增用户数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(tb.myid as string) as myid,
+    cast(tb.monthNewUserCount as string) as monthNewUserCount,
+    cast(tb.weekNewUserCount as string) as weekNewUserCount,
+    cast(dnuc.dayNewUserCount as string) as dayNewUserCount
+from
+    (select
+         mnuc.myid ,
+         mnuc.monthNewUserCount ,
+         wnuc.weekNewUserCount
+     from
+         mnuc , wnuc
+     where
+             mnuc.myid = wnuc.myid) tb , dnuc
+where
+        tb.myid = dnuc.myid
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><h3 id="_3、用户留存率统计"><a href="#_3、用户留存率统计" class="header-anchor">#</a> 3、用户留存率统计</h3> <h4 id="_1、统计次日留存率"><a href="#_1、统计次日留存率" class="header-anchor">#</a> 1、统计次日留存率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 as myid ,
+    concat(cast(count(tb2.last_logon_time)*100/count(tb1.create_time) as string) , '%') as dayStateRate
+from
+    (select
+         id ,
+         date_format(create_time , 'yyyy-MM-dd') create_time
+     from
+         renter
+     where
+             date_format(create_time , 'yyyy-MM-dd') = '2019-07-14') tb1
+    left outer join
+(select
+     id ,
+     date_format(last_logon_time , 'yyyy-MM-dd') last_logon_time
+ from
+     renter
+ where
+         date_format(last_logon_time , 'yyyy-MM-dd') = '2019-07-15') tb2
+on
+tb1.id = tb2.id
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h4 id="_2、计算本周留存率"><a href="#_2、计算本周留存率" class="header-anchor">#</a> 2、计算本周留存率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 as myid ,
+    concat(cast(count(tb2.last_logon_time)*100/count(tb1.create_time) as string) , '%') as weekStateRate
+from
+    (select
+         id ,
+         date_format(create_time , 'yyyy-MM-dd') create_time
+     from
+         renter
+     where
+             date_format(create_time , 'yyyy-MM-dd') = '2019-07-15') tb1
+    left outer join
+(select
+     id ,
+     date_format(last_logon_time , 'yyyy-MM-dd') last_logon_time
+ from
+     renter
+ where
+         date_format(last_logon_time , 'yyyy-MM-dd') = '2019-07-07') tb2
+on
+tb1.id = tb2.id
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h4 id="_3、计算本月留存率"><a href="#_3、计算本月留存率" class="header-anchor">#</a> 3、计算本月留存率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 as myid ,
+    concat(cast(count(tb2.last_logon_time)*100/count(tb1.create_time) as string) , '%') as monthStateRate
+from
+    (select
+         id ,
+         date_format(create_time , 'yyyy-MM-dd') create_time
+     from
+         renter
+     where
+             date_format(create_time , 'yyyy-MM-dd') = '2019-07-30') tb1
+    left outer join
+(select
+     id ,
+     date_format(last_logon_time , 'yyyy-MM-dd') last_logon_time
+ from
+     renter
+ where
+         date_format(last_logon_time , 'yyyy-MM-dd') = '2019-07-01') tb2
+on
+tb1.id = tb2.id
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h4 id="_4、汇总次日-本周-本月留存率"><a href="#_4、汇总次日-本周-本月留存率" class="header-anchor">#</a> 4、汇总次日，本周，本月留存率</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(NVL(tb1.myid,1) as string) as myid ,
+    cast(NVL(tb1.monthStateRate , '0.0%') as string) as monthStateRate,
+    cast(NVL(tb1.weekStateRate, '0.0%') as string) as weekStateRate,
+    cast(NVL(dayStateRate.dayStateRate, '0.0%') as string) as dayStateRate
+from
+    (select
+         NVL(monthStateRate.myid , 1) as  myid,
+         NVL(monthStateRate.monthStateRate , '0.0%') as monthStateRate,
+         NVL(weekStateRate.weekStateRate , '0.0%') as weekStateRate
+     from
+         monthStateRate full outer join weekStateRate
+         on
+monthStateRate.myid = weekStateRate.myid) tb1 full outer join dayStateRate
+    on
+tb1.myid = dayStateRate.myid
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><h3 id="_4、活跃用户统计"><a href="#_4、活跃用户统计" class="header-anchor">#</a> 4、活跃用户统计</h3> <p>统计日活，周活，月活跃用户数量</p> <h4 id="_1、日活跃用户统计"><a href="#_1、日活跃用户统计" class="header-anchor">#</a> 1、日活跃用户统计</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 tmpID ,
+    count(distinct id) DAU
+from 
+		renter
+where 
+		date_format(last_logon_time , 'yyyy-MM-dd') = '2019-07-15'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h4 id="_2、周活跃用户统计"><a href="#_2、周活跃用户统计" class="header-anchor">#</a> 2、周活跃用户统计</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 tmpID ,
+    count(distinct id) WAU
+    from renter
+    where weekofyear(date_format(last_logon_time , 'yyyy-MM-dd')) = '29'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p></p> <h4 id="_3、月活跃用户统计"><a href="#_3、月活跃用户统计" class="header-anchor">#</a> 3、月活跃用户统计</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    1 tmpID ,
+    count(distinct id) MAU
+    from renter
+where
+        date_format(last_logon_time , 'yyyy-MM') = '2019-07'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h2 id="_6、司机统计功能模块"><a href="#_6、司机统计功能模块" class="header-anchor">#</a> 6、司机统计功能模块</h2> <h3 id="_1、平台有效订单统计"><a href="#_1、平台有效订单统计" class="header-anchor">#</a> 1、平台有效订单统计</h3> <p>统计当日，本周，本月，本季度，本年平台的有效订单</p> <h4 id="_1、当日平台有效订单数"><a href="#_1、当日平台有效订单数" class="header-anchor">#</a> 1、当日平台有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _effective_num_day
+    from order
+where
+        date_format(create_time , 'yyyy-MM-dd') = '2019-07-15'
+  and
+        cancel = 0
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h4 id="_2、平台本周有效订单数"><a href="#_2、平台本周有效订单数" class="header-anchor">#</a> 2、平台本周有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _effective_num_week
+    from order
+where
+        weekofyear(create_time) = '29'
+  and
+        cancel = 0
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h4 id="_3、平添本月有效订单数"><a href="#_3、平添本月有效订单数" class="header-anchor">#</a> 3、平添本月有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _effective_num_month
+    from order
+where
+        date_format(create_time , 'yyyy-MM') = '2019-07'
+  and
+        cancel = 0
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h4 id="_4、平添本季度有效订单数"><a href="#_4、平添本季度有效订单数" class="header-anchor">#</a> 4、平添本季度有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _effective_num_quarter
+from order
+where
+        quarter(create_time) = '3'
+  and
+        date_format(create_time , 'yyyy') = '2019'
+  and
+        cancel = 0
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h4 id="_5、平台本年有效订单数"><a href="#_5、平台本年有效订单数" class="header-anchor">#</a> 5、平台本年有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _effective_num_year
+    from order
+where
+        date_format(create_time , 'yyyy') = '2019'
+  and
+        cancel = 0
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h3 id="_2、平台全部订单统计"><a href="#_2、平台全部订单统计" class="header-anchor">#</a> 2、平台全部订单统计</h3> <p>统计当日，本周，本月，本季度，本年的平台全部订单数</p> <h4 id="_1、当日平台全部订单"><a href="#_1、当日平台全部订单" class="header-anchor">#</a> 1、当日平台全部订单</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _total_num_day
+    from order
+where
+        date_format(create_time , 'yyyy-MM-dd') = '2019-07-15'
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h4 id="_2、本周平台全部订单"><a href="#_2、本周平台全部订单" class="header-anchor">#</a> 2、本周平台全部订单</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _total_num_week
+    from order
+where
+        weekofyear(create_time) = '29'
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h4 id="_3、本月平台全部订单"><a href="#_3、本月平台全部订单" class="header-anchor">#</a> 3、本月平台全部订单</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _total_num_month
+    from order
+where
+        date_format(create_time , 'yyyy-MM') = '2019-07'
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h4 id="_4、本季度平台全部订单"><a href="#_4、本季度平台全部订单" class="header-anchor">#</a> 4、本季度平台全部订单</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _total_num_quarter
+from order
+where
+        quarter(create_time) = '3'
+  and
+        date_format(create_time , 'yyyy') = '2019'
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h4 id="_5、本年平台全部订单"><a href="#_5、本年平台全部订单" class="header-anchor">#</a> 5、本年平台全部订单</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    count(1) as _total_num_year
+from order
+where
+        date_format(create_time , 'yyyy') = '2019'
+    group by
+city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h3 id="_3、平台订单完成率统计"><a href="#_3、平台订单完成率统计" class="header-anchor">#</a> 3、平台订单完成率统计</h3> <p>统计当日，本周，本月，本季度，本年度订单的完成率</p> <h4 id="_1、当日订单完成率"><a href="#_1、当日订单完成率" class="header-anchor">#</a> 1、当日订单完成率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    case when _effective_num_day=0 then '0.0%' else CONCAT(cast(round(_effective_num_day*100/_total_num_day, 2) as string),'%') end as _day_comple_rate
+from
+    (select
+         _effective_order_day.city_name ,
+         _effective_order_day._effective_num_day ,
+         _total_order_day._total_num_day
+     from
+         _effective_order_day left join _total_order_day
+         on
+_effective_order_day.city_name = _total_order_day.city_name
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_2、本周订单完成率"><a href="#_2、本周订单完成率" class="header-anchor">#</a> 2、本周订单完成率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    case when _effective_num_week=0 then '0.0%' else CONCAT(cast(round(_effective_num_week*100/_total_num_week, 2) as string),'%') end as _week_comple_rate
+from
+    (select
+         _effective_order_week.city_name ,
+         _effective_order_week._effective_num_week ,
+         _total_order_week._total_num_week
+     from
+         _effective_order_week left join _total_order_week
+         on
+_effective_order_week.city_name = _total_order_week.city_name
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_3、本月订单完成率"><a href="#_3、本月订单完成率" class="header-anchor">#</a> 3、本月订单完成率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    case when _effective_num_month=0 then '0.0%' else CONCAT(cast(round(_effective_num_month*100/_total_num_month, 2) as string),'%') end as _month_comple_rate
+from
+    (select
+         _effective_order_month.city_name ,
+         _effective_order_month._effective_num_month ,
+         _total_order_month._total_num_month
+     from
+         _effective_order_month left join _total_order_month
+         on
+_effective_order_month.city_name = _total_order_month.city_name
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_4、本季度订单完成率"><a href="#_4、本季度订单完成率" class="header-anchor">#</a> 4、本季度订单完成率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    case when _effective_num_quarter=0 then '0.0%' else CONCAT(cast(round(_effective_num_quarter*100/_total_num_quarter, 2) as string),'%') end as _quarter_comple_rate
+from
+    (select
+         _effective_order_quarter.city_name ,
+         _effective_order_quarter._effective_num_quarter ,
+         _total_order_quarter._total_num_quarter
+     from
+         _effective_order_quarter left join _total_order_quarter
+         on
+_effective_order_quarter.city_name = _total_order_quarter.city_name
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_5、本年度订单完成率"><a href="#_5、本年度订单完成率" class="header-anchor">#</a> 5、本年度订单完成率</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    city_name ,
+    case when _effective_num_year=0 then '0.0%' else CONCAT(cast(round(_effective_num_year*100/_total_num_year, 2) as string),'%') end as _year_comple_rate
+from
+    (select
+         _effective_order_year.city_name ,
+         _effective_order_year._effective_num_year ,
+         _total_order_year._total_num_year
+     from
+         _effective_order_year left join _total_order_year
+         on
+_effective_order_year.city_name = _total_order_year.city_name
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h3 id="_4、汇总平台有效订单-平台全部订单以及平台订单完成率指标"><a href="#_4、汇总平台有效订单-平台全部订单以及平台订单完成率指标" class="header-anchor">#</a> 4、汇总平台有效订单，平台全部订单以及平台订单完成率指标</h3> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(1 as string) as rk ,
+    cast(year_quarter_month_week_tb.city_name as  string) as city_name ,
+    cast(year_quarter_month_week_tb._year_comple_rate as string) as _year_comple_rate  ,
+    cast(if(year_quarter_month_week_tb._quarter_comple_rate is null , '0.0%' , year_quarter_month_week_tb._quarter_comple_rate) as string) as _quarter_comple_rate,
+    cast(if(year_quarter_month_week_tb._month_comple_rate is null , '0.0%' , year_quarter_month_week_tb._month_comple_rate) as string) as _month_comple_rate,
+    cast(if(year_quarter_month_week_tb._week_comple_rate is null , '0.0%' , year_quarter_month_week_tb._week_comple_rate) as string) as _week_comple_rate,
+    cast(if(_plat_order_day_status._day_comple_rate is null , '0.0%' , _plat_order_day_status._day_comple_rate) as string) as _day_comple_rate
+from
+    (select
+         year_quarter_month_tb.city_name ,
+         year_quarter_month_tb._year_comple_rate ,
+         year_quarter_month_tb._quarter_comple_rate ,
+         year_quarter_month_tb._month_comple_rate ,
+         _plat_order_week_status._week_comple_rate
+     from
+         (select
+              year_quarter_tb.city_name ,
+              year_quarter_tb._year_comple_rate ,
+              year_quarter_tb._quarter_comple_rate ,
+              _plat_order_month_status._month_comple_rate
+          from
+              (select
+                   _plat_order_year_status.city_name ,
+                   _plat_order_year_status._year_comple_rate ,
+                   _plat_order_quarter_status._quarter_comple_rate
+               from
+                   _plat_order_year_status left join _plat_order_quarter_status
+                   on
+_plat_order_year_status.city_name = _plat_order_quarter_status.city_name
+              ) year_quarter_tb left join _plat_order_month_status
+              on
+year_quarter_tb.city_name = _plat_order_month_status.city_name
+         ) year_quarter_month_tb left join _plat_order_week_status
+         on
+year_quarter_month_tb.city_name = _plat_order_week_status.city_name
+    ) year_quarter_month_week_tb left join _plat_order_day_status
+    on
+year_quarter_month_week_tb.city_name = _plat_order_day_status.city_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><h3 id="_5、统计司机有效订单数"><a href="#_5、统计司机有效订单数" class="header-anchor">#</a> 5、统计司机有效订单数</h3> <h4 id="_1、当日司机有效订单数"><a href="#_1、当日司机有效订单数" class="header-anchor">#</a> 1、当日司机有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name,
+    count(1) as _effective_num_day
+from order
+where
+        date_format(create_time , 'yyyy-MM-dd') = '2019-07-15'
+  and
+        cancel = 0
+    group by
+driver_id ,
+driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h4 id="_2、当周司机有效订单数"><a href="#_2、当周司机有效订单数" class="header-anchor">#</a> 2、当周司机有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _effective_num_week
+from order
+where
+        weekofyear(create_time) = '29'
+  and
+        cancel = 0
+    group by
+driver_id ,
+driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h4 id="_3、当月司机有效订单数"><a href="#_3、当月司机有效订单数" class="header-anchor">#</a> 3、当月司机有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _effective_num_month
+from order
+where
+        date_format(create_time , 'yyyy-MM') = '2019-07'
+  and
+        cancel = 0
+    group by
+driver_id ,
+driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h4 id="_4、当季度司机有效订单数"><a href="#_4、当季度司机有效订单数" class="header-anchor">#</a> 4、当季度司机有效订单数</h4> <p>当季度司机有效订单数</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _effective_num_quarter
+from order
+where
+        quarter(create_time) = '3'
+  and
+        date_format(create_time , 'yyyy') = date_format(NOW() , 'yyyy')
+  and
+        cancel = 0
+    group by
+driver_id , driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><h4 id="_5、当年司机有效订单数"><a href="#_5、当年司机有效订单数" class="header-anchor">#</a> 5、当年司机有效订单数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _effective_num_year
+from order
+where
+        date_format(create_time , 'yyyy') = '2019'
+  and
+        cancel = 0
+    group by
+driver_id ,
+driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h3 id="_6、统计司机订单总数"><a href="#_6、统计司机订单总数" class="header-anchor">#</a> 6、统计司机订单总数</h3> <p>统计司机当日，当周，当月，当季度，当年订单总数</p> <h4 id="_1、当日订单总数统计"><a href="#_1、当日订单总数统计" class="header-anchor">#</a> 1、当日订单总数统计</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _total_num_day
+from order
+where
+        date_format(create_time , 'yyyy-MM-dd') = '2019-07-15'
+    group by
+driver_id , driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_2、当周订单总数统计"><a href="#_2、当周订单总数统计" class="header-anchor">#</a> 2、当周订单总数统计</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _total_num_week
+from order
+where
+        weekofyear(create_time) = '29'
+    group by
+driver_id , driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_3、当月订单总数"><a href="#_3、当月订单总数" class="header-anchor">#</a> 3、当月订单总数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _total_num_month
+from order
+where
+        date_format(create_time , 'yyyy-MM') = '2019-07'
+    group by
+driver_id , driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_4、当季度订单总数"><a href="#_4、当季度订单总数" class="header-anchor">#</a> 4、当季度订单总数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _total_num_quarter
+from order
+where
+        quarter(create_time) = '3'
+  and
+        date_format(create_time , 'yyyy') = date_format(NOW() , 'yyyy')
+    group by
+driver_id , driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><h4 id="_5、当年订单总数"><a href="#_5、当年订单总数" class="header-anchor">#</a> 5、当年订单总数</h4> <p>sql定义</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    count(1) as _total_num_year
+from order
+where
+        date_format(create_time , 'yyyy') = '2019'
+    group by
+driver_id , driver_name
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h3 id="_7、基于司机有效订单数以及订单总数统计司机订单完成率"><a href="#_7、基于司机有效订单数以及订单总数统计司机订单完成率" class="header-anchor">#</a> 7、基于司机有效订单数以及订单总数统计司机订单完成率</h3> <p>基于司机有效订单数，以及司机总订单数，统计每个司机的当日，本周，本月，本季度，本年订单完成率</p> <h4 id="_1、司机当日订单完成率"><a href="#_1、司机当日订单完成率" class="header-anchor">#</a> 1、司机当日订单完成率</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    case when _effective_num_day=0 then '0.0%' else CONCAT(cast(round(_effective_num_day*100/_total_num_day, 2) as string),'%') end as _day_comple_rate
+from
+    (select
+         _effective_driver_order_day.driver_id ,
+         _effective_driver_order_day.driver_name ,
+         _effective_driver_order_day._effective_num_day ,
+         _total_driver_order_day._total_num_day
+     from
+         _effective_driver_order_day left join _total_driver_order_day
+         on
+_effective_driver_order_day.driver_id = _total_driver_order_day.driver_id
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_2、司机当周订单完成率"><a href="#_2、司机当周订单完成率" class="header-anchor">#</a> 2、司机当周订单完成率</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    case when _effective_num_week=0 then '0.0%' else CONCAT(cast(round(_effective_num_week*100/_total_num_week, 2) as string),'%') end as _week_comple_rate
+from
+    (select
+         _effective_driver_order_week.driver_id ,
+         _effective_driver_order_week.driver_name ,
+         _effective_driver_order_week._effective_num_week ,
+         _total_driver_order_week._total_num_week
+     from
+         _effective_driver_order_week left join _total_driver_order_week
+         on
+_effective_driver_order_week.driver_id = _total_driver_order_week.driver_id
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_3、司机当月订单完成率"><a href="#_3、司机当月订单完成率" class="header-anchor">#</a> 3、司机当月订单完成率</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    case when _effective_num_month=0 then '0.0%' else CONCAT(cast(round(_effective_num_month*100/_total_num_month, 2) as string),'%') end as _month_comple_rate
+from
+    (select
+         _effective_driver_order_month.driver_id ,
+         _effective_driver_order_month.driver_name ,
+         _effective_driver_order_month._effective_num_month ,
+         _total_driver_order_month._total_num_month
+     from
+         _effective_driver_order_month left join _total_driver_order_month
+         on
+_effective_driver_order_month.driver_id = _total_driver_order_month.driver_id
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_4、司机当季度订单完成率"><a href="#_4、司机当季度订单完成率" class="header-anchor">#</a> 4、司机当季度订单完成率</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    case when _effective_num_quarter=0 then '0.0%' else CONCAT(cast(round(_effective_num_quarter*100/_total_num_quarter, 2) as string),'%') end as _quarter_comple_rate
+from
+    (select
+         _effective_driver_order_quarter.driver_id ,
+         _effective_driver_order_quarter.driver_name ,
+         _effective_driver_order_quarter._effective_num_quarter ,
+         _total_driver_order_quarter._total_num_quarter
+     from
+         _effective_driver_order_quarter left join _total_driver_order_quarter
+         on
+_effective_driver_order_quarter.driver_id = _total_driver_order_quarter.driver_id
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_5、司机当年订单完成率"><a href="#_5、司机当年订单完成率" class="header-anchor">#</a> 5、司机当年订单完成率</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    driver_id ,
+    driver_name ,
+    case when _effective_num_year=0 then '0.0%' else CONCAT(cast(round(_effective_num_year*100/_total_num_year, 2) as string),'%') end as _year_comple_rate
+from
+    (select
+         _effective_driver_order_year.driver_id ,
+         _effective_driver_order_year.driver_name ,
+         _effective_driver_order_year._effective_num_year ,
+         _total_driver_order_year._total_num_year
+     from
+         _effective_driver_order_year left join _total_driver_order_year
+         on
+_effective_driver_order_year.driver_id = _total_driver_order_year.driver_id
+    ) tb
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_6、汇总司机当日-当周-当月当季度-当年完成率指标"><a href="#_6、汇总司机当日-当周-当月当季度-当年完成率指标" class="header-anchor">#</a> 6、汇总司机当日，当周，当月当季度，当年完成率指标</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    cast(year_quarter_month_week_tb.driver_id as string) as rk ,
+    cast(year_quarter_month_week_tb.driver_id as string) as driver_id,
+    cast(year_quarter_month_week_tb.driver_name as string) as driver_name,
+    cast(year_quarter_month_week_tb._year_comple_rate as string) as _year_comple_rate,
+    cast(if(year_quarter_month_week_tb._quarter_comple_rate is null , '0.0%' , year_quarter_month_week_tb._quarter_comple_rate) as string) as _quarter_comple_rate,
+    cast(if(year_quarter_month_week_tb._month_comple_rate is null , '0.0%' , year_quarter_month_week_tb._month_comple_rate) as string) as _month_comple_rate,
+    cast(if(year_quarter_month_week_tb._week_comple_rate is null , '0.0%' , year_quarter_month_week_tb._week_comple_rate) as string) as _week_comple_rate,
+    cast(if(_driver_order_day_status._day_comple_rate is null , '0.0%' , _driver_order_day_status._day_comple_rate) as string) as _day_comple_rate
+from
+    (select
+         year_quarter_month_tb.driver_id ,
+         year_quarter_month_tb.driver_name ,
+         year_quarter_month_tb._year_comple_rate ,
+         year_quarter_month_tb._quarter_comple_rate ,
+         year_quarter_month_tb._month_comple_rate ,
+         _driver_order_week_status._week_comple_rate
+     from
+         (select
+              year_quarter_tb.driver_id ,
+              year_quarter_tb.driver_name ,
+              year_quarter_tb._year_comple_rate ,
+              year_quarter_tb._quarter_comple_rate ,
+              _driver_order_month_status._month_comple_rate
+          from
+              (select
+                   _driver_order_year_status.driver_id ,
+                   _driver_order_year_status.driver_name ,
+                   _driver_order_year_status._year_comple_rate ,
+                   _driver_order_quarter_status._quarter_comple_rate
+               from
+                   _driver_order_year_status left join _driver_order_quarter_status
+                   on
+_driver_order_year_status.driver_id = _driver_order_quarter_status.driver_id
+              ) year_quarter_tb left join _driver_order_month_status
+              on
+year_quarter_tb.driver_id = _driver_order_month_status.driver_id
+         ) year_quarter_month_tb left join _driver_order_week_status
+         on
+year_quarter_month_tb.driver_id = _driver_order_week_status.driver_id
+    ) year_quarter_month_week_tb left join _driver_order_day_status
+    on
+year_quarter_month_week_tb.driver_id = _driver_order_day_status.driver_id
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br></div></div><h3 id="_8、各城市新增注册司机数"><a href="#_8、各城市新增注册司机数" class="header-anchor">#</a> 8、各城市新增注册司机数</h3> <p>统计各个城市当日，当周，当月，当季度，当年新增注册司机数</p> <h4 id="_1、当日新增注册司机数"><a href="#_1、当日新增注册司机数" class="header-anchor">#</a> 1、当日新增注册司机数</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    register_city ,
+    count(distinct id) _register_day_num
+from
+    driver
+where
+        date_format(create_time , 'yyyy-MM-dd') = '2019-07-15'
+    group by
+register_city
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_2、当周新增注册司机数"><a href="#_2、当周新增注册司机数" class="header-anchor">#</a> 2、当周新增注册司机数</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    register_city ,
+    count(distinct id) _register_week_num
+from
+    driver
+where
+        weekofyear(create_time) = '29'
+    group by
+register_city
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_3、当月新增注册司机数"><a href="#_3、当月新增注册司机数" class="header-anchor">#</a> 3、当月新增注册司机数</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    register_city ,
+    count(distinct id) _register_month_num
+from
+    driver
+where
+        date_format(create_time , 'yyyy-MM') = '2019-07'
+    group by
+register_city
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h4 id="_4、当季度新增注册司机数"><a href="#_4、当季度新增注册司机数" class="header-anchor">#</a> 4、当季度新增注册司机数</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    register_city ,
+    count(distinct id) _register_quarter_num
+from
+    driver
+where
+        quarter(create_time) = '3'
+  and
+        date_format(create_time , 'yyyy') = date_format(NOW() , 'yyyy')
+    group by
+register_city
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><h4 id="_5、当年新增注册司机数"><a href="#_5、当年新增注册司机数" class="header-anchor">#</a> 5、当年新增注册司机数</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>select
+    register_city ,
+    count(distinct id) _register_year_num
+from
+    driver
+where
+        date_format(create_time , 'yyyy') = '2019'
+    group by
+register_city
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h2 id="_7、热门订单以及热门地区统计"><a href="#_7、热门订单以及热门地区统计" class="header-anchor">#</a> 7、热门订单以及热门地区统计</h2> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/1593619390251-e0e4c9fc-9590-489f-9bfb-58d7f9a1fd39.png" alt=""></p> <h3 id="_1、统计每个六边形区域订单个数"><a href="#_1、统计每个六边形区域订单个数" class="header-anchor">#</a> 1、统计每个六边形区域订单个数</h3> <p>通过uber的H3算法，我们知道，为了完整的覆盖所有的地区，我们可以将地区划分成一个个的六边形，而且六边形的半径范围我们也可以自定义，我们需要统计每个六边形的订单数量
+在我们的travel_spark工程模块下的src/main/scala路径下创建package  com.travel.transaction 然后创建scala  object文件  HotOrderTransation.scala</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import java.util
+import com.travel.programApp.SparkSQLHBaseSink
+import com.travel.tools.GetCenterPointFromListOfCoordinates
+import com.uber.h3core.H3Core
+import com.uber.h3core.util.GeoCoord
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{Row, SparkSession}
+import redis.clients.jedis.GeoCoordinate
+
+import scala.collection.JavaConverters
+
+_/**_
+_  * Created by laowang_
+_  */_
+object HotOrderTransation {
+  val h3 = H3Core.newInstance()
+  def init(sparkSession: SparkSession): Unit ={
+    sparkSession.udf.register(&quot;locationToH3&quot; , locationToH3 _)
+
+    lazy val orderHotTmp =(time:Int) =&gt;
+      s&quot;&quot;&quot;
+         |select
+         |open_lng ,
+         |open_lat ,
+         |create_time ,
+         |begin_address_code ,
+         |locationToH3(open_lng , open_lat , 7) as h3Code
+         |from
+         |order
+         |where ${time} &lt;= cast(date_format(create_time , 'yyyyMMdd') as int)
+    &quot;&quot;&quot;.stripMargin
+
+    _//经纬度  转成h3_
+    sparkSession.sql(orderHotTmp(20190715)).createOrReplaceTempView(&quot;orderHotTmp&quot;)
+
+    lazy  val getHotArea =
+      &quot;&quot;&quot;
+        |select tb2.h3Code ,
+        |tb2.num as count ,
+        |tb2.create_time ,
+        |tb2.begin_address_code
+        |from
+        |(select * ,
+        |row_number()  over(partition by h3Code order by rank desc) num
+        |from
+        |(select * ,
+        |row_number() over(partition by h3Code order by create_time) rank
+        |from
+        |orderHotTmp) tb) tb2
+        |where  tb2.num = 1
+      &quot;&quot;&quot;.stripMargin
+
+    val rdd:RDD[Row] = sparkSession.sql(getHotArea).rdd
+    val reultHot: RDD[(String, String, String, Int)] = rdd.map { line =&gt;
+      val h3Code = line.getAs[Long](&quot;h3Code&quot;)
+      val count = line.getAs[Int](&quot;count&quot;)
+      val create_time = line.getAs[String](&quot;create_time&quot;)
+      val begin_address_code = line.getAs[String](&quot;begin_address_code&quot;)
+
+      val geoCood: List[GeoCoord] = h3To6(h3Code)
+
+      val list = new util.ArrayList[GeoCoordinate]()
+      for (in &lt;- geoCood) {
+        list.add(new GeoCoordinate(in.lng, in.lat))
+      }
+
+      val toList = JavaConverters.asScalaIteratorConverter(list.iterator()).asScala.toList
+      val centerPoint: GeoCoordinate = GetCenterPointFromListOfCoordinates.getCenterPoint(toList)
+
+      val rk = h3Code.toString
+      (rk, begin_address_code, centerPoint.getLongitude + &quot;,&quot; + centerPoint.getLatitude, count)
+    }
+    import sparkSession.sqlContext.implicits._
+    val hotOrder = reultHot.toDF(&quot;rk&quot; , &quot;begin_address_code&quot; , &quot;centerPoint&quot; , &quot;count&quot;)
+    SparkSQLHBaseSink.saveToHBase(hotOrder,&quot;hotOrder&quot;,&quot;rk&quot;,&quot;rk,begin_address_code,centerPoint,count&quot;)
+
+  }
+
+  _//UDF   经纬度  ---&gt;h3编码_
+  private def locationToH3(lat:Double , lon:Double , res:Int):Long = {
+    h3.geoToH3(lat , lon , res)
+  }
+  _//h3 --&gt;热区的那个点---&gt;六边形_
+  private def h3To6(geoCode:Long): List[GeoCoord] ={
+    val boundary: util.List[GeoCoord] = h3.h3ToGeoBoundary(geoCode)
+    JavaConverters.asScalaIteratorConverter(boundary.iterator()).asScala.toList
+  }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br></div></div><h3 id="_2、统计每个热门区域的订单数量"><a href="#_2、统计每个热门区域的订单数量" class="header-anchor">#</a> 2、统计每个热门区域的订单数量</h3> <p>求取每个街道的订单数量总和，以及每个街道的订单增长情况</p> <h4 id="第一步-sql文件定义"><a href="#第一步-sql文件定义" class="header-anchor">#</a> 第一步：sql文件定义</h4> <p>在travel_spark项目模块下，创建package  com.travel.sql  ，然后再该pakcage下面创建scala的object文件 HotAreaOrderSQL.scala用于存放我们的sql语句</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>package com.travel.sql
+
+_/**_
+_  * Created by laowang_
+_  */_
+object HotAreaOrderSQL {
+  _//计算当日热区订单数--精度7，大概半径为1200米_
+  lazy val orderHotTable_day =(time:String)=&gt; s&quot;&quot;&quot;
+                                 |select
+                                 |open_lat ,
+                                 |open_lng ,
+                                 |create_time ,
+                                 |begin_address_code ,
+                                 |locationToH3(open_lat , open_lng , 7) as h3Code
+                                 | from order
+                                 | where date_format(create_time , 'yyyy-MM-dd') = '${time}'
+                               &quot;&quot;&quot;.stripMargin_//date_format(NOW() , 'yyyy-MM-dd')_
+  lazy val _today_hot_area  = &quot;&quot;&quot;
+                                |select
+                                |table2.begin_address_code ,
+                                |h3ToCoordinate(table2.h3Code) coordinate,
+                                |table2.h3Code ,
+                                |1200 radius ,
+                                |table2.rank as count
+                                | from
+                                |(select * ,
+                                |row_number() over(partition by h3Code order by rank desc) num
+                                |from
+                                |(select * ,
+                                |row_number() over(partition by h3Code order by create_time desc) rank
+                                |from orderHotTable_day
+                                |) table
+                                |)table2
+                                |where table2.num = 1
+                              &quot;&quot;&quot;.stripMargin
+
+  _//求昨日热力订单情况 2019-07-14_
+  lazy val yestdayOrderStatusTMP =(time:String)=&gt; s&quot;&quot;&quot;
+                                       |select
+                                       |open_lat ,
+                                       |open_lng ,
+                                       |create_time ,
+                                       |begin_address_code ,
+                                       |locationToH3(open_lat , open_lng , 7) as h3Code
+                                       | from order
+                                       | where
+                                       | date_format(create_time , 'yyyy-MM-dd') = '${time}'
+                                     &quot;&quot;&quot;.stripMargin_//DATE_SUB(date_format(NOW() , 'yyyy-MM-dd'), 1)_
+
+ lazy val yestdayOrderStatus =  &quot;&quot;&quot;
+                                  |select
+                                  |table2.begin_address_code ,
+                                  |h3ToCoordinate(table2.h3Code) coordinate ,
+                                  |table2.h3Code ,
+                                  |1200 radius ,
+                                  |table2.rank as count
+                                  | from
+                                  |(select * ,
+                                  |row_number() over(partition by h3Code order by rank desc) num
+                                  |from
+                                  |(select * ,
+                                  |row_number() over(partition by h3Code order by create_time desc) rank
+                                  |from yestdayOrderStatusTMP
+                                  |) table
+                                  |)table2
+                                  |where table2.num = 1
+                                &quot;&quot;&quot;.stripMargin
+  lazy val newHotOrderTmp =
+    &quot;&quot;&quot;
+    |select
+    |if(t_begin_address_code is null,y_begin_address_code , t_begin_address_code) as city_code,
+    |if(t_coordinate is null,y_coordinate , t_coordinate) as coordinate,
+    |if(t_radius is null , y_radius , t_radius) as radius ,
+    |if(t_count is null,0-if(y_count is null , 0 , y_count) , t_count-if(y_count is null,0,y_count)) as count
+    |from
+    |(
+    |select
+    |today_hot_area.begin_address_code as t_begin_address_code,
+    |today_hot_area.coordinate as t_coordinate ,
+    |today_hot_area.radius as t_radius ,
+    |today_hot_area.count as t_count ,
+    |yestdayOrderStatus.begin_address_code as y_begin_address_code ,
+    |yestdayOrderStatus.coordinate as y_coordinate ,
+    |yestdayOrderStatus.radius as y_radius ,
+    |yestdayOrderStatus.count as y_count
+    |from
+    |today_hot_area full outer join yestdayOrderStatus
+    |on
+    |today_hot_area.h3Code = yestdayOrderStatus.h3Code
+    |) tb
+    &quot;&quot;&quot;.stripMargin
+
+  lazy val _hot_order =&quot;&quot;&quot;
+                       |select
+                       |cast(_today_hot_df.city_code as string) as rk ,
+                       |cast(_today_hot_df.city_code as string) as _city_code ,
+                       |cast(_today_hot_df.city_num as string) as _day_order_num ,
+                       |cast(_new_hot_df.city_num as string) as _new_orders_num
+                       |from
+                       |_today_hot_df left join _new_hot_df
+                       |on
+                       |_today_hot_df.city_code = _new_hot_df.city_code
+                     &quot;&quot;&quot;.stripMargin
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br></div></div><h4 id="第二步-定义方法调用入口"><a href="#第二步-定义方法调用入口" class="header-anchor">#</a> 第二步：定义方法调用入口</h4> <p>在travel_spark项目的src/main/scala路径下，创建package com.travel.transaction，然后在该package下面创建com.travel.transaction.HotAreaOrder.scala的object文件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import com.travel.programApp.SparkSQLHBaseSink
+import com.travel.sql.HotAreaOrderSQL
+import com.uber.h3core.H3Core
+import com.uber.h3core.util.GeoCoord
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{Row, SparkSession}
+_/**_
+_  * Created by angel_
+_  */_
+object  HotAreaOrder {
+    val h3 = H3Core.newInstance
+
+    def init(sparkSession:SparkSession): Unit ={
+        _thrid_hotArea_order(sparkSession)
+      }
+
+   //========================当日热区订单、当日新增热区订单=================_
+    def _thrid_hotArea_order(sparkSession:SparkSession): Unit ={
+        sparkSession.udf.register(&quot;locationToH3&quot; , locationToH3 _)
+        sparkSession.udf.register(&quot;h3ToCoordinate&quot; , h3ToCoordinate _)
+       //计算当日热区订单数--精度7，大概半径为1200米_
+       //1）：将经纬度转换成H3编码_
+        sparkSession.sql(HotAreaOrderSQL.orderHotTable_day(&quot;2019-07-15&quot;)).createOrReplaceTempView(&quot;orderHotTable_day&quot;)
+
+       //2）：得到当日的热区订单 ，生成dataframe用来处理每个街道的热区_
+        val today_hot_area = sparkSession.sql(HotAreaOrderSQL._today_hot_area)
+          .toDF(&quot;begin_address_code&quot; , &quot;coordinate&quot;,&quot;h3Code&quot; , &quot;radius&quot; , &quot;count&quot;)
+
+       //注册临时表，用来做后面的当日新增热区_
+        today_hot_area.createOrReplaceTempView(&quot;today_hot_area&quot;)
+
+       //根据当日热区情况，获取每个街道的热区_
+        val today_hot_area_rdd: RDD[Row] = today_hot_area.rdd
+       //(街道编码 , (街道编码 ， 当日热区经纬度 ，当日热区半径，当日热区数量 ))_
+        val data: RDD[(String, Iterable[(String, String, Int, Int)])] = today_hot_area_rdd.map {
+            line =&gt;
+             //当日下单的街道经纬度编码_
+              val begin_address_code = line.getAs[String](&quot;begin_address_code&quot;)
+             //当日热区经纬度坐标_
+              val coordinate = line.getAs[String](&quot;coordinate&quot;)
+             //当日热区半径_
+              val radius = line.getAs[Int](&quot;radius&quot;)
+             //当日热区数量_
+              val count = line.getAs[Int](&quot;count&quot;)
+              (begin_address_code, coordinate, radius, count)
+          }.groupBy(line =&gt; line._1)
+
+       //返回当日对每个街道热区情况计数(街道编码，数量，详情)(begin_address_code, coordinate, radius, count)_
+        val parseData: RDD[(String, Int, List[(String, String, Int, Int)])] = data.map {
+            line =&gt;
+              var count = 0
+              for (dat &lt;- line._2) {
+                  count = count + dat._4
+                }
+             //(街道编码，数量，详情) (begin_address_code, coordinate, radius, count)_
+              (line._1, count, line._2.toList)
+          }
+
+        import sparkSession.sqlContext.implicits._
+       //city_code | city_hot_num | [[coordinate , radius , count] ,[coordinate , radius , count] .... ]_
+        val _today_hot_df = parseData.toDF(&quot;city_code&quot; , &quot;city_num&quot; , &quot;today_hot_arr&quot;)
+
+       //当提新增热区订单数_
+       //求昨日热力订单情况_
+        sparkSession.sql(HotAreaOrderSQL.yestdayOrderStatusTMP(&quot;2019-07-14&quot;)).createOrReplaceTempView(&quot;yestdayOrderStatusTMP&quot;)
+
+        sparkSession.sql(HotAreaOrderSQL.yestdayOrderStatus).createOrReplaceTempView(&quot;yestdayOrderStatus&quot;)
+
+       //根据昨日的热区订单，与今日热区订单做对比，得到日新增订单_
+        val yest_hot_new_status = sparkSession.sql(HotAreaOrderSQL.newHotOrderTmp)
+          .toDF(&quot;city_code&quot; , &quot;coordinate&quot; , &quot;radius&quot; , &quot;count&quot;)
+
+       //得到当日热区和昨日热区对比后的每个街道的热区情况_
+        val yest_hot_new_status_rdd = yest_hot_new_status.rdd
+
+       //依然对街道编码做分组，只不过这次是新增后的热区情况_
+        val _new_hot = yest_hot_new_status_rdd.map {
+            line =&gt;
+             //昨日下单的街道经纬度编码_
+              val city_code = line.getAs[String](&quot;city_code&quot;)
+             //昨日热区经纬度坐标_
+              val coordinate = line.getAs[String](&quot;coordinate&quot;)
+             //昨日热区半径_
+              val radius = line.getAs[Int](&quot;radius&quot;)
+             //昨日热区数量_
+              val count = line.getAs[Int](&quot;count&quot;)
+              (city_code, coordinate, radius, count)
+          }.groupBy(line =&gt; line._1)
+
+       //对每个街道热区情况计数_
+        val _new_hot_parse = _new_hot.map {
+            line =&gt;
+              var count = 0
+              for (dat &lt;- line._2) {
+                  count = count + dat._4
+                }
+              (line._1, count, line._2.toList)
+          }
+
+        import sparkSession.sqlContext.implicits._
+
+       //新增热区的dataframe_
+        val _new_hot_df = _new_hot_parse.toDF(&quot;city_code&quot; , &quot;city_num&quot; , &quot;yest_hot_arr&quot;)
+
+       //新增热区临时表_
+        _new_hot_df.createOrReplaceTempView(&quot;_new_hot_df&quot;)
+
+       //当日热区临时表_
+        _today_hot_df.createOrReplaceTempView(&quot;_today_hot_df&quot;)
+
+       //当日热区订单、当日新增热区订单_
+        val _hot_order = sparkSession.sql(HotAreaOrderSQL._hot_order)
+
+        _hot_order.show()
+
+        SparkSQLHBaseSink.saveToHBase(_hot_order,&quot;_hot_order&quot;,&quot;rk&quot;,&quot;rk,_city_code,_day_order_num,_new_orders_num&quot;)
+
+    _//    DataFrameToHbase.save(_hot_order , &quot;_hot_order&quot; , &quot;rk&quot; , 1 , false)_
+      }
+
+   //经纬度转h3Code_
+    def locationToH3(lat:Double ,lon:Double , res:Int ): Long ={
+        h3.geoToH3(lat, lon, res)
+      }
+   //根据h3编码，转成经纬度_
+    def h3ToCoordinate(line:String):String = {
+        val geo: GeoCoord = h3.h3ToGeo(line.toLong)
+        geo.lat+&quot;,&quot;+geo.lng
+      }
+}
+
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br></div></div><p></p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/03.项目/10.出行大数据项目/09.业务数据库分析.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=%E5%87%BA%E8%A1%8C%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A1%B9%E7%9B%AE" title="标签">#出行大数据项目</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">1/21/2022, 3:12:36 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/036d8c/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">业务数据库功能模块</div></a> <a href="/pages/79d62d/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Spark使用中的优化</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/036d8c/" class="prev">业务数据库功能模块</a></span> <span class="next"><a href="/pages/79d62d/">Spark使用中的优化</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/44.7235eb98.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Hadoop之MapReduce详解 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/76.b8a53386.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Hadoop基础理论</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/479df0/" class="sidebar-link">Hadoop简介</a></li><li><a href="/pages/eeff69/" class="sidebar-link">Hadoop之HDFS详解</a></li><li><a href="/pages/1c6825/" aria-current="page" class="active sidebar-link">Hadoop之MapReduce详解</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#mapreduce编程模型" class="sidebar-link">MapReduce编程模型</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#map阶段" class="sidebar-link">Map阶段</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#reduce阶段" class="sidebar-link">Reduce阶段</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#map-reduce" class="sidebar-link">Map&amp;Reduce</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#mapreduce编程示例" class="sidebar-link">MapReduce编程示例</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#mapreduce原理图" class="sidebar-link">MapReduce原理图</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#mr中key的作用" class="sidebar-link">MR中key的作用</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#map-reduce代码" class="sidebar-link">map - reduce代码</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#运行-查看" class="sidebar-link">运行 / 查看</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#shuffle" class="sidebar-link">Shuffle</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#map端" class="sidebar-link">map端</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#reduce端" class="sidebar-link">reduce端</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#自定义partitioner" class="sidebar-link">自定义Partitioner</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#自定义combiner" class="sidebar-link">自定义Combiner</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#mr设置压缩" class="sidebar-link">mr设置压缩</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#自定义inputformat" class="sidebar-link">自定义InputFormat</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#mapreduce执行过程" class="sidebar-link">MapReduce执行过程</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#示例代码" class="sidebar-link">示例代码</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#自定义outputformat" class="sidebar-link">自定义OutputFormat</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#二次排序" class="sidebar-link">二次排序</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#知识点小例子" class="sidebar-link">知识点小例子</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#逻辑分析" class="sidebar-link">逻辑分析</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#示例代码-2" class="sidebar-link">示例代码</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#mapreduce数据倾斜" class="sidebar-link">MapReduce数据倾斜</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/1c6825/#诊断是否存在数据倾斜" class="sidebar-link">诊断是否存在数据倾斜</a></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#减缓数据倾斜" class="sidebar-link">减缓数据倾斜</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/1c6825/#抽样分区案例" class="sidebar-link">抽样分区案例</a></li></ul></li><li><a href="/pages/975721/" class="sidebar-link">Hadoop架构原理Yarn</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8AHadoop%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《Hadoop》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=Hadoop%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA" title="分类" data-v-70a2d273>Hadoop基础理论</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-09-29</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABKFJREFUSA3tVl1oFVcQnrMbrak3QUgkya1akpJYcrUtIqW1JvFBE9LiQ5v6JmJpolbMg32rVrhgoYK0QiMY6i9Y6EMaW5D+xFJaTYItIuK2Kr3+BJNwkxBj05sQY3b3nM6cs2dv9t7NT/vQJw/sndk5M/PNzJkzewGerP+pAmy+ON8lLzUJgA8ZYxYIYZmGYRnctDaWvJJAmTtfP1pvXsBCCPP8QFcCaRkZYACgDZFO4stNIcBCajEOlmmC9XpJ9bAGCaPaPmzPl32dvLSVu3BWCTQs0XQQ6g0DYgwLIoAZbBCdW/i+781o1VVlm/410mw4h06Y7bIPHNyWDyL4FHkX03Q8SrzNhZTZriieckWt7cL6MM85YcLpsi/7O9/iXFT6MswI0DmmpkSaJ0qLxFIm3+i1THHB3zmBH3PYx9CcykcLOeQVVa7QtdxTgQgEleX2AjHYfwA+2ddV77ruGoJUbhGDI09YSNXyMpUt5ylOzxgbUmtOp7NmbNt8v3arjTBfYELmLUV+M+nSawNNAUqpT3ClJWg5I3BLT+cGW/DXNGCa6tx1aakCGEigArTn4TDIPdrXXYKCZNrHLMCOEPvHBlLQ99s9eHB7EB6NTki73CVPQ2F5MSx/uRQixfmq7rK0wYD8w8E905bnPDfwoWs/rfv93NWN/ZfvwsLIU7A09gxECyISeGJkHAau98L97tuw7NXnoPyNF8FcYGLGKsOs0mN3OEyec9esGW/ZEl945dTP34wlR2FZVQWU1q0Cw8Tr7p+hgLLNL0FPxx/Q35mA8aEUrH6nCgwEl0tn7wUiZYJnNRh6DK4UH/k0lfyrsBKdPVv/AriGIQcEDQZ65LBAGe2Rzui9Ybjz7XUppz1/uKBbyVPGkN3ZAeC6hr0x7Nr38N5+EqkoOm17xpoqR9ohQF55ERSvr4Dkr3chNfC3DMzGJlNBElW8w9nsGQvhNGIzDkXzCg8cLK951xHsFBlTJspJNi3ZFIMF2AeDV3q8DNOB+YHi6QTrChDIWDBRi5U5f+ZMfJLu3ccrqxtdxk4SKH336LFxSmkqefwU5T8fhdSdQf9IVKD6aNiwI/hnmcAZ91isYMJIaCUCx9W098+LgruikeTqzqqxKPUwqJyCPJiyemVVZBOijDGjD38Os0jOiSPL1z3SPjXNANbiNPXAdzTfukjjuknNBbyz3nwgTd3AVFqUJ5hpHlq9MveLnWwttUfoygBmvVjuikxND3znrhsELnZk7k+OjIGxeNEkomyLVta0xxn+HZhjBc4YZ/AFjHjz9u3xRZl2BN4aq9nFwWh16IrQ1aHHEd3j1+4/dB9OtH4e29A2H1DyHQRmOSfQZ1Fy7MHBTGB6J/Djq6p3OxyO2cB+4Car7v/o3GXgfAkj23+x9ID1Teoamo/SXcbvSf2PX7Vc8DdCmE1vN9di+32P9/5YR3vLnhCVGUWBjEkr3yh4H8v9CzmsbdhzOKzsJKM90iFdaTMjRPhGVsakRvOaRidljo6H6G7j+ctrJpsP+4COhDIl0La2+FS4+5mlocBaXY5QnGZysIBYoeSsl5qQzrSj/cgNrfuEzlWBfwA+EjrZyWUvpAAAAABJRU5ErkJggg==">
+          Hadoop之MapReduce详解
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="mapreduce编程模型"><a href="#mapreduce编程模型" class="header-anchor">#</a> MapReduce编程模型</h2> <ul><li>Hadoop架构图
+Hadoop由HDFS分布式存储、<strong>MapReduce分布式计算</strong>、Yarn资源调度三部分组成</li></ul> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201906191834-1562922704761.png#height=426&amp;id=ZT7xI&amp;originHeight=426&amp;originWidth=564&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=564" alt=""></p> <ul><li>MapReduce是采用一种<strong>分而治之</strong>的思想设计出来的分布式计算框架</li> <li>MapReduce由两个阶段组成：
+<ul><li>Map阶段（切分成一个个小的任务）</li> <li>Reduce阶段（汇总小任务的结果）</li></ul></li> <li>那什么是分而治之呢？
+<ul><li>比如一复杂、计算量大、耗时长的的任务，暂且称为“大任务”；</li> <li>此时使用单台服务器无法计算或较短时间内计算出结果时，可将此大任务切分成一个个小的任务，小任务分别在不同的服务器上<strong>并行</strong>的执行</li> <li>最终再汇总每个小任务的结果</li></ul></li></ul> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201906251747.png#height=729&amp;id=Orhbr&amp;originHeight=729&amp;originWidth=1008&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=1008" alt=""></p> <h3 id="map阶段"><a href="#map阶段" class="header-anchor">#</a> Map阶段</h3> <ul><li>map阶段有一个关键的map()函数；</li> <li>此函数的输入是<strong>键值对</strong></li> <li>输出是一系列<strong>键值对</strong>，输出写入<strong>本地磁盘</strong>。</li></ul> <h3 id="reduce阶段"><a href="#reduce阶段" class="header-anchor">#</a> Reduce阶段</h3> <ul><li>reduce阶段有一个关键的函数reduce()函数</li> <li>此函数的输入也是键值对（即map的输出（kv对））</li> <li>输出也是一系列键值对，结果最终写入HDFS</li></ul> <h3 id="map-reduce"><a href="#map-reduce" class="header-anchor">#</a> Map&amp;Reduce</h3> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201906251807.png#height=328&amp;id=SOuUl&amp;originHeight=328&amp;originWidth=1093&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=1093" alt=""></p> <h2 id="mapreduce编程示例"><a href="#mapreduce编程示例" class="header-anchor">#</a> MapReduce编程示例</h2> <ul><li>以<strong>MapReduce的词频统计</strong>为例：统计一批英文文章当中，每个单词出现的总次数</li></ul> <h3 id="mapreduce原理图"><a href="#mapreduce原理图" class="header-anchor">#</a> MapReduce原理图</h3> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201906271715.png#height=760&amp;id=X2wwo&amp;originHeight=760&amp;originWidth=1563&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=1563" alt=""></p> <ul><li>Map阶段
+<ul><li>假设MR的输入文件“<strong>Gone With The Wind</strong>”有三个block；block1、block2、block3</li> <li>MR编程时，每个block对应一个分片split</li> <li>每一个split对应一个map任务（map task）</li> <li>如图共3个map任务（map1、map2、map3）；这3个任务的逻辑一样，所以以第一个map任务（map1）为例分析</li> <li>map1读取block1的数据；一次读取block1的一行数据；
+<ul><li>产生键值对(key/value)，作为map()的参数传入，调用map()；</li> <li>假设当前所读行是第一行</li> <li>将当前所读行的行首相对于当前block开始处的字节偏移量作为key（0）</li> <li>当前行的内容作为value（Dear Bear River）</li></ul></li> <li>map()内
+<ul><li>(按需求，写业务代码)，将value当前行内容按空格切分，得到三个单词Dear | Bear | River</li> <li>将每个单词变成键值对，输出出去(Dear, 1) | (Bear, 1) | (River, 1)；最终结果写入map任务所在节点的本地磁盘中（内里还有细节，讲到shuffle时，再细细展开）</li> <li>block的第一行的数据被处理完后，接着处理第二行；逻辑同上</li> <li>当map任务将当前block中所有的数据全部处理完后，此map任务即运行结束</li></ul></li> <li>其它的每一个map任务都是如上逻辑，不再赘述</li></ul></li> <li>Reduce阶段
+<ul><li>reduce任务（reduce task）的个数由自己写的程序编程指定，main()内的job.setNumReduceTasks(4)指定reduce任务是4个（reduce1、reduce2、reduce3、reduce4）</li> <li>每一个reduce任务的逻辑一下，所以以第一个reduce任务（reduce1）为例分析</li> <li>map1任务完成后，reduce1通过网络，连接到map1，将map1输出结果中属于reduce1的分区的数据，通过网络获取到reduce1端（拷贝阶段）</li> <li>同样也如此连接到map2、map3获取结果</li> <li>最终reduce1端获得4个(Dear, 1)键值对；由于key键相同，它们分到同一组；</li> <li>4个(Dear, 1)键值对，转换成[Dear, Iterable(1, 1, 1, )]，作为两个参数传入reduce()</li> <li>在reduce()内部，计算Dear的总数为4，并将(Dear, 4)作为键值对输出</li> <li>每个reduce任务最终输出文件（内里还有细节，讲到shuffle时，再细细展开），文件写入到HDFS</li></ul></li></ul> <h3 id="mr中key的作用"><a href="#mr中key的作用" class="header-anchor">#</a> MR中key的作用</h3> <ul><li><strong>MapReduce编程中，key有特殊的作用</strong> <ul><li>①数据中，若要针对某个值进行分组、聚合时，需将此值作为MR中的reduce的输入的key</li> <li>如当前的词频统计例子，按单词进行分组，每组中对出现次数做聚合（计算总和）；所以需要将每个单词作为reduce输入的key，MapReduce框架自动按照单词分组，进而求出每组即每个单词的总次数</li> <li>②另外，key还具有可排序的特性，因为MR中的key类需要实现WritableComparable接口；而此接口又继承Comparable接口</li> <li>MR编程时，要充分利用以上两点；结合实际业务需求，设置合适的key
+<img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201908221717.png#height=128&amp;id=g4O4f&amp;originHeight=128&amp;originWidth=970&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=970" alt=""> <img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201908221718.png#height=109&amp;id=cHMrz&amp;originHeight=109&amp;originWidth=985&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=985" alt=""></li></ul></li></ul> <h3 id="map-reduce代码"><a href="#map-reduce代码" class="header-anchor">#</a> map - reduce代码</h3> <p>Mapper代码</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 类Mapper&lt;LongWritable, Text, Text, IntWritable&gt;的四个泛型分别表示
+ * map方法的输入的键的类型kin、值的类型vin；输出的键的类型kout、输出的值的类型vout
+ * kin指的是当前所读行行首相对于split分片开头的字节偏移量,所以是long类型，对应序列化类型LongWritable
+ * vin指的是当前所读行，类型是String，对应序列化类型Text
+ * kout根据需求，输出键指的是单词，类型是String，对应序列化类型是Text
+ * vout根据需求，输出值指的是单词的个数，1，类型是int，对应序列化类型是IntWritable
+ */
+public class WordCountMap extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {
+    /**
+     * 处理分片split中的每一行的数据；针对每行数据，会调用一次map方法
+     * 在一次map方法调用时，从一行数据中，获得一个个单词word，再将每个单词word变成键值对形式(word, 1)输出出去
+     * 输出的值最终写到本地磁盘中
+     * @param key 当前所读行行首相对于split分片开头的字节偏移量
+     * @param value  当前所读行
+     */
+    public void map(LongWritable key, Text value, Context context)
+            throws IOException, InterruptedException {
+            context.write(new Text(word), new IntWritable(1));
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><p>Reducer代码</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * Reducer&lt;Text, IntWritable, Text, IntWritable&gt;的四个泛型分别表示
+ * reduce方法的输入的键的类型kin、输入值的类型vin；输出的键的类型kout、输出的值的类型vout
+ * 注意：因为map的输出作为reduce的输入，所以此处的kin、vin类型分别与map的输出的键类型、值类型相同
+ * kout根据需求，输出键指的是单词，类型是String，对应序列化类型是Text
+ * vout根据需求，输出值指的是每个单词的总个数，类型是int，对应序列化类型是IntWritable
+ */
+public class WordCountReduce extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
+    public void reduce(Text key, Iterable&lt;IntWritable&gt; values,
+                          Context context) throws IOException, InterruptedException {
+        //定义变量，用于累计当前单词出现的次数
+        int sum = 0;
+        for (IntWritable count : values) {
+            //从count中获得值，累加到sum中
+            sum += count.get();
+        }
+        //将单词、单词次数，分别作为键值对，输出
+        context.write(key, new IntWritable(sum));// 输出最终结果
+    };
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><p><strong>2.4.3 Main程序入口</strong></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>Job job = Job.getInstance(configuration, WordCountMain.class.getSimpleName());
+//设置job的jar包，如果参数指定的类包含在一个jar包中，则此jar包作为job的jar包； 参数class跟主类在一个工程即可；一般设置成主类
+job.setJarByClass(WordCountMain.class);
+
+//通过job设置输入/输出格式
+//MR的默认输入格式是TextInputFormat，输出格式是TextOutputFormat；所以下两行可以注释掉
+//        job.setInputFormatClass(TextInputFormat.class);
+//        job.setOutputFormatClass(TextOutputFormat.class);
+
+//设置输入/输出路径
+FileInputFormat.setInputPaths(job, new Path(args[0]));
+FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+//设置处理Map阶段的自定义的类
+job.setMapperClass(WordCountMap.class);
+//设置map combine类，减少网路传出量
+job.setCombinerClass(WordCountReduce.class);
+//设置处理Reduce阶段的自定义的类
+job.setReducerClass(WordCountReduce.class);
+
+//注意：如果map、reduce的输出的kv对类型一致，直接设置reduce的输出的kv对就行；如果不一样，需要分别设置map, reduce的输出的kv类型
+//注意：此处设置的map输出的key/value类型，一定要与自定义map类输出的kv对类型一致；否则程序运行报错
+// job.setMapOutputKeyClass(Text.class);
+// job.setMapOutputValueClass(IntWritable.class);
+
+//设置reduce task最终输出key/value的类型
+//注意：此处设置的reduce输出的key/value类型，一定要与自定义reduce类输出的kv对类型一致；否则程序运行报错
+job.setOutputKeyClass(Text.class);
+job.setOutputValueClass(IntWritable.class);
+
+// 提交作业
+job.waitForCompletion(true);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br></div></div><h3 id="运行-查看"><a href="#运行-查看" class="header-anchor">#</a> 运行 / 查看</h3> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code><span class="token comment"># 查看运行情况 -&gt; job： http://node01:8088</span>
+<span class="token comment"># outpath -&gt; http://node01:50070</span>
+hadoop jar <span class="token punctuation">[</span>jar path<span class="token punctuation">]</span> <span class="token punctuation">[</span>main class path<span class="token punctuation">]</span> /inpath /outpath
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><h2 id="shuffle"><a href="#shuffle" class="header-anchor">#</a> Shuffle</h2> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201906280906.png#height=631&amp;id=tRa96&amp;originHeight=631&amp;originWidth=1427&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=1427" alt=""></p> <h3 id="map端"><a href="#map端" class="header-anchor">#</a> map端</h3> <ul><li>每个map任务都有一个对应的环形内存缓冲区；输出是kv对，先写入到环形缓冲区（默认大小100M），当内容占据80%缓冲区空间后，由一个后台线程将缓冲区中的数据溢出写到一个磁盘文件</li> <li>在溢出写的过程中，map任务可以继续向环形缓冲区写入数据；但是若写入速度大于溢出写的速度，最终造成100m占满后，map任务会暂停向环形缓冲区中写数据的过程；只执行溢出写的过程；直到环形缓冲区的数据全部溢出写到磁盘，才恢复向缓冲区写入</li> <li>后台线程溢写磁盘过程，有以下几个步骤：
+<ul><li>先对每个溢写的kv对做分区；分区的个数由MR程序的reduce任务数决定；默认使用HashPartitioner计算当前kv对属于哪个分区；计算公式：(key.hashCode() &amp; Integer.MAX_VALUE) % numReduceTasks</li> <li>每个分区中，根据kv对的key做内存中排序；</li> <li>若设置了map端本地聚合combiner，则对每个分区中，排好序的数据做combine操作；</li> <li>若设置了对map输出压缩的功能，会对溢写数据压缩</li></ul></li> <li>随着不断的向环形缓冲区中写入数据，会多次触发溢写（每当环形缓冲区写满100m），本地磁盘最终会生成多个溢出文件</li> <li>合并溢写文件：在map task完成之前，所有溢出文件会被合并成一个大的溢出文件；且是已分区、已排序的输出文件</li> <li>小细节：
+<ul><li>在合并溢写文件时，如果至少有3个溢写文件，并且设置了map端combine的话，会在合并的过程中触发combine操作；</li> <li>但是若只有2个或1个溢写文件，则不触发combine操作（因为combine操作，本质上是一个reduce，需要启动JVM虚拟机，有一定的开销）</li></ul></li></ul> <h3 id="reduce端"><a href="#reduce端" class="header-anchor">#</a> reduce端</h3> <ul><li>reduce task会在每个map task运行完成后，通过HTTP获得map task输出中，属于自己的分区数据（许多kv对）</li> <li>如果map输出数据比较小，先保存在reduce的jvm内存中，否则直接写入reduce磁盘</li> <li>一旦内存缓冲区达到阈值（默认0.66）或map输出数的阈值（默认1000），则触发<strong>归并merge</strong>，结果写到本地磁盘</li> <li>若MR编程指定了combine，在归并过程中会执行combine操作</li> <li>随着溢出写的文件的增多，后台线程会将它们合并大的、排好序的文件</li> <li>reduce task将所有map task复制完后，将合并磁盘上所有的溢出文件</li> <li>默认一次合并10个</li> <li>最后一批合并，部分数据来自内存，部分来自磁盘上的文件</li> <li>进入“归并、排序、分组阶段”</li> <li>每组数据调用一次reduce方法</li></ul> <h2 id="自定义partitioner"><a href="#自定义partitioner" class="header-anchor">#</a> 自定义Partitioner</h2> <ul><li>HashPartitioner</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class HashPartitioner&lt;K2, V2&gt; implements Partitioner&lt;K2, V2&gt; {
+  public int getPartition(K2 key, V2 value, int numReduceTasks) {
+    // numReduceTasks : reduce个数，可设置
+    return (key.hashCode() &amp; Integer.MAX_VALUE) % numReduceTasks;
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h2 id="自定义combiner"><a href="#自定义combiner" class="header-anchor">#</a> 自定义Combiner</h2> <div class="language- line-numbers-mode"><pre class="language-text"><code>// 实际上Combiner就是reduce操作，需要设置 
+job.setReducerClass(CustomReduce.class);
+job.setCombinerClass(CustomReduce.class);  // open combiner
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><ul><li>map端combine本地聚合（<strong>本质是reduce</strong>）</li> <li>不论运行多少次Combine操作，都不能影响最终的结果</li> <li>并非所有的mr都适合combine操作，比如求平均值</li></ul> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201909091014.png#height=551&amp;id=D2Dxq&amp;originHeight=551&amp;originWidth=1357&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=1357" alt=""></p> <ul><li>当每个map任务的环形缓冲区添满80%，开始溢写磁盘文件</li> <li>此过程会分区、每个分区内按键排序、再combine操作（若设置了combine的话）、若设置map输出压缩的话则再压缩
+<ul><li>在合并溢写文件时，如果至少有3个溢写文件，并且设置了map端combine的话，会在合并的过程中触发combine操作；</li> <li>但是若只有2个或1个溢写文件，则不触发combine操作（因为combine操作，本质上是一个reduce，需要启动JVM虚拟机，有一定的开销）</li></ul></li> <li>combine本质上也是reduce；因为自定义的combine类继承自Reducer父类</li> <li>map: (K1, V1) -&gt; list(K2, V2)</li> <li>combiner: (K2, list(V2)) -&gt; (K2, V2)</li> <li>reduce: (K2, list(V2)) -&gt; (K3, V3)
+<ul><li>reduce函数与combine函数通常是一样的</li> <li>K3与K2类型相同；</li> <li>V3与V2类型相同</li> <li>即reduce的输入的kv类型分别与输出的kv类型相同</li></ul></li></ul> <h2 id="mr设置压缩"><a href="#mr设置压缩" class="header-anchor">#</a> mr设置压缩</h2> <div class="language- line-numbers-mode"><pre class="language-text"><code>//开启map输出进行压缩的功能
+configuration.set(&quot;mapreduce.map.output.compress&quot;, &quot;true&quot;);
+//设置map输出的压缩算法是：BZip2Codec，它是hadoop默认支持的压缩算法，且支持切分
+configuration.set(&quot;mapreduce.map.output.compress.codec&quot;, &quot;org.apache.hadoop.io.compress.BZip2Codec&quot;);
+//开启job输出压缩功能
+configuration.set(&quot;mapreduce.output.fileoutputformat.compress&quot;, &quot;true&quot;);
+//指定job输出使用的压缩算法
+configuration.set(&quot;mapreduce.output.fileoutputformat.compress.codec&quot;, &quot;org.apache.hadoop.io.compress.BZip2Codec&quot;);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h2 id="自定义inputformat"><a href="#自定义inputformat" class="header-anchor">#</a> 自定义InputFormat</h2> <h3 id="mapreduce执行过程"><a href="#mapreduce执行过程" class="header-anchor">#</a> MapReduce执行过程</h3> <p><img src="http://kflys.gitee.io/upic/2020/03/29/uPic/hadoop/mapreduce/assets/Image201905211621.png#height=770&amp;id=XVFXm&amp;originHeight=770&amp;originWidth=890&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none&amp;width=890" alt=""></p> <ul><li>上图也描述了mapreduce的一个完整的过程；我们主要看map任务是如何从hdfs读取分片数据的部分
+<ul><li>涉及3个关键的类</li> <li>①InputFormat输入格式类
+②InputSplit输入分片类：getSplits()
+<ul><li>InputFormat输入格式类将输入文件分成一个个分片InputSplit</li> <li>每个Map任务对应一个split分片</li></ul></li></ul></li></ul> <p>③RecordReader记录读取器类：createRecordReader()</p> <div class="language- extra-class"><pre><code>  - RecordReader（记录读取器）读取分片数据，一行记录生成一个键值对
+  - 传入map任务的map()方法，调用map()
+</code></pre></div><ul><li>详细流程：
+<ul><li>客户端调用InputFormat的**getSplits()**方法，获得输入文件的分片信息</li></ul></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public abstract class InputFormat&lt;K, V&gt; {
+    public abstract List&lt;InputSplit&gt; getSplits(JobContext var1);
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><ul><li>针对每个MR job会生成一个相应的app master，负责map 、 reduce任务的调度及监控执行情况</li> <li>将分片信息传递给MR job的app master</li> <li>app master根据分片信息，尽量将map任务尽量调度在split分片数据所在节点（<strong>移动计算不移动数据</strong>）</li></ul> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">InputSplit</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">getLocations</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><ul><li>有几个分片，就生成几个map任务</li> <li>每个map任务将split分片传递给createRecordReader()方法，生成此分片对应的RecordReader</li> <li>RecordReader用来读取分片的数据，生成记录的键值对
+<ul><li>nextKeyValue()判断是否有下一个键值对，如果有，返回true；否则，返回false</li> <li>如果返回true，调用getCurrentKey()获得当前的键</li> <li>调用getCurrentValue()获得当前的值</li></ul></li> <li>map任务运行过程</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>// mapper
+public class Mapper&lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&gt; {
+  	// 1. map任务运行时，会调用run()
+    public void run(Mapper&lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&gt;.Context context) throws IOException, InterruptedException {
+      // 2. 首先运行一次setup()方法；只在map任务启动时，运行一次；一些初始化的工作可以在setup方法中完成；如要连接数据库之类的操作
+        this.setup(context);
+      // 3. while循环，调用context.nextKeyValue()；会委托给RecordRecord的nextKeyValue()，判断是否有下一个键值对
+      // 当读取分片尾，context.nextKeyValue()返回false；退出循环
+        while(context.nextKeyValue()) {
+          	//4.  如果有下一个键值对，调用context.getCurrentKey()、context.getCurrentValue()获得当前的键、值的值（也是调用RecordReader的同名方法[见5]）
+            this.map(context.getCurrentKey(), context.getCurrentValue(), context);
+        }
+      	//6. 调用cleanup()方法，只在map任务结束之前，调用一次；所以，一些回收资源的工作可在此方法中实现，如关闭数据库连接
+        this.cleanup(context);
+    }
+  // 5. - 作为参数传入map(key, value, context)，调用一次map()
+  protected void map(KEYIN key, VALUEIN value, Mapper.Context context){
+        context.write(key, value);
+    }
+}
+
+// recordReader
+public abstract class RecordReader&lt;KEYIN, VALUEIN&gt; implements Closeable {
+    public abstract void initialize(InputSplit var1, TaskAttemptContext var2);
+    public abstract boolean nextKeyValue();
+    public abstract KEYIN getCurrentKey();
+    public abstract VALUEIN getCurrentValue();
+    public abstract float getProgress();
+    public abstract void close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br></div></div><h3 id="示例代码"><a href="#示例代码" class="header-anchor">#</a> 示例代码</h3> <ul><li>小文件的优化无非以下几种方式：
+<ul><li>在数据采集的时候，就将小文件或小批数据合成大文件再上传HDFS(SequenceFile方案)</li> <li>在业务处理之前，在HDFS上使用mapreduce程序对小文件进行合并；可使用<strong>自定义InputFormat</strong>实现</li> <li>在mapreduce处理时，可采用<strong>CombineFileInputFormat</strong>提高效率</li></ul></li> <li>自定义InputFormat</li></ul> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token comment">/**
+ * 自定义InputFormat类；
+ * 泛型：
+ *  键：因为不需要使用键，所以设置为NullWritable
+ *  值：值用于保存小文件的内容，此处使用BytesWritable
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WholeFileInputFormat</span> <span class="token keyword">extends</span> <span class="token class-name">FileInputFormat</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">NullWritable</span><span class="token punctuation">,</span> <span class="token class-name">BytesWritable</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+  	 <span class="token comment">// 返回false，表示输入文件不可切割</span>
+    <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">isSplitable</span><span class="token punctuation">(</span><span class="token class-name">JobContext</span> context<span class="token punctuation">,</span> <span class="token class-name">Path</span> file<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 生成读取分片split的RecordReader</span>
+    <span class="token keyword">public</span> <span class="token class-name">RecordReader</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">NullWritable</span><span class="token punctuation">,</span> <span class="token class-name">BytesWritable</span><span class="token punctuation">&gt;</span></span> <span class="token function">createRecordReader</span><span class="token punctuation">(</span><span class="token class-name">InputSplit</span> split<span class="token punctuation">,</span> <span class="token class-name">TaskAttemptContext</span> context<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span><span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+        <span class="token class-name">WholeFileRecordReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WholeFileRecordReader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      	<span class="token comment">// split传如WholeFileRecordReader进行读取，组装value</span>
+        reader<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span>split<span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><ul><li>自定义RecordReader</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class WholeFileRecordReader extends RecordReader&lt;NullWritable, BytesWritable&gt; {
+    private BytesWritable value = new BytesWritable();
+    @Override
+    public boolean nextKeyValue(){
+       value.set(splitBytes, 0, splitBytes.length);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h2 id="自定义outputformat"><a href="#自定义outputformat" class="header-anchor">#</a> 自定义OutputFormat</h2> <ul><li>输出结果到不同<strong>目录</strong></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class MyOutPutFormat extends FileOutputFormat&lt;Text, NullWritable&gt; {
+    public RecordWriter getRecordWriter(TaskAttemptContext context){
+        // 两个输出文件路径
+        FSDataOutputStream badOut = fs.create(badPath);
+        FSDataOutputStream goodOut = fs.create(goodPath);
+        return new MyRecordWriter(badOut,goodOut);
+    }
+    static class MyRecordWriter extends RecordWriter&lt;Text, NullWritable&gt;{
+        public void write(Text key, NullWritable value){
+            if
+             	goodOut.write();
+            else
+              badOut.write();
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>// 设置自定义的输出类
+job.setOutputFormatClass(MyOutPutFormat.class);
+// 设置一个输出目录，这个目录会输出一个success的成功标志的文件
+MyOutPutFormat.setOutputPath(job, new Path(args[1]));
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h3 id="二次排序"><a href="#二次排序" class="header-anchor">#</a> 二次排序</h3> <ul><li>hadoop自带的key类型无法满足需求，自定义key
+<ul><li>实现WritableComparable接口</li> <li>实现compareTo比较方法</li> <li>实现write序列化方法</li> <li>实现readFields反序列化方法</li></ul></li> <li>示例代码</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//根据输入文件格式，定义JavaBean，作为MR时，Map的输出key类型；要求此类可序列化、可比较
+public class Person implements WritableComparable&lt;Person&gt; {
+    private String name;
+    private int age;
+    private int salary;
+
+    public Person() {}
+
+    //两个Person对象的比较规则：①先比较salary，高的排序在前；②若相同，age小的在前
+    public int compareTo(Person other) {}
+
+    //序列化，将NewKey转化成使用流传送的二进制
+    public void write(DataOutput dataOutput) throws IOException {}
+
+    //使用in读字段的顺序，要与write方法中写的顺序保持一致：name、age、salary
+    public void readFields(DataInput dataInput) throws IOException {}
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>job.setOutputKeyClass(Person.class);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h2 id="知识点小例子"><a href="#知识点小例子" class="header-anchor">#</a> 知识点小例子</h2> <ul><li>现有一个淘宝用户订单历史记录文件；每条记录有6个字段，分别表示
+<ul><li>userid、datetime、title商品标题、unitPrice商品单价、purchaseNum购买量、productId商品ID</li></ul></li> <li>现使用MR编程，求出每个用户、每个月消费金额最多的两笔订单，花了多少钱
+<ul><li>所以得相同用户、同一个年月的数据，分到同一组</li></ul></li></ul> <h3 id="逻辑分析"><a href="#逻辑分析" class="header-anchor">#</a> 逻辑分析</h3> <ul><li>根据文件格式，自定义JavaBean类OrderBean
+<ul><li>实现WritableComparable接口</li> <li>包含6个字段分别对应文件中的6个字段</li> <li>重点实现compareTo方法
+<ul><li>先比较userid是否相等；若不相等，则userid升序排序</li> <li>若相等，比较两个Bean的日期是否相等；若不相等，则日期升序排序</li> <li>若相等，再比较总开销，降序排序</li></ul></li> <li>实现序列化方法write()</li> <li>实现反序列化方法readFields()</li></ul></li> <li>自定义分区类
+<ul><li>继承Partitioner类</li> <li>getPartiton()实现，userid相同的，处于同一个分区</li></ul></li> <li>自定义Mapper类
+<ul><li>输出key是当前记录对应的Bean对象</li> <li>输出的value对应当前下单的总开销</li></ul></li> <li>自定义分组类
+<ul><li>决定userid相同、日期（年月）相同的记录，分到同一组中，调用一次reduce()</li></ul></li> <li>自定义Reduce类
+<ul><li>reduce()中求出当前一组数据中，开销头两笔的信息</li></ul></li> <li>main方法
+<ul><li>job.setMapperClass</li> <li>job.setPartitionerClass</li> <li>job.setReducerClass</li> <li>job.setGroupingComparatorClass</li></ul></li></ul> <h3 id="示例代码-2"><a href="#示例代码-2" class="header-anchor">#</a> 示例代码</h3> <ul><li>OrderBean</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class OrderBean implements WritableComparable&lt;OrderBean&gt; {
+
+    //用户ID 等字段
+    private String userid;
+    public OrderBean() {}
+   
+    //key的比较规则
+    public int compareTo(OrderBean other) {}
+    // 序列化
+    public void write(DataOutput dataOutput) throws IOException {}
+		// 反序列化
+    public void readFields(DataInput dataInput) throws IOException { }
+
+    /**
+     * 使用默认分区器，那么userid相同的，落入同一分区；
+     * 另外一个方案：此处不覆写hashCode方法，而是自定义分区器，getPartition方法中，对OrderBean的userid求hashCode值%reduce任务数
+     */
+//    public int hashCode() {
+//        return this.userid.hashCode();
+//    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><ul><li>MyPartitioner</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//mapper的输出key类型是自定义的key类型OrderBean；输出value类型是单笔订单的总开销double -&gt; DoubleWritable
+public class MyPartitioner extends Partitioner&lt;OrderBean, DoubleWritable&gt; {
+    @Override
+    public int getPartition{
+        //userid相同的，落入同一分区
+        return (orderBean.getUserid().hashCode() &amp; Integer.MAX_VALUE) % numReduceTasks;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><ul><li>MyMapper</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class MyMapper extends Mapper&lt;LongWritable, Text, OrderBean, DoubleWritable&gt; {
+    protected void map(LongWritable key, Text value, Context context){
+            // 生成OrderBean对象
+            OrderBean orderBean = getOrderBean();
+            context.write(orderBean, valueOut);
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><ul><li>MyReducer</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class MyReducer extends Reducer&lt;OrderBean, DoubleWritable, Text, DoubleWritable&gt; {
+    /**
+     * ①由于自定义分组逻辑，相同用户、相同年月的订单是一组，调用一次reduce()；
+     * ②由于自定义的key类OrderBean中，比较规则compareTo规定，相同用户、相同年月的订单，按总金额降序排序
+     * 所以取出头两笔，就实现需求
+     */
+    @Override
+    protected void reduce(OrderBean key, Iterable&lt;DoubleWritable&gt; values, Context context) throws IOException, InterruptedException {
+        //求每个用户、每个月、消费金额最多的两笔多少钱
+        int num = 0;
+        for(DoubleWritable value: values) {
+            if(num &lt; 2) {
+                String keyOut = key.getUserid() + &quot;  &quot; + key.getDatetime();
+                context.write(new Text(keyOut), value);
+                num++;
+            } else {
+                break;
+            }
+        }
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><ul><li>MyGroup</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//自定义分组类：reduce端调用reduce()前，对数据做分组；每组数据调用一次reduce()
+public class MyGroup extends WritableComparator {
+  	// 注意： 分组实现的方法是这个
+    public int compare(WritableComparable a, WritableComparable b) {
+        //userid、年、月相同的，作为一组
+        int ret1 = aUserId.compareTo(bUserId);
+        if(ret1 == 0) {//同一用户
+            //年月也相同返回0，在同一组；
+            return aOrderBean.getDatetime().compareTo(bOrderBean.getDatetime());
+        } else {
+            return ret1;
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><ul><li>CustomGroupingMain</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>//设置处理Map阶段的自定义的类
+job.setMapperClass(MyMapper.class);
+//设置map combine类，减少网路传出量
+//job.setCombinerClass(MyReducer.class);
+job.setPartitionerClass(MyPartitioner.class);
+//设置处理Reduce阶段的自定义的类
+job.setReducerClass(MyReducer.class);
+job.setGroupingComparatorClass(MyGroup.class);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h2 id="mapreduce数据倾斜"><a href="#mapreduce数据倾斜" class="header-anchor">#</a> MapReduce数据倾斜</h2> <ul><li>什么是数据倾斜？
+<ul><li>数据中不可避免地会出现离群值（outlier），并导致数据倾斜。这些离群值会显著地拖慢MapReduce的执行。</li></ul></li> <li>常见的数据倾斜有以下几类：
+<ul><li>数据频率倾斜——某一个区域的数据量要远远大于其他区域。比如某一个key对应的键值对远远大于其他键的键值对。</li> <li>数据大小倾斜——部分记录的大小远远大于平均值。</li></ul></li> <li>在map端和reduce端都有可能发生数据倾斜
+<ul><li>在map端的数据倾斜可以考虑使用combine</li> <li>在reduce端的数据倾斜常常来源于MapReduce的默认分区器</li></ul></li> <li>数据倾斜会导致map和reduce的任务执行时间大为延长，也会让需要缓存数据集的操作消耗更多的内存资源</li></ul> <h3 id="诊断是否存在数据倾斜"><a href="#诊断是否存在数据倾斜" class="header-anchor">#</a> 诊断是否存在数据倾斜</h3> <ul><li>发现倾斜数据之后，有必要诊断造成数据倾斜的那些键。有一个简便方法就是在代码里实现追踪每个键的<strong>最大值</strong>。</li> <li>为了减少追踪量，可以设置数据量阀值，只追踪那些数据量大于阀值的键，并输出到日志中。实现代码如下</li> <li>运行作业后就可以从日志中判断发生倾斜的键以及倾斜程度；跟踪倾斜数据是了解数据的重要一步，也是设计MapReduce作业的重要基础</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class WordCountReduce extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
+   
+  private int maxValueThreshold;
+
+  @Override
+  protected void setup(Context context) throws IOException, InterruptedException {
+
+    //一个键达到多少后，会做数据倾斜记录
+    maxValueThreshold = 10000;
+  }
+
+  public void reduce(Text key, Iterable&lt;IntWritable&gt; values,
+                     Context context) throws IOException, InterruptedException {
+    int sum = 0;
+    //用于记录键出现的次数
+    int i = 0;
+
+    for (IntWritable count : values) {
+      sum += count.get();
+      i++;
+    }
+
+    //如果当前键超过10000个，则打印日志
+    if(i &gt; maxValueThreshold) {
+      LOGGER.info(&quot;Received &quot; + i + &quot; values for key &quot; + key);
+    }
+
+    context.write(key, new IntWritable(sum));// 输出最终结果
+  };
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br></div></div><h3 id="减缓数据倾斜"><a href="#减缓数据倾斜" class="header-anchor">#</a> 减缓数据倾斜</h3> <ul><li>Reduce数据倾斜一般是指map的输出数据中存在数据频率倾斜的状况，即部分输出键的数据量远远大于其它的输出键</li> <li>如何减小reduce端数据倾斜的性能损失？常用方式有：
+<ul><li>自定义分区
+<ul><li>基于输出键的背景知识进行自定义分区。</li> <li>例如，如果map输出键的单词来源于一本书。其中大部分必然是省略词（stopword）。那么就可以将自定义分区将这部分省略词发送给固定的一部分reduce实例。而将其他的都发送给剩余的reduce实例。</li></ul></li> <li>Combine
+<ul><li>使用Combine可以大量地减小数据频率倾斜和数据大小倾斜。</li> <li>combine的目的就是聚合并精简数据。</li></ul></li> <li>抽样和范围分区
+<ul><li>Hadoop默认的分区器是HashPartitioner，基于map输出键的哈希值分区。这仅在数据分布比较均匀时比较好。<strong>在有数据倾斜时就很有问题</strong>。</li> <li>使用分区器需要首先了解数据的特性。<strong>TotalOrderPartitioner</strong>中，可以通过对原始数据进行抽样得到的结果集来<strong>预设分区边界值</strong>。</li> <li>TotalOrderPartitioner中的范围分区器可以通过预设的分区边界值进行分区。因此它也可以很好地用在矫正数据中的部分键的数据倾斜问题。</li></ul></li> <li>数据大小倾斜的自定义策略
+<ul><li>在map端或reduce端的数据大小倾斜都会对缓存造成较大的影响，乃至导致OutOfMemoryError异常。处理这种情况并不容易。可以参考以下方法。</li> <li>设置mapreduce.input.linerecordreader.line.maxlength来限制RecordReader读取的最大长度。</li> <li>RecordReader在TextInputFormat和KeyValueTextInputFormat类中使用。默认长度没有上限。</li></ul></li></ul></li></ul> <h2 id="抽样分区案例"><a href="#抽样分区案例" class="header-anchor">#</a> 抽样分区案例</h2> <blockquote><p>使用全排序分区器TotalOrderPartitioner</p></blockquote> <div class="language- line-numbers-mode"><pre class="language-text"><code>//分区器：全局排序分区器
+job.setPartitionerClass(TotalOrderPartitioner.class);
+
+/**
+     * 随机采样器从所有的分片中采样
+     * 每一个参数：采样率；
+     * 第二个参数：总的采样数
+     * 第三个参数：采样的最大分区数；
+     * 只要numSamples和maxSplitSampled（第二、第三参数）任一条件满足，则停止采样
+     */
+InputSampler.Sampler&lt;IntWritable, Text&gt; sampler =
+  new InputSampler.RandomSampler&lt;IntWritable, Text&gt;(0.1, 5000, 10);
+//    TotalOrderPartitioner.setPartitionFile();
+/**
+     * 存储定义分区的键；即整个数据集中温度的大致分布情况；
+     * 由TotalOrderPartitioner读取，作为全排序的分区依据，让每个分区中的数据量近似
+     */
+InputSampler.writePartitionFile(job, sampler);
+
+// 根据上边的SequenceFile文件（包含键的近似分布情况），创建分区
+String partitionFile = TotalOrderPartitioner.getPartitionFile(job.getConfiguration());
+URI partitionUri = new URI(partitionFile);
+
+//与所有map任务共享此文件，添加到分布式缓存中
+DistributedCache.addCacheFile(partitionUri, job.getConfiguration());
+// job.addCacheFile(partitionUri);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><p><a href="https://github.com/orchid-ding/myself-learning/tree/master/hadoop/hadoop/src/main/java/bigdata/hadoop/mapreduces" target="_blank" rel="noopener noreferrer">示例代码<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《Hadoop》笔记/10.Hadoop基础理论/03.Hadoop之MapReduce详解.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=hadoop" title="标签">#hadoop</a><a href="/tags/?tag=mapreduce" title="标签">#mapreduce</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">10/11/2021, 5:53:41 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/eeff69/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">Hadoop之HDFS详解</div></a> <a href="/pages/975721/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Hadoop架构原理Yarn</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/eeff69/" class="prev">Hadoop之HDFS详解</a></span> <span class="next"><a href="/pages/975721/">Hadoop架构原理Yarn</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/76.b8a53386.js" defer></script>
+  </body>
+</html>

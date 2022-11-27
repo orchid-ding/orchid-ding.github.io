@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ElasticaSearch Api操作 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/59.00792d53.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>ELK笔记</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/130694/" class="sidebar-link">什么是ELK</a></li><li><a href="/pages/0f597f/" class="sidebar-link">Elasticasearch安装部署</a></li><li><a href="/pages/6255b5/" class="sidebar-link">ElasticaSearch基础知识</a></li><li><a href="/pages/0898ba/" aria-current="page" class="active sidebar-link">ElasticaSearch Api操作</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0898ba/#_1-e-lasticsearch的-j-avaapi-操作" class="sidebar-link">1. E lasticsearch的 J avaAPI 操作</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0898ba/#_1-1-创建maven工程-并-添加jar包坐标依赖" class="sidebar-link">1.1   创建maven工程， 并 添加jar包坐标依赖</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_1-2-添加-索引文件操作" class="sidebar-link">1.2 添加 索引文件操作</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_1-3-查询索引" class="sidebar-link">1.3. 查询索引</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_1-4、更新-索引" class="sidebar-link">1.4、更新 索引</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_1-5-删除索引" class="sidebar-link">1.5. 删除索引</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-es的高级javaapi-操作" class="sidebar-link">2. es的高级javaAPI 操作</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-1-统计每-个-球队当中球员的数量" class="sidebar-link">2.1 统计每 个 球队当中球员的数量</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-2-统计每-个-球队中每个位置的球员数量" class="sidebar-link">2.2 统计每 个 球队中每个位置的球员数量</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-3-分组求各种值" class="sidebar-link">2.3 分组求各种值</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-4-统计每个球队年龄最小值" class="sidebar-link">2.4 统计每个球队年龄最小值</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-5-分组求平均值" class="sidebar-link">2.5 分组求平均值</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-6-分组求和" class="sidebar-link">2.6 分组求和</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_2-7-聚合-排序" class="sidebar-link">2.7 聚合 排序</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_3、es当中-的地理位置搜索" class="sidebar-link">3、ES当中 的地理位置搜索</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0898ba/#_3-1-创建索引库并添加数据" class="sidebar-link">3.1 创建索引库并添加数据</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_3-2-添加以下jar包坐标依赖" class="sidebar-link">3.2 添加以下jar包坐标依赖</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_3-3-使用-javaapi-来实现基于-地理位置的-搜索" class="sidebar-link">3.3 使用 javaAPI 来实现基于 地理位置的 搜索</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_4-elasticsearch-的-sql插件使用" class="sidebar-link">4. elasticsearch  的 sql插件使用</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0898ba/#_4-1-通过rest风格实现数据的查询" class="sidebar-link">4.1 通过rest风格实现数据的查询</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_4-2-使用sql脚本的方式进入sql客户端进行查询" class="sidebar-link">4.2 使用sql脚本的方式进入sql客户端进行查询</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_4-3-通过jdbc连接的方式" class="sidebar-link">4.3 通过jdbc连接的方式</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_5-es集群-生产调优" class="sidebar-link">5. ES集群 生产调优</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/0898ba/#_5-1-服务器硬件-以及内存调优" class="sidebar-link">5.1. 服务器硬件 以及内存调优</a></li><li class="sidebar-sub-header"><a href="/pages/0898ba/#_5-2、es的参数-调优" class="sidebar-link">5.2、ES的参数 调优</a></li></ul></li></ul></li><li><a href="/pages/d0dbbc/" class="sidebar-link">LogState日志采集</a></li><li><a href="/pages/34a56b/" class="sidebar-link">Kibana报表展示</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8AELK%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《ELK》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=ELK%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>ELK笔记</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-11-24</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABGpJREFUSA3tVVtoXFUU3fvOI53UlmCaKIFmwEhsE7QK0ipFEdHEKpXaZGrp15SINsXUWvBDpBgQRKi0+KKoFeJHfZA+ED9KKoIU2gYD9UejTW4rVIzm0VSTziPzuNu1z507dibTTjL4U/DAzLn3nL3X2o91ziX6f9wMFdh6Jvbm9nNSV0msViVO6tN1Rm7NMu2OpeJ9lWBUTDxrJbYTS0hInuwciu9eLHlFxCLCZEk3MegsJmZ5K/JD6t7FkFdEvGUo1g7qJoG3MHImqRIn8/nzY1K9UPKKiJmtnUqHVE3Gbuay6vJE/N2FEmuxFjW2nUuE0yQXRRxLiTUAzs36zhZvOXJPdX850EVnnLZkB8prodQoM5JGj7Xk2mvC7JB8tG04Ef5PiXtG0UtxupRQSfTnBoCy554x18yJHI6I+G5Eru4LHmPJZEQsrvPUbMiA8G/WgMK7w7I+ez7++o2ANfbrjvaOl1tFMs+htG3IrZH9/hDX1Pr8Tc0UvH8tcX29KzAgIGcEkINyW5BF9x891hw6VYqgJHEk0huccS7vh3C6gTiODL+26huuBtbct8eZnqLML8PkxGYpuPZBqtqwkSjgc4mB5gbgig5i+y0UDK35LMxXisn9xQtK+nd26gTIHsHe/oblK/b29fUmN/8Y+9jAQrnBp56m1LcDlDp9irKTExSKduXJVWSqdBMA08pEJnEIOB3FPPMybu/oeV8zFeYN3xx576Q6RH+VmplE4ncQV5v+5rzSoyOU7PuEAg8g803PwBJ0CExno/jcMbN8tONYeOmHiuUNryvm3fRUy4tMPVLdAGkUhNWuggGrJcXPv+ouCjz0MKUHz1J2/E8IC9nqTabcxgaBYM0hPhD5Y65FsbxRQKxCQrDjDctW7PUM3HuZunFyifSAqEfuzCp48Il24luWUWZoyJCaPR82jE0+kFA643wRFVni4RYSq3ohJO2pZ7B5dO4xkDWbEpossJPLSrPjYID8rS2UHTlvyNxqIGsg674XJJ7vnh5L7PNwC4hh2sjCI96mzszOTpxLF0T7l88Yz7lAuK6OnL8gXLOnTvpzSb22YG8W7us3jSebFHeeqnXRG1vt+MoUM84LQIBmMsCTAcOauTh0T0l0neQK7m2bLMt2mGxU3HYssS0J2cdv5wljlPsrIuZLAG/2DOZIXgCYT8uMGZN+e2kSirfxZOPCsC0f24nTZzspnVn9VePS1Z5vubmAGGXG8ZFno9Hel0yfA5ZPhF7Dh972BQJ2qCpgH67lmWtBYbvk6sz02wjky2vXyz0XErP/kFB619js1BtwfOV4OPRqOQBjy3Qbk18vigUPPSD5ceHnwck7W9bhAqZdd7SuG7w4/P2F/GaJh8c7e9qgow+Q7cGBo+98WsLkuktFqiZabtXuQTu/Y5ETbR0v7tNSFnvrmu6pjdoan2KjMu8q/Hmj1EfCO2ZGfEIbIXKUlw8qaX9/b2oeSJmFksSeT/Fn0V3nSypChh4Gjh74ybO9aeZ/AN2dwciu2/MhAAAAAElFTkSuQmCC">
+          ElasticaSearch Api操作
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-e-lasticsearch的-j-avaapi-操作"><a href="#_1-e-lasticsearch的-j-avaapi-操作" class="header-anchor">#</a> 1. E lasticsearch的 J avaAPI 操作</h2> <h3 id="_1-1-创建maven工程-并-添加jar包坐标依赖"><a href="#_1-1-创建maven工程-并-添加jar包坐标依赖" class="header-anchor">#</a> 1.1   创建maven工程， 并 添加jar包坐标依赖</h3> <p>创建maven工程，并导入以下jar包坐标依赖</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.elasticsearch.client&lt;/groupId&gt;
+        &lt;artifactId&gt;transport&lt;/artifactId&gt;
+        &lt;version&gt;6.7.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+        &lt;version&gt;2.9.1&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+        &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
+        &lt;version&gt;5.3.0-M1&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- https://mvnrepository.com/artifact/com.alibaba/fastjson --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+        &lt;version&gt;1.2.47&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+            &lt;configuration&gt;
+                &lt;source&gt;1.8&lt;/source&gt;
+                &lt;target&gt;1.8&lt;/target&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br></div></div><h3 id="_1-2-添加-索引文件操作"><a href="#_1-2-添加-索引文件操作" class="header-anchor">#</a> 1.2 添加 索引文件操作</h3> <h4 id="_1-2-1-创建client"><a href="#_1-2-1-创建client" class="header-anchor">#</a> 1.2.1. 创建Client</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>private TransportClient client;
+@BeforeEach
+public void test1() throws UnknownHostException {
+    Settings settings = Settings.builder().put(&quot;cluster.name&quot;, &quot;myes&quot;).build();
+    client = new PreBuiltTransportClient(settings).addTransportAddress(new TransportAddress(InetAddress.getByName(&quot;node01&quot;),9300)).addTransportAddress(new TransportAddress(InetAddress.getByName(&quot;node02&quot;),9300));
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h4 id="_1-2-2-创建-索引"><a href="#_1-2-2-创建-索引" class="header-anchor">#</a> 1.2.2. 创建 索引</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 自己拼装json 创建 索引 保存到 myindex1 索引库 下面 的 article当中去 
+ * 插入json格式的索引数据
+ */
+@Test
+public void createIndex(){
+    String json = &quot;{&quot; +
+            &quot;\&quot;user\&quot;:\&quot;kimchy\&quot;,&quot; +
+            &quot;\&quot;postDate\&quot;:\&quot;2013-01-30\&quot;,&quot; +
+            &quot;\&quot;message\&quot;:\&quot;travelying out Elasticsearch\&quot;&quot; +
+            &quot;}&quot;;
+    IndexResponse indexResponse = client.prepareIndex(&quot;myindex1&quot;, &quot;article&quot;, &quot;1&quot;).setSource(json, XContentType.JSON).get();
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><h4 id="_1-2-3-使用map-创建-索引"><a href="#_1-2-3-使用map-创建-索引" class="header-anchor">#</a> 1.2.3. 使用map 创建 索引</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>@Test
+public void  index2() throws  Exception {
+  HashMap&lt;String, String&gt; jsonMap = new  HashMap&lt;String, String&gt;();
+  jsonMap.put(&quot;name&quot; , &quot;zhangsan&quot; );
+  jsonMap.put(&quot;sex&quot; , &quot;1&quot; );
+  jsonMap.put(&quot;age&quot; , &quot;18&quot; );
+  jsonMap.put(&quot;address&quot; , &quot;bj&quot; );
+  IndexResponse indexResponse = client .prepareIndex(&quot;myindex1&quot; , &quot;article&quot; , &quot;2&quot; )
+      .setSource(jsonMap)
+      .get();
+  client .close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h4 id="_1-2-4-xcontentbuilder-实现创建索引"><a href="#_1-2-4-xcontentbuilder-实现创建索引" class="header-anchor">#</a> 1.2.4. XcontentBuilder 实现创建索引</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 通过XContentBuilder来实现索引的创建
+ * @throws IOException
+ */
+@Test
+public void index3() throws IOException {
+    IndexResponse indexResponse = client.prepareIndex(&quot;myindex1&quot;, &quot;article&quot;, &quot;3&quot;)
+            .setSource(new XContentFactory().jsonBuilder()
+                    .startObject()
+                    .field(&quot;name&quot;, &quot;lisi&quot;)
+                    .field(&quot;age&quot;, &quot;18&quot;)
+                    .field(&quot;sex&quot;, &quot;0&quot;)
+                    .field(&quot;address&quot;, &quot;bj&quot;)
+                    .endObject())
+            .get();
+    client.close();
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><h4 id="_1-2-5-将对象创建索引"><a href="#_1-2-5-将对象创建索引" class="header-anchor">#</a> 1.2.5 . 将对象创建索引</h4> <p>定义person对象</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class  Person implements  Serializable{
+  private  Integer id ;
+  private  String name  ;
+  private  Integer age ;
+  private  Integer sex ;
+  private  String address ;
+  private  String phone ;
+  private  String email ;
+  private   String say ;
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><p>插入索引数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 将java对象转换为json格式字符串进行创建索引
+ */
+@Test
+public void objToIndex(){
+    Person person = new Person();
+    person.setAge(18);
+    person.setId(20);
+    person.setName(&quot;张三丰&quot;);
+    person.setAddress(&quot;武当山&quot;);
+    person.setEmail(&quot;zhangsanfeng@163.com&quot;);
+    person.setPhone(&quot;18588888888&quot;);
+    person.setSex(1);
+    String json = JSONObject.toJSONString(person);
+    System.out.println(json);
+    client.prepareIndex(&quot;myindex1&quot;,&quot;article&quot;,&quot;32&quot;).setSource(json,XContentType.JSON).get();
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><h4 id="_1-2-6-批量创建-索引"><a href="#_1-2-6-批量创建-索引" class="header-anchor">#</a> 1.2.6. 批量创建 索引</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 批量创建索引
+ * @throws IOException
+ */
+@Test
+public void index4() throws IOException {
+    BulkRequestBuilder bulk = client.prepareBulk();
+    bulk.add(client.prepareIndex(&quot;myindex1&quot;, &quot;article&quot;, &quot;4&quot;)
+            .setSource(new XContentFactory().jsonBuilder()
+                    .startObject()
+                    .field(&quot;name&quot;, &quot;wangwu&quot;)
+                    .field(&quot;age&quot;, &quot;18&quot;)
+                    .field(&quot;sex&quot;, &quot;0&quot;)
+                    .field(&quot;address&quot;, &quot;bj&quot;)
+                    .endObject()));
+    bulk.add(client.prepareIndex(&quot;news&quot;, &quot;article&quot;, &quot;5&quot;)
+            .setSource(new XContentFactory().jsonBuilder()
+                    .startObject()
+                    .field(&quot;name&quot;, &quot;zhaoliu&quot;)
+                    .field(&quot;age&quot;, &quot;18&quot;)
+                    .field(&quot;sex&quot;, &quot;0&quot;)
+                    .field(&quot;address&quot;, &quot;bj&quot;)
+                    .endObject()));
+    BulkResponse bulkResponse = bulk.get();
+    System.out.println(bulkResponse);
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br></div></div><h3 id="_1-3-查询索引"><a href="#_1-3-查询索引" class="header-anchor">#</a> 1.3. 查询索引</h3> <h4 id="_1-3-1、初始化-一批数据到索引库中准备查询"><a href="#_1-3-1、初始化-一批数据到索引库中准备查询" class="header-anchor">#</a> 1.3.1、初始化 一批数据到索引库中准备查询</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 初始化一批数据到索引库当中去准备做查询使用
+ * 注意这里初始化的时候，需要给我们的数据设置分词属性
+ * @throws Exception
+ */
+@Test
+public void createIndexBatch() throws Exception {
+    Settings settings = Settings
+            .builder()
+            .put(&quot;cluster.name&quot;, &quot;myes&quot;) //节点名称， 在es配置的时候设置
+            //自动发现我们其他的es的服务器
+            .put(&quot;client.transport.sniff&quot;, &quot;true&quot;)
+            .build();
+    //创建客户端
+    TransportClient client = new PreBuiltTransportClient(settings)
+            .addTransportAddress(new TransportAddress(InetAddress.getByName(&quot;node01&quot;), 9300));//以本机作为节点
+    //创建映射
+    XContentBuilder mapping = XContentFactory.jsonBuilder()
+            .startObject()
+            .startObject(&quot;properties&quot;)
+            //      .startObject(&quot;m_id&quot;).field(&quot;type&quot;,&quot;keyword&quot;).endObject()
+            .startObject(&quot;id&quot;).field(&quot;type&quot;, &quot;integer&quot;).endObject()
+            .startObject(&quot;name&quot;).field(&quot;type&quot;, &quot;text&quot;).field(&quot;analyzer&quot;, &quot;ik_max_word&quot;).endObject()
+            .startObject(&quot;age&quot;).field(&quot;type&quot;, &quot;integer&quot;).endObject()
+            .startObject(&quot;sex&quot;).field(&quot;type&quot;, &quot;text&quot;).field(&quot;analyzer&quot;, &quot;ik_max_word&quot;).endObject()
+            .startObject(&quot;address&quot;).field(&quot;type&quot;, &quot;text&quot;).field(&quot;analyzer&quot;, &quot;ik_max_word&quot;).endObject()
+            .startObject(&quot;phone&quot;).field(&quot;type&quot;, &quot;text&quot;).endObject()
+            .startObject(&quot;email&quot;).field(&quot;type&quot;, &quot;text&quot;).endObject()
+            .startObject(&quot;say&quot;).field(&quot;type&quot;, &quot;text&quot;).field(&quot;analyzer&quot;, &quot;ik_max_word&quot;).endObject()
+            .endObject()
+            .endObject();
+    //pois：索引名   cxyword：类型名（可以自己定义）
+    PutMappingRequest putmap = Requests.putMappingRequest(&quot;indexsearch&quot;).type(&quot;mysearch&quot;).source(mapping);
+    //创建索引
+    client.admin().indices().prepareCreate(&quot;indexsearch&quot;).execute().actionGet();
+    //为索引添加映射
+    client.admin().indices().putMapping(putmap).actionGet();
+
+
+    BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
+    Person lujunyi = new Person(2, &quot;玉麒麟卢俊义&quot;, 28, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;lujunyi@163.com&quot;,&quot;hello world今天天气还不错&quot;);
+    Person wuyong = new Person(3, &quot;智多星吴用&quot;, 45, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;wuyong@163.com&quot;,&quot;行走四方，抱打不平&quot;);
+    Person gongsunsheng = new Person(4, &quot;入云龙公孙胜&quot;, 30, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;gongsunsheng@163.com&quot;,&quot;走一个&quot;);
+    Person guansheng = new Person(5, &quot;大刀关胜&quot;, 42, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;wusong@163.com&quot;,&quot;我的大刀已经饥渴难耐&quot;);
+    Person linchong = new Person(6, &quot;豹子头林冲&quot;, 18, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;linchong@163.com&quot;,&quot;梁山好汉&quot;);
+    Person qinming = new Person(7, &quot;霹雳火秦明&quot;, 28, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;qinming@163.com&quot;,&quot;不太了解&quot;);
+    Person huyanzhuo = new Person(8, &quot;双鞭呼延灼&quot;, 25, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;huyanzhuo@163.com&quot;,&quot;不是很熟悉&quot;);
+    Person huarong = new Person(9, &quot;小李广花荣&quot;, 50, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;huarong@163.com&quot;,&quot;打酱油的&quot;);
+    Person chaijin = new Person(10, &quot;小旋风柴进&quot;, 32, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;chaijin@163.com&quot;,&quot;吓唬人的&quot;);
+    Person zhisheng = new Person(13, &quot;花和尚鲁智深&quot;, 15, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;luzhisheng@163.com&quot;,&quot;倒拔杨垂柳&quot;);
+    Person wusong = new Person(14, &quot;行者武松&quot;, 28, 1, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;wusong@163.com&quot;,&quot;二营长。。。。。。&quot;);
+
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;1&quot;)
+            .setSource(JSONObject.toJSONString(lujunyi), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;2&quot;)
+            .setSource(JSONObject.toJSONString(wuyong), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;3&quot;)
+            .setSource(JSONObject.toJSONString(gongsunsheng), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;4&quot;)
+            .setSource(JSONObject.toJSONString(guansheng), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;5&quot;)
+            .setSource(JSONObject.toJSONString(linchong), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;6&quot;)
+            .setSource(JSONObject.toJSONString(qinming), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;7&quot;)
+            .setSource(JSONObject.toJSONString(huyanzhuo), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;8&quot;)
+            .setSource(JSONObject.toJSONString(huarong), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;9&quot;)
+            .setSource(JSONObject.toJSONString(chaijin), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;10&quot;)
+            .setSource(JSONObject.toJSONString(zhisheng), XContentType.JSON)
+    );
+    bulkRequestBuilder.add(client.prepareIndex(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;11&quot;)
+            .setSource(JSONObject.toJSONString(wusong), XContentType.JSON)
+    );
+
+    bulkRequestBuilder.get();
+    client.close();
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br></div></div><h4 id="_1-3-2-、通过数据-id使用prepareget-来查询-索引"><a href="#_1-3-2-、通过数据-id使用prepareget-来查询-索引" class="header-anchor">#</a> 1.3.2 、通过数据 id使用prepareGet 来查询 索引</h4> <p>通过id来进行查询索引</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 通过id来进行精确查询
+ */
+@Test
+public void query1() {
+    GetResponse documentFields = client.prepareGet(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;11&quot;).get();
+    String index = documentFields.getIndex();
+    String type = documentFields.getType();
+    String id = documentFields.getId();
+    System.out.println(index);
+    System.out.println(type);
+    System.out.println(id);
+    Map&lt;String, Object&gt; source = documentFields.getSource();
+    for (String s : source.keySet()) {
+        System.out.println(source.get(s));
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br></div></div><h4 id="_1-3-3、-查询索引库当中的所有数据"><a href="#_1-3-3、-查询索引库当中的所有数据" class="header-anchor">#</a> 1.3.3、 查询索引库当中的所有数据</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 查询所有数据
+ */
+@Test
+public void queryAll() {
+    SearchResponse searchResponse = client
+            .prepareSearch(&quot;indexsearch&quot;)
+            .setTypes(&quot;mysearch&quot;)
+            .setQuery(new MatchAllQueryBuilder())
+            .get();
+    SearchHits searchHits = searchResponse.getHits();
+    SearchHit[] hits = searchHits.getHits();
+    for (SearchHit hit : hits) {
+        String sourceAsString = hit.getSourceAsString();
+        System.out.println(sourceAsString);
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><h4 id="_1-3-4、rangequery-范围-值查询"><a href="#_1-3-4、rangequery-范围-值查询" class="header-anchor">#</a> 1.3.4、RangeQuery 范围 值查询</h4> <p>查找索引库当中年龄为18到28的所有人</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 查找年龄18到28的人,包含18和28
+ */
+@Test
+public void  rangeQuery(){
+    SearchResponse searchResponse = client.prepareSearch(&quot;indexsearch&quot;)
+            .setTypes(&quot;mysearch&quot;)
+            .setQuery(new RangeQueryBuilder(&quot;age&quot;).gt(17).lt(29))
+            .get();
+    SearchHits hits = searchResponse.getHits();
+    SearchHit[] hits1 = hits.getHits();
+    for (SearchHit documentFields : hits1) {
+        System.out.println(documentFields.getSourceAsString());
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><h4 id="_1-3-5-、term-query-词条-查询"><a href="#_1-3-5-、term-query-词条-查询" class="header-anchor">#</a> 1.3.5 、term Query 词条 查询</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 词条查询
+ */
+@Test
+public  void termQuery(){
+    SearchResponse searchResponse = client.prepareSearch(&quot;indexsearch&quot;).setTypes(&quot;mysearch&quot;)
+            .setQuery(new TermQueryBuilder(&quot;say&quot;, &quot;熟悉&quot;))
+            .get();
+    SearchHits hits = searchResponse.getHits();
+    SearchHit[] hits1 = hits.getHits();
+    for (SearchHit documentFields : hits1) {
+        System.out.println(documentFields.getSourceAsString());
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><h4 id="_1-3-6-、fuzzy-query模糊查询"><a href="#_1-3-6-、fuzzy-query模糊查询" class="header-anchor">#</a> 1.3.6 、fuzzy Query模糊查询</h4> <p>模糊查询可以自动帮我们纠正写错误的英文单词，最大纠正次数两次</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * fuzzyQuery表示英文单词的最大可纠正次数，最大可以自动纠正两次
+ */
+@Test
+public void fuzzyQuery(){
+    SearchResponse searchResponse = client.prepareSearch(&quot;indexsearch&quot;).setTypes(&quot;mysearch&quot;)
+            .setQuery(QueryBuilders.fuzzyQuery(&quot;say&quot;, &quot;helOL&quot;).fuzziness(Fuzziness.TWO))
+            .get();
+    SearchHits hits = searchResponse.getHits();
+    SearchHit[] hits1 = hits.getHits();
+    for (SearchHit documentFields : hits1) {
+        System.out.println(documentFields.getSourceAsString());
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_1-3-7-wildcardquery-通配符-查询"><a href="#_1-3-7-wildcardquery-通配符-查询" class="header-anchor">#</a> 1.3.7. wildCardQuery 通配符 查询</h4> <ul><li><p>*：匹配任意多个字符</p></li> <li><p>？：仅匹配一个字符</p></li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 模糊匹配查询有两种匹配符，分别是&quot; * &quot; 以及 &quot; ? &quot;， 用&quot; * &quot;来匹配任何字符，包括空字符串。用&quot; ? &quot;来匹配任意的单个字符
+ */
+@Test
+public void wildCardQueryTest(){
+    SearchResponse searchResponse = client.prepareSearch(&quot;indexsearch&quot;).setTypes(&quot;mysearch&quot;)
+            .setQuery(QueryBuilders.wildcardQuery(&quot;say&quot;, &quot;hel*&quot;))
+            .get();
+    SearchHits hits = searchResponse.getHits();
+    SearchHit[] hits1 = hits.getHits();
+    for (SearchHit documentFields : hits1) {
+        System.out.println(documentFields.getSourceAsString());
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h4 id="_1-3-8-boolquery-多-条件组合查询"><a href="#_1-3-8-boolquery-多-条件组合查询" class="header-anchor">#</a> 1.3.8. boolQuery  多 条件组合查询</h4> <p>使用boolQuery实现多条件组合查询</p> <p>查询年龄是18到28范围内且性别是男性的，或者id范围在10到13范围内的</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 多条件组合查询 boolQuery
+ * 查询年龄是18到28范围内且性别是男性的，或者id范围在10到13范围内的
+ */
+@Test
+public void boolQueryTest(){
+    RangeQueryBuilder age = QueryBuilders.rangeQuery(&quot;age&quot;).gt(17).lt(29);
+    TermQueryBuilder sex = QueryBuilders.termQuery(&quot;sex&quot;, &quot;1&quot;);
+    RangeQueryBuilder id = QueryBuilders.rangeQuery(&quot;id&quot;).gt(&quot;9&quot;).lt(&quot;15&quot;);
+
+    SearchResponse searchResponse = client.prepareSearch(&quot;indexsearch&quot;).setTypes(&quot;mysearch&quot;)
+            .setQuery(
+                    QueryBuilders.boolQuery().should(id)
+           .should(QueryBuilders.boolQuery().must(sex).must(age)))
+            .get();
+    SearchHits hits = searchResponse.getHits();
+    SearchHit[] hits1 = hits.getHits();
+    for (SearchHit documentFields : hits1) {
+        System.out.println(documentFields.getSourceAsString());
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><h4 id="_1-3-9-分页-与-高亮查询"><a href="#_1-3-9-分页-与-高亮查询" class="header-anchor">#</a> 1.3.9. 分页 与 高亮查询</h4> <h5 id="_1-分页-查询"><a href="#_1-分页-查询" class="header-anchor">#</a> 1. 分页 查询</h5> <div class="language- line-numbers-mode"><pre class="language-text"><code>/*分页查询
+ */
+@Test
+public void getPageIndex(){
+    int  pageSize = 5;
+    int pageNum = 2;
+    int startNum = (pageNum-1)*5;
+    SearchResponse searchResponse = client.prepareSearch(&quot;indexsearch&quot;)
+            .setTypes(&quot;mysearch&quot;)
+            .setQuery(QueryBuilders.matchAllQuery())
+            .addSort(&quot;id&quot;,SortOrder.ASC)
+            .setFrom(startNum)
+            .setSize(pageSize)
+            .get();
+    SearchHits hits = searchResponse.getHits();
+    SearchHit[] hits1 = hits.getHits();
+    for (SearchHit documentFields : hits1) {
+        System.out.println(documentFields.getSourceAsString());
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><h5 id="_2、-高亮查询"><a href="#_2、-高亮查询" class="header-anchor">#</a> 2、 高亮查询</h5> <p>在进行关键字搜索时，搜索出的内容中的关键字会显示不同的颜色，称之为高亮</p> <p>百度搜索关键字&quot;周星驰&quot;</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241540521.jpeg" alt="img"></p> <p>京东商城搜索&quot;笔记本&quot;</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241541990.jpeg" alt="img"></p> <h5 id="_3-高亮显示的html分析"><a href="#_3-高亮显示的html分析" class="header-anchor">#</a> 3. 高亮显示的html分析</h5> <p>通过开发者工具查看高亮数据的html代码实现：</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111241505895.jpg" alt="img"></p> <p>ElasticSearch可以对查询出的内容中关键字部分进行标签和样式的设置，但是你需要告诉ElasticSearch使用什么标签对高亮关键字进行包裹</p> <h5 id="_4-高亮显示代码实现"><a href="#_4-高亮显示代码实现" class="header-anchor">#</a> 4. 高亮显示代码实现</h5> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 高亮查询
+ */
+@Test
+public  void  highLight(){
+    //设置我们的查询高亮字段
+    SearchRequestBuilder searchRequestBuilder = client.prepareSearch(&quot;indexsearch&quot;)
+            .setTypes(&quot;mysearch&quot;)
+            .setQuery(QueryBuilders.termQuery(&quot;say&quot;, &quot;hello&quot;));
+
+    //设置我们字段高亮的前缀与后缀
+    HighlightBuilder highlightBuilder = new HighlightBuilder();
+    highlightBuilder.field(&quot;say&quot;).preTags(&quot;&lt;font style='color:red'&gt;&quot;).postTags(&quot;&lt;/font&gt;&quot;);
+
+    //通过高亮来进行我们的数据查询
+    SearchResponse searchResponse = searchRequestBuilder.highlighter(highlightBuilder).get();
+    SearchHits hits = searchResponse.getHits();
+    System.out.println(&quot;查询出来一共&quot;+ hits.totalHits+&quot;条数据&quot;);
+    for (SearchHit hit : hits) {
+        //打印没有高亮显示的数据
+        System.out.println(hit.getSourceAsString());
+        System.out.println(&quot;=========================&quot;);
+        //打印我们经过高亮显示之后的数据
+       Text[] says = hit.getHighlightFields().get(&quot;say&quot;).getFragments();
+        for (Text say : says) {
+            System.out.println(say);
+        }
+
+     /*   Map&lt;String, HighlightField&gt; highlightFields = hit.getHighlightFields();
+        System.out.println(highlightFields);*/
+    }
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br></div></div><h3 id="_1-4、更新-索引"><a href="#_1-4、更新-索引" class="header-anchor">#</a> 1.4、更新 索引</h3> <p>根据系统给数据生成的id来进行更新索引</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 更新索引
+ * 根据数据id来进行更新索引
+ */
+@Test
+public void updateIndex(){
+    Person guansheng = new Person(5, &quot;宋江&quot;, 88, 0, &quot;水泊梁山&quot;, &quot;17666666666&quot;, &quot;wusong@ kfly.com&quot;,&quot;及时雨宋江&quot;);
+    client.prepareUpdate().setIndex(&quot;indexsearch&quot;).setType(&quot;mysearch&quot;).setId(&quot;5&quot;)
+            .setDoc(JSONObject.toJSONString(guansheng),XContentType.JSON)
+            .get();
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h3 id="_1-5-删除索引"><a href="#_1-5-删除索引" class="header-anchor">#</a> 1.5. 删除索引</h3> <h4 id="_1-5-1、-按照id进行删除"><a href="#_1-5-1、-按照id进行删除" class="header-anchor">#</a> 1.5.1、 按照id进行删除</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 按照id进行删除数据
+ */
+@Test
+public void deleteById(){
+    DeleteResponse deleteResponse = client.prepareDelete(&quot;indexsearch&quot;, &quot;mysearch&quot;, &quot;14&quot;).get();
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><h4 id="_1-5-2、-按照查询条件来进行删除"><a href="#_1-5-2、-按照查询条件来进行删除" class="header-anchor">#</a> 1.5.2、 按照查询条件来进行删除</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/*
+按照条件进行删除
+ */
+@Test
+public void  deleteByQuery(){
+
+    BulkByScrollResponse bulkByScrollResponse = DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
+            .filter(QueryBuilders.rangeQuery(&quot;id&quot;).gt(2).lt(4))
+            .source(&quot;indexsearch&quot;)
+            .get();
+    long deleted = bulkByScrollResponse.getDeleted();
+    System.out.println(deleted);
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><h4 id="_1-5-3、-删除整个索引库"><a href="#_1-5-3、-删除整个索引库" class="header-anchor">#</a> 1.5.3、 删除整个索引库</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 删除索引
+ * 删除整个索引库
+ */
+@Test
+public  void  deleteIndex(){
+    DeleteIndexResponse indexsearch = client.admin().indices().prepareDelete(&quot;indexsearch&quot;).execute().actionGet();
+    client.close();
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><h2 id="_2-es的高级javaapi-操作"><a href="#_2-es的高级javaapi-操作" class="header-anchor">#</a> 2. es的高级javaAPI 操作</h2> <p>现有结构化数据内容如下：</p> <table><thead><tr><th>name</th> <th>age</th> <th>salary</th> <th>team</th> <th>position</th></tr></thead> <tbody><tr><td>张云雷</td> <td>26</td> <td>2000</td> <td>war</td> <td>pf</td></tr> <tr><td>特斯拉</td> <td>20</td> <td>500</td> <td>tim</td> <td>sf</td></tr> <tr><td>于谦</td> <td>25</td> <td>2000</td> <td>cav</td> <td>pg</td></tr> <tr><td>爱迪生</td> <td>40</td> <td>1000</td> <td>tim</td> <td>pf</td></tr> <tr><td>爱因斯坦</td> <td>21</td> <td>300</td> <td>tim</td> <td>sg</td></tr> <tr><td>郭德纲</td> <td>33</td> <td>3000</td> <td>cav</td> <td>sf</td></tr> <tr><td>牛顿</td> <td>21</td> <td>500</td> <td>tim</td> <td>c</td></tr> <tr><td>岳云鹏</td> <td>29</td> <td>1000</td> <td>war</td> <td>pg</td></tr></tbody></table> <p>初始化一批数据到es索引库当中去</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+     * 批量添加数据
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    @Test
+    public void addIndexDatas() throws IOException, ExecutionException, InterruptedException {
+        //获取settings
+        //配置es集群的名字
+        Settings settings = Settings.builder().put(&quot;cluster.name&quot;, &quot;myes&quot;).build();
+        //获取客户端
+        TransportAddress transportAddress = new TransportAddress(InetAddress.getByName(&quot;node01&quot;), 9300);
+
+        TransportAddress transportAddress2 = new TransportAddress(InetAddress.getByName(&quot;node02&quot;), 9300);
+
+        TransportAddress transportAddress3 = new TransportAddress(InetAddress.getByName(&quot;node03&quot;), 9300);
+        //获取client客户端
+        TransportClient client = new PreBuiltTransportClient(settings).addTransportAddress(transportAddress).addTransportAddress(transportAddress2).addTransportAddress(transportAddress3);
+
+        /**
+         * 创建索引
+         * */
+        client.admin().indices().prepareCreate(&quot;player&quot;).get();
+        //构建json的数据格式，创建映射
+        XContentBuilder mappingBuilder = XContentFactory.jsonBuilder()
+                .startObject()
+                .startObject(&quot;player&quot;)
+                .startObject(&quot;properties&quot;)
+                .startObject(&quot;name&quot;).field(&quot;type&quot;,&quot;text&quot;).field(&quot;index&quot;, &quot;true&quot;).field(&quot;fielddata&quot;,&quot;true&quot;).endObject()
+                .startObject(&quot;age&quot;).field(&quot;type&quot;,&quot;integer&quot;).endObject()
+                .startObject(&quot;salary&quot;).field(&quot;type&quot;,&quot;integer&quot;).endObject()
+                .startObject(&quot;team&quot;).field(&quot;type&quot;,&quot;text&quot;).field(&quot;index&quot;, &quot;true&quot;).field(&quot;fielddata&quot;,&quot;true&quot;).endObject()
+                .startObject(&quot;position&quot;).field(&quot;type&quot;,&quot;text&quot;).field(&quot;index&quot;, &quot;true&quot;).field(&quot;fielddata&quot;,&quot;true&quot;).endObject()
+                .endObject()
+                .endObject()
+                .endObject();
+        PutMappingRequest request = Requests.putMappingRequest(&quot;player&quot;)
+                .type(&quot;player&quot;)
+                .source(mappingBuilder);
+        client.admin().indices().putMapping(request).get();
+
+
+        //批量添加数据开始
+
+        BulkRequestBuilder bulkRequest = client.prepareBulk();
+
+// either use client#prepare, or use Requests# to directly build index/delete requests
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;1&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;郭德纲&quot;)
+                        .field(&quot;age&quot;, 33)
+                        .field(&quot;salary&quot;,3000)
+                        .field(&quot;team&quot; , &quot;cav&quot;)
+                        .field(&quot;position&quot; , &quot;sf&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;2&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;于谦&quot;)
+                        .field(&quot;age&quot;, 25)
+                        .field(&quot;salary&quot;,2000)
+                        .field(&quot;team&quot; , &quot;cav&quot;)
+                        .field(&quot;position&quot; , &quot;pg&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;3&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;岳云鹏&quot;)
+                        .field(&quot;age&quot;, 29)
+                        .field(&quot;salary&quot;,1000)
+                        .field(&quot;team&quot; , &quot;war&quot;)
+                        .field(&quot;position&quot; , &quot;pg&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;4&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;孙越&quot;)
+                        .field(&quot;age&quot;, 26)
+                        .field(&quot;salary&quot;,2000)
+                        .field(&quot;team&quot; , &quot;war&quot;)
+                        .field(&quot;position&quot; , &quot;sg&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;5&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;张云雷&quot;)
+                        .field(&quot;age&quot;, 26)
+                        .field(&quot;salary&quot;,2000)
+                        .field(&quot;team&quot; , &quot;war&quot;)
+                        .field(&quot;position&quot; , &quot;pf&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;6&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;爱迪生&quot;)
+                        .field(&quot;age&quot;, 40)
+                        .field(&quot;salary&quot;,1000)
+                        .field(&quot;team&quot; , &quot;tim&quot;)
+                        .field(&quot;position&quot; , &quot;pf&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;7&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;牛顿&quot;)
+                        .field(&quot;age&quot;, 21)
+                        .field(&quot;salary&quot;,500)
+                        .field(&quot;team&quot; , &quot;tim&quot;)
+                        .field(&quot;position&quot; , &quot;c&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;4&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;爱因斯坦&quot;)
+                        .field(&quot;age&quot;, 21)
+                        .field(&quot;salary&quot;,300)
+                        .field(&quot;team&quot; , &quot;tim&quot;)
+                        .field(&quot;position&quot; , &quot;sg&quot;)
+                        .endObject()
+                )
+        );
+        bulkRequest.add(client.prepareIndex(&quot;player&quot;, &quot;player&quot;, &quot;8&quot;)
+                .setSource(jsonBuilder()
+                        .startObject()
+                        .field(&quot;name&quot;, &quot;特斯拉&quot;)
+                        .field(&quot;age&quot;, 20)
+                        .field(&quot;salary&quot;,500)
+                        .field(&quot;team&quot; , &quot;tim&quot;)
+                        .field(&quot;position&quot; , &quot;sf&quot;)
+                        .endObject()
+                )
+        );
+
+
+        BulkResponse bulkResponse = bulkRequest.get();
+        client.close();
+    }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br><span class="line-number">143</span><br><span class="line-number">144</span><br><span class="line-number">145</span><br><span class="line-number">146</span><br><span class="line-number">147</span><br><span class="line-number">148</span><br><span class="line-number">149</span><br><span class="line-number">150</span><br><span class="line-number">151</span><br><span class="line-number">152</span><br></div></div><h3 id="_2-1-统计每-个-球队当中球员的数量"><a href="#_2-1-统计每-个-球队当中球员的数量" class="header-anchor">#</a> 2.1 统计每 个 球队当中球员的数量</h3> <ul><li>sql语句实现</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>select team, count(*) as player_count from player group by team;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>使用javaAPI实现</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>@Test
+public void groupAndCount() {
+    //1：构建查询提交
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+    //2：指定聚合条件
+    TermsAggregationBuilder team = AggregationBuilders.terms(&quot;player_count&quot;).field(&quot;team&quot;);
+    //3:将聚合条件放入查询条件中
+    builder.addAggregation(team);
+    //4:执行action，返回searchResponse
+    SearchResponse searchResponse = builder.get();
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+        StringTerms stringTerms = (StringTerms) aggregation;
+        List&lt;StringTerms.Bucket&gt; buckets = stringTerms.getBuckets();
+        for (StringTerms.Bucket bucket : buckets) {
+            System.out.println(bucket.getKey());
+            System.out.println(bucket.getDocCount());
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><h3 id="_2-2-统计每-个-球队中每个位置的球员数量"><a href="#_2-2-统计每-个-球队中每个位置的球员数量" class="header-anchor">#</a> 2.2 统计每 个 球队中每个位置的球员数量</h3> <ul><li>sql语句实现</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>select team, position, count(*) as pos_count from player group by team, position;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li>java代码实现</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 统计每个球队中每个位置的球员数量
+ */
+@Test
+public void teamAndPosition(){
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+    TermsAggregationBuilder team = AggregationBuilders.terms(&quot;player_count&quot;).field(&quot;team&quot;);
+    TermsAggregationBuilder position = AggregationBuilders.terms(&quot;posititon_count&quot;).field(&quot;position&quot;);
+    team.subAggregation(position);
+    SearchResponse searchResponse = builder.addAggregation(team).addAggregation(position).get();
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+       // System.out.println(aggregation.toString());
+        StringTerms stringTerms = (StringTerms) aggregation;
+        List&lt;StringTerms.Bucket&gt; buckets = stringTerms.getBuckets();
+        for (StringTerms.Bucket bucket : buckets) {
+            long docCount = bucket.getDocCount();
+            Object key = bucket.getKey();
+            System.out.println(&quot;当前队伍名称为&quot; +  key + &quot;该队伍下有&quot;+docCount + &quot;个球员&quot;);
+
+            Aggregation posititon_count = bucket.getAggregations().get(&quot;posititon_count&quot;);
+            if(null != posititon_count){
+                StringTerms positionTrem = (StringTerms) posititon_count;
+                List&lt;StringTerms.Bucket&gt; buckets1 = positionTrem.getBuckets();
+                for (StringTerms.Bucket bucket1 : buckets1) {
+                    Object key1 = bucket1.getKey();
+                    long docCount1 = bucket1.getDocCount();
+                    System.out.println(&quot;该队伍下面的位置为&quot; +  key1+&quot;该位置下有&quot; +  docCount1 +&quot;人&quot;);
+                }
+            }
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br></div></div><h3 id="_2-3-分组求各种值"><a href="#_2-3-分组求各种值" class="header-anchor">#</a> 2.3 分组求各种值</h3> <ul><li>计算每个球队年龄最大值</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>select team, max(age) as max_age from player group by team;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 计算每个球队年龄最大值
+ */
+@Test
+public  void groupAndMax(){
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+    TermsAggregationBuilder team = AggregationBuilders.terms(&quot;team_group&quot;).field(&quot;team&quot;);
+
+    MaxAggregationBuilder age = AggregationBuilders.max(&quot;max_age&quot;).field(&quot;age&quot;);
+
+    team.subAggregation(age);
+    SearchResponse searchResponse = builder.addAggregation(team).get();
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+        StringTerms stringTerms = (StringTerms) aggregation;
+        List&lt;StringTerms.Bucket&gt; buckets = stringTerms.getBuckets();
+        for (StringTerms.Bucket bucket : buckets) {
+            Aggregation max_age = bucket.getAggregations().get(&quot;max_age&quot;);
+            System.out.println(max_age.toString());
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><h3 id="_2-4-统计每个球队年龄最小值"><a href="#_2-4-统计每个球队年龄最小值" class="header-anchor">#</a> 2.4 统计每个球队年龄最小值</h3> <p>计算每个球队年龄最大/最小/总/平均的球员年龄</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>select team, min(age) as min_age from player group by team;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 统计每个球队中年龄最小值
+ */
+@Test
+public  void  teamMinAge(){
+
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+
+    TermsAggregationBuilder team = AggregationBuilders.terms(&quot;team_count&quot;).field(&quot;team&quot;);
+
+    MinAggregationBuilder age = AggregationBuilders.min(&quot;min_age&quot;).field(&quot;age&quot;);
+
+    TermsAggregationBuilder termAggregation = team.subAggregation(age);
+
+    SearchResponse searchResponse = builder.addAggregation(termAggregation).get();
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+        System.out.println(aggregation.toString());
+
+        StringTerms stringTerms = (StringTerms) aggregation;
+        List&lt;StringTerms.Bucket&gt; buckets = stringTerms.getBuckets();
+        for (StringTerms.Bucket bucket : buckets) {
+            Aggregations aggregations1 = bucket.getAggregations();
+            for (Aggregation aggregation1 : aggregations1) {
+                System.out.println(aggregation1.toString());
+            }
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br></div></div><h3 id="_2-5-分组求平均值"><a href="#_2-5-分组求平均值" class="header-anchor">#</a> 2.5 分组求平均值</h3> <ul><li>计算每个球队年龄最大/最小/总/平均的球员年龄</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>select team, avg(age) as max_age from player group by team;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 计算每个球队的年龄平均值
+ */
+@Test
+public void avgTeamAge(){
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+
+    TermsAggregationBuilder team_field = AggregationBuilders.terms(&quot;player_count&quot;).field(&quot;team&quot;);
+
+    AvgAggregationBuilder age_avg = AggregationBuilders.avg(&quot;age_avg&quot;).field(&quot;age&quot;);
+
+    team_field.subAggregation(age_avg);
+
+    SearchResponse searchResponse = builder.addAggregation(team_field).get();
+
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+        System.out.println(aggregation.toString());
+        StringTerms stringTerms = (StringTerms) aggregation;
+    }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><h3 id="_2-6-分组求和"><a href="#_2-6-分组求和" class="header-anchor">#</a> 2.6 分组求和</h3> <ul><li>计算每个球队球员的平均年龄，同时又要计算总年薪</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>select team, avg(age)as avg_age, sum(salary) as total_salary from player group by team;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 统计每个球队当中的球员平均年龄，以及队员总年薪
+ */
+@Test
+public void avgAndSum(){
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+
+    TermsAggregationBuilder team_group = AggregationBuilders.terms(&quot;team_group&quot;).field(&quot;team&quot;);
+
+    AvgAggregationBuilder avg_age = AggregationBuilders.avg(&quot;avg_age&quot;).field(&quot;age&quot;);
+
+    SumAggregationBuilder sumMoney = AggregationBuilders.sum(&quot;sum_money&quot;).field(&quot;salary&quot;);
+
+
+    TermsAggregationBuilder termsAggregationBuilder = team_group.subAggregation(avg_age).subAggregation(sumMoney);
+
+    SearchResponse searchResponse = builder.addAggregation(termsAggregationBuilder).get();
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+        System.out.println(aggregation.toString());
+    }
+
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br></div></div><h3 id="_2-7-聚合-排序"><a href="#_2-7-聚合-排序" class="header-anchor">#</a> 2.7 聚合 排序</h3> <ul><li>计算每个球队总年薪，并按照总年薪倒序排列</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 计算每个球队总年薪，并按照年薪进行排序
+ *     select team, sum(salary) as total_salary from player group by team order by total_salary desc;
+ */
+@Test
+public void orderBySum(){
+    SearchRequestBuilder builder = client.prepareSearch(&quot;player&quot;).setTypes(&quot;player&quot;);
+    TermsAggregationBuilder teamGroup = AggregationBuilders.terms(&quot;team_group&quot;).field(&quot;team&quot;).order(BucketOrder.count(true));
+    SumAggregationBuilder sumSalary = AggregationBuilders.sum(&quot;sum_salary&quot;).field(&quot;salary&quot;);
+    TermsAggregationBuilder termsAggregationBuilder = teamGroup.subAggregation(sumSalary);
+    SearchResponse searchResponse = builder.addAggregation(termsAggregationBuilder).get();
+
+    Map&lt;String, Aggregation&gt; stringAggregationMap = searchResponse.getAggregations().asMap();
+    System.out.println(stringAggregationMap.toString());
+    Aggregations aggregations = searchResponse.getAggregations();
+    for (Aggregation aggregation : aggregations) {
+        System.out.println(aggregation.toString());
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br></div></div><h2 id="_3、es当中-的地理位置搜索"><a href="#_3、es当中-的地理位置搜索" class="header-anchor">#</a> 3、ES当中 的地理位置搜索</h2> <p>​		ES不仅可以对我们的数据进行聚合操作，还可以针对我们的地理位置经纬度进行搜索，可以通过ES搜索我们附近的人等等各种基于地理位置的需求</p> <p>经纬度在线解析网站</p> <p>http://www.gpsspg.com/maps.htm</p> <h3 id="_3-1-创建索引库并添加数据"><a href="#_3-1-创建索引库并添加数据" class="header-anchor">#</a> 3.1 创建索引库并添加数据</h3> <p>直接在kibana当中通过以下操作创建索引库，并添加一条数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>PUT platform_foreign_website
+{
+  &quot;mappings&quot;: {
+     &quot;store&quot;:{
+      &quot;properties&quot;: {
+         &quot;id&quot;: {
+            &quot;type&quot;: &quot;text&quot;
+            },
+          &quot;storeName&quot;: {
+            &quot;type&quot;: &quot;text&quot;
+          },
+          &quot;location&quot;:{
+            &quot;type&quot;: &quot;geo_point&quot;
+          }
+    }
+     }
+  }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><ul><li>添加数据</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>40.0488115498,116.4320345091
+PUT /platform_foreign_website/store/40?pretty
+{&quot;id&quot;: &quot;40&quot;, &quot;storeName&quot;: &quot;北京市北京市朝阳区清河营东路2号院&quot;,&quot;longitude&quot;:116.4320345091,&quot;latitude&quot;:40.0488115498,&quot;isdelete&quot;:true,&quot;location&quot;:{
+    &quot;lat&quot;:40.0488115498,
+    &quot;lon&quot;:116.4320345091
+  
+}
+}
+
+40.0461174292,116.4360685514
+PUT /platform_foreign_website/store/41?pretty
+{&quot;id&quot;: &quot;40&quot;, &quot;storeName&quot;: &quot;北京市北京市朝阳区北苑东路&quot;,&quot;longitude&quot;:116.4360685514,&quot;latitude&quot;:40.0461174292,&quot;isdelete&quot;:false,&quot;location&quot;:{
+    &quot;lat&quot;:40.0461174292,
+    &quot;lon&quot;:116.4360685514
+  
+}
+}
+
+40.0519526142,116.4178513254
+PUT /platform_foreign_website/store/42?pretty
+{&quot;id&quot;: &quot;42&quot;, &quot;storeName&quot;: &quot;北京市北京市朝阳区立通路&quot;,&quot;longitude&quot;:116.4178513254,&quot;latitude&quot;:40.0519526142,&quot;isdelete&quot;:true,&quot;location&quot;:{
+    &quot;lat&quot;:40.0519526142,
+    &quot;lon&quot;:116.4178513254
+  
+}
+}
+
+40.0503813013,116.4562592119
+PUT /platform_foreign_website/store/43?pretty
+{&quot;id&quot;: &quot;43&quot;, &quot;storeName&quot;: &quot;北京市北京市朝阳区来广营北路&quot;,&quot;longitude&quot;:116.4562592119,&quot;latitude&quot;:40.0503813013,&quot;isdelete&quot;:false,&quot;location&quot;:{
+    &quot;lat&quot;:40.0503813013,
+    &quot;lon&quot;:116.4562592119
+  
+}
+}
+
+40.0385828363,116.4465266673
+PUT /platform_foreign_website/store/44?pretty
+{&quot;id&quot;: &quot;44&quot;, &quot;storeName&quot;: &quot;北京市北京市朝阳区顺白路&quot;,&quot;longitude&quot;:116.4465266673,&quot;latitude&quot;:40.0385828363,&quot;isdelete&quot;:false,&quot;location&quot;:{
+    &quot;lat&quot;:40.0385828363,
+    &quot;lon&quot;:116.4465266673
+  
+}
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br></div></div><ul><li>查询所有的数据</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>GET /platform_foreign_website/store/_search?pretty
+{
+    &quot;query&quot;: {
+        &quot;match_all&quot;: {}
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h3 id="_3-2-添加以下jar包坐标依赖"><a href="#_3-2-添加以下jar包坐标依赖" class="header-anchor">#</a> 3.2 添加以下jar包坐标依赖</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>&lt;!-- https://mvnrepository.com/artifact/org.locationtech.spatial4j/spatial4j --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.locationtech.spatial4j&lt;/groupId&gt;
+    &lt;artifactId&gt;spatial4j&lt;/artifactId&gt;
+    &lt;version&gt;0.6&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.vividsolutions&lt;/groupId&gt;
+    &lt;artifactId&gt;jts&lt;/artifactId&gt;
+    &lt;version&gt;1.13&lt;/version&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;xerces&lt;/groupId&gt;
+            &lt;artifactId&gt;xercesImpl&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br></div></div><p>​		这里说了 geo_distance（找出与指定位置在给定距离内的点） 和 geo_polygon（找出落在多边形中的点）两种方法，elasticsearch其实还有另外两种 方法 geo_bounding_box（找出落在指定矩形框中的坐标点） 和 geo_distance_range（找出与指定点距离在给定最小距离和最大距离之间的点），因为需求没有涉及到暂时没有调研，以后会慢慢晚上</p> <h3 id="_3-3-使用-javaapi-来实现基于-地理位置的-搜索"><a href="#_3-3-使用-javaapi-来实现基于-地理位置的-搜索" class="header-anchor">#</a> 3.3 使用 javaAPI 来实现基于 地理位置的 搜索</h3> <p>http://www.gpsspg.com/maps.htm</p> <p>经纬度在线解析</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.geo.GeoPoint;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.unit.DistanceUnit;
+import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ESOperate {
+    public static void main(String[] args) throws UnknownHostException {
+        Settings settings = Settings.builder()
+                .put(&quot;cluster.name&quot;, &quot;myes&quot;)
+                .build();
+
+        TransportClient client = new PreBuiltTransportClient(settings)
+                .addTransportAddress(new TransportAddress(InetAddress.getByName(&quot;node03&quot;), 9300));
+
+        /**
+         * 找出落在指定矩形框当中的坐标点
+         *
+         40.0519526142,116.4178513254
+
+         40.0385828363,116.4465266673
+         */
+        SearchResponse searchResponse = client.prepareSearch(&quot;platform_foreign_website&quot;)
+                .setTypes(&quot;store&quot;)
+                .setQuery(QueryBuilders.geoBoundingBoxQuery(&quot;location&quot;)
+                        .setCorners(40.0519526142, 116.4178513254, 40.0385828363, 116.4465266673))
+                .get();
+
+        for(SearchHit searchHit : searchResponse.getHits().getHits()) {
+            System.out.println(searchHit.getSourceAsString());
+        }
+
+        /**|
+         * 找出坐落在多边形当中的坐标点
+         *
+         * 40.0519526142,116.4178513254
+         *
+         *          40.0519526142,116.4178513254
+         *
+         *          40.0385828363,116.4465266673
+         *
+         *
+         */
+        List&lt;GeoPoint&gt; points = new ArrayList&lt;GeoPoint&gt;();
+        points.add(new GeoPoint(40.0519526142, 116.4178513254));
+        points.add(new GeoPoint(40.0519526142, 116.4178513254));
+        points.add(new GeoPoint(40.0385828363, 116.4465266673));
+        searchResponse = client.prepareSearch(&quot;platform_foreign_website&quot;)
+                .setTypes(&quot;store&quot;)
+                .setQuery(QueryBuilders.geoPolygonQuery(&quot;location&quot;, points))
+                .get();
+
+        for(SearchHit searchHit : searchResponse.getHits().getHits()) {
+            System.out.println(searchHit.getSourceAsString());
+        }
+        System.out.println(&quot;==================================================&quot;);
+
+        /**
+         * 以当前的点为中心，搜索落在半径范围内200公里的经纬度坐标点
+         *40.0488115498,116.4320345091
+         */
+        searchResponse = client.prepareSearch(&quot;platform_foreign_website&quot;)
+                .setTypes(&quot;store&quot;)
+                .setQuery(QueryBuilders.geoDistanceQuery(&quot;location&quot;)
+                        .point(40.0488115498, 116.4320345091)
+                        .distance(200, DistanceUnit.KILOMETERS))
+                .get();
+
+        for(SearchHit searchHit : searchResponse.getHits().getHits()) {
+            System.out.println(searchHit.getSourceAsString());
+        }
+
+        client.close();
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br></div></div><h2 id="_4-elasticsearch-的-sql插件使用"><a href="#_4-elasticsearch-的-sql插件使用" class="header-anchor">#</a> 4. elasticsearch  的 sql插件使用</h2> <p>​		对于这些复杂的查询，es使用javaAPI都可以实现，但是相较于sql语句来说，我们更加熟悉sql语句，所以es也提供了sql语句的开发，让我们通过sql语句即可实现ES的查询，接下来我们就来安装并学习sql的插件的使用方法吧！</p> <p>​		在es版本6.3之前都不支持sql语句的开发，如果需要使用sql语句来开发es的数据查询，那么我们需要手动的自己安装插件，插件下载地址如下，</p> <p><a href="https://github.com/NLPchina/elasticsearch-sql/%E3%80%81" target="_blank" rel="noopener noreferrer">https://github.com/NLPchina/elasticsearch-sql/<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>​		但是在6.3版本之后，es自带就安装了sql的插件，我们可以直接通过sql语句的方式实现es当中的数据查询</p> <p>对于sql语句的使用，es给我们提供了三种方式，接下来我们分别看看三种方式如何实现es数据的查询</p> <h3 id="_4-1-通过rest风格实现数据的查询"><a href="#_4-1-通过rest风格实现数据的查询" class="header-anchor">#</a> 4.1 通过rest风格实现数据的查询</h3> <h4 id="_4-1-1-使用rest方式向索引库当中添加数据"><a href="#_4-1-1-使用rest方式向索引库当中添加数据" class="header-anchor">#</a> 4.1.1 使用rest方式向索引库当中添加数据</h4> <p>使用kibana向索引库当中添加数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>PUT /library/book/_bulk?refresh
+{&quot;index&quot;:{&quot;_id&quot;: &quot;Leviathan Wakes&quot;}}
+{&quot;name&quot;: &quot;Leviathan Wakes&quot;, &quot;author&quot;: &quot;James S.A. Corey&quot;, &quot;release_date&quot;: &quot;2011-06-02&quot;, &quot;page_count&quot;: 561}
+{&quot;index&quot;:{&quot;_id&quot;: &quot;Hyperion&quot;}}
+{&quot;name&quot;: &quot;Hyperion&quot;, &quot;author&quot;: &quot;Dan Simmons&quot;, &quot;release_date&quot;: &quot;1989-05-26&quot;, &quot;page_count&quot;: 482}
+{&quot;index&quot;:{&quot;_id&quot;: &quot;Dune&quot;}}
+{&quot;name&quot;: &quot;Dune&quot;, &quot;author&quot;: &quot;Frank Herbert&quot;, &quot;release_date&quot;: &quot;1965-06-01&quot;, &quot;page_count&quot;: 604}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h4 id="_4-1-2-使用rest风格方式查询数据"><a href="#_4-1-2-使用rest风格方式查询数据" class="header-anchor">#</a> 4.1.2 使用rest风格方式查询数据</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>curl -X POST &quot;node01:9200/_xpack/sql?format=txt&quot; -H 'Content-Type: application/json' -d'
+{
+    &quot;query&quot;: &quot;SELECT * FROM library WHERE release_date &lt; \u00272000-01-01\u0027&quot;
+}'
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h3 id="_4-2-使用sql脚本的方式进入sql客户端进行查询"><a href="#_4-2-使用sql脚本的方式进入sql客户端进行查询" class="header-anchor">#</a> 4.2 使用sql脚本的方式进入sql客户端进行查询</h3> <p>我们也可以使用sql脚本的方式，进入sql客户端，通过sql语句的方式实现数据的查询</p> <h4 id="_4-2-1-node01进入sql脚本-客户-端"><a href="#_4-2-1-node01进入sql脚本-客户-端" class="header-anchor">#</a> 4.2.1 node01进入sql脚本 客户 端</h4> <p>node01执行以下命令进入sql脚本客户端</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-6.7.0
+
+bin/elasticsearch-sql-cli node01:9200
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><h4 id="_4-2-2-执行sql语句"><a href="#_4-2-2-执行sql语句" class="header-anchor">#</a> 4.2.2 执行sql语句</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>sql&gt; select * from library;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><table><thead><tr><th>author</th> <th>name</th> <th>page_count</th></tr></thead> <tbody><tr><td>Dan Simmons</td> <td>Hyperion</td> <td>482</td></tr> <tr><td>James S.A. Corey</td> <td>Leviathan Wakes</td> <td>561</td></tr> <tr><td>Frank Herbert</td> <td>Dune</td> <td>604</td></tr></tbody></table> <h3 id="_4-3-通过jdbc连接的方式"><a href="#_4-3-通过jdbc连接的方式" class="header-anchor">#</a> 4.3 通过jdbc连接的方式</h3> <p>​		当然了，我们也可以通过jdbc连接的方式，通过java代码来实现ES当中数据的查询操作</p> <p>官网介绍操作连接</p> <p>https://www.elastic.co/guide/en/elasticsearch/reference/6.7/sql-jdbc.html</p> <p>​		使用javaAPI访问数据库当中的数据，会产生一个错误，参见这篇文章</p> <p>https://www.cnblogs.com/hts-technology/p/9282421.html</p> <h4 id="_4-3-1-导入jar包"><a href="#_4-3-1-导入jar包" class="header-anchor">#</a> 4.3.1 导入jar包</h4> <p>在我们的maven依赖中添加以下坐标，导入es-sql的jar包</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>&lt;repository&gt;
+    &lt;id&gt;elastic.co&lt;/id&gt;
+    &lt;url&gt;https://artifacts.elastic.co/maven&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.elasticsearch.plugin&lt;/groupId&gt;
+    &lt;artifactId&gt;x-pack-sql-jdbc&lt;/artifactId&gt;
+    &lt;version&gt;6.7.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div><h4 id="_4-3-2-开发java代码-实现-查询"><a href="#_4-3-2-开发java代码-实现-查询" class="header-anchor">#</a> 4.3.2 开发java代码， 实现 查询</h4> <p>通过java代码，使用jdbc连接es服务器，然后查询数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>@Test
+    public void esJdbc() throws SQLException {
+        EsDataSource dataSource = new EsDataSource();
+        String address = &quot;jdbc:es://http://node01:9200&quot; ;
+        dataSource.setUrl(address);
+        Properties connectionProperties = new Properties();
+        dataSource.setProperties(connectionProperties);
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(&quot;select * from library&quot;);
+        while(resultSet.next()){
+            String string = resultSet.getString(0);
+            String string1 = resultSet.getString(1);
+            int anInt = resultSet.getInt(2);
+            String string2 = resultSet.getString(4);
+            System.out.println(string + &quot;\t&quot; +  string1 + &quot;\t&quot; +  anInt + &quot;\t&quot; + string2);
+        }
+        connection.close();
+    }
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br></div></div><h2 id="_5-es集群-生产调优"><a href="#_5-es集群-生产调优" class="header-anchor">#</a> 5. ES集群 生产调优</h2> <h3 id="_5-1-服务器硬件-以及内存调优"><a href="#_5-1-服务器硬件-以及内存调优" class="header-anchor">#</a> 5.1. 服务器硬件 以及内存调优</h3> <h4 id="_5-1-1、调整交换区-的swap大小"><a href="#_5-1-1、调整交换区-的swap大小" class="header-anchor">#</a> 5.1.1、调整交换区 的swap大小</h4> <p>​		关闭系统的交换区，禁用linux的虚拟内存，尽量让我们的ES禁用虚拟内存，因为如果使用虚拟内存，就会将内存当中过多的数据缓存到磁盘上面去，可以简单理解为就是拿了一块磁盘出来当做内存使用，这样当然性能就会急剧下降，所以在实际工作当中我们一般的都会尽量关闭linux的交换区的内存空间</p> <p>关闭交换区的空间大小</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>swapoff -a
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>​		如果不能完全禁用swap交换区的空间大小，我们可以调整设置，尽量减少swap的空间，通过调整交换区内存空间大小，来调整我们的交换比例</p> <p>swappiness参数值可设置范围在0到100之间。 低参数值会让内核尽量少用交换，更高参数值会使内核更多的去使用交换空间。默认值为60</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>vim /etc/sysctl.conf
+
+vm.swappiness=1
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>如果没法更改我们的swap的参数值，那么我们也可以在es当中配置，禁止JVM堆内存当中的数据交换到磁盘当中去</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-6.7.0/config/
+vim elasticsearch.yml
+
+bootstrap.memory_lock:true
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h4 id="_5-1-2、-调整普通用户打开文件数以及线程数的限制"><a href="#_5-1-2、-调整普通用户打开文件数以及线程数的限制" class="header-anchor">#</a> 5.1.2、 调整普通用户打开文件数以及线程数的限制</h4> <h5 id="普通用户打开文件的最大数限制"><a href="#普通用户打开文件的最大数限制" class="header-anchor">#</a> 普通用户打开文件的最大数限制</h5> <p>​		ES因为需要大量的创建索引文件，需要大量的打开系统的文件，所以我们需要解除linux系统当中打开文件最大数目的限制，不然ES启动就会抛错</p> <p>​		三台机器使用es用户执行以下命令解除打开文件数据的限制</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sudo vi /etc/security/limits.conf
+
+\* soft nofile 65536
+\* hard nofile 131072
+\* soft nproc 2048
+\* hard nproc 4096
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h5 id="普通-用户启动线程数限制"><a href="#普通-用户启动线程数限制" class="header-anchor">#</a> 普通 用户启动线程数限制</h5> <p>三台机器执行以下命令打开文件最大数</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>sudo vi /etc/sysctl.conf
+
+vm.max_map_count=655360
+fs.file-max=655360
+
+执行以下命令生效
+sudo sysctl -p
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><p>注意：以上两个问题修改完成之后，一定要重新连接linux生效。关闭secureCRT或者XShell工具，然后重新打开工具连接linux即可</p> <h4 id="_5-1-3、-调整-es的jv-m-堆-内存大小"><a href="#_5-1-3、-调整-es的jv-m-堆-内存大小" class="header-anchor">#</a> 5.1.3、 调整 ES的JV M 堆 内存大小</h4> <p>​		官方建议ES的堆内存大小不要超过32GB，超过32GB之后，反而会造成大量的内存的浪费，所以我们在ES当中，JVM堆内存大小，尽量调整成小于32GB，其中堆内存大小与系统内存大小，尽量五五分，例如一台服务器64GB，那么我们可以给ES堆内存大小设置为32GB，剩下的32GB留作OS  cache ，当做系统内存留给lucene来使用（因为ES底层也是基于lucene的）</p> <p>调整堆内存大小的官方建议</p> <p>https://www.elastic.co/guide/cn/elasticsearch/guide/current/heap-sizing.html</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd / kfly/install/elasticsearch-6.7.0/config
+vim jvm.options
+
+-Xms32g
+-Xmx32g
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h3 id="_5-2、es的参数-调优"><a href="#_5-2、es的参数-调优" class="header-anchor">#</a> 5.2、ES的参数 调优</h3> <h4 id="_5-2-1-、es集群-自动发现机制"><a href="#_5-2-1-、es集群-自动发现机制" class="header-anchor">#</a> 5.2.1 、ES集群 自动发现机制</h4> <p>配置ES集群的自动发现机制</p> <p>discovery.zen.ping.unicast.hosts: [&quot;node01&quot;, &quot;node02&quot;, &quot;node03&quot;]</p> <p>配置在每轮ping操作中等待DNS主机名查找的超时时间。需要指定<a href="#time-units">时间单位</a>，默认为5秒。</p> <p>discovery.zen.ping.unicast.resolve_timeout:30</p> <h4 id="_5-2-2、-集群的主节点选举"><a href="#_5-2-2、-集群的主节点选举" class="header-anchor">#</a> 5.2.2、 集群的主节点选举</h4> <p>​		ES集群当中的节点角色介绍</p> <h5 id="master"><a href="#master" class="header-anchor">#</a> Master</h5> <div class="language- extra-class"><pre><code>	主要负责集群中索引的创建、删除以及数据的Rebalance等操作。Master不负责数据的索引和检索，所以负载较轻。当Master节点失联或者挂掉的时候，ES集群会自动从其他Master节点选举出一个Leader。为了防止脑裂，常常设置参数为discovery.zen.minimum_master_nodes=N/2+1，其中N为集群中Master节点的个数。建议集群中Master节点的个数为奇数个，如3个或者5个。
+</code></pre></div><p>设置为Master节点的方式如下：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>node.master: true   #设置为主节点
+node.data: false  #不是数据节点
+node.ingest: false  #不是ingest 节点
+search.remote.connect: false  #禁用跨集群查询
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h5 id="data-node"><a href="#data-node" class="header-anchor">#</a> Data Node</h5> <p>​		主要负责集群中数据的索引和检索，一般压力比较大。建议和Master节点分开，避免因为Data Node节点出问题影响到Master节点。</p> <p>​		设置一个节点为Data Node节点的方式如下：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>node.master: false   #不是主节点
+node.data: true    #作为数据二级店
+node.ingest: false   # 不是ingest节点
+search.remote.connect: false  #禁用跨集群查询
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h5 id="coordinating-node"><a href="#coordinating-node" class="header-anchor">#</a> Coordinating Node</h5> <p>协作节点，主要用于协作处理集群当中的一些事情</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>node.master: false    #不是主节点
+node.data: true       #作为数据二级店
+node.ingest: false    # 不是ingest节点
+search.remote.connect: false   #禁用跨集群查询
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h5 id="ingest-node"><a href="#ingest-node" class="header-anchor">#</a> Ingest Node</h5> <p>Ingest node专门对索引的文档做预处理，实际中不常用，除非文档在索引之前有大量的预处理工作需要做。Ingest node设置如下：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>node.master: false node.master: false         
+node.master: false 
+node.data: false
+node.ingest: true
+search.remote.connect: false
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>​		以上节点当中最重要的就是Master Node，这个节点关系着我们集群的生死存放，我们可以通过设置多个master node作为我们集群当中的主节点，其中多个master node会通过选举机制实现选择一个master node作为active，其他的作为standBy，如果master  active状态的主节点宕机，es会从其他的standBy状态的主节点当中重新选择一个新的作为active状态的节点</p> <p>控制节点加入某个集群或者开始选举的响应时间(默认3s)</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>discovery.zen.ping_timeout:3
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>​		在网络缓慢时，3秒时间可能不够，这种情况下，需要慎重增加超时时间，增加超时时间会减慢选举进程</p> <p>​		一旦节点决定加入一个存在的集群，它会发出一个加入请求给主节点，这个请求的超时时间由discovery.zen.join_time控制，默认是 ping 超时时间(discovery.zen.ping_timeout)的20倍</p> <p>​		当主节点停止或者出现问题，集群中的节点会重新 ping 并选举一个新节点。有时一个节点也许会错误的认为主节点已死，所以这种 ping 操作也可以作为部分网络故障的保护性措施。在这种情况下，节点将只从其他节点监听有关当前活动主节点的信息。</p> <p>​		如果discovery.zen.master_election.ignore_non_master_pings设置为true时（默认值为false），node.master为false的节点不参加主节点的选举，同时选票也不包含这种节点。</p> <p>​		通过设置node.master为false，可以将节点设置为非备选主节点，永远没有机会成为主节点。</p> <p>​		discovery.zen.minimum_master_nodes设置了最少有多少个备选主节点参加选举，同时也设置了一个主节点需要控制最少多少个备选主节点才能继续保持主节点身份。如果控制的备选主节点少于discovery.zen.minimum_master_nodes个，那么当前主节点下台，重新开始选举。</p> <p>​		discovery.zen.minimum_master_nodes必须设置一个恰当的备选主节点值(quonum，一般设置 为备选主节点数/2+1)，尽量避免只有两个备选主节点，因为两个备选主节点quonum应该为2，那么如果一个节点出现问题，另一个节点的同意人数最多只能为1，永远也不能选举出新的主节点，这时就发生了脑裂现象。</p> <h4 id="_5-2-3-、-集群的故障检测"><a href="#_5-2-3-、-集群的故障检测" class="header-anchor">#</a> 5.2.3 、 集群的故障检测</h4> <p>有两个故障检测进程在集群的生命周期中一直运行。一个是主节点的，ping集群中所有的其他节点，检查他们是否活着。另一种是每个节点都ping主节点，确认主节点是否仍在运行或者是否需要重新启动选举程序。</p> <p>使用discovery.zen.fd前缀设置来控制故障检测过程，配置如下</p> <table><thead><tr><th>配置</th> <th>描述</th> <th></th></tr></thead> <tbody><tr><td>discovery.zen.fd.ping_interval</td> <td>节点多久ping一次，默认1s</td> <td></td></tr> <tr><td>discovery.zen.fd.ping_timeout</td> <td>等待响应时间，默认30s</td> <td></td></tr> <tr><td>discovery.zen.fd.ping_retries</td> <td>失败或超时后重试的次数，默认3</td> <td></td></tr></tbody></table> <h4 id="_5-2-4、集群-状态更新"><a href="#_5-2-4、集群-状态更新" class="header-anchor">#</a> 5.2.4、集群 状态更新</h4> <p>主节点是唯一一个能够更新集群状态的节点。主节点一次处理一个群集状态更新，应用所需的更改并将更新的群集状态发布到群集中的所有其他节点。当其他节点接收到状态时，先确认收到消息，但是不应用最新状态。如果主节点在规定时间（discovery.zen.commit_timeout ，默认30s）内没有收到大多数节点(discovery.zen.minimum_master_nodes)的确认，集群状态更新不被通过。</p> <p>一旦足够的节点响应了更新的消息，新的集群状态(cluster state)被提交并且会发送一条消息给所有的节点。这些节点开始在内部应用新的集群状态。在继续处理队列中的下一个更新之前，主节点等待所有节点响应，直到超时(discovery.zen.publish_timeout，默认设置为30秒)。上述两个超时设置都可以通过<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-update-settings.html" target="_blank" rel="noopener noreferrer">集群更新设置api<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>动态更改。</p> <h4 id="_5-2-5、-no-master-block-机制"><a href="#_5-2-5、-no-master-block-机制" class="header-anchor">#</a> 5.2.5、 no Master  block 机制</h4> <p>​		对于一个可以正常充分运作的集群来说，必须拥有一个活着的主节点和正常数量(discovery.zen.minimum_master_nodes个)活跃的备选主节点。discovery.zen.no_master_block设置了没有主节点时限制的操作。它又两个可选参数</p> <ul><li><p>all：所有操作均不可做，读写、包括集群状态的读写api，例如获得索引配置(index settings)，putMapping，和集群状态(cluster state)api</p></li> <li><p>write：默认为write，写操作被拒绝执行，基于最后一次已知的正常的集群状态可读，这也许会读取到已过时的数据。</p></li> <li><p>discovery.zen.no_master_block，对于节点相关的基本api，这个参数是无效的，如集群统计信息(cluster stats)，节点信息(node info)，节点统计信息(node stats)。对这些api的请求不会被阻止，并且可以在任何可用节点上运行。</p></li></ul> <h4 id="_5-2-6、-增加-refresh-时间间隔"><a href="#_5-2-6、-增加-refresh-时间间隔" class="header-anchor">#</a> 5.2.6、 增加 Refresh 时间间隔</h4> <p>​		为了提高索引性能，Elasticsearch 在写入数据时候，采用延迟写入的策略，即数据先写到内存中，当超过默认 1 秒 （index.refresh_interval）会进行一次写入操作，就是将内存中 segment 数据刷新到操作系统中，此时我们才能将数据搜索出来，所以这就是为什么 Elasticsearch 提供的是近实时 搜索功能，而不是实时搜索功能。</p> <p>​		当然像我们的内部系统对数据延迟要求不高的话，我们可以通过延长 refresh 时间间隔，可以有效的减少 segment 合并压力，提供索引速度。在做全链路跟踪的过程中，我们就将 index.refresh_interval 设置为 30s，减少 refresh 次数。</p> <p>​		同时，在进行全量索引时，可以将 refresh 次数临时关闭，即 index.refresh_interval 设置为 -1，数据导入成功后再打开到正常模式，比如 30s。</p> <h4 id="_5-2-7、-综合调优概览"><a href="#_5-2-7、-综合调优概览" class="header-anchor">#</a> 5.2.7、 综合调优概览</h4> <p>ES调优综合参数设置概览：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>index.merge.scheduler.max_thread_count:1 # 索引 merge ***线程数 
+indices.memory.index_buffer_size:30%     # 内存 
+index.translog.durability:async # 这个可以异步写硬盘，增大写的速度 
+index.translog.sync_interval:120s #translog 间隔时间 
+discovery.zen.ping_timeout:120s # 心跳超时时间 
+discovery.zen.fd.ping_interval:120s     # 节点检测时间 
+discovery.zen.fd.ping_timeout:120s     #ping 超时时间 
+discovery.zen.fd.ping_retries:6     # 心跳重试次数 
+thread_pool.bulk.size:20 # 写入线程个数 由于我们查询线程都是在代码里设定好的，我这里只调节了写入的线程数 
+thread_pool.bulk.queue_size:1000 # 写入线程队列大小 
+index.refresh_interval:300s #index 刷新间隔复制代码
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br></div></div></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《ELK》笔记/10.ELK笔记/04.ElasticaSearch Java Api操作.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <!----> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">1/21/2022, 3:12:36 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/6255b5/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">ElasticaSearch基础知识</div></a> <a href="/pages/d0dbbc/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">LogState日志采集</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/6255b5/" class="prev">ElasticaSearch基础知识</a></span> <span class="next"><a href="/pages/d0dbbc/">LogState日志采集</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/59.00792d53.js" defer></script>
+  </body>
+</html>

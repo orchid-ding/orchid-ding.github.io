@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Flink入门基础简介 | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/62.b02509d6.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/66.1d8c00be.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Flink入门基础</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/25c5d8/" aria-current="page" class="active sidebar-link">Flink入门基础简介</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_1-flink简介" class="sidebar-link">1 Flink简介</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_1-1-处理无界和有界数据" class="sidebar-link">1.1 处理无界和有界数据</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_1-2-部署应用到任意地方" class="sidebar-link">1.2  部署应用到任意地方</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_1-3-运行任意规模应用" class="sidebar-link">1.3  运行任意规模应用</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_1-4-利用内存性能" class="sidebar-link">1.4  利用内存性能</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_2-flink基本架构" class="sidebar-link">2 Flink基本架构</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_2-1-主从式的架构图" class="sidebar-link">2.1 主从式的架构图</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_2-2-client-客户端" class="sidebar-link">2.2   Client 客户端</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_2-3-jobmanager" class="sidebar-link">2.3  JobManager</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_2-4-taskmanager" class="sidebar-link">2.4  TaskManager</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-入门案例演示" class="sidebar-link">3 入门案例演示</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-1-实时需求分析" class="sidebar-link">3.1 实时需求分析</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-2-开发环境部署" class="sidebar-link">3.2 开发环境部署</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-3-实时代码开发-java" class="sidebar-link">3.3  实时代码开发（java）</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-4-实时代码开发-scala" class="sidebar-link">3.4  实时代码开发（scala）</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-5-需求分析" class="sidebar-link">3.5 需求分析</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_3-6-离线代码开发-java" class="sidebar-link">3.6 离线代码开发（java）</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_4-local模式安装" class="sidebar-link">4  local模式安装</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_4-1-local模式安装" class="sidebar-link">4.1  Local模式安装</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_4-2-在集群上提交任务" class="sidebar-link">4.2 在集群上提交任务</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_5-standalone模式安装-local" class="sidebar-link">5 Standalone模式安装(local)</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_5-1-集群规划" class="sidebar-link">5.1 集群规划</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_5-2-依赖" class="sidebar-link">5.2 依赖</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_5-3-安装步骤" class="sidebar-link">5.3 安装步骤</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_5-4-standalone模式需要考虑的参数" class="sidebar-link">5.4 StandAlone模式需要考虑的参数</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_6-flink-on-yarn模式安装" class="sidebar-link">6 Flink on Yarn模式安装</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_6-1-第一种方式" class="sidebar-link">6.1 第一种方式</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_6-2-第二种方式" class="sidebar-link">6.2 第二种方式</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_6-3-不同模式的任务提交" class="sidebar-link">6.3 不同模式的任务提交</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_6-4-help信息" class="sidebar-link">6.4 help信息</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_7-flink-shell使用" class="sidebar-link">7 Flink Shell使用</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_8-flink数据" class="sidebar-link">8. Flink数据</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_8-1-flink之数据源" class="sidebar-link">8.1 Flink之数据源</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_8-2-常见transformation操作" class="sidebar-link">8.2  常见Transformation操作</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_8-3-常见sink操作" class="sidebar-link">8.3  常见sink操作</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_9-dataset算子操作" class="sidebar-link">9 DataSet算子操作</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_9-1-source" class="sidebar-link">9.1  source</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_9-2-transform" class="sidebar-link">9.2  transform</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_9-3-sink" class="sidebar-link">9.3  sink</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_9-4-flink之广播变量" class="sidebar-link">9.4  Flink之广播变量</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#_9-5-flink之counter-计数器" class="sidebar-link">9.5 Flink之Counter（计数器）</a></li><li class="sidebar-sub-header"><a href="/pages/25c5d8/#flink思维导图" class="sidebar-link">Flink思维导图</a></li></ul></li></ul></li><li><a href="/pages/974b7f/" class="sidebar-link">Flink分布式计算任务</a></li><li><a href="/pages/fd6f8c/" class="sidebar-link">Flink重的State和容错</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>FlinkSQL</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Flink进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8AFlink%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《Flink》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=Flink%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80" title="分类" data-v-70a2d273>Flink入门基础</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-11-19</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABKFJREFUSA3tVl1oFVcQnrMbrak3QUgkya1akpJYcrUtIqW1JvFBE9LiQ5v6JmJpolbMg32rVrhgoYK0QiMY6i9Y6EMaW5D+xFJaTYItIuK2Kr3+BJNwkxBj05sQY3b3nM6cs2dv9t7NT/vQJw/sndk5M/PNzJkzewGerP+pAmy+ON8lLzUJgA8ZYxYIYZmGYRnctDaWvJJAmTtfP1pvXsBCCPP8QFcCaRkZYACgDZFO4stNIcBCajEOlmmC9XpJ9bAGCaPaPmzPl32dvLSVu3BWCTQs0XQQ6g0DYgwLIoAZbBCdW/i+781o1VVlm/410mw4h06Y7bIPHNyWDyL4FHkX03Q8SrzNhZTZriieckWt7cL6MM85YcLpsi/7O9/iXFT6MswI0DmmpkSaJ0qLxFIm3+i1THHB3zmBH3PYx9CcykcLOeQVVa7QtdxTgQgEleX2AjHYfwA+2ddV77ruGoJUbhGDI09YSNXyMpUt5ylOzxgbUmtOp7NmbNt8v3arjTBfYELmLUV+M+nSawNNAUqpT3ClJWg5I3BLT+cGW/DXNGCa6tx1aakCGEigArTn4TDIPdrXXYKCZNrHLMCOEPvHBlLQ99s9eHB7EB6NTki73CVPQ2F5MSx/uRQixfmq7rK0wYD8w8E905bnPDfwoWs/rfv93NWN/ZfvwsLIU7A09gxECyISeGJkHAau98L97tuw7NXnoPyNF8FcYGLGKsOs0mN3OEyec9esGW/ZEl945dTP34wlR2FZVQWU1q0Cw8Tr7p+hgLLNL0FPxx/Q35mA8aEUrH6nCgwEl0tn7wUiZYJnNRh6DK4UH/k0lfyrsBKdPVv/AriGIQcEDQZ65LBAGe2Rzui9Ybjz7XUppz1/uKBbyVPGkN3ZAeC6hr0x7Nr38N5+EqkoOm17xpoqR9ohQF55ERSvr4Dkr3chNfC3DMzGJlNBElW8w9nsGQvhNGIzDkXzCg8cLK951xHsFBlTJspJNi3ZFIMF2AeDV3q8DNOB+YHi6QTrChDIWDBRi5U5f+ZMfJLu3ccrqxtdxk4SKH336LFxSmkqefwU5T8fhdSdQf9IVKD6aNiwI/hnmcAZ91isYMJIaCUCx9W098+LgruikeTqzqqxKPUwqJyCPJiyemVVZBOijDGjD38Os0jOiSPL1z3SPjXNANbiNPXAdzTfukjjuknNBbyz3nwgTd3AVFqUJ5hpHlq9MveLnWwttUfoygBmvVjuikxND3znrhsELnZk7k+OjIGxeNEkomyLVta0xxn+HZhjBc4YZ/AFjHjz9u3xRZl2BN4aq9nFwWh16IrQ1aHHEd3j1+4/dB9OtH4e29A2H1DyHQRmOSfQZ1Fy7MHBTGB6J/Djq6p3OxyO2cB+4Car7v/o3GXgfAkj23+x9ID1Teoamo/SXcbvSf2PX7Vc8DdCmE1vN9di+32P9/5YR3vLnhCVGUWBjEkr3yh4H8v9CzmsbdhzOKzsJKM90iFdaTMjRPhGVsakRvOaRidljo6H6G7j+ctrJpsP+4COhDIl0La2+FS4+5mlocBaXY5QnGZysIBYoeSsl5qQzrSj/cgNrfuEzlWBfwA+EjrZyWUvpAAAAABJRU5ErkJggg==">
+          Flink入门基础简介
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-flink简介"><a href="#_1-flink简介" class="header-anchor">#</a> 1 Flink简介</h2> <blockquote><p>Apache Flink® — Stateful Computations over Data Streams</p></blockquote> <blockquote><p>Apache Flink 是一个框架和分布式处理引擎，用于在<em>无边界和有边界</em>数据流上进行有状态的计算。Flink 能在所有常见集群环境中运行，并能以内存速度和任意规模进行计算。</p></blockquote> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231419115.png" alt="flink"></p> <h3 id="_1-1-处理无界和有界数据"><a href="#_1-1-处理无界和有界数据" class="header-anchor">#</a> 1.1 处理无界和有界数据</h3> <p>​		任何类型的数据都可以形成一种事件流。信用卡交易、传感器测量、机器日志、网站或移动应用程序上的用户交互记录，所有这些数据都形成一种流。</p> <p>数据可以被作为 <em>无界</em> 或者 <em>有界</em> 流来处理。</p> <ol><li><p><strong>无界流</strong>  有定义流的开始，但没有定义流的结束。它们会无休止地产生数据。无界流的数据必须持续处理，即数据被摄取后需要立刻处理。我们不能等到所有数据都到达再处理，因为输入是无限的，在任何时候输入都不会完成。处理无界数据通常要求以特定顺序摄取事件，例如事件发生的顺序，以便能够推断结果的完整性。</p></li> <li><p><strong>有界流</strong> 有定义流的开始，也有定义流的结束。有界流可以在摄取所有数据后再进行计算。有界流所有数据可以被排序，所以并不需要有序摄取。有界流处理通常被称为批处理</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231419013.png" alt="bounded-unbounded"></p></li></ol> <p><strong>Apache Flink 擅长处理无界和有界数据集</strong> 精确的时间控制和状态化使得 Flink 的运行时(runtime)能够运行任何处理无界流的应用。有界流则由一些专为固定大小数据集特殊设计的算法和数据结构进行内部处理，产生了出色的性能。</p> <h3 id="_1-2-部署应用到任意地方"><a href="#_1-2-部署应用到任意地方" class="header-anchor">#</a> 1.2  部署应用到任意地方</h3> <p>​		Apache Flink 是一个分布式系统，它需要计算资源来执行应用程序。Flink 集成了所有常见的集群资源管理器，例如 <a href="https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html" target="_blank" rel="noopener noreferrer">Hadoop YARN<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>、 <a href="https://mesos.apache.org/" target="_blank" rel="noopener noreferrer">Apache Mesos<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> 和 <a href="https://kubernetes.io/" target="_blank" rel="noopener noreferrer">Kubernetes<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>，但同时也可以作为独立集群运行。
+​		Flink 被设计为能够很好地工作在上述每个资源管理器中，这是通过资源管理器特定(resource-manager-specific)的部署模式实现的。Flink 可以采用与当前资源管理器相适应的方式进行交互。
+​		部署 Flink 应用程序时，Flink 会根据应用程序配置的并行性自动标识所需的资源，并从资源管理器请求这些资源。在发生故障的情况下，Flink 通过请求新资源来替换发生故障的容器。提交或控制应用程序的所有通信都是通过 REST 调用进行的，这可以简化 Flink 与各种环境中的集成</p> <h3 id="_1-3-运行任意规模应用"><a href="#_1-3-运行任意规模应用" class="header-anchor">#</a> 1.3  运行任意规模应用</h3> <p>​		Flink 旨在任意规模上运行有状态流式应用。因此，应用程序被并行化为可能数千个任务，这些任务分布在集群中并发执行。所以应用程序能够充分利用无尽的 CPU、内存、磁盘和网络 IO。而且 Flink 很容易维护非常大的应用程序状态。其异步和增量的检查点算法对处理延迟产生最小的影响，同时保证精确一次状态的一致性。
+Flink 用户报告了其生产环境中一些令人印象深刻的扩展性数字：
+​		每天处理数万亿的事件
+​		可以维护几TB大小的状态
+​		可以部署上千个节点的集群</p> <h3 id="_1-4-利用内存性能"><a href="#_1-4-利用内存性能" class="header-anchor">#</a> 1.4  利用内存性能</h3> <p>​		有状态的 Flink 程序针对本地状态访问进行了优化。任务的状态始终保留在内存中，如果状态大小超过可用内存，则会保存在能高效访问的磁盘数据结构中。任务通过访问本地（通常在内存中）状态来进行所有的计算，从而产生非常低的处理延迟。Flink 通过定期和异步地对本地状态进行持久化存储来保证故障场景下精确一次的状态一致性。</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231420165.png" alt="local-state"></p> <h2 id="_2-flink基本架构"><a href="#_2-flink基本架构" class="header-anchor">#</a> 2 Flink基本架构</h2> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231419550.png" alt="1563615522100"></p> <h3 id="_2-1-主从式的架构图"><a href="#_2-1-主从式的架构图" class="header-anchor">#</a> 2.1 主从式的架构图</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231428304.png" alt="flink运行原理"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231428788.png" alt="FlinkOnYarn"></p> <p>​		Flink 整个系统主要由两个组件组成，分别为 JobManager 和 TaskManager，Flink 架构也遵循 Master - Slave 架构设计原则，JobManager 为 Master 节点，TaskManager 为 Worker （Slave）节点。
+所有组件之间的通信都是借助于 Akka Framework，包括任务的状态以及 Checkpoint 触发等信息。</p> <h3 id="_2-2-client-客户端"><a href="#_2-2-client-客户端" class="header-anchor">#</a> 2.2   Client 客户端</h3> <p>​		客户端负责将任务提交到集群，与 JobManager 构建 Akka 连接，然后将任务提交到 JobManager，通过和 JobManager 之间进行交互获取任务执行状态。
+客户端提交任务可以采用 CLI 方式或者通过使用 Flink WebUI 提交，也可以在应用程序中指定 JobManager 的 RPC 网络端口构建 ExecutionEnvironment 提交 Flink 应用。</p> <h3 id="_2-3-jobmanager"><a href="#_2-3-jobmanager" class="header-anchor">#</a> 2.3  JobManager</h3> <p>​		JobManager 负责整个 Flink 集群任务的调度以及资源的管理，从客户端中获取提交的应用，然后根据集群中 TaskManager 上 TaskSlot 的使用情况，为提交的应用分配相应的 TaskSlot 资源并命令 TaskManager 启动从客户端中获取的应用。
+JobManager 相当于整个集群的 Master 节点，且整个集群有且只有一个活跃的 JobManager ，负责整个集群的任务管理和资源管理。
+JobManager 和 TaskManager 之间通过 Actor System 进行通信，获取任务执行的情况并通过 Actor System 将应用的任务执行情况发送给客户端。
+​		同时在任务执行的过程中，Flink JobManager 会触发 Checkpoint 操作，每个 TaskManager 节点 收到 Checkpoint 触发指令后，完成 Checkpoint 操作，所有的 Checkpoint 协调过程都是在 Fink JobManager 中完成。
+当任务完成后，Flink 会将任务执行的信息反馈给客户端，并且释放掉 TaskManager 中的资源以供下一次提交任务使用。</p> <h3 id="_2-4-taskmanager"><a href="#_2-4-taskmanager" class="header-anchor">#</a> 2.4  TaskManager</h3> <p>TaskManager 相当于整个集群的 Slave 节点，负责具体的任务执行和对应任务在每个节点上的资源申请和管理。
+客户端通过将编写好的 Flink 应用编译打包，提交到 JobManager，然后 JobManager 会根据已注册在 JobManager 中 TaskManager 的资源情况，将任务分配给有资源的 TaskManager节点，然后启动并运行任务。
+TaskManager 从 JobManager 接收需要部署的任务，然后使用 Slot 资源启动 Task，建立数据接入的网络连接，接收数据并开始数据处理。同时 TaskManager 之间的数据交互都是通过数据流的方式进行的。
+可以看出，Flink 的任务运行其实是采用多线程的方式，这和 MapReduce 多 JVM 进行的方式有很大的区别，Flink 能够极大提高 CPU 使用效率，在多个任务和 Task 之间通过 TaskSlot 方式共享系统资源，每个 TaskManager 中通过管理多个 TaskSlot 资源池进行对资源进行有效管理。</p> <table><thead><tr><th>模式</th> <th>提交语句</th></tr></thead> <tbody><tr><td>StandAlnoe模式</td> <td>flink run -c streaming.slot.lesson01.WordCount -p 2 flinklesson-1.0-SNAPSHOT.jar</td></tr> <tr><td>Flink on Yarn(1)</td> <td>flink run -m yarn-cluster -p 2 -yn 2 -yjm 1024 -ytm 1024 -c streaming.slot.lesson01.WordCount flinklesson-1.0-SNAPSHOT.jar 特点： 一个任务一个集群</td></tr> <tr><td>Flink on Yarn(2)</td> <td>yarn-session.sh -n 2 -jm 1024 -tm 1024<br>flink run ./examples/batch/WordCount.jar -input hdfs://hadoop100:9000/LICENSE -output hdfs://hadoop100:9000/wordcount-result.txt 特点：先建立一个集群，然后再往集群里面提交任务</td></tr></tbody></table> <h2 id="_3-入门案例演示"><a href="#_3-入门案例演示" class="header-anchor">#</a> 3 入门案例演示</h2> <h3 id="_3-1-实时需求分析"><a href="#_3-1-实时需求分析" class="header-anchor">#</a> 3.1 实时需求分析</h3> <p>​		实时统计每隔1秒统计最近2秒单词出现的次数</p> <h3 id="_3-2-开发环境部署"><a href="#_3-2-开发环境部署" class="header-anchor">#</a> 3.2 开发环境部署</h3> <ol><li><p>官网建议使用IDEA，IDEA默认集成了scala和maven，使用起来方便</p></li> <li><p>本次课使用了当前最新的flink版本</p> <p>pom依赖如下：</p></li></ol> <div class="language- line-numbers-mode"><pre class="language-text"><code>    &lt;properties&gt;
+        &lt;flink.version&gt;1.9.0&lt;/flink.version&gt;
+        &lt;scala.version&gt;2.11.8&lt;/scala.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+        &lt;artifactId&gt;flink-streaming-java_2.11&lt;/artifactId&gt;
+        &lt;version&gt;${flink.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h3 id="_3-3-实时代码开发-java"><a href="#_3-3-实时代码开发-java" class="header-anchor">#</a> 3.3  实时代码开发（java）</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.util.Collector;
+
+public class WindowWordCountJava {
+    public static void main(String[] args) throws Exception {
+        //flink提供的工具类，获取传递的参数
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        String hostname = parameterTool.get(&quot;hostname&quot;);
+        int port = parameterTool.getInt(&quot;port&quot;);
+        //步骤一：获取执行环境
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //步骤二：获取数据源
+        DataStream&lt;String&gt; dataStream = env.socketTextStream(hostname, port);
+        //步骤三：执行逻辑操作
+        DataStream&lt;WordCount&gt; wordAndOneStream = dataStream.flatMap(new FlatMapFunction&lt;String, WordCount&gt;() {
+            public void flatMap(String line, Collector&lt;WordCount&gt; out) {
+                String[] fields = line.split(&quot;,&quot;);
+                for (String word : fields) {
+                    out.collect(new WordCount(word, 1L));
+                }
+            }
+        });
+
+        DataStream&lt;WordCount&gt; resultStream = wordAndOneStream.keyBy(&quot;word&quot;)
+                .timeWindow(Time.seconds(2), Time.seconds(1))//每隔1秒计算最近2秒
+                .sum(&quot;count&quot;);
+        //步骤四：结果打印
+        resultStream.print();
+        //步骤五：任务启动
+        env.execute(&quot;WindowWordCountJava&quot;);
+    }
+
+    public static class WordCount{
+        public String word;
+        public long count;
+        //记得要有这个空构建
+        public WordCount(){
+
+        }
+        public WordCount(String word,long count){
+            this.word = word;
+            this.count = count;
+        }
+
+        @Override
+        public String toString() {
+            return &quot;WordCount{&quot; +
+                    &quot;word='&quot; + word + '\'' +
+                    &quot;, count=&quot; + count +
+                    '}';
+        }
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br></div></div><h3 id="_3-4-实时代码开发-scala"><a href="#_3-4-实时代码开发-scala" class="header-anchor">#</a> 3.4  实时代码开发（scala）</h3> <p>添加依赖</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>  &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+            &lt;artifactId&gt;flink-streaming-scala_2.11&lt;/artifactId&gt;
+            &lt;version&gt;${flink.version}&lt;/version&gt;
+  &lt;/dependency&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>scala开发依赖和编译插件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>&lt;properties&gt;
+        &lt;flink.version&gt;1.9.0&lt;/flink.version&gt;
+        &lt;scala.version&gt;2.11.8&lt;/scala.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+            &lt;artifactId&gt;flink-streaming-java_2.11&lt;/artifactId&gt;
+            &lt;version&gt;${flink.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+            &lt;artifactId&gt;flink-streaming-scala_2.11&lt;/artifactId&gt;
+            &lt;version&gt;${flink.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;pluginManagement&gt;
+            &lt;plugins&gt;
+                &lt;!-- scala插件 --&gt;
+                &lt;plugin&gt;
+                    &lt;groupId&gt;net.alchim31.maven&lt;/groupId&gt;
+                    &lt;artifactId&gt;scala-maven-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;3.2.2&lt;/version&gt;
+                &lt;/plugin&gt;
+                &lt;!-- maven 插件 --&gt;
+                &lt;plugin&gt;
+                    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                    &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;3.5.1&lt;/version&gt;
+                    &lt;configuration&gt;
+                        &lt;source&gt;1.8&lt;/source&gt;
+                        &lt;target&gt;1.8&lt;/target&gt;
+                    &lt;/configuration&gt;
+                &lt;/plugin&gt;
+            &lt;/plugins&gt;
+        &lt;/pluginManagement&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;net.alchim31.maven&lt;/groupId&gt;
+                &lt;artifactId&gt;scala-maven-plugin&lt;/artifactId&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;id&gt;scala-compile-first&lt;/id&gt;
+                        &lt;phase&gt;process-resources&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;add-source&lt;/goal&gt;
+                            &lt;goal&gt;compile&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                    &lt;execution&gt;
+                        &lt;id&gt;scala-test-compile&lt;/id&gt;
+                        &lt;phase&gt;process-test-resources&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;testCompile&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;
+
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;phase&gt;compile&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;compile&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;
+
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+                &lt;version&gt;2. 3&lt;/version&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;phase&gt;package&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;shade&lt;/goal&gt;
+                        &lt;/goals&gt;
+                        &lt;configuration&gt;
+                            &lt;filters&gt;
+                                &lt;filter&gt;
+                                    &lt;artifact&gt;*:*&lt;/artifact&gt;
+                                    &lt;excludes&gt;
+                                        &lt;exclude&gt;META-INF/*.SF&lt;/exclude&gt;
+                                        &lt;exclude&gt;META-INF/*.DSA&lt;/exclude&gt;
+                                        &lt;exclude&gt;META-INF/*.RSA&lt;/exclude&gt;
+                                    &lt;/excludes&gt;
+                                &lt;/filter&gt;
+                            &lt;/filters&gt;
+                        &lt;/configuration&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br></div></div><p>代码开发</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.apache.flink.api.java.utils.ParameterTool
+import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.streaming.api.windowing.time.Time
+
+/**
+  * 滑动窗口
+  * 每隔1秒钟统计最近2秒内的数据，打印到控制台。
+  */
+object WindowWordCountScala {
+  def main(args: Array[String]): Unit = {
+    //获取参数
+    val hostname = ParameterTool.fromArgs(args).get(&quot;hostname&quot;)
+    val port = ParameterTool.fromArgs(args).getInt(&quot;port&quot;)
+    //TODO 导入隐式转换
+    import org.apache.flink.api.scala._
+    //步骤一：获取执行环境
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+    //步骤二：获取数据源
+    val textStream = env.socketTextStream(hostname,port)
+    //步骤三：数据处理
+    val wordCountStream = textStream.flatMap(line =&gt; line.split(&quot;,&quot;))
+      .map((_, 1))
+      .keyBy(0)
+      .timeWindow(Time.seconds(2), Time.seconds(1))
+      .sum(1)
+    //步骤四：数据结果处理
+    wordCountStream.print()
+    //步骤六：启动程序
+    env.execute(&quot;WindowWordCountScala&quot;)
+  }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br></div></div><h3 id="_3-5-需求分析"><a href="#_3-5-需求分析" class="header-anchor">#</a> 3.5 需求分析</h3> <p>​	对文件进行单词计数</p> <h3 id="_3-6-离线代码开发-java"><a href="#_3-6-离线代码开发-java" class="header-anchor">#</a> 3.6 离线代码开发（java）</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.operators.AggregateOperator;
+import org.apache.flink.api.java.operators.DataSource;
+import org.apache.flink.api.java.operators.FlatMapOperator;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.util.Collector;
+
+public class WordCount {
+    public static void main(String[] args)throws  Exception {
+        //步骤一：获取离线的程序入口
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        String inputPath=&quot;D:\\kfly\\flinklesson\\src\\main\\input\\hello.txt&quot;;
+        //步骤二：获取数据源
+        DataSource&lt;String&gt; dataSet = env.readTextFile(inputPath);
+        //步骤三：数据处理
+        FlatMapOperator&lt;String, Tuple2&lt;String, Integer&gt;&gt; wordAndOneDataSet = dataSet.flatMap(new FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt;() {
+            @Override
+            public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; collector) throws Exception {
+                String[] fileds = line.split(&quot;,&quot;);
+                for (String word : fileds) {
+                    collector.collect(new Tuple2&lt;String, Integer&gt;(word, 1));
+                }
+            }
+        });
+
+        AggregateOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = wordAndOneDataSet.groupBy(0)
+                .sum(1);
+        //步骤四：数据结果处理
+        result.writeAsText(&quot;D:\\kfly\\flinklesson\\src\\output\\result&quot;).setParallelism(1);
+        //步骤五：启动程序
+        env.execute(&quot;word count&quot;);
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br></div></div><p>换一种写法</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class WordCount {
+    public static void main(String[] args)throws  Exception {
+        //步骤一：获取离线的程序入口
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        String inputPath=&quot;D:\\kfly\\flinklesson\\src\\main\\input\\hello.txt&quot;;
+        //步骤二：获取数据源
+        DataSource&lt;String&gt; dataSet = env.readTextFile(inputPath);
+        //步骤三：数据处理
+        FlatMapOperator&lt;String, Tuple2&lt;String, Integer&gt;&gt; wordAndOneDataSet = dataSet.flatMap(new MySplitWordsTask());
+
+        AggregateOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = wordAndOneDataSet.groupBy(0)
+                .sum(1);
+        //步骤四：数据结果处理
+        result.writeAsText(&quot;D:\\kfly\\flinklesson\\src\\output\\result1&quot;).setParallelism(1);
+        //步骤五：启动程序
+        env.execute(&quot;word count&quot;);
+    }
+
+
+    public static class MySplitWordsTask implements   FlatMapFunction&lt;String,Tuple2&lt;String,Integer&gt;&gt;{
+        @Override
+        public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; collector) throws Exception {
+            String[] fileds = line.split(&quot;,&quot;);
+            for (String word : fileds) {
+                collector.collect(new Tuple2&lt;String, Integer&gt;(word, 1));
+            }
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br></div></div><p>总结：上面这种写法，我们把flink的算子抽离出来，代码看起来会更清晰。</p> <h2 id="_4-local模式安装"><a href="#_4-local模式安装" class="header-anchor">#</a> 4  local模式安装</h2> <h3 id="_4-1-local模式安装"><a href="#_4-1-local模式安装" class="header-anchor">#</a> 4.1  Local模式安装</h3> <p>（1）安装jdk，配置JAVA_HOME，建议使用jdk1.8以上</p> <p>（2）安装包下载地址：http://mirrors.tuna.tsinghua.edu.cn/apache/flink/flink-1.9.1/flink-1.9.1-bin-scala_2.11.tgz</p> <p>（3）直接上传安装包到服务器</p> <div class="language- extra-class"><pre><code>    ```
+    // 解压安装包：
+    tar -zxvf  flink-1.9.1-bin-scala_2.11.tgz
+    
+    // 创建快捷方式： 
+    ln -s flink-1.9.1-bin-scala_2.11.tgz flink
+    
+    // 配置FLINK_HOEM环境变量
+    ```
+</code></pre></div><p>（4）启动服务</p> <p>​           local模式，什么配置项都不需要配，直接启动服务器即可</p> <div class="language- extra-class"><pre><code>      ```
+      cd $FLIKE_HOME
+      
+      # 启动服务
+      ./bin/start-cluster.sh 
+      # 停止服务
+      ./bin/stop-cluster.sh 
+      ```
+</code></pre></div><p>（5）Web页面浏览</p> <p>​      localhost:8081</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231423281.png" alt="1563630933663"></p> <h3 id="_4-2-在集群上提交任务"><a href="#_4-2-在集群上提交任务" class="header-anchor">#</a> 4.2 在集群上提交任务</h3> <p>（1）编译，打包</p> <p>​          mvn clean package</p> <p>​         pom文件里面的依赖上添加上：</p> <p>​          代表这个依赖打包的时候不打到jar包里面，因为我们这些依赖包flink已经自带了，所以我们打包的时候不用把打包进去。</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231423067.png" alt="1563632280672"></p> <p>(2) 运行</p> <p>​       在hadoop01 上执行 nc -lk 9999</p> <div class="language- extra-class"><pre><code>```
+  flink run -c stream.lesson01.WindowWordCountJava flinklesson-1.0-SNAPSHOT.jar -port 9999
+```
+</code></pre></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231423826.png" alt="1563632969308"></p> <p>查看任务</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231423643.png" alt="1563633009046"></p> <p>查看日志：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>tail -F $FLINK_HOME/log/flink-work-taskexecutor-0-tjtx-98-197.58os.org.out
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231423371.png" alt="1563633150841"></p> <p>(3) 停止任务</p> <p>方式一：页面上停止</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231423187.png" alt="1563633479119"></p> <p>方式二：命令停止</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>flink cancel job-id
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h2 id="_5-standalone模式安装-local"><a href="#_5-standalone模式安装-local" class="header-anchor">#</a> 5 Standalone模式安装(local)</h2> <h3 id="_5-1-集群规划"><a href="#_5-1-集群规划" class="header-anchor">#</a> 5.1 集群规划</h3> <table><thead><tr><th style="text-align:left;">主机名</th> <th style="text-align:right;">JobManager</th> <th style="text-align:center;">TaskManager</th></tr></thead> <tbody><tr><td style="text-align:left;">hadoop01</td> <td style="text-align:right;">是</td> <td style="text-align:center;"></td></tr> <tr><td style="text-align:left;">hadoop02</td> <td style="text-align:right;"></td> <td style="text-align:center;">是</td></tr> <tr><td style="text-align:left;">hadoop03</td> <td style="text-align:right;"></td> <td style="text-align:center;">是</td></tr></tbody></table> <h3 id="_5-2-依赖"><a href="#_5-2-依赖" class="header-anchor">#</a> 5.2 依赖</h3> <p>jdk1.8以上，配置JAVA_HOME</p> <p>主机之间免密码</p> <p>flink-1.9.1-bin-scala_2.11.tgz</p> <h3 id="_5-3-安装步骤"><a href="#_5-3-安装步骤" class="header-anchor">#</a> 5.3 安装步骤</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>(a) 修改conf/flink-conf.yaml
+jobmanager.rpc.address: hadoop01
+(b) 修改conf/slaves
+hadoop02
+hadoop03
+(c) 拷贝到其他节点
+scp -rq /usr/local/flink-1.9.1 hadoop02:/usr/local
+scp -rq /usr/local/flink-1.9.1 hadoop03:/usr/local
+(d)：在hadoop01(JobMananger)节点启动
+start-cluster.sh
+(e)：访问http://hadoop01:8081
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h3 id="_5-4-standalone模式需要考虑的参数"><a href="#_5-4-standalone模式需要考虑的参数" class="header-anchor">#</a> 5.4 StandAlone模式需要考虑的参数</h3> <p>jobmanager.heap.mb：jobmanager节点可用的内存大小</p> <p>taskmanager.heap.mb：taskmanager节点可用的内存大小</p> <p>taskmanager.numberOfTaskSlots：每台机器可用的cpu数量</p> <p>parallelism.default：默认情况下任务的并行度</p> <p>taskmanager.tmp.dirs：taskmanager的临时数据存储目录</p> <h2 id="_6-flink-on-yarn模式安装"><a href="#_6-flink-on-yarn模式安装" class="header-anchor">#</a> 6 Flink on Yarn模式安装</h2> <ol><li>首先安装好Hadoop（yarn）</li> <li>上传一个f lin k的包（什么参数都不要配置）</li></ol> <p>flink on yarn有两种方式：</p> <h3 id="_6-1-第一种方式"><a href="#_6-1-第一种方式" class="header-anchor">#</a> 6.1 第一种方式</h3> <p>​		在YARN里面启动一个flink集群，然后我们再往flink集群提交任务，除非把Flink集群停了，不然资源不会释放</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231425833.png" alt="1563634783626"></p> <h3 id="_6-2-第二种方式"><a href="#_6-2-第二种方式" class="header-anchor">#</a> 6.2 第二种方式</h3> <p>​		没提交一个任务就在yarn上面启动一个flink小集群（推荐使用）</p> <p>任务运行完了资源就自动释放</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231425931.png" alt="1563634942092"></p> <h3 id="_6-3-不同模式的任务提交"><a href="#_6-3-不同模式的任务提交" class="header-anchor">#</a> 6.3 不同模式的任务提交</h3> <ul><li>第一种【yarn-session.sh(开辟资源)+flink run(提交任务)】</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code># 启动一个一直运行的flink集群
+/bin/yarn-session.sh -n 2 -jm 1024 -tm 1024 [-d]
+
+# 把任务附着到一个已存在的flink yarn session
+./bin/yarn-session.sh -id application_1463870264508_0029
+
+# 执行任务
+./bin/flink run ./examples/batch/WordCount.jar -input hdfs://hadoop100:9000/LICENSE -output hdfs://hadoop100:9000/wordcount-result.txt 
+
+停止任务 【web界面或者命令行执行cancel命令】
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><ul><li>第二种【flink run -m yarn-cluster(开辟资源+提交任务)】</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code># 启动集群，执行任务
+./bin/flink run -m yarn-cluster -yn 2 -yjm 1024 -ytm 1024 ./examples/batch/WordCount.jar
+
+注意：client端必须要设置YARN_CONF_DIR或者HADOOP_CONF_DIR或者HADOOP_HOME环境变量，通过这个环境变量来读取YARN和HDFS的配置信息，否则启动会失败
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><h3 id="_6-4-help信息"><a href="#_6-4-help信息" class="header-anchor">#</a> 6.4 <strong>help信息</strong></h3> <ul><li>yarn-session.sh</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>用法:  
+   必选  
+     -n,--container &lt;arg&gt;   分配多少个yarn容器 (=taskmanager的数量)  
+   可选  
+     -D &lt;arg&gt;                        动态属性  
+     -d,--detached                   独立运行  
+     -jm,--jobManagerMemory &lt;arg&gt;    JobManager的内存 [in MB]  
+     -nm,--name                     在YARN上为一个自定义的应用设置一个名字  
+     -q,--query                      显示yarn中可用的资源 (内存, cpu核数)  
+     -qu,--queue &lt;arg&gt;               指定YARN队列.  
+     -s,--slots &lt;arg&gt;                每个TaskManager使用的slots数量  
+     -tm,--taskManagerMemory &lt;arg&gt;   每个TaskManager的内存 [in MB]  
+     -z,--zookeeperNamespace &lt;arg&gt;   针对HA模式在zookeeper上创建NameSpace 
+     -id,--applicationId &lt;yarnAppId&gt;        YARN集群上的任务id，附着到一个后台运行的yarn session中
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><ul><li>flink run</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>run [OPTIONS] &lt;jar-file&gt; &lt;arguments&gt;  
+ &quot;run&quot; 操作参数:  
+-c,--class &lt;classname&gt;  如果没有在jar包中指定入口类，则需要在这里通过这个参数指定  
+-m,--jobmanager &lt;host:port&gt;  指定需要连接的jobmanager(主节点)地址，使用这个参数可以指定一个不同于配置文件中的jobmanager  
+-p,--parallelism &lt;parallelism&gt;   指定程序的并行度。可以覆盖配置文件中的默认值。
+
+默认查找当前yarn集群中已有的yarn-session信息中的jobmanager【/tmp/.yarn-properties-root】：
+./bin/flink run ./examples/batch/WordCount.jar -input hdfs://hostname:port/hello.txt -output hdfs://hostname:port/result1
+连接指定host和port的jobmanager：
+./bin/flink run -m hadoop100:1234 ./examples/batch/WordCount.jar -input hdfs://hostname:port/hello.txt -output hdfs://hostname:port/result1
+启动一个新的yarn-session：
+./bin/flink run -m yarn-cluster -yn 2 ./examples/batch/WordCount.jar -input hdfs://hostname:port/hello.txt -output hdfs://hostname:port/result1
+注意：yarn session命令行的选项也可以使用./bin/flink 工具获得。它们都有一个y或者yarn的前缀
+例如：./bin/flink run -m yarn-cluster -yn 2 ./examples/batch/WordCount.jar 
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><h2 id="_7-flink-shell使用"><a href="#_7-flink-shell使用" class="header-anchor">#</a> 7 Flink Shell使用</h2> <p>​		针对初学者，开发的时候容易出错，如果每次都打包进行调试，比较麻烦，并且也不好定位问题，可以在scala shell命令行下进行调试</p> <p>scala shell方式支持流处理和批处理。当启动shell命令行之后，两个不同的ExecutionEnvironments会被自动创建。使用senv(Stream)和benv(Batch)分别去处理流处理和批处理程序。(类似于spark-shell中sc变量)</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>bin/start-scala-shell.sh [local|remote|yarn] [options] &lt;args&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h2 id="_8-flink数据"><a href="#_8-flink数据" class="header-anchor">#</a> 8. Flink数据</h2> <h3 id="_8-1-flink之数据源"><a href="#_8-1-flink之数据源" class="header-anchor">#</a> 8.1 Flink之数据源</h3> <h4 id="_8-1-1-source简介"><a href="#_8-1-1-source简介" class="header-anchor">#</a> 8.1.1  source简介</h4> <p>​		source是程序的数据源输入，你可以通过StreamExecutionEnvironment.addSource(sourceFunction)来为你的程序添加一个source。</p> <p>flink提供了大量的已经实现好的source方法，你也可以自定义source：</p> <p>（1）通过实现sourceFunction接口来自定义无并行度的source</p> <p>（2）通过实现ParallelSourceFunction 接口 or 继承RichParallelSourceFunction 来自定义有并行度的source</p> <p>不过大多数情况下，我们使用自带的source即可。</p> <p><strong>获取source的方式</strong></p> <p>（1）基于文件</p> <p>​          readTextFile(path)</p> <p>​         读取文本文件，文件遵循TextInputFormat 读取规则，逐行读取并返回。</p> <p>（2）基于socket</p> <p>​         socketTextStream
+​         从socker中读取数据，元素可以通过一个分隔符切开。</p> <p>（3）基于集合</p> <p>​          fromCollection(Collection)</p> <p>​         通过java 的collection集合创建一个数据流，集合中的所有元素必须是相同类型的。</p> <p>（4）自定义输入</p> <p>​         addSource 可以实现读取第三方数据源的数据</p> <p>​        系统内置提供了一批connectors，连接器会提供对应的source支持【kafka】</p> <p><strong>自带的connectors</strong></p> <ul><li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/kafka.html" target="_blank" rel="noopener noreferrer">Apache Kafka<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)  <strong>后面重点分析</strong></li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/cassandra.html" target="_blank" rel="noopener noreferrer">Apache Cassandra<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/kinesis.html" target="_blank" rel="noopener noreferrer">Amazon Kinesis Streams<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/elasticsearch.html" target="_blank" rel="noopener noreferrer">Elasticsearch<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/filesystem_sink.html" target="_blank" rel="noopener noreferrer">Hadoop FileSystem<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/rabbitmq.html" target="_blank" rel="noopener noreferrer">RabbitMQ<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/nifi.html" target="_blank" rel="noopener noreferrer">Apache NiFi<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/connectors/twitter.html" target="_blank" rel="noopener noreferrer">Twitter Streaming API<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source)</li></ul> <h4 id="_8-1-2-数据源之collection"><a href="#_8-1-2-数据源之collection" class="header-anchor">#</a> 8.1.2  数据源之collection</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class StreamingSourceFromCollection {
+    public static void main(String[] args) throws Exception {
+        //步骤一：获取环境变量
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //步骤二：模拟数据
+        ArrayList&lt;String&gt; data = new ArrayList&lt;String&gt;();
+        data.add(&quot;hadoop&quot;);
+        data.add(&quot;spark&quot;);
+        data.add(&quot;flink&quot;);
+        //步骤三：获取数据源
+        DataStreamSource&lt;String&gt; dataStream = env.fromCollection(data);
+        //步骤四：transformation操作
+        SingleOutputStreamOperator&lt;String&gt; addPreStream = dataStream.map(new MapFunction&lt;String, String&gt;() {
+            @Override
+            public String map(String word) throws Exception {
+                return &quot;kaikeba_&quot; + word;
+            }
+        });
+        //步骤五：对结果进行处理（打印）
+        addPreStream.print().setParallelism(1);
+        //步骤六：启动程序
+        env.execute(&quot;StreamingSourceFromCollection&quot;);
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br></div></div><h4 id="_8-1-3-自定义单并行度数据源"><a href="#_8-1-3-自定义单并行度数据源" class="header-anchor">#</a> 8.1.3  自定义单并行度数据源</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 注意：指定数据类型
+ * 功能：每秒产生一条数据
+ */
+public class MyNoParalleSource implements SourceFunction&lt;Long&gt; {
+    private long number = 1L;
+    private boolean isRunning = true;
+    @Override
+    public void run(SourceContext&lt;Long&gt; sct) throws Exception {
+        while (isRunning){
+         sct.collect(number);
+         number++;
+         //每秒生成一条数据
+         Thread.sleep(1000);
+        }
+
+    }
+
+    @Override
+    public void cancel() {
+        isRunning=false;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 功能：从自定义的数据数据源里面获取数据，然后过滤出偶数
+ */
+public class StreamingDemoWithMyNoPralalleSource {
+    public static void main(String[] args) throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;Long&gt; numberStream = env.addSource(new MyNoParalleSource()).setParallelism(1);
+        SingleOutputStreamOperator&lt;Long&gt; dataStream = numberStream.map(new MapFunction&lt;Long, Long&gt;() {
+            @Override
+            public Long map(Long value) throws Exception {
+                System.out.println(&quot;接受到了数据：&quot;+value);
+                return value;
+            }
+        });
+        SingleOutputStreamOperator&lt;Long&gt; filterDataStream = dataStream.filter(new FilterFunction&lt;Long&gt;() {
+            @Override
+            public boolean filter(Long number) throws Exception {
+                return number % 2 == 0;
+            }
+        });
+
+        filterDataStream.print().setParallelism(1);
+        env.execute(&quot;StreamingDemoWithMyNoPralalleSource&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br></div></div><p>运行结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>接受到了数据：1
+接受到了数据：2
+2
+接受到了数据：3
+接受到了数据：4
+4
+接受到了数据：5
+接受到了数据：6
+6
+接受到了数据：7
+接受到了数据：8
+8
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h4 id="_8-1-4-自定义多并行度数据源"><a href="#_8-1-4-自定义多并行度数据源" class="header-anchor">#</a> 8.1.4 自定义多并行度数据源</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 功能：自定义支持并行度的数据源
+ * 每秒产生一条数据
+ */
+public class MyParalleSource implements ParallelSourceFunction&lt;Long&gt; {
+    private long number = 1L;
+    private boolean isRunning = true;
+    @Override
+    public void run(SourceContext&lt;Long&gt; sct) throws Exception {
+        while (isRunning){
+            sct.collect(number);
+            number++;
+            //每秒生成一条数据
+            Thread.sleep(1000);
+        }
+
+    }
+
+    @Override
+    public void cancel() {
+        isRunning=false;
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>public class StreamingDemoWithMyPralalleSource {
+    public static void main(String[] args) throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;Long&gt; numberStream = env.addSource(new MyParalleSource()).setParallelism(2);
+        SingleOutputStreamOperator&lt;Long&gt; dataStream = numberStream.map(new MapFunction&lt;Long, Long&gt;() {
+            @Override
+            public Long map(Long value) throws Exception {
+                System.out.println(&quot;接受到了数据：&quot;+value);
+                return value;
+            }
+        });
+        SingleOutputStreamOperator&lt;Long&gt; filterDataStream = dataStream.filter(new FilterFunction&lt;Long&gt;() {
+            @Override
+            public boolean filter(Long number) throws Exception {
+                return number % 2 == 0;
+            }
+        });
+
+        filterDataStream.print().setParallelism(1);
+        env.execute(&quot;StreamingDemoWithMyNoPralalleSource&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br></div></div><p>运行结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>接受到了数据：1
+接受到了数据：1
+接受到了数据：2
+接受到了数据：2
+2
+2
+接受到了数据：3
+接受到了数据：3
+接受到了数据：4
+4
+接受到了数据：4
+4
+接受到了数据：5
+接受到了数据：5
+接受到了数据：6
+接受到了数据：6
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><h3 id="_8-2-常见transformation操作"><a href="#_8-2-常见transformation操作" class="header-anchor">#</a> 8.2  常见Transformation操作</h3> <h4 id="_8-2-1-map和filter"><a href="#_8-2-1-map和filter" class="header-anchor">#</a> 8.2.1 map和filter</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 数据源：1 2 3 4 5.....源源不断过来
+ * 通过map打印一下接受到数据
+ * 通过filter过滤一下数据，我们只需要偶数
+ */
+public class MapDemo {
+        public static void main(String[] args) throws Exception {
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            DataStreamSource&lt;Long&gt; numberStream = env.addSource(new MyNoParalleSource()).setParallelism(1);
+            SingleOutputStreamOperator&lt;Long&gt; dataStream = numberStream.map(new MapFunction&lt;Long, Long&gt;() {
+                @Override
+                public Long map(Long value) throws Exception {
+                    System.out.println(&quot;接受到了数据：&quot;+value);
+                    return value;
+                }
+            });
+            SingleOutputStreamOperator&lt;Long&gt; filterDataStream = dataStream.filter(new FilterFunction&lt;Long&gt;() {
+                @Override
+                public boolean filter(Long number) throws Exception {
+                    return number % 2 == 0;
+                }
+            });
+
+            filterDataStream.print().setParallelism(1);
+            env.execute(&quot;StreamingDemoWithMyNoPralalleSource&quot;);
+        }
+
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br></div></div><h4 id="_8-2-2-flatmap-keyby和sum"><a href="#_8-2-2-flatmap-keyby和sum" class="header-anchor">#</a> 8.2.2  flatMap，keyBy和sum</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 滑动窗口实现单词计数
+ * 数据源：socket
+ * 需求：每隔1秒计算最近2秒单词出现的次数
+ *
+ * 练习算子：
+ * flatMap
+ * keyBy:
+ *    dataStream.keyBy(&quot;someKey&quot;) // 指定对象中的 &quot;someKey&quot;字段作为分组key
+ *    dataStream.keyBy(0) //指定Tuple中的第一个元素作为分组key
+ * sum
+ */
+public class WindowWordCountJava {
+    public static void main(String[] args) throws  Exception {
+        int port;
+        try{
+            ParameterTool parameterTool = ParameterTool.fromArgs(args);
+            port = parameterTool.getInt(&quot;port&quot;);
+        }catch (Exception e){
+            System.err.println(&quot;no port set,user default port 9988&quot;);
+            port=9988;
+        }
+        //步骤一：获取flink运行环境（stream）
+        StreamExecutionEnvironment env= StreamExecutionEnvironment.getExecutionEnvironment();
+        String hostname=&quot;10.126.88.226&quot;;
+        String delimiter=&quot;\n&quot;;
+        //步骤二：获取数据源
+        DataStreamSource&lt;String&gt; textStream = env.socketTextStream(hostname, port, delimiter);
+        //步骤三：执行transformation操作
+        SingleOutputStreamOperator&lt;WordCount&gt; wordCountStream = textStream.flatMap(new FlatMapFunction&lt;String, WordCount&gt;() {
+            public void flatMap(String line, Collector&lt;WordCount&gt; out) throws Exception {
+                String[] fields = line.split(&quot;\t&quot;);
+                for (String word : fields) {
+                    out.collect(new WordCount(word, 1L));
+                }
+            }
+        }).keyBy(&quot;word&quot;)
+                .timeWindow(Time.seconds(2), Time.seconds(1))//每隔1秒计算最近2秒
+                .sum(&quot;count&quot;);
+
+        wordCountStream.print().setParallelism(1);//打印并设置并行度
+        //步骤四：运行程序
+        env.execute(&quot;socket word count&quot;);
+
+
+    }
+
+    public static class WordCount{
+        public String word;
+        public long count;
+        public WordCount(){
+
+        }
+        public WordCount(String word,long count){
+            this.word=word;
+            this.count=count;
+        }
+
+        @Override
+        public String toString() {
+            return &quot;WordCount{&quot; +
+                    &quot;word='&quot; + word + '\'' +
+                    &quot;, count=&quot; + count +
+                    '}';
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br></div></div><h4 id="_8-2-3-union"><a href="#_8-2-3-union" class="header-anchor">#</a> 8.2.3  union</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 合并多个流，新的流会包含所有流中的数据，但是union是一个限制，就是所有合并的流类型必须是一致的
+ */
+public class unionDemo {
+    public static void main(String[] args) throws Exception {
+        //获取Flink的运行环境
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //获取数据源
+        DataStreamSource&lt;Long&gt; text1 = env.addSource(new MyNoParalleSource()).setParallelism(1);//注意：针对此source，并行度只能设置为1
+        DataStreamSource&lt;Long&gt; text2 = env.addSource(new MyNoParalleSource()).setParallelism(1);
+
+        //把text1和text2组装到一起
+        DataStream&lt;Long&gt; text = text1.union(text2);
+
+        DataStream&lt;Long&gt; num = text.map(new MapFunction&lt;Long, Long&gt;() {
+            @Override
+            public Long map(Long value) throws Exception {
+                System.out.println(&quot;原始接收到数据：&quot; + value);
+                return value;
+            }
+        });
+        //每2秒钟处理一次数据
+        DataStream&lt;Long&gt; sum = num.timeWindowAll(Time.seconds(2)).sum(0);
+        //打印结果
+        sum.print().setParallelism(1);
+        String jobName = unionDemo.class.getSimpleName();
+        env.execute(jobName);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br></div></div><h4 id="_8-2-4-connect-conmap和conflatmap"><a href="#_8-2-4-connect-conmap和conflatmap" class="header-anchor">#</a> 8.2.4   connect,conMap和conFlatMap</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 和union类似，但是只能连接两个流，两个流的数据类型可以不同，会对两个流中的数据应用不同的处理方法
+ */
+public class ConnectionDemo {
+    public static void main(String[] args) throws Exception {
+        //获取Flink的运行环境
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        //获取数据源
+        DataStreamSource&lt;Long&gt; text1 = env.addSource(new MyNoParalleSource()).setParallelism(1);//注意：针对此source，并行度只能设置为1
+
+        DataStreamSource&lt;Long&gt; text2 = env.addSource(new MyNoParalleSource()).setParallelism(1);
+        SingleOutputStreamOperator&lt;String&gt; text2_str = text2.map(new MapFunction&lt;Long, String&gt;() {
+            @Override
+            public String map(Long value) throws Exception {
+                return &quot;str_&quot; + value;
+            }
+        });
+
+        ConnectedStreams&lt;Long, String&gt; connectStream = text1.connect(text2_str);
+
+        SingleOutputStreamOperator&lt;Object&gt; result = connectStream.map(new CoMapFunction&lt;Long, String, Object&gt;() {
+            @Override
+            public Object map1(Long value) throws Exception {
+                return value;
+            }
+
+            @Override
+            public Object map2(String value) throws Exception {
+                return value;
+            }
+        });
+
+        //打印结果
+        result.print().setParallelism(1);
+        String jobName = ConnectionDemo.class.getSimpleName();
+        env.execute(jobName);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><h4 id="_8-2-5-split和select"><a href="#_8-2-5-split和select" class="header-anchor">#</a> 8.2.5  Split和Select</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ *  根据规则把一个数据流切分为多个流
+ 应用场景：
+ * 可能在实际工作中，源数据流中混合了多种类似的数据，多种类型的数据处理规则不一样，所以就可以在根据一定的规则，
+ * 把一个数据流切分成多个数据流，这样每个数据流就可以使用不用的处理逻辑了
+ */
+public class SplitDemo {
+    public static void main(String[] args) throws  Exception {
+        //获取Flink的运行环境
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //获取数据源
+        DataStreamSource&lt;Long&gt; text = env.addSource(new MyNoParalleSource()).setParallelism(1);//注意：针对此source，并行度只能设置为1
+        //对流进行切分，按照数据的奇偶性进行区分
+        SplitStream&lt;Long&gt; splitStream = text.split(new OutputSelector&lt;Long&gt;() {
+            @Override
+            public Iterable&lt;String&gt; select(Long value) {
+                ArrayList&lt;String&gt; outPut = new ArrayList&lt;&gt;();
+                if (value % 2 == 0) {
+                    outPut.add(&quot;even&quot;);//偶数
+                } else {
+                    outPut.add(&quot;odd&quot;);//奇数
+                }
+                return outPut;
+            }
+        });
+
+        //选择一个或者多个切分后的流
+        DataStream&lt;Long&gt; evenStream = splitStream.select(&quot;even&quot;);
+        DataStream&lt;Long&gt; oddStream = splitStream.select(&quot;odd&quot;);
+        DataStream&lt;Long&gt; moreStream = splitStream.select(&quot;odd&quot;,&quot;even&quot;);
+
+        //打印结果
+        evenStream.print().setParallelism(1);
+        String jobName = SplitDemo.class.getSimpleName();
+        env.execute(jobName);
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br></div></div><h3 id="_8-3-常见sink操作"><a href="#_8-3-常见sink操作" class="header-anchor">#</a> 8.3  常见sink操作</h3> <h4 id="_8-3-1-print-printtoerr"><a href="#_8-3-1-print-printtoerr" class="header-anchor">#</a> 8.3.1 print() / printToErr()</h4> <p>​		打印每个元素的toString()方法的值到标准输出或者标准错误输出流中</p> <h4 id="_8-3-2-writeastext"><a href="#_8-3-2-writeastext" class="header-anchor">#</a> 8.3.2  writeAsText()</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 数据源：1 2 3 4 5.....源源不断过来
+ * 通过map打印一下接受到数据
+ * 通过filter过滤一下数据，我们只需要偶数
+ */
+public class WriteTextDemo {
+    public static void main(String[] args) throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;Long&gt; numberStream = env.addSource(new MyNoParalleSource()).setParallelism(1);
+        SingleOutputStreamOperator&lt;Long&gt; dataStream = numberStream.map(new MapFunction&lt;Long, Long&gt;() {
+            @Override
+            public Long map(Long value) throws Exception {
+                System.out.println(&quot;接受到了数据：&quot;+value);
+                return value;
+            }
+        });
+        SingleOutputStreamOperator&lt;Long&gt; filterDataStream = dataStream.filter(new FilterFunction&lt;Long&gt;() {
+            @Override
+            public boolean filter(Long number) throws Exception {
+                return number % 2 == 0;
+            }
+        });
+   filterDataStream.writeAsText(&quot;D:\\kfly\\flinklesson\\src\\output\\test&quot;).setParallelism(1);
+        env.execute(&quot;StreamingDemoWithMyNoPralalleSource&quot;);
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><h4 id="_8-3-4-flink提供的sink"><a href="#_8-3-4-flink提供的sink" class="header-anchor">#</a> 8.3.4   Flink提供的sink</h4> <ul><li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/kafka.html" target="_blank" rel="noopener noreferrer">Apache Kafka<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/cassandra.html" target="_blank" rel="noopener noreferrer">Apache Cassandra<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/kinesis.html" target="_blank" rel="noopener noreferrer">Amazon Kinesis Streams<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/elasticsearch.html" target="_blank" rel="noopener noreferrer">Elasticsearch<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/filesystem_sink.html" target="_blank" rel="noopener noreferrer">Hadoop FileSystem<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/rabbitmq.html" target="_blank" rel="noopener noreferrer">RabbitMQ<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/nifi.html" target="_blank" rel="noopener noreferrer">Apache NiFi<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/twitter.html" target="_blank" rel="noopener noreferrer">Twitter Streaming API<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source)</li> <li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/pubsub.html" target="_blank" rel="noopener noreferrer">Google PubSub<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (source/sink)</li></ul> <h4 id="_8-3-5-自定义sink"><a href="#_8-3-5-自定义sink" class="header-anchor">#</a> 8.3.5 自定义sink</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>     &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.bahir&lt;/groupId&gt;
+            &lt;artifactId&gt;flink-connector-redis_2.11&lt;/artifactId&gt;
+            &lt;version&gt;1.0&lt;/version&gt;
+     &lt;/dependency&gt;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p>自定义redis sink</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 把数据写入redis
+ */
+public class SinkForRedisDemo {
+    public static void main(String[] args) throws  Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;String&gt; text = env.socketTextStream(&quot;hadoop100&quot;, 9000, &quot;\n&quot;);
+        //lpsuh l_words word
+        //对数据进行组装,把string转化为tuple2&lt;String,String&gt;
+        DataStream&lt;Tuple2&lt;String, String&gt;&gt; l_wordsData = text.map(new MapFunction&lt;String, Tuple2&lt;String, String&gt;&gt;() {
+            @Override
+            public Tuple2&lt;String, String&gt; map(String value) throws Exception {
+                return new Tuple2&lt;&gt;(&quot;l_words&quot;, value);
+            }
+        });
+        //创建redis的配置
+        FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost(&quot;hadoop110&quot;).setPort(6379).build();
+
+        //创建redissink
+        RedisSink&lt;Tuple2&lt;String, String&gt;&gt; redisSink = new RedisSink&lt;&gt;(conf, new MyRedisMapper());
+        l_wordsData.addSink(redisSink);
+        env.execute(&quot;StreamingDemoToRedis&quot;);
+
+    }
+
+    public static class MyRedisMapper implements RedisMapper&lt;Tuple2&lt;String, String&gt;&gt; {
+        //表示从接收的数据中获取需要操作的redis key
+        @Override
+        public String getKeyFromData(Tuple2&lt;String, String&gt; data) {
+            return data.f0;
+        }
+        //表示从接收的数据中获取需要操作的redis value
+        @Override
+        public String getValueFromData(Tuple2&lt;String, String&gt; data) {
+            return data.f1;
+        }
+
+        @Override
+        public RedisCommandDescription getCommandDescription() {
+            return new RedisCommandDescription(RedisCommand.LPUSH);
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br></div></div><h2 id="_9-dataset算子操作"><a href="#_9-dataset算子操作" class="header-anchor">#</a> 9 DataSet算子操作</h2> <h3 id="_9-1-source"><a href="#_9-1-source" class="header-anchor">#</a> 9.1  source</h3> <ul><li>基于文件
+readTextFile(path)</li> <li>基于集合
+fromCollection(Collection)</li></ul> <h3 id="_9-2-transform"><a href="#_9-2-transform" class="header-anchor">#</a> 9.2  transform</h3> <ul><li><p>Map：输入一个元素，然后返回一个元素，中间可以做一些清洗转换等操作</p></li> <li><p>FlatMap：输入一个元素，可以返回零个，一个或者多个元素</p></li> <li><p>MapPartition：类似map，一次处理一个分区的数据【如果在进行map处理的时候需要获取第三方资源链接，建议使用MapPartition】</p></li> <li><p>Filter：过滤函数，对传入的数据进行判断，符合条件的数据会被留下</p></li> <li><p>Reduce：对数据进行聚合操作，结合当前元素和上一次reduce返回的值进行聚合操作，然后返回一个新的值</p></li> <li><p>Aggregate：sum、max、min等</p></li> <li><p>Distinct：返回一个数据集中去重之后的元素，data.distinct()</p></li> <li><p>Join：内连接</p></li> <li><p>OuterJoin：外链接</p></li> <li><p>Cross：获取两个数据集的笛卡尔积</p></li> <li><p>Union：返回两个数据集的总和，数据类型需要一致</p></li> <li><p>First-n：获取集合中的前N个元素</p></li> <li><p>Sort Partition：在本地对数据集的所有分区进行排序，通过sortPartition()的链接调用来完成对多个字段的排序</p></li></ul> <h4 id="_9-2-1-mappartition"><a href="#_9-2-1-mappartition" class="header-anchor">#</a> 9.2.1 MapPartition</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>public class MapPartitionDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ArrayList&lt;String&gt; data = new ArrayList&lt;&gt;();
+        data.add(&quot;hello you&quot;);
+        data.add(&quot;hello me&quot;);
+        DataSource&lt;String&gt; text = env.fromCollection(data);
+
+        /*text.map(new MapFunction&lt;String, String&gt;() {
+            @Override
+            public String map(String value) throws Exception {
+                //获取数据库连接--注意，此时是每过来一条数据就获取一次链接
+                //处理数据
+                //关闭连接
+                return value;
+            }
+        });*/
+        DataSet&lt;String&gt; mapPartitionData = text.mapPartition(new MapPartitionFunction&lt;String, String&gt;() {
+            @Override
+            public void mapPartition(Iterable&lt;String&gt; values, Collector&lt;String&gt; out) throws Exception {
+                //获取数据库连接--注意，此时是一个分区的数据获取一次连接【优点，每个分区获取一次链接】
+                //values中保存了一个分区的数据
+                //处理数据
+                Iterator&lt;String&gt; it = values.iterator();
+                while (it.hasNext()) {
+                    String next = it.next();
+                    String[] split = next.split(&quot;\\W+&quot;);
+                    for (String word : split) {
+                        out.collect(word);
+                    }
+                }
+                //关闭链接
+            }
+        });
+        mapPartitionData.print();
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><h4 id="_9-2-2-distinct"><a href="#_9-2-2-distinct" class="header-anchor">#</a> 9.2.2 distinct</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 对数据进行去重
+ */
+public class DistinctDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ArrayList&lt;String&gt; data = new ArrayList&lt;&gt;();
+        data.add(&quot;you jump&quot;);
+        data.add(&quot;i jump&quot;);
+        DataSource&lt;String&gt; text = env.fromCollection(data);
+        FlatMapOperator&lt;String, String&gt; flatMapData = text.flatMap(new FlatMapFunction&lt;String, String&gt;() {
+            @Override
+            public void flatMap(String value, Collector&lt;String&gt; out) throws Exception {
+                String[] split = value.toLowerCase().split(&quot;\\W+&quot;);
+                for (String word : split) {
+                    System.out.println(&quot;单词：&quot;+word);
+                    out.collect(word);
+                }
+            }
+        });
+
+        flatMapData.distinct()// 对数据进行整体去重
+                .print();
+
+
+    }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br></div></div><h4 id="_9-2-3-join"><a href="#_9-2-3-join" class="header-anchor">#</a> 9.2.3 join</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 对数据进行join
+ */
+public class JoinDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+
+        //tuple2&lt;用户id，用户姓名&gt;
+        ArrayList&lt;Tuple2&lt;Integer, String&gt;&gt; data1 = new ArrayList&lt;&gt;();
+        data1.add(new Tuple2&lt;&gt;(1,&quot;zs&quot;));
+        data1.add(new Tuple2&lt;&gt;(2,&quot;ls&quot;));
+        data1.add(new Tuple2&lt;&gt;(3,&quot;ww&quot;));
+
+
+        //tuple2&lt;用户id，用户所在城市&gt;
+        ArrayList&lt;Tuple2&lt;Integer, String&gt;&gt; data2 = new ArrayList&lt;&gt;();
+        data2.add(new Tuple2&lt;&gt;(1,&quot;beijing&quot;));
+        data2.add(new Tuple2&lt;&gt;(2,&quot;shanghai&quot;));
+        data2.add(new Tuple2&lt;&gt;(3,&quot;guangzhou&quot;));
+
+
+        DataSource&lt;Tuple2&lt;Integer, String&gt;&gt; text1 = env.fromCollection(data1);
+        DataSource&lt;Tuple2&lt;Integer, String&gt;&gt; text2 = env.fromCollection(data2);
+
+
+        text1.join(text2).where(0)//指定第一个数据集中需要进行比较的元素角标
+                .equalTo(0)//指定第二个数据集中需要进行比较的元素角标
+                .with(new JoinFunction&lt;Tuple2&lt;Integer,String&gt;, Tuple2&lt;Integer,String&gt;, Tuple3&lt;Integer,String,String&gt;&gt;() {
+                    @Override
+                    public Tuple3&lt;Integer, String, String&gt; join(Tuple2&lt;Integer, String&gt; first, Tuple2&lt;Integer, String&gt; second)
+                            throws Exception {
+                        return new Tuple3&lt;&gt;(first.f0,first.f1,second.f1);
+                    }
+                }).print();
+
+        System.out.println(&quot;==================================&quot;);
+
+        //注意，这里用map和上面使用的with最终效果是一致的。
+        /*text1.join(text2).where(0)//指定第一个数据集中需要进行比较的元素角标
+                .equalTo(0)//指定第二个数据集中需要进行比较的元素角标
+                .map(new MapFunction&lt;Tuple2&lt;Tuple2&lt;Integer,String&gt;,Tuple2&lt;Integer,String&gt;&gt;, Tuple3&lt;Integer,String,String&gt;&gt;() {
+                    @Override
+                    public Tuple3&lt;Integer, String, String&gt; map(Tuple2&lt;Tuple2&lt;Integer, String&gt;, Tuple2&lt;Integer, String&gt;&gt; value) throws Exception {
+                        return new Tuple3&lt;&gt;(value.f0.f0,value.f0.f1,value.f1.f1);
+                    }
+                }).print();*/
+    }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br></div></div><h4 id="_9-2-4-outjoin"><a href="#_9-2-4-outjoin" class="header-anchor">#</a> 9.2.4 OutJoin</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 外连接:
+ *      左外连接
+ *      右外连接
+ *      全外连接
+ */
+public class OuterJoinDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        //tuple2&lt;用户id，用户姓名&gt;
+        ArrayList&lt;Tuple2&lt;Integer, String&gt;&gt; data1 = new ArrayList&lt;&gt;();
+        data1.add(new Tuple2&lt;&gt;(1,&quot;zs&quot;));
+        data1.add(new Tuple2&lt;&gt;(2,&quot;ls&quot;));
+        data1.add(new Tuple2&lt;&gt;(3,&quot;ww&quot;));
+        //tuple2&lt;用户id，用户所在城市&gt;
+        ArrayList&lt;Tuple2&lt;Integer, String&gt;&gt; data2 = new ArrayList&lt;&gt;();
+        data2.add(new Tuple2&lt;&gt;(1,&quot;beijing&quot;));
+        data2.add(new Tuple2&lt;&gt;(2,&quot;shanghai&quot;));
+        data2.add(new Tuple2&lt;&gt;(4,&quot;guangzhou&quot;));
+        DataSource&lt;Tuple2&lt;Integer, String&gt;&gt; text1 = env.fromCollection(data1);
+        DataSource&lt;Tuple2&lt;Integer, String&gt;&gt; text2 = env.fromCollection(data2);
+        /**
+         * 左外连接
+         *
+         * 注意：second这个tuple中的元素可能为null
+         *
+         */
+        text1.leftOuterJoin(text2)
+                .where(0)
+                .equalTo(0)
+                .with(new JoinFunction&lt;Tuple2&lt;Integer,String&gt;, Tuple2&lt;Integer,String&gt;, Tuple3&lt;Integer,String,String&gt;&gt;() {
+                    @Override
+                    public Tuple3&lt;Integer, String, String&gt; join(Tuple2&lt;Integer, String&gt; first, Tuple2&lt;Integer, String&gt; second) throws Exception {
+                        if(second==null){
+                            return new Tuple3&lt;&gt;(first.f0,first.f1,&quot;null&quot;);
+                        }else{
+                            return new Tuple3&lt;&gt;(first.f0,first.f1,second.f1);
+                        }
+
+                    }
+                }).print();
+        System.out.println(&quot;=============================================================================&quot;);
+        /**
+         * 右外连接
+         *
+         * 注意：first这个tuple中的数据可能为null
+         *
+         */
+        text1.rightOuterJoin(text2)
+                .where(0)
+                .equalTo(0)
+                .with(new JoinFunction&lt;Tuple2&lt;Integer,String&gt;, Tuple2&lt;Integer,String&gt;, Tuple3&lt;Integer,String,String&gt;&gt;() {
+                    @Override
+                    public Tuple3&lt;Integer, String, String&gt; join(Tuple2&lt;Integer, String&gt; first, Tuple2&lt;Integer, String&gt; second) throws Exception {
+                        if(first==null){
+                            return new Tuple3&lt;&gt;(second.f0,&quot;null&quot;,second.f1);
+                        }
+                        return new Tuple3&lt;&gt;(first.f0,first.f1,second.f1);
+                    }
+                }).print();
+
+
+
+        System.out.println(&quot;=================================================&quot;);
+
+        /**
+         * 全外连接
+         *
+         * 注意：first和second这两个tuple都有可能为null
+         *
+         */
+
+        text1.fullOuterJoin(text2)
+                .where(0)
+                .equalTo(0)
+                .with(new JoinFunction&lt;Tuple2&lt;Integer,String&gt;, Tuple2&lt;Integer,String&gt;, Tuple3&lt;Integer,String,String&gt;&gt;() {
+                    @Override
+                    public Tuple3&lt;Integer, String, String&gt; join(Tuple2&lt;Integer, String&gt; first, Tuple2&lt;Integer, String&gt; second) throws Exception {
+                        if(first==null){
+                            return new Tuple3&lt;&gt;(second.f0,&quot;null&quot;,second.f1);
+                        }else if(second == null){
+                            return new Tuple3&lt;&gt;(first.f0,first.f1,&quot;null&quot;);
+                        }else{
+                            return new Tuple3&lt;&gt;(first.f0,first.f1,second.f1);
+                        }
+                    }
+                }).print();
+
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br></div></div><h4 id="_9-2-5-cross"><a href="#_9-2-5-cross" class="header-anchor">#</a> 9.2.5 Cross</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 笛卡尔积
+ */
+public class CrossDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        //tuple2&lt;用户id，用户姓名&gt;
+        ArrayList&lt;String&gt; data1 = new ArrayList&lt;&gt;();
+        data1.add(&quot;zs&quot;);
+        data1.add(&quot;ww&quot;);
+        //tuple2&lt;用户id，用户所在城市&gt;
+        ArrayList&lt;Integer&gt; data2 = new ArrayList&lt;&gt;();
+        data2.add(1);
+        data2.add(2);
+        DataSource&lt;String&gt; text1 = env.fromCollection(data1);
+        DataSource&lt;Integer&gt; text2 = env.fromCollection(data2);
+        CrossOperator.DefaultCross&lt;String, Integer&gt; cross = text1.cross(text2);
+        cross.print();
+
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br></div></div><h4 id="_9-2-6-first-n-和-sortpartition"><a href="#_9-2-6-first-n-和-sortpartition" class="header-anchor">#</a> 9.2.6 First-n 和 SortPartition</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * TopN
+ */
+import java.util.ArrayList;
+
+public class FirstNDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+
+        ArrayList&lt;Tuple2&lt;Integer, String&gt;&gt; data = new ArrayList&lt;&gt;();
+        data.add(new Tuple2&lt;&gt;(2,&quot;zs&quot;));
+        data.add(new Tuple2&lt;&gt;(4,&quot;ls&quot;));
+        data.add(new Tuple2&lt;&gt;(3,&quot;ww&quot;));
+        data.add(new Tuple2&lt;&gt;(1,&quot;xw&quot;));
+        data.add(new Tuple2&lt;&gt;(1,&quot;aw&quot;));
+        data.add(new Tuple2&lt;&gt;(1,&quot;mw&quot;));
+
+
+        DataSource&lt;Tuple2&lt;Integer, String&gt;&gt; text = env.fromCollection(data);
+
+
+        //获取前3条数据，按照数据插入的顺序
+        text.first(3).print();
+        System.out.println(&quot;==============================&quot;);
+
+        //根据数据中的第一列进行分组，获取每组的前2个元素
+        text.groupBy(0).first(2).print();
+        System.out.println(&quot;==============================&quot;);
+
+        //根据数据中的第一列分组，再根据第二列进行组内排序[升序]，获取每组的前2个元素
+        text.groupBy(0).sortGroup(1, Order.ASCENDING).first(2).print();
+        System.out.println(&quot;==============================&quot;);
+
+        //不分组，全局排序获取集合中的前3个元素，针对第一个元素升序，第二个元素倒序
+        text.sortPartition(0,Order.ASCENDING).sortPartition(1,Order.DESCENDING).first(3).print();
+
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br></div></div><h4 id="_9-2-7-partition"><a href="#_9-2-7-partition" class="header-anchor">#</a> 9.2.7 partition</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * HashPartition
+ *
+ * RangePartition
+ */
+public class HashRangePartitionDemo {
+
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+
+        ArrayList&lt;Tuple2&lt;Integer, String&gt;&gt; data = new ArrayList&lt;&gt;();
+        data.add(new Tuple2&lt;&gt;(1,&quot;hello1&quot;));
+        data.add(new Tuple2&lt;&gt;(2,&quot;hello2&quot;));
+        data.add(new Tuple2&lt;&gt;(2,&quot;hello3&quot;));
+        data.add(new Tuple2&lt;&gt;(3,&quot;hello4&quot;));
+        data.add(new Tuple2&lt;&gt;(3,&quot;hello5&quot;));
+        data.add(new Tuple2&lt;&gt;(3,&quot;hello6&quot;));
+        data.add(new Tuple2&lt;&gt;(4,&quot;hello7&quot;));
+        data.add(new Tuple2&lt;&gt;(4,&quot;hello8&quot;));
+        data.add(new Tuple2&lt;&gt;(4,&quot;hello9&quot;));
+        data.add(new Tuple2&lt;&gt;(4,&quot;hello10&quot;));
+        data.add(new Tuple2&lt;&gt;(5,&quot;hello11&quot;));
+        data.add(new Tuple2&lt;&gt;(5,&quot;hello12&quot;));
+        data.add(new Tuple2&lt;&gt;(5,&quot;hello13&quot;));
+        data.add(new Tuple2&lt;&gt;(5,&quot;hello14&quot;));
+        data.add(new Tuple2&lt;&gt;(5,&quot;hello15&quot;));
+        data.add(new Tuple2&lt;&gt;(6,&quot;hello16&quot;));
+        data.add(new Tuple2&lt;&gt;(6,&quot;hello17&quot;));
+        data.add(new Tuple2&lt;&gt;(6,&quot;hello18&quot;));
+        data.add(new Tuple2&lt;&gt;(6,&quot;hello19&quot;));
+        data.add(new Tuple2&lt;&gt;(6,&quot;hello20&quot;));
+        data.add(new Tuple2&lt;&gt;(6,&quot;hello21&quot;));
+
+
+        DataSource&lt;Tuple2&lt;Integer, String&gt;&gt; text = env.fromCollection(data);
+
+        /*text.partitionByHash(0).mapPartition(new MapPartitionFunction&lt;Tuple2&lt;Integer,String&gt;, Tuple2&lt;Integer,String&gt;&gt;() {
+            @Override
+            public void mapPartition(Iterable&lt;Tuple2&lt;Integer, String&gt;&gt; values, Collector&lt;Tuple2&lt;Integer, String&gt;&gt; out) throws Exception {
+                Iterator&lt;Tuple2&lt;Integer, String&gt;&gt; it = values.iterator();
+                while (it.hasNext()){
+                    Tuple2&lt;Integer, String&gt; next = it.next();
+                    System.out.println(&quot;当前线程id：&quot;+Thread.currentThread().getId()+&quot;,&quot;+next);
+                }
+            }
+        }).print();*/
+
+
+        text.partitionByRange(0).mapPartition(new MapPartitionFunction&lt;Tuple2&lt;Integer,String&gt;, Tuple2&lt;Integer,String&gt;&gt;() {
+            @Override
+            public void mapPartition(Iterable&lt;Tuple2&lt;Integer, String&gt;&gt; values, Collector&lt;Tuple2&lt;Integer, String&gt;&gt; out) throws Exception {
+                Iterator&lt;Tuple2&lt;Integer, String&gt;&gt; it = values.iterator();
+                while (it.hasNext()){
+                    Tuple2&lt;Integer, String&gt; next = it.next();
+                    System.out.println(&quot;当前线程id：&quot;+Thread.currentThread().getId()+&quot;,&quot;+next);
+                }
+
+            }
+        }).print();
+
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br></div></div><h3 id="_9-3-sink"><a href="#_9-3-sink" class="header-anchor">#</a> 9.3  sink</h3> <ul><li><p>writeAsText()：</p> <p>​	将元素以字符串形式逐行写入，这些字符串通过调用每个元素的toString()方法来获取</p></li> <li><p>writeAsCsv()：</p> <p>​	将元组以逗号分隔写入文件中，行及字段之间的分隔是可配置的。每个字段的值来自对象的toString()方法</p></li> <li><p>print()：</p> <p>​	打印每个元素的toString()方法的值到标准输出或者标准错误输出流中</p></li></ul> <h3 id="_9-4-flink之广播变量"><a href="#_9-4-flink之广播变量" class="header-anchor">#</a> 9.4  Flink之广播变量</h3> <p>​		广播变量允许编程人员在每台机器上保持1个只读的缓存变量，而不是传送变量的副本给tasks
+​		广播变量创建后，它可以运行在集群中的任何function上，而不需要多次传递给集群节点。另外需要记住，不应该修改广播变量，这样才能确保每个节点获取到的值都是一致的
+​		一句话解释，可以理解为是一个公共的共享变量，我们可以把一个dataset 数据集广播出去，然后不同的task在节点上都能够获取到，这个数据在每个节点上只会存在一份。如果不使用broadcast，则在每个节点中的每个task中都需要拷贝一份dataset数据集，比较浪费内存(也就是一个节点中可能会存在多份dataset数据)。
+用法</p> <div class="language- line-numbers-mode"><pre class="language-text"><code># 1：初始化数据
+DataSet&lt;Integer&gt; toBroadcast = env.fromElements(1, 2, 3)
+# 2：广播数据
+.withBroadcastSet(toBroadcast, &quot;broadcastSetName&quot;);
+# 3：获取数据
+Collection&lt;Integer&gt; broadcastSet = getRuntimeContext().getBroadcastVariable(&quot;broadcastSetName&quot;);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>注意：
+1：广播出去的变量存在于每个节点的内存中，所以这个数据集不能太大。因为广播出去的数据，会常驻内存，除非程序执行结束
+2：广播变量在初始化广播出去以后不支持修改，这样才能保证每个节点的数据都是一致的。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * broadcast广播变量
+ * 需求：
+ *  flink会从数据源中获取到用户的姓名
+ *  最终需要把用户的姓名和年龄信息打印出来
+ *  分析：
+ *  所以就需要在中间的map处理的时候获取用户的年龄信息
+ *  建议吧用户的关系数据集使用广播变量进行处理
+ *
+ */
+public class BroadCastDemo {
+    public static void main(String[] args) throws Exception{
+
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        //1：准备需要广播的数据
+        ArrayList&lt;Tuple2&lt;String, Integer&gt;&gt; broadData = new ArrayList&lt;&gt;();
+        broadData.add(new Tuple2&lt;&gt;(&quot;zs&quot;,18));
+        broadData.add(new Tuple2&lt;&gt;(&quot;ls&quot;,20));
+        broadData.add(new Tuple2&lt;&gt;(&quot;ww&quot;,17));
+        DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; tupleData = env.fromCollection(broadData);
+
+        //1.1:处理需要广播的数据,把数据集转换成map类型，map中的key就是用户姓名，value就是用户年龄
+        DataSet&lt;HashMap&lt;String, Integer&gt;&gt; toBroadcast = tupleData.map(new MapFunction&lt;Tuple2&lt;String, Integer&gt;, HashMap&lt;String, Integer&gt;&gt;() {
+            @Override
+            public HashMap&lt;String, Integer&gt; map(Tuple2&lt;String, Integer&gt; value) throws Exception {
+                HashMap&lt;String, Integer&gt; res = new HashMap&lt;&gt;();
+                res.put(value.f0, value.f1);
+                return res;
+            }
+        });
+        //源数据
+        DataSource&lt;String&gt; data = env.fromElements(&quot;zs&quot;, &quot;ls&quot;, &quot;ww&quot;);
+        //注意：在这里需要使用到RichMapFunction获取广播变量
+        DataSet&lt;String&gt; result = data.map(new RichMapFunction&lt;String, String&gt;() {
+            List&lt;HashMap&lt;String, Integer&gt;&gt; broadCastMap = new ArrayList&lt;HashMap&lt;String, Integer&gt;&gt;();
+            HashMap&lt;String, Integer&gt; allMap = new HashMap&lt;String, Integer&gt;();
+
+            /**
+             * 这个方法只会执行一次
+             * 可以在这里实现一些初始化的功能
+             * 所以，就可以在open方法中获取广播变量数据
+             */
+            @Override
+            public void open(Configuration parameters) throws Exception {
+                super.open(parameters);
+                //3:获取广播数据
+                this.broadCastMap = getRuntimeContext().getBroadcastVariable(&quot;broadCastMapName&quot;);
+                for (HashMap map : broadCastMap) {
+                    allMap.putAll(map);
+                }
+            }
+            @Override
+            public String map(String value) throws Exception {
+                Integer age = allMap.get(value);
+                return value + &quot;,&quot; + age;
+            }
+        }).withBroadcastSet(toBroadcast, &quot;broadCastMapName&quot;);//2：执行广播数据的操作
+        result.print();
+    }
+
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br></div></div><h3 id="_9-5-flink之counter-计数器"><a href="#_9-5-flink之counter-计数器" class="header-anchor">#</a> 9.5 Flink之Counter（计数器）</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>Accumulator即累加器，与Mapreduce counter的应用场景差不多，都能很好地观察task在运行期间的数据变化
+可以在Flink job任务中的算子函数中操作累加器，但是只能在任务执行结束之后才能获得累加器的最终结果。
+Counter是一个具体的累加器(Accumulator)实现
+IntCounter, LongCounter 和 DoubleCounter
+用法
+1：创建累加器
+private IntCounter numLines = new IntCounter(); 
+2：注册累加器
+getRuntimeContext().addAccumulator(&quot;num-lines&quot;, this.numLines);
+3：使用累加器
+this.numLines.add(1); 
+4：获取累加器的结果
+myJobExecutionResult.getAccumulatorResult(&quot;num-lines&quot;)
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 计数器
+ */
+public class CounterDemo {
+    public static void main(String[] args) throws Exception{
+        //获取运行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        DataSource&lt;String&gt; data = env.fromElements(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;);
+        DataSet&lt;String&gt; result = data.map(new RichMapFunction&lt;String, String&gt;() {
+
+            //1:创建累加器
+            private IntCounter numLines = new IntCounter();
+            @Override
+            public void open(Configuration parameters) throws Exception {
+                super.open(parameters);
+                //2:注册累加器
+                getRuntimeContext().addAccumulator(&quot;num-lines&quot;,this.numLines);
+
+            }
+            //int sum = 0;
+            @Override
+            public String map(String value) throws Exception {
+                //如果并行度为1，使用普通的累加求和即可，但是设置多个并行度，则普通的累加求和结果就不准了
+                //sum++;
+                //System.out.println(&quot;sum：&quot;+sum);
+                this.numLines.add(1);
+                return value;
+            }
+        }).setParallelism(8);
+        //如果要获取counter的值，只能是任务
+        //result.print();
+        result.writeAsText(&quot;d:\\data\\mycounter&quot;);
+        JobExecutionResult jobResult = env.execute(&quot;counter&quot;);
+        //3：获取累加器
+        int num = jobResult.getAccumulatorResult(&quot;num-lines&quot;);
+        System.out.println(&quot;num:&quot;+num);
+
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br></div></div><h3 id="flink思维导图"><a href="#flink思维导图" class="header-anchor">#</a> Flink思维导图</h3> <p>flink学习思维导图</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231616009.png" alt="画布 1"></p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《Flink》笔记/10.Flink入门基础/01.Flink入门基础简介.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=flink" title="标签">#flink</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">11/25/2021, 4:33:54 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><!----> <a href="/pages/974b7f/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Flink分布式计算任务</div></a></div> <div class="page-nav"><p class="inner"><!----> <span class="next"><a href="/pages/974b7f/">Flink分布式计算任务</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/62.b02509d6.js" defer></script>
+  </body>
+</html>

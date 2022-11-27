@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Flink中的Time和WaterMark | clivia‘s blog</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <link rel="icon" href="/img/favicon.ico">
+    <script data-ad-client="ca-pub-7828333725993554" async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="description" content="Java后端、大数据等技术博客，专注于各种技术总结。Java、高并发、hadoop、spark、hbase、hive、zookeeper、mysql、mongodb、redis">
+    <meta name="keywords" content="前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="baidu-site-verification" content="7F55weZDDc">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.027adcb0.css" as="style"><link rel="preload" href="/assets/js/app.06f86fe0.js" as="script"><link rel="preload" href="/assets/js/2.ed69dcfc.js" as="script"><link rel="preload" href="/assets/js/3.b6cd915d.js" as="script"><link rel="preload" href="/assets/js/66.1d8c00be.js" as="script"><link rel="prefetch" href="/assets/js/10.2b0a2d8d.js"><link rel="prefetch" href="/assets/js/100.16d5c2bc.js"><link rel="prefetch" href="/assets/js/101.c4ff0a78.js"><link rel="prefetch" href="/assets/js/102.4e574824.js"><link rel="prefetch" href="/assets/js/103.ac1661b8.js"><link rel="prefetch" href="/assets/js/104.dfdf274c.js"><link rel="prefetch" href="/assets/js/105.f792ba33.js"><link rel="prefetch" href="/assets/js/106.4347b2a7.js"><link rel="prefetch" href="/assets/js/107.7248a258.js"><link rel="prefetch" href="/assets/js/108.a3c43671.js"><link rel="prefetch" href="/assets/js/109.e8c087b3.js"><link rel="prefetch" href="/assets/js/11.0c3d61f1.js"><link rel="prefetch" href="/assets/js/110.2b89ad56.js"><link rel="prefetch" href="/assets/js/111.d35e07d0.js"><link rel="prefetch" href="/assets/js/112.2402331a.js"><link rel="prefetch" href="/assets/js/113.82a39665.js"><link rel="prefetch" href="/assets/js/114.4c8d3fcb.js"><link rel="prefetch" href="/assets/js/115.f038010e.js"><link rel="prefetch" href="/assets/js/116.c7865d0c.js"><link rel="prefetch" href="/assets/js/117.2729b824.js"><link rel="prefetch" href="/assets/js/118.b8c9bb1f.js"><link rel="prefetch" href="/assets/js/119.a9eea003.js"><link rel="prefetch" href="/assets/js/12.e4b75a11.js"><link rel="prefetch" href="/assets/js/120.06f1eb1b.js"><link rel="prefetch" href="/assets/js/121.354a7fd4.js"><link rel="prefetch" href="/assets/js/122.af00dd2b.js"><link rel="prefetch" href="/assets/js/123.976e22ad.js"><link rel="prefetch" href="/assets/js/124.de810dba.js"><link rel="prefetch" href="/assets/js/125.2c17fa05.js"><link rel="prefetch" href="/assets/js/126.ffeb8997.js"><link rel="prefetch" href="/assets/js/127.6b2f64dd.js"><link rel="prefetch" href="/assets/js/128.f9b62119.js"><link rel="prefetch" href="/assets/js/129.ce5c5c0e.js"><link rel="prefetch" href="/assets/js/13.2c54c92b.js"><link rel="prefetch" href="/assets/js/130.7db38d34.js"><link rel="prefetch" href="/assets/js/131.5abdd66a.js"><link rel="prefetch" href="/assets/js/132.5dd5eece.js"><link rel="prefetch" href="/assets/js/133.651d4b9b.js"><link rel="prefetch" href="/assets/js/134.68173250.js"><link rel="prefetch" href="/assets/js/135.ca520569.js"><link rel="prefetch" href="/assets/js/136.1515cd12.js"><link rel="prefetch" href="/assets/js/137.d783808b.js"><link rel="prefetch" href="/assets/js/138.05efd534.js"><link rel="prefetch" href="/assets/js/139.a65dce22.js"><link rel="prefetch" href="/assets/js/14.5cb33b3a.js"><link rel="prefetch" href="/assets/js/140.44dc5c4e.js"><link rel="prefetch" href="/assets/js/141.0632e3aa.js"><link rel="prefetch" href="/assets/js/142.66ac9883.js"><link rel="prefetch" href="/assets/js/143.8a75f55a.js"><link rel="prefetch" href="/assets/js/144.349bba43.js"><link rel="prefetch" href="/assets/js/15.06dff62d.js"><link rel="prefetch" href="/assets/js/16.ad74e0a9.js"><link rel="prefetch" href="/assets/js/17.e0d7a93c.js"><link rel="prefetch" href="/assets/js/18.0c217b19.js"><link rel="prefetch" href="/assets/js/19.33d29011.js"><link rel="prefetch" href="/assets/js/20.5c47e53a.js"><link rel="prefetch" href="/assets/js/21.4623dcf3.js"><link rel="prefetch" href="/assets/js/22.1d2819bf.js"><link rel="prefetch" href="/assets/js/23.da3264cc.js"><link rel="prefetch" href="/assets/js/24.a3976766.js"><link rel="prefetch" href="/assets/js/25.52b1b746.js"><link rel="prefetch" href="/assets/js/26.527a58d4.js"><link rel="prefetch" href="/assets/js/27.1a611ca9.js"><link rel="prefetch" href="/assets/js/28.19848920.js"><link rel="prefetch" href="/assets/js/29.0399b7cc.js"><link rel="prefetch" href="/assets/js/30.f4967fc4.js"><link rel="prefetch" href="/assets/js/31.ec15c096.js"><link rel="prefetch" href="/assets/js/32.ea29ed83.js"><link rel="prefetch" href="/assets/js/33.2506e8df.js"><link rel="prefetch" href="/assets/js/34.b317cb6a.js"><link rel="prefetch" href="/assets/js/35.e98b1f8e.js"><link rel="prefetch" href="/assets/js/36.5a3c937d.js"><link rel="prefetch" href="/assets/js/37.d8e66f15.js"><link rel="prefetch" href="/assets/js/38.583bd78a.js"><link rel="prefetch" href="/assets/js/39.02884927.js"><link rel="prefetch" href="/assets/js/4.4f8d037f.js"><link rel="prefetch" href="/assets/js/40.11d31d5e.js"><link rel="prefetch" href="/assets/js/41.e3b7229f.js"><link rel="prefetch" href="/assets/js/42.ed31fd5c.js"><link rel="prefetch" href="/assets/js/43.71601b99.js"><link rel="prefetch" href="/assets/js/44.7235eb98.js"><link rel="prefetch" href="/assets/js/45.8adef6f7.js"><link rel="prefetch" href="/assets/js/46.44d68224.js"><link rel="prefetch" href="/assets/js/47.ec6b4de8.js"><link rel="prefetch" href="/assets/js/48.ee56118d.js"><link rel="prefetch" href="/assets/js/49.0f6101ee.js"><link rel="prefetch" href="/assets/js/5.0e4db68d.js"><link rel="prefetch" href="/assets/js/50.2d01b40c.js"><link rel="prefetch" href="/assets/js/51.ddf132cb.js"><link rel="prefetch" href="/assets/js/52.fbc9619b.js"><link rel="prefetch" href="/assets/js/53.089b304e.js"><link rel="prefetch" href="/assets/js/54.34c0d377.js"><link rel="prefetch" href="/assets/js/55.41e71cff.js"><link rel="prefetch" href="/assets/js/56.ed6b0ac8.js"><link rel="prefetch" href="/assets/js/57.538bf884.js"><link rel="prefetch" href="/assets/js/58.d0051104.js"><link rel="prefetch" href="/assets/js/59.00792d53.js"><link rel="prefetch" href="/assets/js/6.6a15c5c7.js"><link rel="prefetch" href="/assets/js/60.44529245.js"><link rel="prefetch" href="/assets/js/61.6a6e2fe6.js"><link rel="prefetch" href="/assets/js/62.b02509d6.js"><link rel="prefetch" href="/assets/js/63.c865f599.js"><link rel="prefetch" href="/assets/js/64.7aafe0f4.js"><link rel="prefetch" href="/assets/js/65.029254a7.js"><link rel="prefetch" href="/assets/js/67.191949ec.js"><link rel="prefetch" href="/assets/js/68.fc11d430.js"><link rel="prefetch" href="/assets/js/69.5e5d346e.js"><link rel="prefetch" href="/assets/js/7.4353a828.js"><link rel="prefetch" href="/assets/js/70.61cd3f71.js"><link rel="prefetch" href="/assets/js/71.1a87ddd4.js"><link rel="prefetch" href="/assets/js/72.f561b5cf.js"><link rel="prefetch" href="/assets/js/73.d1c67ae7.js"><link rel="prefetch" href="/assets/js/74.3725d6d7.js"><link rel="prefetch" href="/assets/js/75.310c7556.js"><link rel="prefetch" href="/assets/js/76.b8a53386.js"><link rel="prefetch" href="/assets/js/77.e04be33a.js"><link rel="prefetch" href="/assets/js/78.17c06f28.js"><link rel="prefetch" href="/assets/js/79.3ff2fb40.js"><link rel="prefetch" href="/assets/js/8.248194f5.js"><link rel="prefetch" href="/assets/js/80.96d575dc.js"><link rel="prefetch" href="/assets/js/81.770ca2a4.js"><link rel="prefetch" href="/assets/js/82.8900493c.js"><link rel="prefetch" href="/assets/js/83.4716d242.js"><link rel="prefetch" href="/assets/js/84.5ae9874f.js"><link rel="prefetch" href="/assets/js/85.924e7d3d.js"><link rel="prefetch" href="/assets/js/86.5073d16d.js"><link rel="prefetch" href="/assets/js/87.1148acd0.js"><link rel="prefetch" href="/assets/js/88.629d8beb.js"><link rel="prefetch" href="/assets/js/89.36b4cdb0.js"><link rel="prefetch" href="/assets/js/9.85151a25.js"><link rel="prefetch" href="/assets/js/90.fac275aa.js"><link rel="prefetch" href="/assets/js/91.93484ec9.js"><link rel="prefetch" href="/assets/js/92.01e42c63.js"><link rel="prefetch" href="/assets/js/93.50a55dd7.js"><link rel="prefetch" href="/assets/js/94.6a3f96c8.js"><link rel="prefetch" href="/assets/js/95.7dd7befb.js"><link rel="prefetch" href="/assets/js/96.38d049b2.js"><link rel="prefetch" href="/assets/js/97.a129eb48.js"><link rel="prefetch" href="/assets/js/98.f848c937.js"><link rel="prefetch" href="/assets/js/99.2dc3271b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.027adcb0.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/C-logo.png" alt="clivia‘s blog" class="logo"> <span class="site-name can-hide">clivia‘s blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="/img/logo.png"> <div class="blogger-info"><h3>clivia’s blog</h3> <span>专注于后端开发，致力于简洁知识。</span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/bigdata/" class="nav-link">大数据</a></div><div class="nav-item"><a href="/technology/" class="nav-link">技术</a></div><div class="nav-item"><a href="/project/" class="nav-link">项目</a></div><div class="nav-item"><a href="/more/" class="nav-link">更多</a></div><div class="nav-item"><a href="/about/" class="nav-link">关于</a></div><div class="nav-item"><a href="/pages/beb6c0bd8a66cea6/" class="nav-link">收藏</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="索引" class="dropdown-title"><a href="/archives/" class="link-title">索引</a> <span class="title" style="display:none;">索引</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div> <a href="https://gitee.com/kflys/clivia-blog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Gitee
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Flink入门基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>FlinkSQL</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Flink进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/27f542/" aria-current="page" class="active sidebar-link">Flink中的Time和WaterMark</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/27f542/#_1-需求背景" class="sidebar-link">1 需求背景</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/27f542/#_1-1-timewindow实现" class="sidebar-link">1.1  TimeWindow实现</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_1-2-processwindowfunction" class="sidebar-link">1.2  ProcessWindowFunction</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_1-3-time的种类" class="sidebar-link">1.3  Time的种类</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_2-process-time-window-有序" class="sidebar-link">2  Process Time Window（有序）</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_3-process-time-window-无序" class="sidebar-link">3  Process Time Window（无序）</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_4-使用event-time处理无序" class="sidebar-link">4  使用Event Time处理无序</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_5-使用watermark机制解决无序" class="sidebar-link">5  使用WaterMark机制解决无序</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_6-watermark机制" class="sidebar-link">6  WaterMark机制</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/27f542/#_6-2-watermark的定义" class="sidebar-link">6.2  WaterMark的定义</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_6-3-需求" class="sidebar-link">6.3 需求</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_6-4计算window的触发时间" class="sidebar-link">6.4计算window的触发时间</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_6-5-watermark-window-处理乱序时间" class="sidebar-link">6.5 WaterMark+Window 处理乱序时间</a></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_6-6-迟到太多的事件" class="sidebar-link">6.6 迟到太多的事件</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/27f542/#_7-多并行度下的watermark" class="sidebar-link">7 多并行度下的WaterMark</a></li></ul></li><li><a href="/pages/ade781/" class="sidebar-link">Flink窗口函数</a></li></ul></section></li></ul> <div class="sidebar-slot sidebar-slot-bottom"><!-- 正方形 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="3508773082"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div></aside> <div><main class="page"><div class="theme-vdoing-wrapper "><div class="articleInfo-wrap" data-v-70a2d273><div class="articleInfo" data-v-70a2d273><ul class="breadcrumbs" data-v-70a2d273><li data-v-70a2d273><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-70a2d273></a></li> <li data-v-70a2d273><a href="/categories/?category=%E3%80%8AFlink%E3%80%8B%E7%AC%94%E8%AE%B0" title="分类" data-v-70a2d273>《Flink》笔记</a></li> <li data-v-70a2d273><a href="/categories/?category=Flink%E8%BF%9B%E9%98%B6" title="分类" data-v-70a2d273>Flink进阶</a></li> <!----></ul> <div class="info" data-v-70a2d273><div title="作者" class="author iconfont icon-touxiang" data-v-70a2d273><a href="https://gitee.com/kflys" target="_blank" title="作者" class="beLink" data-v-70a2d273>kflys</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-70a2d273><a href="javascript:;" data-v-70a2d273>2021-11-23</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABKFJREFUSA3tVl1oFVcQnrMbrak3QUgkya1akpJYcrUtIqW1JvFBE9LiQ5v6JmJpolbMg32rVrhgoYK0QiMY6i9Y6EMaW5D+xFJaTYItIuK2Kr3+BJNwkxBj05sQY3b3nM6cs2dv9t7NT/vQJw/sndk5M/PNzJkzewGerP+pAmy+ON8lLzUJgA8ZYxYIYZmGYRnctDaWvJJAmTtfP1pvXsBCCPP8QFcCaRkZYACgDZFO4stNIcBCajEOlmmC9XpJ9bAGCaPaPmzPl32dvLSVu3BWCTQs0XQQ6g0DYgwLIoAZbBCdW/i+781o1VVlm/410mw4h06Y7bIPHNyWDyL4FHkX03Q8SrzNhZTZriieckWt7cL6MM85YcLpsi/7O9/iXFT6MswI0DmmpkSaJ0qLxFIm3+i1THHB3zmBH3PYx9CcykcLOeQVVa7QtdxTgQgEleX2AjHYfwA+2ddV77ruGoJUbhGDI09YSNXyMpUt5ylOzxgbUmtOp7NmbNt8v3arjTBfYELmLUV+M+nSawNNAUqpT3ClJWg5I3BLT+cGW/DXNGCa6tx1aakCGEigArTn4TDIPdrXXYKCZNrHLMCOEPvHBlLQ99s9eHB7EB6NTki73CVPQ2F5MSx/uRQixfmq7rK0wYD8w8E905bnPDfwoWs/rfv93NWN/ZfvwsLIU7A09gxECyISeGJkHAau98L97tuw7NXnoPyNF8FcYGLGKsOs0mN3OEyec9esGW/ZEl945dTP34wlR2FZVQWU1q0Cw8Tr7p+hgLLNL0FPxx/Q35mA8aEUrH6nCgwEl0tn7wUiZYJnNRh6DK4UH/k0lfyrsBKdPVv/AriGIQcEDQZ65LBAGe2Rzui9Ybjz7XUppz1/uKBbyVPGkN3ZAeC6hr0x7Nr38N5+EqkoOm17xpoqR9ohQF55ERSvr4Dkr3chNfC3DMzGJlNBElW8w9nsGQvhNGIzDkXzCg8cLK951xHsFBlTJspJNi3ZFIMF2AeDV3q8DNOB+YHi6QTrChDIWDBRi5U5f+ZMfJLu3ccrqxtdxk4SKH336LFxSmkqefwU5T8fhdSdQf9IVKD6aNiwI/hnmcAZ91isYMJIaCUCx9W098+LgruikeTqzqqxKPUwqJyCPJiyemVVZBOijDGjD38Os0jOiSPL1z3SPjXNANbiNPXAdzTfukjjuknNBbyz3nwgTd3AVFqUJ5hpHlq9MveLnWwttUfoygBmvVjuikxND3znrhsELnZk7k+OjIGxeNEkomyLVta0xxn+HZhjBc4YZ/AFjHjz9u3xRZl2BN4aq9nFwWh16IrQ1aHHEd3j1+4/dB9OtH4e29A2H1DyHQRmOSfQZ1Fy7MHBTGB6J/Djq6p3OxyO2cB+4Car7v/o3GXgfAkj23+x9ID1Teoamo/SXcbvSf2PX7Vc8DdCmE1vN9di+32P9/5YR3vLnhCVGUWBjEkr3yh4H8v9CzmsbdhzOKzsJKM90iFdaTMjRPhGVsakRvOaRidljo6H6G7j+ctrJpsP+4COhDIl0La2+FS4+5mlocBaXY5QnGZysIBYoeSsl5qQzrSj/cgNrfuEzlWBfwA+EjrZyWUvpAAAAABJRU5ErkJggg==">
+          Flink中的Time和WaterMark
+        </h1> <div class="page-slot page-slot-top"><!-- 固定100% * 90px可显示，max-height:90px未见显示-->
+     <ins class="adsbygoogle"
+          style="display:inline-block;width:100%;max-height:90px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6625304284"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="theme-vdoing-content content__default"><h2 id="_1-需求背景"><a href="#_1-需求背景" class="header-anchor">#</a> 1 需求背景</h2> <p>需求描述：每隔5秒，计算最近10秒单词出现的次数。</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231628795.png" alt="Window"></p> <h3 id="_1-1-timewindow实现"><a href="#_1-1-timewindow实现" class="header-anchor">#</a> 1.1  TimeWindow实现</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 每隔5秒计算最近10秒单词出现的次数
+ */
+public class TimeWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;String&gt; dataStream = env.socketTextStream(&quot;localhost&quot;, 8888);
+        SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = dataStream.flatMap(new FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt;() {
+            @Override
+            public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                for (String word : fields) {
+                    out.collect(new Tuple2&lt;&gt;(word, 1));
+                }
+            }
+        }).keyBy(0)
+                .timeWindow(Time.seconds(10), Time.seconds(5))
+                .sum(1);
+
+        result.print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><h3 id="_1-2-processwindowfunction"><a href="#_1-2-processwindowfunction" class="header-anchor">#</a> 1.2  ProcessWindowFunction</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 每隔5秒计算最近10秒单词出现的次数
+ */
+public class TimeWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource&lt;String&gt; dataStream = env.socketTextStream(&quot;hadoop1&quot;, 8888);
+        SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = dataStream.flatMap(new FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt;() {
+            @Override
+            public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                for (String word : fields) {
+                    out.collect(new Tuple2&lt;&gt;(word, 1));
+                }
+            }
+        }).keyBy(0)
+                .timeWindow(Time.seconds(10), Time.seconds(5))
+                .process(new SumProcessWindowFunction());
+
+        result.print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Integer&gt;,Tuple2&lt;String,Integer&gt;,Tuple,TimeWindow&gt; {
+        FastDateFormat dataFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Integer&gt;&gt; elements,
+                            Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) {
+
+            System.out.println(&quot;当天系统的时间：&quot;+dataFormat.format(System.currentTimeMillis()));
+
+            System.out.println(&quot;Window的处理时间：&quot;+dataFormat.format(context.currentProcessingTime()));
+            System.out.println(&quot;Window的开始时间：&quot;+dataFormat.format(context.window().getStart()));
+            System.out.println(&quot;Window的结束时间：&quot;+dataFormat.format(context.window().getEnd()));
+
+            int sum = 0;
+            for (Tuple2&lt;String, Integer&gt; ele : elements) {
+                sum += 1;
+            }
+            // 输出单词出现的次数
+            out.collect(Tuple2.of(tuple.getField(0), sum));
+
+        }
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br></div></div><p>先输入：</p> <p>hive</p> <p>然后输入hive,hbase</p> <p>输出结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>当天系统的时间：15:10:30
+Window的处理时间：15:10:30
+Window的开始时间：15:10:20
+Window的结束时间：15:10:30
+(hive,1)
+当天系统的时间：15:10:35
+Window的处理时间：15:10:35
+Window的开始时间：15:10:25
+Window的结束时间：15:10:35
+当天系统的时间：15:10:35
+Window的处理时间：15:10:35
+Window的开始时间：15:10:25
+Window的结束时间：15:10:35
+(hbase,1)
+(hive,1)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><p>根据每隔5秒执行最近10秒的数据，Flink划分的窗口</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>[00:00:00, 00:00:05) [00:00:05, 00:00:10)
+[00:00:10, 00:00:15) [00:00:15, 00:00:20) 
+[00:00:20, 00:00:25) [00:00:25, 00:00:30)
+[00:00:30, 00:00:35) [00:00:35, 00:00:40)
+[00:00:40, 00:00:45) [00:00:45, 00:00:50) 
+[00:00:50, 00:00:55) [00:00:55, 00:01:00)
+[00:01:00, 00:01:05)  ...
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><h3 id="_1-3-time的种类"><a href="#_1-3-time的种类" class="header-anchor">#</a> 1.3  Time的种类</h3> <p>针对stream数据中的时间，可以分为以下三种：</p> <ul><li>Event Time：事件产生的时间，它通常由事件中的时间戳描述。</li> <li>Ingestion time：事件进入Flink的时间</li> <li>Processing Time：事件被处理时当前系统的时间</li></ul> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231644404.png" alt="1569394563906"></p> <p>案例演示：
+原始日志如下</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>2019-11-11 10:00:01,134 INFO executor.Executor: Finished task in state 0.0
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>这条数据进入Flink的时间是2019-11-11 20:00:00,102
+到达window处理的时间为2019-11-11 20:00:01,100</p> <p>2019-11-11 10:00:01,134 是Event time
+2019-11-11 20:00:00,102 是Ingestion time
+2019-11-11 20:00:01,100 是Processing time</p> <p>思考：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>如果我们想要统计每分钟内接口调用失败的错误日志个数，使用哪个时间才有意义？
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h2 id="_2-process-time-window-有序"><a href="#_2-process-time-window-有序" class="header-anchor">#</a> 2  Process Time Window（有序）</h2> <p>需求：每隔5秒计算最近10秒的单词出现的次数</p> <p>自定义source，模拟：第 13 秒的时候连续发送 2 个事件，第 16 秒的时候再发送 1 个事件</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231644884.png" alt="自定义source-TimeWindow"></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 每隔5秒计算最近10秒单词出现的次数
+ */
+public class TimeWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+        DataStreamSource&lt;String&gt; dataStream = env.addSource(new TestSouce());
+        SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = dataStream.flatMap(new FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt;() {
+            @Override
+            public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                for (String word : fields) {
+                    out.collect(new Tuple2&lt;&gt;(word, 1));
+                }
+            }
+        }).keyBy(0)
+                .timeWindow(Time.seconds(10), Time.seconds(5))
+                .process(new SumProcessWindowFunction());
+
+        result.print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+
+    public static class TestSouce implements SourceFunction&lt;String&gt;{
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        @Override
+        public void run(SourceContext&lt;String&gt; ctx) throws Exception {
+             // 控制大约在 10 秒的倍数的时间点发送事件
+            String currTime = String.valueOf(System.currentTimeMillis());
+            while (Integer.valueOf(currTime.substring(currTime.length() - 4)) &gt; 100) {
+                currTime = String.valueOf(System.currentTimeMillis());
+                continue;
+            }
+            System.out.println(&quot;开始发送事件的时间：&quot; + dateFormat.format(System.currentTimeMillis()));
+            // 第 13 秒发送两个事件
+            TimeUnit.SECONDS.sleep(13);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 产生了一个事件，但是由于网络原因，事件没有发送
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 第 16 秒发送一个事件
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            TimeUnit.SECONDS.sleep(300);
+
+        }
+
+        @Override
+        public void cancel() {
+
+        }
+    }
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Integer&gt;,Tuple2&lt;String,Integer&gt;,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Integer&gt;&gt; elements,
+                            Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) {
+
+//            System.out.println(&quot;当天系统的时间：&quot;+dateFormat.format(System.currentTimeMillis()));
+//
+//            System.out.println(&quot;Window的处理时间：&quot;+dateFormat.format(context.currentProcessingTime()));
+//            System.out.println(&quot;Window的开始时间：&quot;+dateFormat.format(context.window().getStart()));
+//            System.out.println(&quot;Window的结束时间：&quot;+dateFormat.format(context.window().getEnd()));
+
+            int sum = 0;
+            for (Tuple2&lt;String, Integer&gt; ele : elements) {
+                sum += 1;
+            }
+            // 输出单词出现的次数
+            out.collect(Tuple2.of(tuple.getField(0), sum));
+
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br></div></div><p>输出结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>开始发送事件的时间：16:16:40
+(hadoop,2)
+(hadoop,3)
+(hadoop,1)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231626599.png" alt="自定义source-TimeWindow2"></p> <h2 id="_3-process-time-window-无序"><a href="#_3-process-time-window-无序" class="header-anchor">#</a> 3  Process Time Window（无序）</h2> <p>自定义source，模拟：第 13 秒的时候连续发送 2 个事件，但是有一个事件确实在第13秒的发送出去了，另外一个事件因为某种原因在19秒的时候才发送出去，第 16 秒的时候再发送 1 个事件</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 每隔5秒计算最近10秒单词出现的次数
+ */
+public class TimeWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+        DataStreamSource&lt;String&gt; dataStream = env.addSource(new TestSouce());
+        SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; result = dataStream.flatMap(new FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt;() {
+            @Override
+            public void flatMap(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                for (String word : fields) {
+                    out.collect(new Tuple2&lt;&gt;(word, 1));
+                }
+            }
+        }).keyBy(0)
+                .timeWindow(Time.seconds(10), Time.seconds(5))
+                .process(new SumProcessWindowFunction());
+
+        result.print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+    /**
+     * 模拟：第 13 秒的时候连续发送 2 个事件，第 16 秒的时候再发送 1 个事件
+     */
+    public static class TestSouce implements SourceFunction&lt;String&gt;{
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        @Override
+        public void run(SourceContext&lt;String&gt; ctx) throws Exception {
+            // 控制大约在 10 秒的倍数的时间点发送事件
+            String currTime = String.valueOf(System.currentTimeMillis());
+            while (Integer.valueOf(currTime.substring(currTime.length() - 4)) &gt; 100) {
+                currTime = String.valueOf(System.currentTimeMillis());
+                continue;
+            }
+            System.out.println(&quot;开始发送事件的时间：&quot; + dateFormat.format(System.currentTimeMillis()));
+            // 第 13 秒发送两个事件
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 产生了一个事件，但是由于网络原因，事件没有发送
+            String event = &quot;hadoop,&quot; + System.currentTimeMillis();
+            // 第 16 秒发送一个事件
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 第 19 秒的时候发送
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(event);
+
+            TimeUnit.SECONDS.sleep(300);
+
+        }
+
+        @Override
+        public void cancel() {
+
+        }
+    }
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Integer&gt;,Tuple2&lt;String,Integer&gt;,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Integer&gt;&gt; elements,
+                            Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) {
+
+//            System.out.println(&quot;当天系统的时间：&quot;+dateFormat.format(System.currentTimeMillis()));
+//
+//            System.out.println(&quot;Window的处理时间：&quot;+dateFormat.format(context.currentProcessingTime()));
+//            System.out.println(&quot;Window的开始时间：&quot;+dateFormat.format(context.window().getStart()));
+//            System.out.println(&quot;Window的结束时间：&quot;+dateFormat.format(context.window().getEnd()));
+
+            int sum = 0;
+            for (Tuple2&lt;String, Integer&gt; ele : elements) {
+                sum += 1;
+            }
+            // 输出单词出现的次数
+            out.collect(Tuple2.of(tuple.getField(0), sum));
+
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br></div></div><p>处理结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>开始发送事件的时间：16:18:50
+(hadoop,1)
+(1573287543001,1)
+(1573287543001,1)
+(hadoop,3)
+(1573287546016,1)
+(1573287543016,1)
+(1573287546016,1)
+(hadoop,2)
+(1573287543016,1)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231645029.png" alt="自定义source-TimeWindow-无序"></p> <h2 id="_4-使用event-time处理无序"><a href="#_4-使用event-time处理无序" class="header-anchor">#</a> 4  使用Event Time处理无序</h2> <p>使用Event Time处理</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 每隔5秒计算最近10秒单词出现的次数
+ */
+public class TimeWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+        //步骤一：设置时间类型
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        DataStreamSource&lt;String&gt; dataStream = env.addSource(new TestSouce());
+       dataStream.map(new MapFunction&lt;String, Tuple2&lt;String,Long&gt;&gt;() {
+            @Override
+            public Tuple2&lt;String, Long&gt; map(String line) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                return new Tuple2&lt;&gt;(fields[0],Long.valueOf(fields[1]));
+            }
+            //步骤二：获取数据里面的event Time
+        }).assignTimestampsAndWatermarks(new EventTimeExtractor() )
+               .keyBy(0)
+                .timeWindow(Time.seconds(10), Time.seconds(5))
+                .process(new SumProcessWindowFunction())
+                .print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+
+    public static class TestSouce implements SourceFunction&lt;String&gt;{
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        @Override
+        public void run(SourceContext&lt;String&gt; ctx) throws Exception {
+            // 控制大约在 10 秒的倍数的时间点发送事件
+            String currTime = String.valueOf(System.currentTimeMillis());
+            while (Integer.valueOf(currTime.substring(currTime.length() - 4)) &gt; 100) {
+                currTime = String.valueOf(System.currentTimeMillis());
+                continue;
+            }
+            System.out.println(&quot;开始发送事件的时间：&quot; + dateFormat.format(System.currentTimeMillis()));
+            // 第 13 秒发送两个事件
+            TimeUnit.SECONDS.sleep(13);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 产生了一个事件，但是由于网络原因，事件没有发送
+            String event = &quot;hadoop,&quot; + System.currentTimeMillis();
+            // 第 16 秒发送一个事件
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 第 19 秒的时候发送
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(event);
+
+            TimeUnit.SECONDS.sleep(300);
+
+        }
+
+        @Override
+        public void cancel() {
+
+        }
+    }
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Long&gt;,Tuple2&lt;String,Integer&gt;,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Long&gt;&gt; elements,
+                            Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) {
+
+//            System.out.println(&quot;当天系统的时间：&quot;+dateFormat.format(System.currentTimeMillis()));
+//
+//            System.out.println(&quot;Window的处理时间：&quot;+dateFormat.format(context.currentProcessingTime()));
+//            System.out.println(&quot;Window的开始时间：&quot;+dateFormat.format(context.window().getStart()));
+//            System.out.println(&quot;Window的结束时间：&quot;+dateFormat.format(context.window().getEnd()));
+
+            int sum = 0;
+            for (Tuple2&lt;String, Long&gt; ele : elements) {
+                sum += 1;
+            }
+            // 输出单词出现的次数
+            out.collect(Tuple2.of(tuple.getField(0), sum));
+
+        }
+    }
+
+
+    private static class EventTimeExtractor
+            implements AssignerWithPeriodicWatermarks&lt;Tuple2&lt;String, Long&gt;&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+
+        // 拿到每一个事件的 Event Time
+        @Override
+        public long extractTimestamp(Tuple2&lt;String, Long&gt; element,
+                                     long previousElementTimestamp) {
+            return element.f1;
+        }
+
+        @Nullable
+        @Override
+        public Watermark getCurrentWatermark() {
+
+            return new Watermark(System.currentTimeMillis());
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br></div></div><p>计算结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>开始发送事件的时间：16:44:10
+(hadoop,1)
+(hadoop,3)
+(hadoop,1)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646615.png" alt="用EventTime处理无序的数据"></p> <p>现在我们第三个window的结果已经计算准确了，但是我们还是没有彻底的解决问题。接下来就需要我们使用WaterMark机制来解决了。</p> <h2 id="_5-使用watermark机制解决无序"><a href="#_5-使用watermark机制解决无序" class="header-anchor">#</a> 5  使用WaterMark机制解决无序</h2> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646994.png" alt="使用waterMark机制处理无序的数据"></p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 每隔5秒计算最近10秒单词出现的次数
+ */
+public class TimeWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+        //步骤一：设置时间类型
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        DataStreamSource&lt;String&gt; dataStream = env.addSource(new TestSouce());
+       dataStream.map(new MapFunction&lt;String, Tuple2&lt;String,Long&gt;&gt;() {
+            @Override
+            public Tuple2&lt;String, Long&gt; map(String line) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                return new Tuple2&lt;&gt;(fields[0],Long.valueOf(fields[1]));
+            }
+            //步骤二：获取数据里面的event Time
+        }).assignTimestampsAndWatermarks(new EventTimeExtractor() )
+               .keyBy(0)
+                .timeWindow(Time.seconds(10), Time.seconds(5))
+                .process(new SumProcessWindowFunction())
+                .print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+
+    public static class TestSouce implements SourceFunction&lt;String&gt;{
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        @Override
+        public void run(SourceContext&lt;String&gt; ctx) throws Exception {
+            // 控制大约在 10 秒的倍数的时间点发送事件
+            String currTime = String.valueOf(System.currentTimeMillis());
+            while (Integer.valueOf(currTime.substring(currTime.length() - 4)) &gt; 100) {
+                currTime = String.valueOf(System.currentTimeMillis());
+                continue;
+            }
+            System.out.println(&quot;开始发送事件的时间：&quot; + dateFormat.format(System.currentTimeMillis()));
+            // 第 13 秒发送两个事件
+            TimeUnit.SECONDS.sleep(13);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 产生了一个事件，但是由于网络原因，事件没有发送
+            String event = &quot;hadoop,&quot; + System.currentTimeMillis();
+            // 第 16 秒发送一个事件
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(&quot;hadoop,&quot; + System.currentTimeMillis());
+            // 第 19 秒的时候发送
+            TimeUnit.SECONDS.sleep(3);
+            ctx.collect(event);
+
+            TimeUnit.SECONDS.sleep(300);
+
+        }
+
+        @Override
+        public void cancel() {
+
+        }
+    }
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Long&gt;,Tuple2&lt;String,Integer&gt;,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Long&gt;&gt; elements,
+                            Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) {
+
+//            System.out.println(&quot;当天系统的时间：&quot;+dateFormat.format(System.currentTimeMillis()));
+//
+//            System.out.println(&quot;Window的处理时间：&quot;+dateFormat.format(context.currentProcessingTime()));
+//            System.out.println(&quot;Window的开始时间：&quot;+dateFormat.format(context.window().getStart()));
+//            System.out.println(&quot;Window的结束时间：&quot;+dateFormat.format(context.window().getEnd()));
+
+            int sum = 0;
+            for (Tuple2&lt;String, Long&gt; ele : elements) {
+                sum += 1;
+            }
+            // 输出单词出现的次数
+            out.collect(Tuple2.of(tuple.getField(0), sum));
+
+        }
+    }
+
+
+    private static class EventTimeExtractor
+            implements AssignerWithPeriodicWatermarks&lt;Tuple2&lt;String, Long&gt;&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+
+        // 拿到每一个事件的 Event Time
+        @Override
+        public long extractTimestamp(Tuple2&lt;String, Long&gt; element,
+                                     long previousElementTimestamp) {
+            return element.f1;
+        }
+
+        @Nullable
+        @Override
+        public Watermark getCurrentWatermark() {
+            //window延迟5秒触发
+            return new Watermark(System.currentTimeMillis() - 5000);
+        }
+    }
+}
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br></div></div><p>计算结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>开始发送事件的时间：16:57:40
+(hadoop,2)
+(hadoop,3)
+(hadoop,1)
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><p>结果正确！</p> <h2 id="_6-watermark机制"><a href="#_6-watermark机制" class="header-anchor">#</a> 6  WaterMark机制</h2> <h3 id="_6-2-watermark的定义"><a href="#_6-2-watermark的定义" class="header-anchor">#</a> 6.2  WaterMark的定义</h3> <p>使用eventTime的时候如何处理乱序数据？
+我们知道，流处理从事件产生，到流经source，再到operator，中间是有一个过程和时间的。虽然大部分情况下，流到operator的数据都是按照事件产生的时间顺序来的，但是也不排除由于网络延迟等原因，导致乱序的产生，特别是使用kafka的话，多个分区的数据无法保证有序。所以在进行window计算的时候，我们又不能无限期的等下去，必须要有个机制来保证一个特定的时间后，必须触发window去进行计算了。这个特别的机制，就是watermark，watermark是用于处理乱序事件的。watermark可以翻译为水位线</p> <p>有序的流的watermarks</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646844.png" alt="1569479960665"></p> <p>无序的流的watermarks</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646485.png" alt="1569479997521"></p> <p>多并行度流的watermarks</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646674.png" alt="1569480051217"></p> <h3 id="_6-3-需求"><a href="#_6-3-需求" class="header-anchor">#</a> 6.3 需求</h3> <p>得到并打印每隔 3 秒钟统计前 3 秒内的相同的 key 的所有的事件</p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646450.png" alt="1573294611566"></p> <p>代码开发</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 得到并打印每隔 3 秒钟统计前 3 秒内的相同的 key 的所有的事件
+ 
+   3秒统计一卡。 单词计数
+ */
+public class WaterMarkWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+        //步骤一：设置时间类型
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        //设置waterMark产生的周期为1s
+        env.getConfig().setAutoWatermarkInterval(1000);
+
+        DataStreamSource&lt;String&gt; dataStream = env.socketTextStream(&quot;hadoop1&quot;, 8888);
+        dataStream.map(new MapFunction&lt;String, Tuple2&lt;String,Long&gt;&gt;() {
+            @Override
+            public Tuple2&lt;String, Long&gt; map(String line) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                return new Tuple2&lt;&gt;(fields[0],Long.valueOf(fields[1]));
+            }
+            //步骤二：获取数据里面的event Time
+        }).assignTimestampsAndWatermarks(new EventTimeExtractor() )
+               .keyBy(0)
+                .timeWindow(Time.seconds(3))
+                .process(new SumProcessWindowFunction())
+                .print().setParallelism(1);
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+
+
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Long&gt;,String,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Long&gt;&gt; elements,
+                            Collector&lt;String&gt; out) {
+            System.out.println(&quot;处理时间：&quot; + dateFormat.format(context.currentProcessingTime()));
+            System.out.println(&quot;window start time : &quot; + dateFormat.format(context.window().getStart()));
+
+            List&lt;String&gt; list = new ArrayList&lt;&gt;();
+            for (Tuple2&lt;String, Long&gt; ele : elements) {
+                list.add(ele.toString() + &quot;|&quot; + dateFormat.format(ele.f1));
+            }
+            out.collect(list.toString());
+            System.out.println(&quot;window end time  : &quot; + dateFormat.format(context.window().getEnd()));
+
+        }
+    }
+
+
+    private static class EventTimeExtractor
+            implements AssignerWithPeriodicWatermarks&lt;Tuple2&lt;String, Long&gt;&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+
+        private long currentMaxEventTime = 0L;
+        private long maxOutOfOrderness = 10000; // 最大允许的乱序时间 10 秒
+
+
+        // 拿到每一个事件的 Event Time
+        @Override
+        public long extractTimestamp(Tuple2&lt;String, Long&gt; element,
+                                     long previousElementTimestamp) {
+            long currentElementEventTime = element.f1;
+            currentMaxEventTime = Math.max(currentMaxEventTime, currentElementEventTime);
+            System.out.println(&quot;event = &quot; + element
+                    + &quot;|&quot; + dateFormat.format(element.f1) // Event Time
+                    + &quot;|&quot; + dateFormat.format(currentMaxEventTime)  // Max Event Time
+                    + &quot;|&quot; + dateFormat.format(getCurrentWatermark().getTimestamp())); // Current Watermark
+            return currentElementEventTime;
+        }
+
+        @Nullable
+        @Override
+        public Watermark getCurrentWatermark() {
+            /**
+             * WasterMark会周期性的产生，默认就是每隔200毫秒产生一个
+             *
+             *         设置 watermark 产生的周期为 1000ms
+             *         env.getConfig().setAutoWatermarkInterval(1000);
+             */
+            //window延迟5秒触发
+            System.out.println(&quot;water mark...&quot;);
+            return new Watermark(currentMaxEventTime - maxOutOfOrderness);
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br></div></div><p>演示数据：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>-- window 计算触发的条件
+000001,1461756862000
+000001,1461756866000
+000001,1461756872000
+000001,1461756873000
+000001,1461756874000
+000001,1461756876000
+000001,1461756877000
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><p>一条一条的数据输入。</p> <h3 id="_6-4计算window的触发时间"><a href="#_6-4计算window的触发时间" class="header-anchor">#</a> 6.4计算window的触发时间</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646908.png" alt="1573295426278"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646235.png" alt="1573295434967"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646823.png" alt="1573295444736"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646755.png" alt="1573295452688"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646842.png" alt="1573295462557"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646467.png" alt="1573295482248"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646362.png" alt="1573295499134"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231646158.png" alt="1573295512707"></p> <p>总结：window触发的时间</p> <ol><li>watermark 时间 &gt;= window_end_time</li> <li>在 [window_start_time, window_end_time) 区间中有数据存在，注意是左闭右开的区间，而且是以 event time 来计算的</li></ol> <h3 id="_6-5-watermark-window-处理乱序时间"><a href="#_6-5-watermark-window-处理乱序时间" class="header-anchor">#</a> 6.5 WaterMark+Window 处理乱序时间</h3> <p>输入数据：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>000001,1461756879000
+000001,1461756871000
+
+000001,1461756883000
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231626052.png" alt="1573296359405"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647508.png" alt="1573296391460"></p> <h3 id="_6-6-迟到太多的事件"><a href="#_6-6-迟到太多的事件" class="header-anchor">#</a> 6.6 迟到太多的事件</h3> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647843.png" alt="1573296532906"></p> <ol><li>丢弃，这个是默认的处理方式</li> <li>allowedLateness 指定允许数据延迟的时间</li> <li>sideOutputLateData 收集迟到的数据</li></ol> <h4 id="_6-6-1-丢弃"><a href="#_6-6-1-丢弃" class="header-anchor">#</a> 6.6.1 丢弃</h4> <p>重启程序，做测试。</p> <p>输入数据：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>000001,1461756870000
+000001,1461756883000
+
+000001,1461756870000
+000001,1461756871000
+000001,1461756872000
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647413.png" alt="1573296944424"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647140.png" alt="1573296954680"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647107.png" alt="1573296963406"></p> <p>发现迟到太多数据就会被丢弃</p> <h4 id="_6-6-2-指定允许再次迟到的时间"><a href="#_6-6-2-指定允许再次迟到的时间" class="header-anchor">#</a> 6.6.2 指定允许再次迟到的时间</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>).assignTimestampsAndWatermarks(new EventTimeExtractor() )
+               .keyBy(0)
+                .timeWindow(Time.seconds(3))
+                .allowedLateness(Time.seconds(2)) // 允许事件迟到 2 秒
+                .process(new SumProcessWindowFunction())
+                .print().setParallelism(1);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>输入数据</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>000001,1461756870000
+000001,1461756883000
+
+000001,1461756870000
+000001,1461756871000
+000001,1461756872000
+
+000001,1461756884000
+
+000001,1461756870000
+000001,1461756871000
+000001,1461756872000
+
+000001,1461756885000
+
+000001,1461756870000
+000001,1461756871000
+000001,1461756872000
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br></div></div><p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231626153.png" alt="1573297641179"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647764.png" alt="1573297653341"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231626163.png" alt="1573297664487"></p> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647059.png" alt="1573297613203"></p> <ol><li>当我们设置允许迟到 2 秒的事件，第一次 window 触发的条件是 watermark &gt;= window_end_time</li> <li>第二次(或者多次)触发的条件是 watermark &lt; window_end_time + allowedLateness</li></ol> <h4 id="_6-6-3-收集迟到的数据"><a href="#_6-6-3-收集迟到的数据" class="header-anchor">#</a> 6.6.3 收集迟到的数据</h4> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 得到并打印每隔 3 秒钟统计前 3 秒内的相同的 key 的所有的事件
+ * 收集迟到太多的数据
+ */
+public class WaterMarkWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+        //步骤一：设置时间类型
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        //设置waterMark产生的周期为1s
+        env.getConfig().setAutoWatermarkInterval(1000);
+
+        // 保存迟到的，会被丢弃的数据
+        OutputTag&lt;Tuple2&lt;String, Long&gt;&gt; outputTag =
+                new OutputTag&lt;Tuple2&lt;String, Long&gt;&gt;(&quot;late-date&quot;){};
+
+        DataStreamSource&lt;String&gt; dataStream = env.socketTextStream(&quot;hadoop1&quot;, 8888);
+        SingleOutputStreamOperator&lt;String&gt; result = dataStream.map(new MapFunction&lt;String, Tuple2&lt;String, Long&gt;&gt;() {
+            @Override
+            public Tuple2&lt;String, Long&gt; map(String line) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                return new Tuple2&lt;&gt;(fields[0], Long.valueOf(fields[1]));
+            }
+            //步骤二：获取数据里面的event Time
+        }).assignTimestampsAndWatermarks(new EventTimeExtractor())
+                .keyBy(0)
+                .timeWindow(Time.seconds(3))
+                // .allowedLateness(Time.seconds(2)) // 允许事件迟到 2 秒
+                .sideOutputLateData(outputTag) // 保存迟到太多的数据
+                .process(new SumProcessWindowFunction());
+        //打印正常的数据
+        result.print();
+        //获取迟到太多的数据
+
+        DataStream&lt;String&gt; lateDataStream
+                = result.getSideOutput(outputTag).map(new MapFunction&lt;Tuple2&lt;String, Long&gt;, String&gt;() {
+            @Override
+            public String map(Tuple2&lt;String, Long&gt; stringLongTuple2) throws Exception {
+                return &quot;迟到的数据：&quot; + stringLongTuple2.toString();
+            }
+        });
+
+        lateDataStream.print();
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+
+
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Long&gt;,String,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Long&gt;&gt; elements,
+                            Collector&lt;String&gt; out) {
+            System.out.println(&quot;处理时间：&quot; + dateFormat.format(context.currentProcessingTime()));
+            System.out.println(&quot;window start time : &quot; + dateFormat.format(context.window().getStart()));
+
+            List&lt;String&gt; list = new ArrayList&lt;&gt;();
+            for (Tuple2&lt;String, Long&gt; ele : elements) {
+                list.add(ele.toString() + &quot;|&quot; + dateFormat.format(ele.f1));
+            }
+            out.collect(list.toString());
+            System.out.println(&quot;window end time  : &quot; + dateFormat.format(context.window().getEnd()));
+
+        }
+    }
+
+
+    private static class EventTimeExtractor
+            implements AssignerWithPeriodicWatermarks&lt;Tuple2&lt;String, Long&gt;&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+
+        private long currentMaxEventTime = 0L;
+        private long maxOutOfOrderness = 10000; // 最大允许的乱序时间 10 秒
+
+
+        // 拿到每一个事件的 Event Time
+        @Override
+        public long extractTimestamp(Tuple2&lt;String, Long&gt; element,
+                                     long previousElementTimestamp) {
+            long currentElementEventTime = element.f1;
+            currentMaxEventTime = Math.max(currentMaxEventTime, currentElementEventTime);
+            System.out.println(&quot;event = &quot; + element
+                    + &quot;|&quot; + dateFormat.format(element.f1) // Event Time
+                    + &quot;|&quot; + dateFormat.format(currentMaxEventTime)  // Max Event Time
+                    + &quot;|&quot; + dateFormat.format(getCurrentWatermark().getTimestamp())); // Current Watermark
+            return currentElementEventTime;
+        }
+
+        @Nullable
+        @Override
+        public Watermark getCurrentWatermark() {
+            /**
+             * WasterMark会周期性的产生，默认就是每隔200毫秒产生一个
+             *
+             *         设置 watermark 产生的周期为 1000ms
+             *         env.getConfig().setAutoWatermarkInterval(1000);
+             */
+            System.out.println(&quot;water mark...&quot;);
+            return new Watermark(currentMaxEventTime - maxOutOfOrderness);
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br></div></div><p>输入：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>000001,1461756870000
+000001,1461756883000
+迟到的数据
+000001,1461756870000
+000001,1461756871000
+000001,1461756872000
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><h2 id="_7-多并行度下的watermark"><a href="#_7-多并行度下的watermark" class="header-anchor">#</a> 7 多并行度下的WaterMark</h2> <p><img src="https://gitee.com/kflys/uPic/raw/master/uPic/202111231647484.png" alt="1573298799383"></p> <p>一个window可能会接受到多个waterMark，我们以最小的为准。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>/**
+ * 得到并打印每隔 3 秒钟统计前 3 秒内的相同的 key 的所有的事件
+ * 测试多并行度
+ */
+public class WaterMarkWindowWordCount {
+    public static void main(String[] args) throws Exception{
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //把并行度设置为2
+        env.setParallelism(2);
+        //步骤一：设置时间类型
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        //设置waterMark产生的周期为1s
+        env.getConfig().setAutoWatermarkInterval(1000);
+
+        // 保存迟到的，会被丢弃的数据
+        OutputTag&lt;Tuple2&lt;String, Long&gt;&gt; outputTag =
+                new OutputTag&lt;Tuple2&lt;String, Long&gt;&gt;(&quot;late-date&quot;){};
+
+        DataStreamSource&lt;String&gt; dataStream = env.socketTextStream(&quot;hadoop1&quot;, 8888);
+        SingleOutputStreamOperator&lt;String&gt; result = dataStream.map(new MapFunction&lt;String, Tuple2&lt;String, Long&gt;&gt;() {
+            @Override
+            public Tuple2&lt;String, Long&gt; map(String line) throws Exception {
+                String[] fields = line.split(&quot;,&quot;);
+                return new Tuple2&lt;&gt;(fields[0], Long.valueOf(fields[1]));
+            }
+            //步骤二：获取数据里面的event Time
+        }).assignTimestampsAndWatermarks(new EventTimeExtractor())
+                .keyBy(0)
+                .timeWindow(Time.seconds(3))
+                // .allowedLateness(Time.seconds(2)) // 允许事件迟到 2 秒
+                .sideOutputLateData(outputTag) // 保存迟到太多的数据
+                .process(new SumProcessWindowFunction());
+        //打印正常的数据
+        result.print();
+        //获取迟到太多的数据
+
+        DataStream&lt;String&gt; lateDataStream
+                = result.getSideOutput(outputTag).map(new MapFunction&lt;Tuple2&lt;String, Long&gt;, String&gt;() {
+            @Override
+            public String map(Tuple2&lt;String, Long&gt; stringLongTuple2) throws Exception {
+                return &quot;迟到的数据：&quot; + stringLongTuple2.toString();
+            }
+        });
+
+        lateDataStream.print();
+
+        env.execute(&quot;TimeWindowWordCount&quot;);
+
+    }
+
+
+
+
+    /**
+     * IN, OUT, KEY, W
+     * IN：输入的数据类型
+     * OUT：输出的数据类型
+     * Key：key的数据类型（在Flink里面，String用Tuple表示）
+     * W：Window的数据类型
+     */
+    public static class SumProcessWindowFunction extends
+            ProcessWindowFunction&lt;Tuple2&lt;String,Long&gt;,String,Tuple,TimeWindow&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+        /**
+         * 当一个window触发计算的时候会调用这个方法
+         * @param tuple key
+         * @param context operator的上下文
+         * @param elements 指定window的所有元素
+         * @param out 用户输出
+         */
+        @Override
+        public void process(Tuple tuple, Context context, Iterable&lt;Tuple2&lt;String, Long&gt;&gt; elements,
+                            Collector&lt;String&gt; out) {
+            System.out.println(&quot;处理时间：&quot; + dateFormat.format(context.currentProcessingTime()));
+            System.out.println(&quot;window start time : &quot; + dateFormat.format(context.window().getStart()));
+
+            List&lt;String&gt; list = new ArrayList&lt;&gt;();
+            for (Tuple2&lt;String, Long&gt; ele : elements) {
+                list.add(ele.toString() + &quot;|&quot; + dateFormat.format(ele.f1));
+            }
+            out.collect(list.toString());
+            System.out.println(&quot;window end time  : &quot; + dateFormat.format(context.window().getEnd()));
+
+        }
+    }
+
+
+    private static class EventTimeExtractor
+            implements AssignerWithPeriodicWatermarks&lt;Tuple2&lt;String, Long&gt;&gt; {
+        FastDateFormat dateFormat = FastDateFormat.getInstance(&quot;HH:mm:ss&quot;);
+
+        private long currentMaxEventTime = 0L;
+        private long maxOutOfOrderness = 10000; // 最大允许的乱序时间 10 秒
+
+
+        // 拿到每一个事件的 Event Time
+        @Override
+        public long extractTimestamp(Tuple2&lt;String, Long&gt; element,
+                                     long previousElementTimestamp) {
+            long currentElementEventTime = element.f1;
+            currentMaxEventTime = Math.max(currentMaxEventTime, currentElementEventTime);
+            //打印线程
+            long id = Thread.currentThread().getId();
+            System.out.println(&quot;当前线程ID：&quot;+id+&quot;event = &quot; + element
+                    + &quot;|&quot; + dateFormat.format(element.f1) // Event Time
+                    + &quot;|&quot; + dateFormat.format(currentMaxEventTime)  // Max Event Time
+                    + &quot;|&quot; + dateFormat.format(getCurrentWatermark().getTimestamp())); // Current Watermark
+            return currentElementEventTime;
+        }
+
+        @Nullable
+        @Override
+        public Watermark getCurrentWatermark() {
+            /**
+             * WasterMark会周期性的产生，默认就是每隔200毫秒产生一个
+             *
+             *         设置 watermark 产生的周期为 1000ms
+             *         env.getConfig().setAutoWatermarkInterval(1000);
+             */
+            System.out.println(&quot;water mark...&quot;);
+            return new Watermark(currentMaxEventTime - maxOutOfOrderness);
+        }
+    }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br></div></div><p>输入数据：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>000001,1461756870000
+000001,1461756883000
+000001,1461756888000
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>输出结果：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>当前线程ID：55event = (000001,1461756883000)|19:34:43|19:34:43|19:34:33
+  
+  
+当前线程ID：56event = (000001,1461756870000)|19:34:30|19:34:30|19:34:20
+当前线程ID：56event = (000001,1461756888000)|19:34:48|19:34:48|19:34:38
+  
+
+处理时间：19:31:25
+window start time : 19:34:30
+2&gt; [(000001,1461756870000)|19:34:30]
+window end time  : 19:34:33
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><p>ID为56的线程有两个WaterMark：20,38</p> <p>那么38这个会替代20，所以ID为56的线程的WaterMark是38</p> <p>然后ID为55的线程的WaterMark是33，而ID为56是WaterMark是38，会在里面求一个小的值作为waterMark，就是33，这个时候会触发Window为30-33的窗口，那这个窗口里面就有 (000001,1461756870000)这条数据。</p></div></div> <div class="page-slot page-slot-bottom"><!-- 横向自适应 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="6620245489"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></div> <div class="page-edit"><div class="edit-link"><a href="https://gitee.com/kflys/clivia-blog/edit/master/docs/《Flink》笔记/30.Flink进阶/01.Flink中的Time和WaterMark.md" target="_blank" rel="noopener noreferrer">编辑</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="tags"><a href="/tags/?tag=flink%20time" title="标签">#flink time</a><a href="/tags/?tag=flink%20watermark" title="标签">#flink watermark</a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">11/23/2021, 5:45:41 PM</span></div></div> <div class="page-nav-wapper"><div class="page-nav-centre-wrap"><a href="/pages/80431c/" class="page-nav-centre page-nav-centre-prev"><div class="tooltip">Flink Table和SQL编程开发</div></a> <a href="/pages/ade781/" class="page-nav-centre page-nav-centre-next"><div class="tooltip">Flink窗口函数</div></a></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/80431c/" class="prev">Flink Table和SQL编程开发</a></span> <span class="next"><a href="/pages/ade781/">Flink窗口函数</a>→
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-bi">最近更新</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/8e0b33/"><div>阿里官方Redis开发规范</div></a> <span>10-08</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/20a714/"><div>无监督学习</div></a> <span>01-26</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/e78220/"><div>模拟保存预加载</div></a> <span>01-26</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div></main></div> <div class="footer"><div class="icons"><a href="mailto:clivia.pro@gmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://gitee.com/kflys" title="Gitee" target="_blank" class="iconfont icon-gitee"></a><a href="https://y.qq.com/n/ryqq/songDetail/003lgoEG1SWHmF" title="music" target="_blank" class="iconfont icon-erji"></a></div> <div><span> Theme by <a href="https://github.com/xugaoyi/vuepress-theme-vdoing" target="_blank" title="本站主题">Vdoing</a> | Powered by <a href="https://webify.cloudbase.net/" target="_blank">CloudBase Webify</a></span></div> <span>Clivia‘s <a href="https://gitee.com/kflys/clivia-blog" target="_blank">blog</a> </span>
+    | Copyright © 2019-2022
+    <span><a href="http://beian.miit.gov.cn/" target="_blank">皖ICP备2021014093号</a> </span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----> <!----> <div class="custom-html-window custom-html-window-rb" style="display:;"><div class="custom-wrapper"><i class="close-but">×</i> <div><!-- 固定160*160px -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;max-width:160px;max-height:160px"
+          data-ad-client="ca-pub-7828333725993554"
+          data-ad-slot="8377369658"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      </div></div></div></div><div class="global-ui"><div id="live2d-widget" class="live2d-widget-container" style="position:fixed;left:65px;bottom:0px;width:135px;height:300px;z-index:99999;opacity:0.8;pointer-events:none;"><!----></div></div></div>
+    <script src="/assets/js/app.06f86fe0.js" defer></script><script src="/assets/js/2.ed69dcfc.js" defer></script><script src="/assets/js/3.b6cd915d.js" defer></script><script src="/assets/js/66.1d8c00be.js" defer></script>
+  </body>
+</html>
