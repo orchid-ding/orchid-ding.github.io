@@ -1792,7 +1792,7 @@
 }
 
 .ly-box81 {
-	width: 15%;
+	width: 20%;
 	height: 600px;
 	border: 2px #CCC;
 	background-color: #fff;
@@ -1852,14 +1852,14 @@
 }
 
 .ly-box82 {
-	width: 54%;
+	width: 50%;
 	height: 600px;
 	border: 2px #CCC;
 	background-color: #fff;
 	background-color: rgba(255,255,255,0.6);
 	border-radius: 8px;
 	position: absolute;
-	left: 42%;
+	left: 47%;
 	top:10%;
 	overflow: hidden;
 	opacity: 0;
@@ -1883,7 +1883,7 @@
 	border-radius: 2px; 
 	margin-left: 24px;
 	position: absolute;
-	right: 58%;
+	right: 53%;
 	top: 14%;
 	opacity: 0;
 	-webkit-transform: scale(0.5, 0.5);
